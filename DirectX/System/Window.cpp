@@ -11,29 +11,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 Window::Window() :
     mhWnd(nullptr),
+    mWndClass(),
     mTitle("") {
 }
 
-Window::~Window() = default;
+Window::~Window() {
+    //ウィンドウクラスを登録解除
+    UnregisterClass(mWndClass.lpszClassName, mWndClass.hInstance);
+}
 
 void Window::createWindow(HINSTANCE hInstance) {
     gWindow = this;
 
     // ウィンドウの定義
-    WNDCLASSEX wc;
-    ZeroMemory(&wc, sizeof(wc));
-    wc.cbSize = sizeof(wc);
-    wc.style = CS_HREDRAW | CS_VREDRAW;
-    wc.lpfnWndProc = WndProc;
-    wc.hInstance = hInstance;
-    wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
-    wc.lpszClassName = StringUtil::charToWchar(mTitle.c_str());
-    wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    mWndClass.cbSize = sizeof(WNDCLASSEX);
+    //mWndClass.style = CS_HREDRAW | CS_VREDRAW;
+    mWndClass.lpfnWndProc = WndProc;
+    mWndClass.hInstance = hInstance;
+    //mWndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    mWndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    //mWndClass.hbrBackground = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
+    mWndClass.lpszClassName = StringUtil::charToWchar(mTitle.c_str());
+    //mWndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 
     //ウィンドウクラスをOSに登録
-    RegisterClassEx(&wc);
+    RegisterClassEx(&mWndClass);
 
     //ウィンドウサイズ { X 座標 Y 座標 横幅 縦幅 }
     RECT wrc{};
@@ -46,7 +48,7 @@ void Window::createWindow(HINSTANCE hInstance) {
 
     //ウィンドウの作成
     mhWnd = CreateWindow(
-        wc.lpszClassName,                        //クラス名
+        mWndClass.lpszClassName,                        //クラス名
         StringUtil::charToWchar(mTitle.c_str()), //タイトルバーの文字
         WS_OVERLAPPEDWINDOW,                     //標準的なウィンドウスタイル
         CW_USEDEFAULT,                           //表示X座標(OSに任せる)

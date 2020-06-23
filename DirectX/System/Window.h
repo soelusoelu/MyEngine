@@ -27,6 +27,7 @@ private:
 
 private:
     HWND mhWnd;
+    WNDCLASSEX mWndClass; //ウィンドウクラスの設定
     std::string mTitle;
     static inline int mWidth = 1080;
     static inline int mHeight = 720;
