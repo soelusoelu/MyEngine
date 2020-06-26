@@ -55,5 +55,3 @@ unsigned long long Time::time() {
     QueryPerformanceCounter(&time);
     return static_cast<unsigned long long>(time.QuadPart);
 }
-
-float Time::deltaTime = 0.01666f;

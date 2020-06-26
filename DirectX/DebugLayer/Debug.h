@@ -5,6 +5,8 @@
 class Debug {
     Debug() = delete;
     ~Debug() = delete;
+    Debug(const Debug&) = delete;
+    Debug& operator=(const Debug&) = delete;
 
 public:
     static void windowMessage(const std::string& message);

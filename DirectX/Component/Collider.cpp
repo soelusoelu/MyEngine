@@ -102,5 +102,3 @@ std::list<std::shared_ptr<Collider>> Collider::onCollisionExit() {
 void Collider::setPhysics(Physics* physics) {
     mPhysics = physics;
 }
-
-Physics* Collider::mPhysics = nullptr;

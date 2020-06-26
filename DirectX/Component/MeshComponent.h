@@ -82,5 +82,5 @@ protected:
     float mRadius;
     Vector3 mColor;
 
-    static MeshManager* mMeshManager;
+    static inline MeshManager* mMeshManager = nullptr;
 };

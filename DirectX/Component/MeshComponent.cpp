@@ -201,5 +201,3 @@ void MeshComponent::addToManager(bool isTransparent) {
         mMeshManager->add(shared_from_this());
     }
 }
-
-MeshManager* MeshComponent::mMeshManager = nullptr;

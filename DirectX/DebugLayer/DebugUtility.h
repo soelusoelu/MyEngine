@@ -14,6 +14,8 @@ class Pause;
 class DebugUtility {
     DebugUtility() = delete;
     ~DebugUtility() = delete;
+    DebugUtility(const DebugUtility&) = delete;
+    DebugUtility& operator=(const DebugUtility&) = delete;
 
 public:
     static void create();

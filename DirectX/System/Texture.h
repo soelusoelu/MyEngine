@@ -27,7 +27,7 @@ class Texture {
 public:
     Texture(const std::string& fileName, bool isSprite);
     ~Texture();
-    static void end();
+    static void finalize();
     const TextureDesc& desc() const;
     //テクスチャの登録
     void setVSTextures(unsigned start = 0, unsigned numTextures = 1) const;
@@ -46,9 +46,9 @@ private:
     unsigned toFilter(TextureFilter filter) const;
 
 public:
-    static VertexBuffer* vertexBuffer;
-    static VertexBuffer* vertexBuffer3D;
-    static IndexBuffer* indexBuffer;
+    static inline VertexBuffer* vertexBuffer = nullptr;
+    static inline VertexBuffer* vertexBuffer3D = nullptr;
+    static inline IndexBuffer* indexBuffer = nullptr;
 
 private:
     std::unique_ptr<ShaderResourceView> mShaderResourceView;

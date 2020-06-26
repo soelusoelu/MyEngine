@@ -25,7 +25,7 @@ public:
     static unsigned long long time();
 
 public:
-    static float deltaTime;
+    static inline float deltaTime = 0.f;
 
 private:
     float mCurrentTime;

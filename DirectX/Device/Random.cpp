@@ -28,5 +28,3 @@ Vector3 Random::randomRange(const Vector3& min, const Vector3& max) {
     Vector3 v = Vector3(randomNormal(), randomNormal(), randomNormal());
     return min + (max - min) * v;
 }
-
-std::mt19937 Random::mt;

@@ -33,7 +33,7 @@ Texture::Texture(const std::string& fileName, bool isSprite) :
 
 Texture::~Texture() = default;
 
-void Texture::end() {
+void Texture::finalize() {
     safeDelete(vertexBuffer);
     safeDelete(vertexBuffer3D);
     safeDelete(indexBuffer);
@@ -160,7 +160,3 @@ unsigned Texture::toFilter(TextureFilter filter) const {
     };
     return filters[static_cast<unsigned>(filter)];
 }
-
-VertexBuffer* Texture::vertexBuffer = nullptr;
-VertexBuffer* Texture::vertexBuffer3D = nullptr;
-IndexBuffer* Texture::indexBuffer = nullptr;

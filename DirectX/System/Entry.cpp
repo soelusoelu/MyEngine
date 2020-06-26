@@ -19,6 +19,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT) {
     game->run(hInstance);
 
     delete game;
+    game = nullptr;
 
     SingletonFinalizer::finalize();
 

@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-struct Material;
 class VertexArray;
 
 class FBX : public IMeshLoader {

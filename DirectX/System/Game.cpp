@@ -15,13 +15,19 @@
 #include "../Utility/FileUtil.h"
 #include "../Utility/LevelLoader.h"
 
-Game::Game() {
-    ZeroMemory(this, sizeof(Game));
+Game::Game() :
+    mWindow(nullptr),
+    mRenderer(nullptr),
+    mSceneManager(nullptr),
+    mFPSCounter(nullptr),
+    mInstance(nullptr),
+    mhWnd(nullptr)
+{
 }
 
 Game::~Game() {
     InputUtility::finalize();
-    Texture::end();
+    Texture::finalize();
     DebugUtility::finalize();
 }
 
@@ -29,12 +35,8 @@ void Game::run(HINSTANCE hInstance) {
     Singleton<Directory>::instance().initialize();
 
     mInstance = hInstance;
-    if (!initialize()) {
-        return;
-    }
-    ShowWindow(mhWnd, SW_SHOW);
-    UpdateWindow(mhWnd);
-    // メッセージループ
+    initialize();
+
     MSG msg = { 0 };
     ZeroMemory(&msg, sizeof(msg));
     while (msg.message != WM_QUIT) {
@@ -59,7 +61,7 @@ void Game::quit() {
     PostQuitMessage(0);
 }
 
-bool Game::initialize() {
+void Game::initialize() {
     mWindow = std::make_unique<Window>();
 
     mRenderer = std::make_shared<Renderer>();
@@ -82,8 +84,6 @@ bool Game::initialize() {
     DebugUtility::initialize();
     InputUtility::initialize(mhWnd);
     mSceneManager->initialize();
-
-    return true;
 }
 
 void Game::mainLoop() {

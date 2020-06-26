@@ -46,6 +46,6 @@ private:
     CollPtrList mPreviousCollider;
     CollPtrList mCurrentCollider;
 
-    static Physics* mPhysics;
+    static inline Physics* mPhysics = nullptr;
 };
 

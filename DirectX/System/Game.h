@@ -23,7 +23,7 @@ public:
 
 private:
     //各クラスの初期化
-    bool initialize();
+    void initialize();
     //メインループ
     void mainLoop();
 
