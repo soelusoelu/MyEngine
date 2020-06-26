@@ -2,8 +2,8 @@
 #include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
 
-Transform3D::Transform3D(std::shared_ptr<GameObject> owner) :
-    mOwner(owner),
+Transform3D::Transform3D(const std::shared_ptr<GameObject>& gameObject) :
+    mGameObject(gameObject),
     mWorldTransform(Matrix4::identity),
     mPosition(Vector3::zero),
     mRotation(Quaternion::identity),
@@ -21,12 +21,12 @@ Transform3D::~Transform3D() {
         return;
     }
     for (const auto& child : mChildren) {
-        child->owner()->destroy();
+        child->gameObject()->destroy();
     }
 }
 
-std::shared_ptr<GameObject> Transform3D::owner() const {
-    return mOwner.lock();
+std::shared_ptr<GameObject> Transform3D::gameObject() const {
+    return mGameObject.lock();
 }
 
 bool Transform3D::computeWorldTransform() {
@@ -68,6 +68,13 @@ const Vector3& Transform3D::getLocalPosition() const {
 
 void Transform3D::translate(const Vector3& translation) {
     mPosition += translation;
+    shouldRecomputeTransform();
+}
+
+void Transform3D::translate(float x, float y, float z) {
+    mPosition.x += x;
+    mPosition.y += y;
+    mPosition.z += z;
     shouldRecomputeTransform();
 }
 
@@ -174,13 +181,13 @@ void Transform3D::addChild(const TransformPtr& child) {
 }
 
 void Transform3D::removeChild(const TransformPtr& child) {
-    removeChild(child->owner()->tag());
+    removeChild(child->gameObject()->tag());
 }
 
 void Transform3D::removeChild(const std::string& tag) {
     for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr) {
-        if ((*itr)->owner()->tag() == tag) {
-            (*itr)->owner()->destroy();
+        if ((*itr)->gameObject()->tag() == tag) {
+            (*itr)->gameObject()->destroy();
             mChildren.erase(itr);
             return;
         }
@@ -190,7 +197,7 @@ void Transform3D::removeChild(const std::string& tag) {
 std::shared_ptr<Transform3D> Transform3D::getChild(const std::string& tag) const {
     TransformPtr child = nullptr;
     for (const auto& c : mChildren) {
-        if (c->owner()->tag() == tag) {
+        if (c->gameObject()->tag() == tag) {
             child = c;
         }
     }

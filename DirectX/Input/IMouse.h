@@ -23,5 +23,5 @@ public:
     //キーが離れた瞬間
     virtual bool getMouseButtonUp(MouseCode button) = 0;
     //マウスのウィンドウ位置
-    virtual Vector2 getMousePosition() = 0;
+    virtual const Vector2& getMousePosition() = 0;
 };

@@ -21,8 +21,7 @@ Game::Game() :
     mSceneManager(nullptr),
     mFPSCounter(nullptr),
     mInstance(nullptr),
-    mhWnd(nullptr)
-{
+    mhWnd(nullptr) {
 }
 
 Game::~Game() {

@@ -14,7 +14,7 @@ public:
     Game();
     ~Game();
     //アプリケーションの実行
-    void run(HINSTANCE);
+    void run(HINSTANCE hInstance);
     //グローバルファイルを読み込む
     void loadProperties(const rapidjson::Value& inObj);
 

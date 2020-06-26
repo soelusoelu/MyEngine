@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "IMouse.h"
+#include "../Math/Math.h"
 #include <dinput.h>
 #include <string>
 
@@ -11,7 +12,7 @@ public:
     virtual bool getMouseButtonDown(MouseCode button) override;
     virtual bool getMouseButton(MouseCode button) override;
     virtual bool getMouseButtonUp(MouseCode button) override;
-    virtual Vector2 getMousePosition() override;
+    virtual const Vector2& getMousePosition() override;
 
     bool initialize(HWND hWnd, IDirectInput8* directInput);
     void update();
@@ -19,10 +20,15 @@ public:
     static void stringToJoyCode(const std::string& src, MouseCode* dst);
 
 private:
+    //マウス座標の更新
+    void updateMousePosition();
+    //マウス座標をクランプ
+    void clampMousePosition();
+
+private:
     IDirectInputDevice8* mMouseDevice;
     DIMOUSESTATE2 mCurrentMouseState;
     DIMOUSESTATE2 mPreviousMouseState;
     HWND mhWnd;
-    float mMousePositionX;
-    float mMousePositionY;
+    Vector2 mMousePosition;
 };
