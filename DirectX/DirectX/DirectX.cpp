@@ -45,15 +45,15 @@ ID3D11DeviceContext* DirectX::deviceContext() const {
     return mDeviceContext;
 }
 
-std::shared_ptr<BlendState> DirectX::blendState() const {
+const std::shared_ptr<BlendState>& DirectX::blendState() const {
     return mBlendState;
 }
 
-std::shared_ptr<DepthStencilState> DirectX::depthStencilState() const {
+const std::shared_ptr<DepthStencilState>& DirectX::depthStencilState() const {
     return mDepthStencilState;
 }
 
-std::shared_ptr<RasterizerState> DirectX::rasterizerState() const {
+const std::shared_ptr<RasterizerState>& DirectX::rasterizerState() const {
     return mRasterizerState;
 }
 

@@ -25,14 +25,20 @@ class RenderTargetView;
 class DirectX {
     friend class Singleton<DirectX>;
 
+private:
+    DirectX();
+    ~DirectX();
+    DirectX(const DirectX&) = delete;
+    DirectX& operator=(const DirectX&) = delete;
+
 public:
     void initialize(const HWND& hWnd);
 
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
-    std::shared_ptr<BlendState> blendState() const;
-    std::shared_ptr<DepthStencilState> depthStencilState() const;
-    std::shared_ptr<RasterizerState> rasterizerState() const;
+    const std::shared_ptr<BlendState>& blendState() const;
+    const std::shared_ptr<DepthStencilState>& depthStencilState() const;
+    const std::shared_ptr<RasterizerState>& rasterizerState() const;
 
     void setViewport(float width, float height, float x = 0.f, float y = 0.f) const;
     void setRenderTarget() const;
@@ -48,8 +54,6 @@ public:
     void present();
 
 private:
-    DirectX();
-    ~DirectX();
     void createDeviceAndSwapChain(const HWND& hWnd);
     void createRenderTargetView();
     void createDepthStencilView();
