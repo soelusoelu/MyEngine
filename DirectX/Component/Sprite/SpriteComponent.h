@@ -1,26 +1,35 @@
 ﻿#pragma once
 
-#include "../GameObject/Object.h"
-#include "../Math/Math.h"
+#include "../Component.h"
+#include "../../Math/Math.h"
 #include <memory>
 #include <string>
 
 class Shader;
+class Sprite;
 class SpriteManager;
 class Texture;
 class Transform2D;
 
-class Sprite : public Object {
+class SpriteComponent : public Component, public std::enable_shared_from_this<SpriteComponent> {
 public:
-    Sprite(const std::string& fileName);
-    ~Sprite();
-    //行列の計算をする
-    void computeWorldTransform();
+    SpriteComponent();
+    virtual ~SpriteComponent();
+    virtual void awake() override;
+    virtual void lateUpdate() override;
+    virtual void finalize() override;
+    virtual void onEnable(bool value) override;
+    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
+
     //描画
     void draw(const Matrix4& proj) const;
-    //Transform
+
+    //スプライトを生成しセット
+    void setSprite(const std::string& fileName);
+    //トランスフォーム
     const std::shared_ptr<Transform2D>& transform() const;
-    //色味、たぶん0～1
+    //色味
     void setLightColor(const Vector3& color);
     void setLightColor(float r, float g, float b);
     //不透明度(0～1、1が不透明, 0が透明)
@@ -31,27 +40,30 @@ public:
     const Vector4& getUV() const;
     //テクスチャサイズの取得
     const Vector2& getTextureSize() const;
-    //アクティブ指定
+    //状態管理
     void setActive(bool value);
-    //アクティブ状態の取得
     bool getActive() const;
+    bool isDead() const;
     //テクスチャの張替え
     void changeTexture(const std::string& fileName);
-    //テクスチャの取得
+    //テクスチャ
     const Texture& texture() const;
     //シェーダーの取得
     const Shader& shader() const;
     //ファイル名の取得
     const std::string& fileName() const;
+    //描画優先番号の取得
+    int getDrawOrder() const;
+
+    static void setSpriteManager(SpriteManager* manager);
 
 private:
-    std::shared_ptr<Transform2D> mTransform;
-    std::shared_ptr<Texture> mTexture;
-    std::shared_ptr<Shader> mShader;
-    Vector2 mTextureSize;
-    Vector4 mLightColor;
-    Vector4 mUV;
-    std::string mFileName;
-    bool mIsActive;
+    void addToManager();
+
+protected:
+    std::shared_ptr<Sprite> mSprite;
+    int mDrawOrder;
+
+    static inline SpriteManager* mSpriteManager = nullptr;
 };
 

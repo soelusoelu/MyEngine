@@ -1,7 +1,6 @@
 ﻿#include "MeshManager.h"
-#include "../Component/Camera.h"
-#include "../Component/MeshComponent.h"
-#include "../Device/Renderer.h"
+#include "../Component/Camera/Camera.h"
+#include "../Component/Mesh/MeshComponent.h"
 #include "../DirectX/BlendDesc.h"
 #include "../DirectX/BlendState.h"
 #include "../DirectX/DepthStencilState.h"
@@ -23,8 +22,9 @@ void MeshManager::draw(const Camera& camera) const {
         return;
     }
 
+    auto& dx = Singleton<DirectX>::instance();
     //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
 
     for (const auto& mesh : mMeshes) {
         if (!isDraw(*mesh, camera)) {
@@ -34,11 +34,11 @@ void MeshManager::draw(const Camera& camera) const {
         RasterizerDesc rd;
 
         rd.cullMode = CullMode::FRONT;
-        Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setRasterizerState(rd);
         mesh->draw();
 
         rd.cullMode = CullMode::BACK;
-        Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setRasterizerState(rd);
         mesh->draw();
     }
 }
@@ -48,17 +48,18 @@ void MeshManager::drawTransparent(const Camera& camera) const {
         return;
     }
 
+    auto& dx = Singleton<DirectX>::instance();
     //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     //デプステスト有効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
+    dx.depthStencilState()->depthTest(true);
     //デプスマスク有効化
-    Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
+    dx.depthStencilState()->depthMask(true);
     //通常合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
     bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+    dx.blendState()->setBlendState(bd);
 
     for (const auto& mesh : mTransparentMeshes) {
         if (!isDraw(*mesh, camera)) {
@@ -68,11 +69,11 @@ void MeshManager::drawTransparent(const Camera& camera) const {
         RasterizerDesc rd;
 
         rd.cullMode = CullMode::FRONT;
-        Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setRasterizerState(rd);
         mesh->draw();
 
         rd.cullMode = CullMode::BACK;
-        Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setRasterizerState(rd);
         mesh->draw();
     }
 }

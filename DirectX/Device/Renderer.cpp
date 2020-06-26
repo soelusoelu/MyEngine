@@ -1,7 +1,7 @@
 ﻿#include "Renderer.h"
 #include "DrawString.h"
 #include "Sound.h"
-#include "../Component/PointLightComponent.h"
+#include "../Component/Light/PointLightComponent.h"
 #include "../DirectX/BlendState.h"
 #include "../DirectX/DirectX.h"
 #include "../DirectX/DepthStencilState.h"

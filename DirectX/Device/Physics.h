@@ -3,7 +3,6 @@
 #include <memory>
 #include <vector>
 
-class Actor;
 class Collider;
 
 class Physics {

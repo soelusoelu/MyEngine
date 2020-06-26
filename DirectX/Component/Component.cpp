@@ -19,3 +19,7 @@ const std::shared_ptr<Transform3D>& Component::transform() const {
 const std::string& Component::getComponentName() const {
     return mComponentName;
 }
+
+const std::shared_ptr<ComponentManager>& Component::componentManager() const {
+    return gameObject()->componentManager();
+}

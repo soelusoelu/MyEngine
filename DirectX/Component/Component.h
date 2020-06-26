@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "ComponentManager.h"
 #include "../GameObject/Object.h"
 #include <rapidjson/document.h>
 #include <any>
@@ -7,9 +8,11 @@
 #include <memory>
 #include <string>
 #include <utility>
+#include <vector>
 
 class GameObject;
 class Transform3D;
+class ComponentManager;
 
 namespace ComponentDebug {
     using DebugInfo = std::pair<std::string, std::any>;
@@ -35,7 +38,7 @@ public:
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};
     //アクティブ・非アクティブ時の切り替え
-    virtual void onSetActive(bool value) {};
+    virtual void onEnable(bool value) {};
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj) {};
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
@@ -51,6 +54,17 @@ public:
     //コンポーネントの名前を返す
     const std::string& getComponentName() const;
 
+    //コンポーネントの取得
+    template<typename T>
+    std::shared_ptr<T> getComponent() const {
+        return componentManager()->getComponent<T>();
+    }
+    //指定した型のコンポーネントをすべて取得
+    template<typename T>
+    std::vector<std::shared_ptr<T>> getComponents() const {
+        return componentManager()->getComponents<T>();
+    }
+
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
     static void create(const GameObjectPtr& gameObject, const std::string& componentName, const rapidjson::Value& inObj) {
@@ -61,6 +75,10 @@ public:
         t->loadProperties(inObj);
         t->awake();
     }
+
+private:
+    //自身を管理しているマネージャーを返す
+    const std::shared_ptr<ComponentManager>& componentManager() const;
 
 private:
     std::weak_ptr<GameObject> mGameObject;

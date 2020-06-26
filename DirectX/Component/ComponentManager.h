@@ -28,7 +28,7 @@ public:
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
     void onUpdateWorldTransform() const;
     //所有するすべてのコンポーネントのonSetActiveを実行
-    void onSetActive(bool value) const;
+    void onEnable(bool value) const;
 
     //全コンポーネントの取得
     const ComponentPtrList& getAllComponents() const;
@@ -72,6 +72,10 @@ public:
         //最後まで見つからなければnullptrを返す
         return components;
     }
+
+private:
+    ComponentManager(const ComponentManager&) = delete;
+    ComponentManager& operator=(const ComponentManager&) = delete;
 
 private:
     ComponentPtrList mStartComponents;

@@ -197,7 +197,7 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     computePositionFromPivot(&pos, size, pivot);
 
     mFontSprite->transform()->setScale(scale);
-    mFontSprite->setColor(color);
+    mFontSprite->setLightColor(color);
     mFontSprite->setAlpha(alpha);
     for (const auto& c : alphabet) {
         mFontSprite->transform()->setPosition(pos);

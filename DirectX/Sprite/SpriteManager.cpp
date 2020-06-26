@@ -1,6 +1,6 @@
 ﻿#include "SpriteManager.h"
-#include "../Component/Sprite3D.h"
-#include "../Component/SpriteComponent.h"
+#include "../Component/Sprite/Sprite3D.h"
+#include "../Component/Sprite/SpriteComponent.h"
 
 SpriteManager::SpriteManager() = default;
 SpriteManager::~SpriteManager() = default;

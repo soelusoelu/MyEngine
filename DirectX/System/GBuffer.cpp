@@ -1,8 +1,8 @@
 ﻿#include "GBuffer.h"
 #include "Shader.h"
 #include "Window.h"
-#include "../Component/Camera.h"
-#include "../Component/DirectionalLight.h"
+#include "../Component/Camera/Camera.h"
+#include "../Component/Light/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/BlendDesc.h"
 #include "../DirectX/BlendState.h"
@@ -93,37 +93,41 @@ void GBuffer::create() {
 }
 
 void GBuffer::renderToTexture() {
+    auto& dx = Singleton<DirectX>::instance();
+
     //各テクスチャをレンダーターゲットに設定
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     ID3D11RenderTargetView* views[numGBuffer];
     for (size_t i = 0; i < numGBuffer; i++) {
         views[i] = mRenderTargets[i]->getRenderTarget();
     }
-    Singleton<DirectX>::instance().setRenderTargets(views, numGBuffer);
+    dx.setRenderTargets(views, numGBuffer);
 
     //クリア
     for (size_t i = 0; i < numGBuffer; i++) {
         mRenderTargets[i]->clearRenderTarget();
     }
-    Singleton<DirectX>::instance().clearDepthStencilView();
+    dx.clearDepthStencilView();
 
     //デプステスト有効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
+    dx.depthStencilState()->depthTest(true);
     //デプスマスク有効化
-    Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
+    dx.depthStencilState()->depthMask(true);
     //通常合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
     bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+    dx.blendState()->setBlendState(bd);
 }
 
 void GBuffer::renderFromTexture(const Camera& camera, const DirectionalLight& dirLight, const Vector3& ambient) {
+    auto& dx = Singleton<DirectX>::instance();
+
     //レンダーターゲットを通常に戻す
-    Singleton<DirectX>::instance().setRenderTarget();
+    dx.setRenderTarget();
     //クリア
-    Singleton<DirectX>::instance().clearRenderTarget();
-    Singleton<DirectX>::instance().clearDepthStencilView();
+    dx.clearRenderTarget();
+    dx.clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
     mShader->setVSShader();
@@ -139,7 +143,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const DirectionalLight& di
     if (mShader->map(&msrd)) {
         GBufferShaderConstantBuffer cb;
         cb.dirLightDir = dirLight.getDirection();
-        cb.dirLightColor = dirLight.getColor();
+        cb.dirLightColor = dirLight.getLightColor();
         cb.cameraPos = camera.gameObject()->transform()->getPosition();
         cb.ambientLight = ambient;
 
@@ -147,15 +151,15 @@ void GBuffer::renderFromTexture(const Camera& camera, const DirectionalLight& di
         mShader->unmap();
     }
     //スクリーンサイズのポリゴンをレンダー
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     //バーテックスバッファーをセット
     mVertexBuffer->setVertexBuffer();
     //インデックスバッファをセット
     mIndexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //デプステスト無効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
+    dx.depthStencilState()->depthTest(false);
 
-    Singleton<DirectX>::instance().drawIndexed(6);
+    dx.drawIndexed(6);
 }
 
 void GBuffer::setVSShaderResources() const {

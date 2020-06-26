@@ -10,7 +10,6 @@
     <FxCompile Include="Shader\ChickenMesh.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Device\CSVReader.cpp" />
@@ -26,11 +25,8 @@
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
-    <ClCompile Include="Component\MeshComponent.cpp" />
-    <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
-    <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="System\Texture.cpp" />
@@ -38,7 +34,6 @@
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="Utility\Singleton.cpp" />
-    <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Mesh\VertexArray.cpp" />
@@ -65,23 +60,15 @@
     <ClCompile Include="GameObject\GameObjectFactory.cpp" />
     <ClCompile Include="GameObject\Transform2D.cpp" />
     <ClCompile Include="GameObject\Transform3D.cpp" />
-    <ClCompile Include="Component\SpriteComponent.cpp" />
-    <ClCompile Include="Component\TransparentMeshComponent.cpp" />
-    <ClCompile Include="Component\Camera.cpp" />
-    <ClCompile Include="Component\DirectionalLight.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
-    <ClCompile Include="Component\Text.cpp" />
-    <ClCompile Include="Component\Sprite3D.cpp" />
     <ClCompile Include="Component\Scene\GamePlay.cpp" />
     <ClCompile Include="Component\Scene\Title.cpp" />
-    <ClCompile Include="Component\Fade.cpp" />
     <ClCompile Include="GameObject\Pivot.cpp" />
     <ClCompile Include="Input\InputUtility.cpp" />
     <ClCompile Include="DebugLayer\Pause.cpp" />
     <ClCompile Include="DebugLayer\Button.cpp" />
     <ClCompile Include="Device\Subject.cpp" />
-    <ClCompile Include="Component\CircleCollision.cpp" />
     <ClCompile Include="System\Shader.cpp" />
     <ClCompile Include="DirectX\BlendState.cpp" />
     <ClCompile Include="DirectX\Buffer.cpp" />
@@ -101,12 +88,24 @@
     <ClCompile Include="DirectX\VertexBuffer.cpp" />
     <ClCompile Include="System\SceneManager.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
-    <ClCompile Include="Component\TextNumber.cpp" />
-    <ClCompile Include="Component\TextFloat.cpp" />
     <ClCompile Include="Component\Scene\Scene.cpp" />
+    <ClCompile Include="Component\Collider\Collider.cpp" />
+    <ClCompile Include="Component\Light\PointLightComponent.cpp" />
+    <ClCompile Include="Component\Light\DirectionalLight.cpp" />
+    <ClCompile Include="Component\Text\Text.cpp" />
+    <ClCompile Include="Component\Text\TextFloat.cpp" />
+    <ClCompile Include="Component\Text\TextNumber.cpp" />
+    <ClCompile Include="Component\Sprite\Sprite3D.cpp" />
+    <ClCompile Include="Component\Sprite\SpriteComponent.cpp" />
+    <ClCompile Include="Component\Mesh\TransparentMeshComponent.cpp" />
+    <ClCompile Include="Component\Mesh\MeshComponent.cpp" />
+    <ClCompile Include="Component\Camera\Camera.cpp" />
+    <ClCompile Include="Component\Other\Fade.cpp" />
+    <ClCompile Include="Component\Other\HitPointComponent.cpp" />
+    <ClCompile Include="Component\Collider\CircleCollider.cpp" />
+    <ClCompile Include="Component\Collider\SphereCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Device\CSVReader.h" />
@@ -121,11 +120,8 @@
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\SoundComponent.h" />
-    <ClInclude Include="Component\MeshComponent.h" />
-    <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="System\GBuffer.h" />
-    <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="Light\PointLight.h" />
@@ -134,7 +130,6 @@
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="Utility\Singleton.h" />
-    <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Mesh\FBX.h" />
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="Utility\FileUtil.h" />
@@ -164,17 +159,10 @@
     <ClInclude Include="GameObject\GameObjectFactory.h" />
     <ClInclude Include="GameObject\Transform2D.h" />
     <ClInclude Include="GameObject\Transform3D.h" />
-    <ClInclude Include="Component\SpriteComponent.h" />
-    <ClInclude Include="Component\TransparentMeshComponent.h" />
-    <ClInclude Include="Component\Camera.h" />
-    <ClInclude Include="Component\DirectionalLight.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="Math\Plane.h" />
-    <ClInclude Include="Component\Text.h" />
-    <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Component\Scene\GamePlay.h" />
     <ClInclude Include="Component\Scene\Title.h" />
-    <ClInclude Include="Component\Fade.h" />
     <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="Input\InputUtility.h" />
     <ClInclude Include="Input\IKeyboard.h" />
@@ -183,7 +171,6 @@
     <ClInclude Include="DebugLayer\Button.h" />
     <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="Device\Subject.h" />
-    <ClInclude Include="Component\CircleCollision.h" />
     <ClInclude Include="System\Shader.h" />
     <ClInclude Include="System\SystemInclude.h" />
     <ClInclude Include="System\GlobalFunction.h" />
@@ -215,8 +202,21 @@
     <ClInclude Include="DirectX\VertexBuffer.h" />
     <ClInclude Include="System\SceneManager.h" />
     <ClInclude Include="GameObject\Object.h" />
-    <ClInclude Include="Component\TextNumber.h" />
-    <ClInclude Include="Component\TextFloat.h" />
     <ClInclude Include="Component\Scene\Scene.h" />
+    <ClInclude Include="Component\Collider\Collider.h" />
+    <ClInclude Include="Component\Light\PointLightComponent.h" />
+    <ClInclude Include="Component\Light\DirectionalLight.h" />
+    <ClInclude Include="Component\Text\Text.h" />
+    <ClInclude Include="Component\Text\TextFloat.h" />
+    <ClInclude Include="Component\Text\TextNumber.h" />
+    <ClInclude Include="Component\Sprite\SpriteComponent.h" />
+    <ClInclude Include="Component\Sprite\Sprite3D.h" />
+    <ClInclude Include="Component\Mesh\TransparentMeshComponent.h" />
+    <ClInclude Include="Component\Mesh\MeshComponent.h" />
+    <ClInclude Include="Component\Camera\Camera.h" />
+    <ClInclude Include="Component\Other\HitPointComponent.h" />
+    <ClInclude Include="Component\Other\Fade.h" />
+    <ClInclude Include="Component\Collider\CircleCollider.h" />
+    <ClInclude Include="Component\Collider\SphereCollider.h" />
   </ItemGroup>
 </Project>

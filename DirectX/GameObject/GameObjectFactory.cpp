@@ -1,25 +1,25 @@
 ﻿#include "GameObjectFactory.h"
 #include "GameObject.h"
-#include "../Component/Camera.h"
-#include "../Component/CircleCollision.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
-#include "../Component/DirectionalLight.h"
-#include "../Component/Fade.h"
-#include "../Component/HitPointComponent.h"
-#include "../Component/MeshComponent.h"
-#include "../Component/PointLightComponent.h"
-#include "../Component/SoundComponent.h"
-#include "../Component/SphereCollisionComponent.h"
-#include "../Component/Sprite3D.h"
-#include "../Component/SpriteComponent.h"
-#include "../Component/Text.h"
-#include "../Component/TextFloat.h"
-#include "../Component/TextNumber.h"
-#include "../Component/TransparentMeshComponent.h"
+#include "../Component/Camera/Camera.h"
+#include "../Component/Collider/CircleCollider.h"
+#include "../Component/Collider/SphereCollider.h"
+#include "../Component/Light/DirectionalLight.h"
+#include "../Component/Light/PointLightComponent.h"
+#include "../Component/Mesh/MeshComponent.h"
+#include "../Component/Mesh/TransparentMeshComponent.h"
+#include "../Component/Other/Fade.h"
+#include "../Component/Other/HitPointComponent.h"
 #include "../Component/Scene/GamePlay.h"
 #include "../Component/Scene/Scene.h"
 #include "../Component/Scene/Title.h"
+#include "../Component/Sprite/Sprite3D.h"
+#include "../Component/Sprite/SpriteComponent.h"
+#include "../Component/Text/Text.h"
+#include "../Component/Text/TextFloat.h"
+#include "../Component/Text/TextNumber.h"
+#include "../Component/SoundComponent.h"
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
 
@@ -30,24 +30,31 @@
 GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
     ADD_COMPONENT(Camera);
-    ADD_COMPONENT(CircleCollision);
+
+    ADD_COMPONENT(CircleCollider);
+    ADD_COMPONENT(SphereCollider);
+
     ADD_COMPONENT(DirectionalLight);
+    ADD_COMPONENT(PointLightComponent);
+
+    ADD_COMPONENT(MeshComponent);
+    ADD_COMPONENT(TransparentMeshComponent);
+
     ADD_COMPONENT(Fade);
     ADD_COMPONENT(HitPointComponent);
-    ADD_COMPONENT(MeshComponent);
-    ADD_COMPONENT(PointLightComponent);
-    ADD_COMPONENT(SoundComponent);
-    ADD_COMPONENT(SphereCollisionComponent);
-    ADD_COMPONENT(Sprite3D);
-    ADD_COMPONENT(SpriteComponent);
-    ADD_COMPONENT(Text);
-    ADD_COMPONENT(TextFloat);
-    ADD_COMPONENT(TextNumber);
-    ADD_COMPONENT(TransparentMeshComponent);
 
     ADD_COMPONENT(GamePlay);
     ADD_COMPONENT(Scene);
     ADD_COMPONENT(Title);
+
+    ADD_COMPONENT(Sprite3D);
+    ADD_COMPONENT(SpriteComponent);
+
+    ADD_COMPONENT(Text);
+    ADD_COMPONENT(TextFloat);
+    ADD_COMPONENT(TextNumber);
+
+    ADD_COMPONENT(SoundComponent);
 }
 
 GameObjectFactory::~GameObjectFactory() = default;

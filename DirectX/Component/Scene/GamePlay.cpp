@@ -1,7 +1,6 @@
 ﻿#include "GamePlay.h"
 #include "Scene.h"
-#include "../../Component/ComponentManager.h"
-#include "../../GameObject/GameObject.h"
+#include "../../GameObject/GameObjectFactory.h"
 #include "../../Input/Input.h"
 
 GamePlay::GamePlay() :
@@ -12,7 +11,9 @@ GamePlay::GamePlay() :
 GamePlay::~GamePlay() = default;
 
 void GamePlay::start() {
-    mScene = gameObject()->componentManager()->getComponent<Scene>();
+    mScene = getComponent<Scene>();
+
+    GameObjectCreater::create("Test");
 }
 
 void GamePlay::update() {

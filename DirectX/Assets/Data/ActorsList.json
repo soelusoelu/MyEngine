@@ -73,6 +73,20 @@
           }
         }
       ]
+    },
+    {
+      "type": "Test",
+      "properties": {
+        "rotation": [ -90.0, -90.0, 0.0 ]
+      },
+      "components": [
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "/Player.fbx"
+          }
+        }
+      ]
     }
   ]
 }

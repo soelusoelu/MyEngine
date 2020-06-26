@@ -42,7 +42,7 @@ void GameObject::saveProperties(rapidjson::Document::AllocatorType& alloc, rapid
 void GameObject::setActive(bool value) {
     mIsActive = value;
 
-    mComponentManager->onSetActive(value);
+    mComponentManager->onEnable(value);
 }
 
 bool GameObject::getActive() const {

@@ -54,12 +54,12 @@ void ComponentManager::onUpdateWorldTransform() const {
     }
 }
 
-void ComponentManager::onSetActive(bool value) const {
+void ComponentManager::onEnable(bool value) const {
     for (const auto& comp : mStartComponents) {
-        comp->onSetActive(value);
+        comp->onEnable(value);
     }
     for (const auto& comp : mComponents) {
-        comp->onSetActive(value);
+        comp->onEnable(value);
     }
 }
 
