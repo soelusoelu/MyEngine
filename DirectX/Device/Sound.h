@@ -5,7 +5,6 @@
 #include <string>
 
 class Sound;
-class Actor;
 
 class SoundBase {
 public:
@@ -21,6 +20,7 @@ private:
 
 class Sound {
     friend class SoundBase;
+
 public:
     Sound();
     ~Sound();

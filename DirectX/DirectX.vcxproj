@@ -208,7 +208,7 @@
     <ClCompile Include="DirectX\RenderTargetView.cpp" />
     <ClCompile Include="DirectX\ComparisonFunc.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
-    <ClCompile Include="Component\SoundComponent.cpp" />
+    <ClCompile Include="Component\Sound\SoundComponent.cpp" />
     <ClCompile Include="Component\Collider\Collider.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\Component.cpp" />
@@ -312,7 +312,7 @@
     <ClInclude Include="DirectX\RenderTargetView.h" />
     <ClInclude Include="DirectX\ComparisonFunc.h" />
     <ClInclude Include="Device\Sound.h" />
-    <ClInclude Include="Component\SoundComponent.h" />
+    <ClInclude Include="Component\Sound\SoundComponent.h" />
     <ClInclude Include="Component\Collider\Collider.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\Component.h" />

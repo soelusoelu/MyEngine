@@ -14,12 +14,12 @@
 #include "../Component/Scene/GamePlay.h"
 #include "../Component/Scene/Scene.h"
 #include "../Component/Scene/Title.h"
+#include "../Component/Sound/SoundComponent.h"
 #include "../Component/Sprite/Sprite3D.h"
 #include "../Component/Sprite/SpriteComponent.h"
 #include "../Component/Text/Text.h"
 #include "../Component/Text/TextFloat.h"
 #include "../Component/Text/TextNumber.h"
-#include "../Component/SoundComponent.h"
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
 
@@ -47,14 +47,14 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(Scene);
     ADD_COMPONENT(Title);
 
+    ADD_COMPONENT(SoundComponent);
+
     ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteComponent);
 
     ADD_COMPONENT(Text);
     ADD_COMPONENT(TextFloat);
     ADD_COMPONENT(TextNumber);
-
-    ADD_COMPONENT(SoundComponent);
 }
 
 GameObjectFactory::~GameObjectFactory() = default;

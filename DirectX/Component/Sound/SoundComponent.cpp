@@ -1,7 +1,7 @@
 #include "SoundComponent.h"
-#include "../Device/AssetsManager.h"
-#include "../Device/Sound.h"
-#include "../Utility/LevelLoader.h"
+#include "../../Device/AssetsManager.h"
+#include "../../Device/Sound.h"
+#include "../../Utility/LevelLoader.h"
 
 SoundComponent::SoundComponent() :
     Component(),

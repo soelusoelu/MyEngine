@@ -1,5 +1,5 @@
 ﻿#include "Sound.h"
-#include "Renderer.h"
+#include "../DebugLayer/Debug.h"
 #include "../System/GlobalFunction.h"
 #include "../Utility/Directory.h"
 
@@ -28,7 +28,7 @@ SoundBase::SoundBase() :
 }
 
 SoundBase::~SoundBase() {
-    safeRelease<IXAudio2>(mXAudio2);
+    safeRelease(mXAudio2);
     CoUninitialize();
 }
 
@@ -63,7 +63,7 @@ void SoundBase::load(const std::string& fileName, std::shared_ptr<Sound>* sound)
     mmioRead(hMmio, reinterpret_cast<HPSTR>((*sound)->mWavBuffer), wavSize);
     //ソースボイスにデータを詰め込む
     if (FAILED(mXAudio2->CreateSourceVoice(&(*sound)->mSourceVoice, pwfex))) {
-        MessageBox(0, L"ソースボイス作成失敗", 0, MB_OK);
+        Debug::windowMessage("ソースボイス作成失敗");
     }
     (*sound)->mWavSize = wavSize;
     (*sound)->mWavFormat = pwfex;
@@ -72,7 +72,7 @@ void SoundBase::load(const std::string& fileName, std::shared_ptr<Sound>* sound)
 void SoundBase::createSourceVoice(std::shared_ptr<Sound>* sound) {
     //ソースボイスにデータを詰め込む
     if (FAILED(mXAudio2->CreateSourceVoice(&(*sound)->mSourceVoice, (*sound)->mWavFormat))) {
-        MessageBox(0, L"ソースボイス作成失敗", 0, MB_OK);
+        Debug::windowMessage("ソースボイス作成失敗");
     }
 }
 
@@ -100,7 +100,7 @@ void Sound::play(bool isLoop) {
         buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
     }
     if (FAILED(mSourceVoice->SubmitSourceBuffer(&buffer))) {
-        MessageBox(0, L"ソースボイスにサブミット失敗", 0, MB_OK);
+        Debug::windowMessage("ソースボイスにサブミット失敗");
         return;
     }
     mSourceVoice->Start(0, XAUDIO2_COMMIT_NOW);

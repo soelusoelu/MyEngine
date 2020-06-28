@@ -24,7 +24,6 @@
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
-    <ClCompile Include="Component\SoundComponent.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
@@ -104,6 +103,7 @@
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
     <ClCompile Include="Component\Collider\CircleCollider.cpp" />
     <ClCompile Include="Component\Collider\SphereCollider.cpp" />
+    <ClCompile Include="Component\Sound\SoundComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -119,7 +119,6 @@
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="Device\Sound.h" />
-    <ClInclude Include="Component\SoundComponent.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\Material.h" />
@@ -218,5 +217,6 @@
     <ClInclude Include="Component\Other\Fade.h" />
     <ClInclude Include="Component\Collider\CircleCollider.h" />
     <ClInclude Include="Component\Collider\SphereCollider.h" />
+    <ClInclude Include="Component\Sound\SoundComponent.h" />
   </ItemGroup>
 </Project>
