@@ -16,7 +16,7 @@ Sprite::Sprite(const std::string& fileName) :
     mTexture(nullptr),
     mShader(Singleton<AssetsManager>::instance().createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
-    mLightColor(ColorPalette::white, 1.f),
+    mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
     mFileName(fileName),
     mIsActive(true) {
@@ -62,7 +62,7 @@ void Sprite::draw(const Matrix4& proj) const {
         //ワールド、射影行列を渡す
         cb.wp = mTransform->getWorldTransform() * proj;
         cb.wp.transpose();
-        cb.color = mLightColor;
+        cb.color = mColor;
         cb.uv = mUV;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
@@ -80,24 +80,24 @@ const std::shared_ptr<Transform2D>& Sprite::transform() const {
     return mTransform;
 }
 
-void Sprite::setLightColor(const Vector3 & color) {
-    mLightColor.x = color.x;
-    mLightColor.y = color.y;
-    mLightColor.z = color.z;
+void Sprite::setColor(const Vector3 & color) {
+    mColor.x = color.x;
+    mColor.y = color.y;
+    mColor.z = color.z;
 }
 
-void Sprite::setLightColor(float r, float g, float b) {
-    mLightColor.x = r;
-    mLightColor.y = g;
-    mLightColor.z = b;
+void Sprite::setColor(float r, float g, float b) {
+    mColor.x = r;
+    mColor.y = g;
+    mColor.z = b;
 }
 
 void Sprite::setAlpha(float alpha) {
-    mLightColor.w = alpha;
+    mColor.w = alpha;
 }
 
-const Vector4& Sprite::getLightColor() const {
-    return mLightColor;
+const Vector4& Sprite::getColor() const {
+    return mColor;
 }
 
 void Sprite::setUV(float l, float t, float r, float b) {

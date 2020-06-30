@@ -1,5 +1,4 @@
 ﻿#include "Renderer.h"
-#include "DrawString.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../System/GBuffer.h"
 #include "../System/Texture.h"
@@ -7,23 +6,13 @@
 #include "../Utility/LevelLoader.h"
 
 Renderer::Renderer() :
-    mDrawString(std::make_shared<DrawString>()),
     mGBuffer(std::make_unique<GBuffer>()) {
 }
 
 Renderer::~Renderer() = default;
 
-void Renderer::loadProperties(const rapidjson::Value& inObj) {
-    mDrawString->loadProperties(inObj);
-}
-
 void Renderer::initialize() {
     mGBuffer->create();
-    mDrawString->initialize();
-}
-
-const std::shared_ptr<DrawString>& Renderer::getDrawString() const {
-    return mDrawString;
 }
 
 void Renderer::renderToTexture() {

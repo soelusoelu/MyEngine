@@ -17,7 +17,7 @@ Sprite3D::Sprite3D() :
     mTexture(nullptr),
     mShader(nullptr),
     mTextureAspect(Vector2::zero),
-    mLightColor(Vector4(1.f, 1.f, 1.f, 1.f)),
+    mColor(Vector4(1.f, 1.f, 1.f, 1.f)),
     mUV(Vector4(0.f, 0.f, 1.f, 1.f)),
     mFileName(""),
     mIsActive(true),
@@ -86,7 +86,7 @@ void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
         mTransform->setScale(Vector3(vec2, 1.f));
     }
     if (JsonHelper::getVector3(inObj, "color", &vec3)) {
-        setLightColor(vec3);
+        setColor(vec3);
     }
     float alpha;
     if (JsonHelper::getFloat(inObj, "alpha", &alpha)) {
@@ -119,7 +119,7 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
         //ワールド、射影行列を渡す
         cb.wp = mTransform->getWorldTransform() * viewProj;
         cb.wp.transpose();
-        cb.color = mLightColor;
+        cb.color = mColor;
         cb.uv = mUV;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
@@ -150,7 +150,7 @@ void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
         //ワールド、射影行列を渡す
         cb.wp = invView * mTransform->getWorldTransform() * viewProj;
         cb.wp.transpose();
-        cb.color = mLightColor;
+        cb.color = mColor;
         cb.uv = mUV;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
@@ -168,24 +168,24 @@ const std::shared_ptr<Transform3D>& Sprite3D::transform() const {
     return mTransform;
 }
 
-void Sprite3D::setLightColor(const Vector3& color) {
-    mLightColor.x = color.x;
-    mLightColor.y = color.y;
-    mLightColor.z = color.z;
+void Sprite3D::setColor(const Vector3& color) {
+    mColor.x = color.x;
+    mColor.y = color.y;
+    mColor.z = color.z;
 }
 
-void Sprite3D::setLightColor(float r, float g, float b) {
-    mLightColor.x = r;
-    mLightColor.y = g;
-    mLightColor.z = b;
+void Sprite3D::setColor(float r, float g, float b) {
+    mColor.x = r;
+    mColor.y = g;
+    mColor.z = b;
 }
 
 void Sprite3D::setAlpha(float alpha) {
-    mLightColor.w = alpha;
+    mColor.w = alpha;
 }
 
-const Vector4& Sprite3D::getLightColor() const {
-    return mLightColor;
+const Vector4& Sprite3D::getColor() const {
+    return mColor;
 }
 
 void Sprite3D::setUV(float l, float t, float r, float b) {

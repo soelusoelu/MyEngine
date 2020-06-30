@@ -91,7 +91,7 @@ bool Fade::isFadeInEnded() const {
 }
 
 void Fade::fadeOutUpdate() {
-    auto alpha = mSprite->getLightColor().w;
+    auto alpha = mSprite->getColor().w;
     alpha += Time::deltaTime / mFadeSpeed;
     if (alpha > 1.f) {
         alpha = 1.f;
@@ -102,7 +102,7 @@ void Fade::fadeOutUpdate() {
 }
 
 void Fade::fadeInUpdate() {
-    auto alpha = mSprite->getLightColor().w;
+    auto alpha = mSprite->getColor().w;
     alpha -= Time::deltaTime / mFadeSpeed;
     if (alpha < 0.f) {
         alpha = 0.f;

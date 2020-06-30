@@ -4,10 +4,12 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Collider/Collider.h"
+#include "../Component/Light/PointLightComponent.h"
 #include "../Component/Mesh/MeshComponent.h"
 #include "../Component/Scene/Scene.h"
 #include "../Component/Sprite/Sprite3D.h"
 #include "../Component/Sprite/SpriteComponent.h"
+#include "../Component/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Pause.h"
 #include "../Device/DrawString.h"
@@ -23,8 +25,8 @@
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 
-SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
-    mRenderer(renderer),
+SceneManager::SceneManager() :
+    mRenderer(std::make_unique<Renderer>()),
     mCurrentScene(nullptr),
     mCamera(nullptr),
     mGameObjectManager(new GameObjectManager()),
@@ -32,6 +34,7 @@ SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mSpriteManager(new SpriteManager()),
     mPhysics(new Physics()),
     mLightManager(new LightManager()),
+    mTextDrawer(new DrawString()),
     mShouldDraw(true) {
 }
 
@@ -41,26 +44,34 @@ SceneManager::~SceneManager() {
     safeDelete(mSpriteManager);
     safeDelete(mPhysics);
     safeDelete(mLightManager);
+    safeDelete(mTextDrawer);
 
-    GameObject::setGameObjectManager(nullptr);
-    MeshComponent::setMeshManager(nullptr);
-    SpriteComponent::setSpriteManager(nullptr);
-    Sprite3D::setSpriteManager(nullptr);
-    Collider::setPhysics(nullptr);
+    //GameObject::setGameObjectManager(nullptr);
+    //MeshComponent::setMeshManager(nullptr);
+    //SpriteComponent::setSpriteManager(nullptr);
+    //Sprite3D::setSpriteManager(nullptr);
+    //Collider::setPhysics(nullptr);
+    //PointLightComponent::setLightManager(nullptr);
+    //Text::setDrawString(nullptr);
 }
 
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
     mLightManager->loadProperties(inObj);
+    mTextDrawer->loadProperties(inObj);
 }
 
 void SceneManager::initialize() {
+    mRenderer->initialize();
     mLightManager->initialize();
+    mTextDrawer->initialize();
 
     GameObject::setGameObjectManager(mGameObjectManager);
     MeshComponent::setMeshManager(mMeshManager);
     SpriteComponent::setSpriteManager(mSpriteManager);
     Sprite3D::setSpriteManager(mSpriteManager);
     Collider::setPhysics(mPhysics);
+    PointLightComponent::setLightManager(mLightManager);
+    TextBase::setDrawString(mTextDrawer);
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager()->getComponent<Camera>();
@@ -73,7 +84,6 @@ void SceneManager::initialize() {
 
 void SceneManager::update() {
     //アップデートの最初で文字列削除
-    mRenderer->getDrawString()->clear();
     DebugUtility::drawStringClear();
     mShouldDraw = true;
 
@@ -88,6 +98,8 @@ void SceneManager::update() {
         return;
     }
 
+    //保有しているテキストを全削除
+    mTextDrawer->clear();
     //全ゲームオブジェクトの更新
     mGameObjectManager->update();
     //総当たり判定
@@ -134,7 +146,7 @@ void SceneManager::draw() const {
     mRenderer->renderSprite2D(&proj);
     mSpriteManager->drawComponents(proj);
     //テキスト一括描画
-    mRenderer->getDrawString()->drawAll(proj);
+    mTextDrawer->drawAll(proj);
 
 #ifdef _DEBUG
     //レンダリング領域をデバッグに変更

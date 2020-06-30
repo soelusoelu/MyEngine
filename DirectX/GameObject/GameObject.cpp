@@ -3,8 +3,7 @@
 #include "Transform3D.h"
 #include "../Component/ComponentManager.h"
 
-GameObject::GameObject(const std::shared_ptr<Renderer>& renderer) :
-    mRenderer(renderer),
+GameObject::GameObject() :
     mTransform(nullptr),
     mComponentManager(nullptr),
     mTag(""),
@@ -57,10 +56,6 @@ const std::string& GameObject::tag() const {
     return mTag;
 }
 
-const std::shared_ptr<Renderer>& GameObject::renderer() const {
-    return mRenderer;
-}
-
 const std::shared_ptr<Transform3D>& GameObject::transform() const {
     return mTransform;
 }
@@ -77,8 +72,8 @@ GameObjectManager* GameObject::getGameObjectManager() {
     return mGameObjectManager;
 }
 
-std::shared_ptr<GameObject> GameObject::create(const std::shared_ptr<Renderer>& renderer) {
-    auto obj = std::make_shared<GameObject>(renderer);
+std::shared_ptr<GameObject> GameObject::create() {
+    auto obj = std::make_shared<GameObject>();
     obj->initialize();
     return obj;
 }

@@ -5,7 +5,6 @@
 #include <memory>
 
 class Camera;
-class DrawString;
 class GBuffer;
 class LightManager;
 
@@ -13,12 +12,11 @@ class Renderer {
 public:
     Renderer();
     ~Renderer();
-    void loadProperties(const rapidjson::Value& inObj);
     void initialize();
 
-    const std::shared_ptr<DrawString>& getDrawString() const;
-
+    //GBufferのテクスチャに書き込み
     void renderToTexture();
+    //GBufferのテクスチャを参照して書き込み
     void renderFromTexture(const Camera& camera, const LightManager& lightManager);
 
     //スプライト描画共通処理
@@ -33,6 +31,5 @@ public:
     void renderPointLight() const;
 
 private:
-    std::shared_ptr<DrawString> mDrawString;
     std::unique_ptr<GBuffer> mGBuffer;
 };

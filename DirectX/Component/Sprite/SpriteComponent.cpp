@@ -63,7 +63,7 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     }
     Vector3 vec3;
     if (JsonHelper::getVector3(inObj, "color", &vec3)) {
-        setLightColor(vec3);
+        setColor(vec3);
     }
     if (JsonHelper::getFloat(inObj, "alpha", &value)) {
         setAlpha(value);
@@ -99,20 +99,20 @@ const std::shared_ptr<Transform2D>& SpriteComponent::transform() const {
     return mSprite->transform();
 }
 
-void SpriteComponent::setLightColor(const Vector3& color) {
-    mSprite->setLightColor(color);
+void SpriteComponent::setColor(const Vector3& color) {
+    mSprite->setColor(color);
 }
 
-void SpriteComponent::setLightColor(float r, float g, float b) {
-    mSprite->setLightColor(r, g, b);
+void SpriteComponent::setColor(float r, float g, float b) {
+    mSprite->setColor(r, g, b);
 }
 
 void SpriteComponent::setAlpha(float alpha) {
     mSprite->setAlpha(alpha);
 }
 
-const Vector4& SpriteComponent::getLightColor() const {
-    return mSprite->getLightColor();
+const Vector4& SpriteComponent::getColor() const {
+    return mSprite->getColor();
 }
 
 void SpriteComponent::setUV(float l, float t, float r, float b) {

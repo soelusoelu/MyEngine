@@ -6,6 +6,7 @@
 #include <unordered_set>
 
 class Scene;
+class Renderer;
 class Camera;
 class DirectionalLight;
 class GameObjectManager;
@@ -14,12 +15,13 @@ class Physics;
 class Renderer;
 class SpriteManager;
 class LightManager;
+class DrawString;
 
 class SceneManager {
     using StringSet = std::unordered_set<std::string>;
 
 public:
-    SceneManager(const std::shared_ptr<Renderer>& renderer);
+    SceneManager();
     ~SceneManager();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
@@ -31,7 +33,7 @@ private:
     void createScene(const std::string& name);
 
 private:
-    std::shared_ptr<Renderer> mRenderer;
+    std::unique_ptr<Renderer> mRenderer;
     std::shared_ptr<Scene> mCurrentScene;
     std::shared_ptr<Camera> mCamera;
     GameObjectManager* mGameObjectManager;
@@ -39,5 +41,6 @@ private:
     SpriteManager* mSpriteManager;
     Physics* mPhysics;
     LightManager* mLightManager;
+    DrawString* mTextDrawer;
     bool mShouldDraw;
 };

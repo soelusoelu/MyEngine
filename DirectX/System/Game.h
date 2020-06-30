@@ -5,7 +5,6 @@
 #include <memory>
 
 class FPSCounter;
-class Renderer;
 class SceneManager;
 class Window;
 
@@ -29,7 +28,6 @@ private:
 
 private:
     std::unique_ptr<Window> mWindow;
-    std::shared_ptr<Renderer> mRenderer;
     std::unique_ptr<SceneManager> mSceneManager;
     std::unique_ptr<FPSCounter> mFPSCounter;
     HINSTANCE mInstance;

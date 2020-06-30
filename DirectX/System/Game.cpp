@@ -6,7 +6,6 @@
 #include "../Device/DrawString.h"
 #include "../Device/FPSCounter.h"
 #include "../Device/Random.h"
-#include "../Device/Renderer.h"
 #include "../Device/Time.h"
 #include "../DirectX/DirectX.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -17,7 +16,6 @@
 
 Game::Game() :
     mWindow(nullptr),
-    mRenderer(nullptr),
     mSceneManager(nullptr),
     mFPSCounter(nullptr),
     mInstance(nullptr),
@@ -51,7 +49,6 @@ void Game::run(HINSTANCE hInstance) {
 
 void Game::loadProperties(const rapidjson::Value& inObj) {
     mWindow->loadProperties(inObj);
-    mRenderer->loadProperties(inObj);
     mFPSCounter->loadProperties(inObj);
     DebugUtility::loadProperties(inObj);
     InputUtility::loadProperties(inObj);
@@ -65,12 +62,11 @@ void Game::quit() {
 void Game::initialize() {
     mWindow = std::make_unique<Window>();
 
-    mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>();
-    Singleton<GameObjectFactory>::instance().initialize(mRenderer);
+    Singleton<GameObjectFactory>::instance().initialize();
     DebugUtility::create();
     InputUtility::create();
-    mSceneManager = std::make_unique<SceneManager>(mRenderer);
+    mSceneManager = std::make_unique<SceneManager>();
 
     //ファイルから値を読み込む
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
@@ -79,7 +75,6 @@ void Game::initialize() {
     mhWnd = mWindow->gethWnd();
 
     Singleton<DirectX>::instance().initialize(mhWnd);
-    mRenderer->initialize();
 
     Random::initialize();
     DebugUtility::initialize();

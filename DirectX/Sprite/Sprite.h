@@ -21,11 +21,11 @@ public:
     //Transform
     const std::shared_ptr<Transform2D>& transform() const;
     //色味、たぶん0～1
-    void setLightColor(const Vector3& color);
-    void setLightColor(float r, float g, float b);
+    void setColor(const Vector3& color);
+    void setColor(float r, float g, float b);
     //不透明度(0～1、1が不透明, 0が透明)
     void setAlpha(float alpha);
-    const Vector4& getLightColor() const;
+    const Vector4& getColor() const;
     //切り取り範囲(left, top, right, bottom, 0～1)
     void setUV(float l, float t, float r, float b);
     const Vector4& getUV() const;
@@ -49,7 +49,7 @@ private:
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
     Vector2 mTextureSize;
-    Vector4 mLightColor;
+    Vector4 mColor;
     Vector4 mUV;
     std::string mFileName;
     bool mIsActive;

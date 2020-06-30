@@ -19,7 +19,7 @@ MeshComponent::MeshComponent() :
     mState(State::ACTIVE),
     mCenter(Vector3::zero),
     mRadius(0.f),
-    mLightColor(ColorPalette::white) {
+    mColor(ColorPalette::white) {
 }
 
 MeshComponent::~MeshComponent() = default;
@@ -46,7 +46,7 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    inspect->emplace_back("Color", mLightColor);
+    inspect->emplace_back("Color", mColor);
 }
 
 size_t MeshComponent::getNumMaterial() const {
@@ -65,12 +65,12 @@ float MeshComponent::getRadius() const {
     return mRadius;
 }
 
-void MeshComponent::setLightColor(const Vector3& color) {
-    mLightColor = color;
+void MeshComponent::setColor(const Vector3& color) {
+    mColor = color;
 }
 
-const Vector3& MeshComponent::getLightColor() const {
-    return mLightColor;
+const Vector3& MeshComponent::getColor() const {
+    return mColor;
 }
 
 void MeshComponent::destroy() {

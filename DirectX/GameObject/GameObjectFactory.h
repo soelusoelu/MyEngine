@@ -8,8 +8,6 @@
 #include <unordered_map>
 
 class GameObject;
-class Component;
-class Renderer;
 
 class GameObjectFactory {
     friend class Singleton<GameObjectFactory>;
@@ -21,7 +19,7 @@ private:
     ~GameObjectFactory();
 
 public:
-    void initialize(const std::shared_ptr<Renderer>& renderer);
+    void initialize();
     //ファイルからゲームオブジェクト生成
     GameObjectPtr loadGameObject(const std::string& type) const;
 
@@ -33,7 +31,6 @@ private:
 
 private:
     std::unordered_map<std::string, ComponentFunc> mComponents;
-    std::shared_ptr<Renderer> mRenderer;
     rapidjson::Document mDocument;
 };
 

@@ -23,7 +23,7 @@ void Title::update() {
     }
 
     if (isEnd) {
-        //mScene->next("GamePlay");
+        mScene->next("GamePlay");
         //mSound->playBGM();
     }
 }

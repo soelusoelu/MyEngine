@@ -43,23 +43,25 @@ void DrawString::clear() {
     mParamsString.clear();
 }
 
-void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, float alpha, Pivot pivot) {
+void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, const Vector3& color, float alpha, Pivot pivot) {
     ParamInt param;
     param.number = number;
     param.position = position;
     param.scale = scale;
+    param.color = color;
     param.alpha = alpha;
     param.pivot = pivot;
 
     mParamsInt.emplace_back(param);
 }
 
-void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, float alpha, Pivot pivot) {
+void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, const Vector3& color, float alpha, Pivot pivot) {
     ParamFloat param;
     param.number = number;
     param.position = position;
     param.scale = scale;
     param.decimalDigits = decimalDigits;
+    param.color = color;
     param.alpha = alpha;
     param.pivot = pivot;
 
@@ -83,6 +85,7 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
     auto number = param.number;
     auto pos = param.position;
     auto scale = param.scale;
+    auto color = param.color;
     auto alpha = param.alpha;
     auto pivot = param.pivot;
 
@@ -106,6 +109,7 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
 
     //数字を文字列化し、1文字ずつ取り出す
     mNumberSprite->transform()->setScale(scale);
+    mNumberSprite->setColor(color);
     mNumberSprite->setAlpha(alpha);
     for (const auto& n : std::to_string(number)) {
         mNumberSprite->transform()->setPosition(pos);
@@ -130,6 +134,7 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
     auto pos = param.position;
     auto scale = param.scale;
     auto decimalDigits = param.decimalDigits;
+    auto color = param.color;
     auto alpha = param.alpha;
     auto pivot = param.pivot;
 
@@ -151,6 +156,7 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
 
     //数字を文字列化し、1文字ずつ取り出す
     mNumberSprite->transform()->setScale(scale);
+    mNumberSprite->setColor(color);
     mNumberSprite->setAlpha(alpha);
     for (const auto& n : num) {
         mNumberSprite->transform()->setPosition(pos);
@@ -197,7 +203,7 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     computePositionFromPivot(&pos, size, pivot);
 
     mFontSprite->transform()->setScale(scale);
-    mFontSprite->setLightColor(color);
+    mFontSprite->setColor(color);
     mFontSprite->setAlpha(alpha);
     for (const auto& c : alphabet) {
         mFontSprite->transform()->setPosition(pos);

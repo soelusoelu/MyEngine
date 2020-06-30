@@ -25,15 +25,16 @@ public:
         int number,
         const Vector2& position,
         const Vector2& scale = Vector2::one,
+        const Vector3& color = ColorPalette::white,
         float alpha = 1.f,
         Pivot pivot = Pivot::LEFT_TOP
     );
-    //ちゃんと動くかわからん
     void drawNumber(
         float number,
         const Vector2& position,
         const Vector2& scale = Vector2::one,
         int decimalDigits = 1,
+        const Vector3& color = ColorPalette::white,
         float alpha = 1.f,
         Pivot pivot = Pivot::LEFT_TOP
     );
@@ -51,6 +52,7 @@ private:
         int number;
         Vector2 position;
         Vector2 scale;
+        Vector3 color;
         float alpha;
         Pivot pivot;
     };
@@ -59,6 +61,7 @@ private:
         Vector2 position;
         Vector2 scale;
         int decimalDigits;
+        Vector3 color;
         float alpha;
         Pivot pivot;
     };

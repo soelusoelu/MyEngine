@@ -23,12 +23,10 @@
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
 
-
 //練習がてら、ちょい楽できるように
 #define ADD_COMPONENT(className) { mComponents.emplace((#className), &Component::create<className>); }
 
-GameObjectFactory::GameObjectFactory() :
-    mRenderer(nullptr) {
+GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(Camera);
 
     ADD_COMPONENT(CircleCollider);
@@ -59,9 +57,7 @@ GameObjectFactory::GameObjectFactory() :
 
 GameObjectFactory::~GameObjectFactory() = default;
 
-void GameObjectFactory::initialize(const std::shared_ptr<Renderer>& renderer) {
-    mRenderer = renderer;
-
+void GameObjectFactory::initialize() {
     const std::string& fileName = "ActorsList.json";
     if (!Singleton<LevelLoader>::instance().loadJSON(fileName, &mDocument)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
@@ -97,7 +93,7 @@ std::shared_ptr<GameObject> GameObjectFactory::loadGameObjectProperties(const ra
             continue;
         }
         //mapからゲームオブジェクトを生成
-        gameObj = GameObject::create(mRenderer);
+        gameObj = GameObject::create();
         gameObj->setTag(type);
         if (obj.HasMember("properties")) {
             gameObj->loadProperties(obj["properties"]);

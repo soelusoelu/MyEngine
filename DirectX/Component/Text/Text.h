@@ -1,11 +1,9 @@
 ﻿#pragma once
 
-#include "../Component.h"
-#include "../../GameObject/Pivot.h"
-#include "../../Math/Math.h"
+#include "TextBase.h"
 #include <string>
 
-class Text : public Component {
+class Text : public TextBase {
 public:
     Text();
     ~Text();
@@ -14,25 +12,7 @@ public:
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void setText(const std::string& text);
     const std::string& text() const;
-    void setPosition(const Vector2& pos);
-    const Vector2& getPosition() const;
-    void setScale(const Vector2& scale);
-    const Vector2& getScale() const;
-    void setLightColor(const Vector3& color);
-    const Vector3& getLightColor() const;
-    void setAlpha(float alpha);
-    float getAlpha() const;
-    void setPivot(Pivot pivot);
-    Pivot getPivot() const;
-    void setActive(bool value);
-    bool getActive() const;
 
 private:
     std::string mText;
-    Vector2 mPosition;
-    Vector2 mScale;
-    Vector3 mLightColor;
-    float mAlpha;
-    Pivot mPivot;
-    bool mIsActive;
 };

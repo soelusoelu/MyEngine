@@ -7,12 +7,11 @@
 
 class ComponentManager;
 class GameObjectManager;
-class Renderer;
 class Transform3D;
 
 class GameObject final : public Object, public std::enable_shared_from_this<GameObject> {
 public:
-    GameObject(const std::shared_ptr<Renderer>& renderer);
+    GameObject();
     ~GameObject();
 
     //更新
@@ -34,8 +33,6 @@ public:
     //タグの取得
     const std::string& tag() const;
 
-    //レンダラーの取得
-    const std::shared_ptr<Renderer>& renderer() const;
     //トランスフォームの取得
     const std::shared_ptr<Transform3D>& transform() const;
     //コンポーネント管理者の取得
@@ -47,7 +44,7 @@ public:
     GameObjectManager* getGameObjectManager();
 
     //ゲームオブジェクトを生成
-    static std::shared_ptr<GameObject> create(const std::shared_ptr<Renderer>& renderer);
+    static std::shared_ptr<GameObject> create();
 
 private:
     //初期化
@@ -56,7 +53,6 @@ private:
     void computeWorldTransform();
 
 private:
-    std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<ComponentManager> mComponentManager;
     std::string mTag;

@@ -51,8 +51,8 @@ public:
     //半径の取得
     float getRadius() const;
     //全体の色合い(シェーダー側で使用している必要あり)
-    void setLightColor(const Vector3& color);
-    const Vector3& getLightColor() const;
+    void setColor(const Vector3& color);
+    const Vector3& getColor() const;
     //状態
     void destroy();
     void setActive(bool value);
@@ -75,7 +75,7 @@ protected:
     State mState;
     Vector3 mCenter;
     float mRadius;
-    Vector3 mLightColor;
+    Vector3 mColor;
 
     static inline MeshManager* mMeshManager = nullptr;
 };

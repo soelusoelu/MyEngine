@@ -198,6 +198,7 @@
     <ClCompile Include="Component\Text\TextNumber.cpp" />
     <ClCompile Include="Component\Text\TextFloat.cpp" />
     <ClCompile Include="Component\Collider\SphereCollider.cpp" />
+    <ClCompile Include="Component\Text\TextBase.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
@@ -303,6 +304,7 @@
     <ClInclude Include="System\SystemInclude.h" />
     <ClInclude Include="Component\Text\TextNumber.h" />
     <ClInclude Include="Component\Text\TextFloat.h" />
+    <ClInclude Include="Component\Text\TextBase.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="Input\JoyPad.h" />
     <ClInclude Include="Input\Keyboard.h" />
