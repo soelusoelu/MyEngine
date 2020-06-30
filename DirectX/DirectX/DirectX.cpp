@@ -25,6 +25,13 @@ DirectX::~DirectX() {
     safeRelease(mDevice);
 }
 
+DirectX& DirectX::instance() {
+    if (!mInstance) {
+        mInstance = new DirectX();
+    }
+    return *mInstance;
+}
+
 void DirectX::initialize(const HWND& hWnd) {
     createDeviceAndSwapChain(hWnd);
     createDepthStencilView();
@@ -35,6 +42,10 @@ void DirectX::initialize(const HWND& hWnd) {
     mBlendState = std::make_shared<BlendState>();
     mDepthStencilState = std::make_shared<DepthStencilState>();
     mRasterizerState = std::make_shared<RasterizerState>();
+}
+
+void DirectX::finalize() {
+    safeDelete(mInstance);
 }
 
 ID3D11Device* DirectX::device() const {

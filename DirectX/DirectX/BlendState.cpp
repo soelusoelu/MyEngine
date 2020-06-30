@@ -53,7 +53,7 @@ const BlendDesc& BlendState::desc() const {
 void BlendState::execute(unsigned renderTarget) const {
     ID3D11BlendState* blend;
 
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     dx.device()->CreateBlendState(&toBlendDesc(mDesc, renderTarget), &blend);
     unsigned mask = 0xffffffff;
     dx.deviceContext()->OMSetBlendState(blend, nullptr, mask);

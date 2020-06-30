@@ -113,7 +113,7 @@ void Texture::createTexture(const std::string & filePath, bool isSprite) {
 
     ID3D11ShaderResourceView* srv;
 
-    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(Singleton<DirectX>::instance().device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
+    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(DirectX::instance().device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
         Debug::windowMessage(fileName + ": テクスチャ作成失敗");
     }
 

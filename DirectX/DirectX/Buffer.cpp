@@ -5,11 +5,12 @@
 
 Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data) :
     mDesc(desc) {
+    auto dev = DirectX::instance().device();
     //バッファの作成
     if (data) {
-        Singleton<DirectX>::instance().device()->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
+        dev->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
     } else {
-        Singleton<DirectX>::instance().device()->CreateBuffer(&toBufferDesc(desc), nullptr, &mBuffer);
+        dev->CreateBuffer(&toBufferDesc(desc), nullptr, &mBuffer);
     }
 }
 

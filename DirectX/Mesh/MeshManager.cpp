@@ -16,9 +16,9 @@ void MeshManager::draw(const Camera& camera) const {
         return;
     }
 
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     //プリミティブ・トポロジーをセット
-    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
 
     for (const auto& mesh : mMeshes) {
         if (!isDraw(*mesh, camera)) {
@@ -38,9 +38,9 @@ void MeshManager::drawTransparent(const Camera& camera) const {
         return;
     }
 
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     //プリミティブ・トポロジーをセット
-    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //デプステスト有効化
     dx.depthStencilState()->depthTest(true);
     //デプスマスク有効化

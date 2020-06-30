@@ -237,7 +237,6 @@
     <ClCompile Include="DirectX\Texture2D.cpp" />
     <ClCompile Include="DirectX\Usage.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
-    <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -352,7 +351,6 @@
     <ClInclude Include="DirectX\Texture2D.h" />
     <ClInclude Include="DirectX\Usage.h" />
     <ClInclude Include="Input\Mouse.h" />
-    <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />

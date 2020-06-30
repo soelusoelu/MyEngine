@@ -131,7 +131,7 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
     //サンプラーのセット
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
-    Singleton<DirectX>::instance().drawIndexed(6);
+    DirectX::instance().drawIndexed(6);
 }
 
 void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
@@ -162,7 +162,7 @@ void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
     //サンプラーのセット
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
-    Singleton<DirectX>::instance().drawIndexed(6);
+    DirectX::instance().drawIndexed(6);
 }
 
 const std::shared_ptr<Transform3D>& Sprite3D::transform() const {

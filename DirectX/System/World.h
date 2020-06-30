@@ -7,6 +7,8 @@ class AssetsManager;
 
 //グローバルアクセス専用クラス
 class World {
+private:
+    World();
 public:
     ~World();
     static World& instance();
@@ -15,7 +17,6 @@ public:
     AssetsManager& assetsManager() const;
 
 private:
-    World();
     World(const World&) = delete;
     World& operator=(const World&) = delete;
 

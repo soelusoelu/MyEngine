@@ -84,7 +84,7 @@ void PointLightComponent::draw(const Camera& camera, const PointLight& pointLigh
         mesh->getVertexArray()->setIndexBuffer(i);
 
         //プリミティブをレンダリング
-        Singleton<DirectX>::instance().drawIndexed(mats[i]->numFace * 3);
+        DirectX::instance().drawIndexed(mats[i]->numFace * 3);
     }
 }
 

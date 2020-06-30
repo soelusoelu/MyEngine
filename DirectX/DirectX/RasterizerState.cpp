@@ -31,7 +31,7 @@ const RasterizerDesc& RasterizerState::desc() const {
 void RasterizerState::execute() {
     ID3D11RasterizerState* rasterizer;
 
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     dx.device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
     dx.deviceContext()->RSSetState(rasterizer);
 

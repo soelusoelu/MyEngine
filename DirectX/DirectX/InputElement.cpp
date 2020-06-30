@@ -10,7 +10,7 @@ InputElement::InputElement(const InputElementDesc desc[], unsigned numElements, 
     }
 
     //頂点インプットレイアウトを作成
-    Singleton<DirectX>::instance().device()->CreateInputLayout(mElements, numElements, compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
+    DirectX::instance().device()->CreateInputLayout(mElements, numElements, compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
 
     safeDeleteArray(mElements);
 }

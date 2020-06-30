@@ -61,7 +61,7 @@ void LightManager::drawPointLights(const Camera& camera) {
         return;
     }
 
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     auto shader = mPointLight->shader;
     //使用するシェーダーの登録
     shader->setVSShader();
@@ -74,7 +74,7 @@ void LightManager::drawPointLights(const Camera& camera) {
     //バーテックスバッファーをセット
     mPointLight->mesh->getVertexArray()->setVertexBuffer();
     //プリミティブ指定
-    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //デプステスト有効化
     dx.depthStencilState()->depthTest(true);
     //デプスマスク無効化

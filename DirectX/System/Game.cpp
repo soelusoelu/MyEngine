@@ -27,6 +27,7 @@ Game::~Game() {
     InputUtility::finalize();
     DebugUtility::finalize();
     World::instance().finalize();
+    DirectX::instance().finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
@@ -73,7 +74,7 @@ void Game::initialize() {
     mWindow->createWindow(mInstance);
     mhWnd = mWindow->gethWnd();
 
-    Singleton<DirectX>::instance().initialize(mhWnd);
+    DirectX::instance().initialize(mhWnd);
 
     Random::initialize();
     DebugUtility::initialize();
@@ -83,8 +84,9 @@ void Game::initialize() {
 }
 
 void Game::mainLoop() {
-    Singleton<DirectX>::instance().clearRenderTarget();
-    Singleton<DirectX>::instance().clearDepthStencilView();
+    auto& dx = DirectX::instance();
+    dx.clearRenderTarget();
+    dx.clearDepthStencilView();
 
     InputUtility::update();
     mWindow->update();
@@ -93,5 +95,5 @@ void Game::mainLoop() {
     mSceneManager->draw();
 
     mFPSCounter->fixedFrame();
-    Singleton<DirectX>::instance().present();
+    dx.present();
 }

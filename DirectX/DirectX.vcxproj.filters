@@ -32,7 +32,6 @@
     <ClCompile Include="Device\DrawString.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
-    <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Mesh\VertexArray.cpp" />
@@ -131,7 +130,6 @@
     <ClInclude Include="Device\DrawString.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
-    <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Mesh\FBX.h" />
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="Utility\FileUtil.h" />

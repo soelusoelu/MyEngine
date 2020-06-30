@@ -70,7 +70,7 @@ void Sprite::draw(const Matrix4& proj) const {
     //サンプラーのセット
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
-    Singleton<DirectX>::instance().drawIndexed(6);
+    DirectX::instance().drawIndexed(6);
 }
 
 const std::shared_ptr<Transform2D>& Sprite::transform() const {

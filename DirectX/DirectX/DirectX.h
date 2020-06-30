@@ -5,34 +5,29 @@
 #include "SubResourceDesc.h"
 #include "Texture2DDesc.h"
 #include "../System/SystemInclude.h"
-#include "../Utility/Singleton.h"
 #include <memory>
 
 enum class PrimitiveType {
-    PRIMITIVE_TYPE_POINT_LIST,
-    PRIMITIVE_TYPE_LINE_LIST,
-    PRIMITIVE_TYPE_LINE_STRIP,
-    PRIMITIVE_TYPE_TRIANGLE_LIST,
-    PRIMITIVE_TYPE_TRIANGLE_STRIP
+    POINT_LIST,
+    LINE_LIST,
+    LINE_STRIP,
+    TRIANGLE_LIST,
+    TRIANGLE_STRIP
 };
 
 class BlendState;
 class DepthStencilState;
-class GBuffer;
 class RasterizerState;
 class RenderTargetView;
 
 class DirectX {
-    friend class Singleton<DirectX>;
-
 private:
     DirectX();
-    ~DirectX();
-    DirectX(const DirectX&) = delete;
-    DirectX& operator=(const DirectX&) = delete;
-
 public:
+    ~DirectX();
+    static DirectX& instance();
     void initialize(const HWND& hWnd);
+    void finalize();
 
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
@@ -54,12 +49,17 @@ public:
     void present();
 
 private:
+    DirectX(const DirectX&) = delete;
+    DirectX& operator=(const DirectX&) = delete;
+
     void createDeviceAndSwapChain(const HWND& hWnd);
     void createRenderTargetView();
     void createDepthStencilView();
     D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive) const;
 
 private:
+    static inline DirectX* mInstance = nullptr;
+
     ID3D11Device* mDevice;
     ID3D11DeviceContext* mDeviceContext;
     IDXGISwapChain* mSwapChain;

@@ -6,10 +6,11 @@
 
 ShaderResourceView::ShaderResourceView(std::shared_ptr<Texture2D> texture2D, const ShaderResourceViewDesc* desc) :
     mShaderResourceView(nullptr) {
+    auto dev = DirectX::instance().device();
     if (desc) {
-        Singleton<DirectX>::instance().device()->CreateShaderResourceView(texture2D->texture2D(), &toSRVDesc(desc), &mShaderResourceView);
+        dev->CreateShaderResourceView(texture2D->texture2D(), &toSRVDesc(desc), &mShaderResourceView);
     } else {
-        Singleton<DirectX>::instance().device()->CreateShaderResourceView(texture2D->texture2D(), nullptr, &mShaderResourceView);
+        dev->CreateShaderResourceView(texture2D->texture2D(), nullptr, &mShaderResourceView);
     }
 }
 
@@ -22,11 +23,11 @@ ShaderResourceView::~ShaderResourceView() {
 }
 
 void ShaderResourceView::setVSShaderResources(unsigned start, unsigned numViews) const {
-    Singleton<DirectX>::instance().deviceContext()->VSSetShaderResources(start, numViews, &mShaderResourceView);
+    DirectX::instance().deviceContext()->VSSetShaderResources(start, numViews, &mShaderResourceView);
 }
 
 void ShaderResourceView::setPSShaderResources(unsigned start, unsigned numViews) const {
-    Singleton<DirectX>::instance().deviceContext()->PSSetShaderResources(start, numViews, &mShaderResourceView);
+    DirectX::instance().deviceContext()->PSSetShaderResources(start, numViews, &mShaderResourceView);
 }
 
 D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceView::toSRVDesc(const ShaderResourceViewDesc* desc) const {

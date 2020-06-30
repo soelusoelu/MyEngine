@@ -7,10 +7,11 @@
 Texture2D::Texture2D(const Texture2DDesc& desc, const SubResourceDesc* data) :
     mTexture2D(nullptr),
     mDesc(desc) {
+    auto dev = DirectX::instance().device();
     if (data) {
-        Singleton<DirectX>::instance().device()->CreateTexture2D(&toTexture2DDesc(desc), &toSubResource(data), &mTexture2D);
+        dev->CreateTexture2D(&toTexture2DDesc(desc), &toSubResource(data), &mTexture2D);
     } else {
-        Singleton<DirectX>::instance().device()->CreateTexture2D(&toTexture2DDesc(desc), nullptr, &mTexture2D);
+        dev->CreateTexture2D(&toTexture2DDesc(desc), nullptr, &mTexture2D);
     }
 }
 

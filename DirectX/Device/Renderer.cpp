@@ -16,7 +16,7 @@ void Renderer::initialize() {
 }
 
 void Renderer::renderToTexture() {
-    Singleton<DirectX>::instance().setViewport(Window::width(), Window::height());
+    DirectX::instance().setViewport(Window::width(), Window::height());
     mGBuffer->renderToTexture();
 }
 
@@ -25,9 +25,9 @@ void Renderer::renderFromTexture(const Camera& camera, const LightManager& light
 }
 
 void Renderer::renderSprite() const {
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     //プリミティブ・トポロジーをセット
-    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //インデックスバッファーをセット
     Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //半透明合成
@@ -47,20 +47,20 @@ void Renderer::renderSprite2D(Matrix4* proj) const {
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
     //デプステスト無効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
+    DirectX::instance().depthStencilState()->depthTest(false);
 }
 
 void Renderer::renderSprite3D() const {
     //バーテックスバッファーをセット
     Texture::vertexBuffer3D->setVertexBuffer();
     //デプステスト有効化
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
     dx.depthStencilState()->depthTest(true);
     dx.depthStencilState()->depthMask(true);
 }
 
 void Renderer::renderToDebug(Matrix4* proj) const {
-    auto& dx = Singleton<DirectX>::instance();
+    auto& dx = DirectX::instance();
 
     dx.setDebugRenderTarget();
     dx.setViewport(Window::debugWidth(), Window::debugHeight());

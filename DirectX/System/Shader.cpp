@@ -16,14 +16,14 @@ Shader::Shader(const std::string& fileName) :
 }
 
 Shader::~Shader() {
-    safeRelease<ID3D10Blob>(mCompileShader);
-    safeRelease<ID3D11VertexShader>(mVertexShader);
-    safeRelease<ID3D11PixelShader>(mPixelShader);
+    safeRelease(mCompileShader);
+    safeRelease(mVertexShader);
+    safeRelease(mPixelShader);
 }
 
 bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {
     auto msr = toMappedSubResource(data);
-    auto res = Singleton<DirectX>::instance().deviceContext()->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
+    auto res = DirectX::instance().deviceContext()->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
 
     data->data = msr.pData;
     data->rowPitch = msr.RowPitch;
@@ -33,15 +33,15 @@ bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D1
 }
 
 void Shader::unmap(unsigned index, unsigned sub) const {
-    Singleton<DirectX>::instance().deviceContext()->Unmap(mConstantBuffers[index]->buffer(), sub);
+    DirectX::instance().deviceContext()->Unmap(mConstantBuffers[index]->buffer(), sub);
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
-    Singleton<DirectX>::instance().deviceContext()->VSSetShader(mVertexShader, &classInstances, numClassInstances);
+    DirectX::instance().deviceContext()->VSSetShader(mVertexShader, &classInstances, numClassInstances);
 }
 
 void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
-    Singleton<DirectX>::instance().deviceContext()->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+    DirectX::instance().deviceContext()->PSSetShader(mPixelShader, &classInstances, numClassInstances);
 }
 
 void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
@@ -61,12 +61,12 @@ void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
 
 void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) const {
     auto buf = mConstantBuffers[index]->buffer();
-    Singleton<DirectX>::instance().deviceContext()->VSSetConstantBuffers(index, numBuffers, &buf);
+    DirectX::instance().deviceContext()->VSSetConstantBuffers(index, numBuffers, &buf);
 }
 
 void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) const {
     auto buf = mConstantBuffers[index]->buffer();
-    Singleton<DirectX>::instance().deviceContext()->PSSetConstantBuffers(index, numBuffers, &buf);
+    DirectX::instance().deviceContext()->PSSetConstantBuffers(index, numBuffers, &buf);
 }
 
 void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElements) {
@@ -74,7 +74,7 @@ void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElem
 }
 
 void Shader::setInputLayout() const {
-    Singleton<DirectX>::instance().deviceContext()->IASetInputLayout(mVertexLayout->layout());
+    DirectX::instance().deviceContext()->IASetInputLayout(mVertexLayout->layout());
 }
 
 void Shader::createVertexShader(const std::string& fileName) {
@@ -84,7 +84,7 @@ void Shader::createVertexShader(const std::string& fileName) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");
         return;
     }
-    if (FAILED(Singleton<DirectX>::instance().device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
+    if (FAILED(DirectX::instance().device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
         safeRelease<ID3D10Blob>(mCompileShader);
         Debug::windowMessage(fileName + ": バーテックスシェーダー作成失敗");
         return;
@@ -99,7 +99,7 @@ void Shader::createPixelShader(const std::string& fileName) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");
         return;
     }
-    if (FAILED(Singleton<DirectX>::instance().device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
+    if (FAILED(DirectX::instance().device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
         safeRelease<ID3D10Blob>(compiledShader);
         Debug::windowMessage(fileName + ": ピクセルシェーダー作成失敗");
         return;

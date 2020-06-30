@@ -32,9 +32,9 @@ const DepthStencilDesc& DepthStencilState::desc() const {
 void DepthStencilState::execute() const {
     ID3D11DepthStencilState* depthStencilState;
 
-    Singleton<DirectX>::instance().device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
-
-    Singleton<DirectX>::instance().deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
+    auto& dx = DirectX::instance();
+    dx.device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
+    dx.deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
     safeRelease(depthStencilState);
 }
