@@ -182,6 +182,7 @@
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="Component\Scene\GamePlay.cpp" />
     <ClCompile Include="Input\InputUtility.cpp" />
+    <ClCompile Include="Light\LightManager.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Matrix3.cpp" />
     <ClCompile Include="Math\Matrix4.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="Component\Text\Text.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="DebugLayer\IButton.h" />
+    <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
@@ -281,6 +283,7 @@
     <ClInclude Include="Input\IKeyboard.h" />
     <ClInclude Include="Input\IMouse.h" />
     <ClInclude Include="Input\InputUtility.h" />
+    <ClInclude Include="Light\LightManager.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Vector2.h" />

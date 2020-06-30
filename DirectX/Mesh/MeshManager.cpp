@@ -1,13 +1,7 @@
 ﻿#include "MeshManager.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Mesh/MeshComponent.h"
-#include "../DirectX/BlendDesc.h"
-#include "../DirectX/BlendState.h"
-#include "../DirectX/DepthStencilState.h"
-#include "../DirectX/DirectX.h"
-#include "../DirectX/RasterizerDesc.h"
-#include "../DirectX/RasterizerState.h"
-#include "../GameObject/GameObject.h"
+#include "../DirectX/DirectXInclude.h"
 #include "../GameObject/Transform3D.h"
 
 MeshManager::MeshManager() = default;
@@ -35,11 +29,11 @@ void MeshManager::draw(const Camera& camera) const {
 
         rd.cullMode = CullMode::FRONT;
         dx.rasterizerState()->setRasterizerState(rd);
-        mesh->draw();
+        mesh->draw(camera);
 
         rd.cullMode = CullMode::BACK;
         dx.rasterizerState()->setRasterizerState(rd);
-        mesh->draw();
+        mesh->draw(camera);
     }
 }
 
@@ -70,11 +64,11 @@ void MeshManager::drawTransparent(const Camera& camera) const {
 
         rd.cullMode = CullMode::FRONT;
         dx.rasterizerState()->setRasterizerState(rd);
-        mesh->draw();
+        mesh->draw(camera);
 
         rd.cullMode = CullMode::BACK;
         dx.rasterizerState()->setRasterizerState(rd);
-        mesh->draw();
+        mesh->draw(camera);
     }
 }
 
@@ -117,8 +111,8 @@ bool MeshManager::isDraw(const MeshComponent& mesh, const Camera& camera) const 
     if (mesh.isDead()) {
         return false;
     }
-    auto pos = mesh.gameObject()->transform()->getPosition();
-    auto radius = mesh.getRadius() * mesh.gameObject()->transform()->getScale().x;
+    auto pos = mesh.transform()->getPosition();
+    auto radius = mesh.getRadius() * mesh.transform()->getScale().x;
     if (!camera.viewFrustumCulling(pos, radius)) {
         return false;
     }

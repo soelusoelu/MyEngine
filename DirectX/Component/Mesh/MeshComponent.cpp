@@ -1,10 +1,8 @@
 ﻿#include "MeshComponent.h"
-#include "../ComponentManager.h"
 #include "../Camera/Camera.h"
 #include "../../Device/AssetsManager.h"
-#include "../../DirectX/DirectX.h"
+#include "../../DirectX/DirectXInclude.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/GameObjectManager.h"
 #include "../../GameObject/Transform3D.h"
 #include "../../Mesh/IMeshLoader.h"
 #include "../../Mesh/Material.h"
@@ -18,7 +16,6 @@ MeshComponent::MeshComponent() :
     Component(),
     mMesh(nullptr),
     mShader(nullptr),
-    mCamera(nullptr),
     mState(State::ACTIVE),
     mCenter(Vector3::zero),
     mRadius(0.f),
@@ -28,9 +25,6 @@ MeshComponent::MeshComponent() :
 MeshComponent::~MeshComponent() = default;
 
 void MeshComponent::awake() {
-    const auto& camera = gameObject()->getGameObjectManager()->find("Camera");
-    mCamera = camera->componentManager()->getComponent<Camera>();
-
     //半径と中心座標の取得
     mCenter = mMesh->getCenter();
     mRadius = mMesh->getRadius();
@@ -53,14 +47,6 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
 
 void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Color", mLightColor);
-}
-
-bool MeshComponent::isVisible() const {
-    if (!mCamera) {
-        return false;
-    }
-
-    return mCamera->viewFrustumCulling(gameObject()->transform()->getPosition(), mRadius);
 }
 
 size_t MeshComponent::getNumMaterial() const {
@@ -124,7 +110,7 @@ void MeshComponent::setShader() {
     mShader->createInputLayout(layout, numElements);
 }
 
-void MeshComponent::draw() {
+void MeshComponent::draw(const Camera& camera) {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -139,11 +125,10 @@ void MeshComponent::draw() {
     if (mShader->map(&msrd, 0)) {
         MeshConstantBuffer cb;
         //ワールド行列を渡す
-        auto trans = gameObject()->transform();
-        cb.world = trans->getWorldTransform();
+        cb.world = transform()->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = trans->getWorldTransform() * mCamera->getViewProjection();
+        cb.WVP = transform()->getWorldTransform() * camera.getViewProjection();
         cb.WVP.transpose();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));

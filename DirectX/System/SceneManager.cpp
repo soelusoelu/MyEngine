@@ -4,7 +4,6 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Collider/Collider.h"
-#include "../Component/Light/DirectionalLight.h"
 #include "../Component/Mesh/MeshComponent.h"
 #include "../Component/Scene/Scene.h"
 #include "../Component/Sprite/Sprite3D.h"
@@ -19,6 +18,7 @@
 #include "../GameObject/GameObjectManager.h"
 #include "../Input/Input.h"
 #include "../Input/Keyboard.h"
+#include "../Light/LightManager.h"
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
@@ -31,6 +31,7 @@ SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mMeshManager(new MeshManager()),
     mSpriteManager(new SpriteManager()),
     mPhysics(new Physics()),
+    mLightManager(new LightManager()),
     mShouldDraw(true) {
 }
 
@@ -39,6 +40,7 @@ SceneManager::~SceneManager() {
     safeDelete(mMeshManager);
     safeDelete(mSpriteManager);
     safeDelete(mPhysics);
+    safeDelete(mLightManager);
 
     GameObject::setGameObjectManager(nullptr);
     MeshComponent::setMeshManager(nullptr);
@@ -47,7 +49,13 @@ SceneManager::~SceneManager() {
     Collider::setPhysics(nullptr);
 }
 
+void SceneManager::loadProperties(const rapidjson::Value& inObj) {
+    mLightManager->loadProperties(inObj);
+}
+
 void SceneManager::initialize() {
+    mLightManager->initialize();
+
     GameObject::setGameObjectManager(mGameObjectManager);
     MeshComponent::setMeshManager(mMeshManager);
     SpriteComponent::setSpriteManager(mSpriteManager);
@@ -56,8 +64,8 @@ void SceneManager::initialize() {
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager()->getComponent<Camera>();
-    auto dirLight = GameObjectCreater::create("DirectionalLight");
-    mDirectionalLight = dirLight->componentManager()->getComponent<DirectionalLight>();
+
+    mLightManager->createDirectionalLight();
 
     //初期シーンの設定
     createScene("Title");
@@ -84,8 +92,6 @@ void SceneManager::update() {
     mGameObjectManager->update();
     //総当たり判定
     mPhysics->sweepAndPrune();
-    //レンダラーの更新
-    mRenderer->update();
     //各マネージャークラスを更新
     mMeshManager->update();
     mSpriteManager->update();
@@ -110,9 +116,11 @@ void SceneManager::draw() const {
     //メッシュの一括描画
     mMeshManager->draw(*mCamera);
     //各テクスチャを参照してレンダリング
-    mRenderer->renderFromTexture(*mCamera, *mDirectionalLight);
+    mRenderer->renderFromTexture(*mCamera, *mLightManager);
+    //ポイントライト描画準備
+    mRenderer->renderPointLight();
     //ポイントライトの一括描画
-    mRenderer->drawPointLights();
+    mLightManager->drawPointLights(*mCamera);
     //透明メッシュの描画
     mMeshManager->drawTransparent(*mCamera);
 

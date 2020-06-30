@@ -15,6 +15,11 @@ public:
     const Matrix4& getProjection() const;
     // View * Projection
     Matrix4 getViewProjection() const;
+    //位置の設定
+    void setPosition(const Vector3& pos);
+    //位置の取得
+    Vector3 getPosition() const;
+    //視点を指定
     void lookAt(const Vector3& position);
     //スクリーン座標をワールド座標に変換
     Vector3 screenToWorldPoint(const Vector2& position, float z);

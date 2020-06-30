@@ -104,6 +104,7 @@
     <ClCompile Include="Component\Collider\CircleCollider.cpp" />
     <ClCompile Include="Component\Collider\SphereCollider.cpp" />
     <ClCompile Include="Component\Sound\SoundComponent.cpp" />
+    <ClCompile Include="Light\LightManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -218,5 +219,7 @@
     <ClInclude Include="Component\Collider\CircleCollider.h" />
     <ClInclude Include="Component\Collider\SphereCollider.h" />
     <ClInclude Include="Component\Sound\SoundComponent.h" />
+    <ClInclude Include="Light\LightManager.h" />
+    <ClInclude Include="DirectX\DirectXInclude.h" />
   </ItemGroup>
 </Project>

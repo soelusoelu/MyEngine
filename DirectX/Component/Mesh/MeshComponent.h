@@ -42,8 +42,6 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
-    //カメラに写っているか
-    bool isVisible() const;
     //マテリアル数の取得
     size_t getNumMaterial() const;
     //マテリアルの取得
@@ -63,7 +61,7 @@ public:
 
     virtual void setMesh(const std::string& fileName);
     virtual void setShader();
-    virtual void draw();
+    virtual void draw(const Camera& camera);
 
     static void setMeshManager(MeshManager* manager);
 
@@ -73,7 +71,6 @@ protected:
 protected:
     std::shared_ptr<IMeshLoader> mMesh;
     std::shared_ptr<Shader> mShader;
-    std::shared_ptr<Camera> mCamera;
     MaterialPtrArray mMaterials;
     State mState;
     Vector3 mCenter;

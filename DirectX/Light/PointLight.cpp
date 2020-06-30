@@ -4,17 +4,25 @@
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
 #include "../System/Shader.h"
+#include "../Utility/LevelLoader.h"
 
 PointLight::PointLight() :
     shader(nullptr),
-    radius(0.f) {
+    radius(0.f),
+    mMeshFileName("") {
 }
 
 PointLight::~PointLight() = default;
 
+void PointLight::loadProperties(const rapidjson::Value & inObj) {
+    const auto& obj = inObj["light"];
+    if (obj.IsObject()) {
+        JsonHelper::getString(obj, "pointLightMeshFileName", &mMeshFileName);
+    }
+}
+
 void PointLight::initialize() {
-    //メッシュ描画されるとだるいから自己管理
-    mesh = Singleton<AssetsManager>::instance().createMesh("Shape/Sphere.obj");
+    mesh = Singleton<AssetsManager>::instance().createMesh(mMeshFileName);
     mesh->setInitMaterials(&materials);
     radius = mesh->getRadius();
     shader = Singleton<AssetsManager>::instance().createShader("PointLight.hlsl");

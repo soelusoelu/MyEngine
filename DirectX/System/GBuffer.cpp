@@ -4,26 +4,11 @@
 #include "../Component/Camera/Camera.h"
 #include "../Component/Light/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
-#include "../DirectX/BlendDesc.h"
-#include "../DirectX/BlendState.h"
-#include "../DirectX/Buffer.h"
-#include "../DirectX/BufferDesc.h"
-#include "../DirectX/DepthStencilState.h"
-#include "../DirectX/DirectX.h"
-#include "../DirectX/IndexBuffer.h"
-#include "../DirectX/RenderTargetView.h"
-#include "../DirectX/RenderTargetViewDesc.h"
-#include "../DirectX/Sampler.h"
-#include "../DirectX/SamplerDesc.h"
-#include "../DirectX/ShaderResourceView.h"
-#include "../DirectX/ShaderResourceViewDesc.h"
-#include "../DirectX/SubResourceDesc.h"
-#include "../DirectX/Texture2D.h"
-#include "../DirectX/Texture2DDesc.h"
-#include "../DirectX/Usage.h"
-#include "../DirectX/VertexBuffer.h"
+#include "../DirectX/DirectXInclude.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
+#include "../Light/LightManager.h"
+#include "../System/SystemInclude.h"
 
 GBuffer::GBuffer() :
     mSampler(nullptr),
@@ -120,7 +105,7 @@ void GBuffer::renderToTexture() {
     dx.blendState()->setBlendState(bd);
 }
 
-void GBuffer::renderFromTexture(const Camera& camera, const DirectionalLight& dirLight, const Vector3& ambient) {
+void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {
     auto& dx = Singleton<DirectX>::instance();
 
     //レンダーターゲットを通常に戻す
@@ -142,10 +127,10 @@ void GBuffer::renderFromTexture(const Camera& camera, const DirectionalLight& di
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd)) {
         GBufferShaderConstantBuffer cb;
-        cb.dirLightDir = dirLight.getDirection();
-        cb.dirLightColor = dirLight.getLightColor();
+        cb.dirLightDir = lightManager.getDirectionalLight().getDirection();
+        cb.dirLightColor = lightManager.getDirectionalLight().getLightColor();
         cb.cameraPos = camera.gameObject()->transform()->getPosition();
-        cb.ambientLight = ambient;
+        cb.ambientLight = lightManager.getAmbientLight();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShader->unmap();

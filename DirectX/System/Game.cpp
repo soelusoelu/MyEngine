@@ -55,6 +55,7 @@ void Game::loadProperties(const rapidjson::Value& inObj) {
     mFPSCounter->loadProperties(inObj);
     DebugUtility::loadProperties(inObj);
     InputUtility::loadProperties(inObj);
+    mSceneManager->loadProperties(inObj);
 }
 
 void Game::quit() {

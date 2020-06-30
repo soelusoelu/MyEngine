@@ -62,7 +62,7 @@ void TransparentMeshComponent::setShader() {
     mShader->createInputLayout(layout, numElements);
 }
 
-void TransparentMeshComponent::draw() {
+void TransparentMeshComponent::draw(const Camera& camera) {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -81,10 +81,10 @@ void TransparentMeshComponent::draw() {
         cb.world = trans->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = trans->getWorldTransform() * mCamera->getViewProjection();
+        cb.WVP = trans->getWorldTransform() * camera.getViewProjection();
         cb.WVP.transpose();
         cb.lightDir = mDirLight->getDirection();
-        cb.cameraPos = mCamera->gameObject()->transform()->getPosition();
+        cb.cameraPos = camera.getPosition();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShader->unmap(0);

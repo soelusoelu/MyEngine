@@ -1,12 +1,8 @@
 ﻿#include "PointLightComponent.h"
-#include "../ComponentManager.h"
 #include "../Camera/Camera.h"
-#include "../../DirectX/DirectX.h"
-#include "../../DirectX/SubResourceDesc.h"
-#include "../../GameObject/GameObject.h"
-#include "../../GameObject/GameObjectManager.h"
+#include "../../DirectX/DirectXInclude.h"
 #include "../../GameObject/Transform3D.h"
-#include "../../Device/Renderer.h"
+#include "../../Light/LightManager.h"
 #include "../../Light/PointLight.h"
 #include "../../Mesh/IMeshLoader.h"
 #include "../../Mesh/Material.h"
@@ -17,7 +13,6 @@
 
 PointLightComponent::PointLightComponent() :
     Component(),
-    mCamera(nullptr),
     mLightColor(ColorPalette::white),
     mInnerRadius(0.5f),
     mOuterRadius(1.f),
@@ -27,9 +22,15 @@ PointLightComponent::PointLightComponent() :
 PointLightComponent::~PointLightComponent() = default;
 
 void PointLightComponent::start() {
-    auto camera = gameObject()->getGameObjectManager()->find("Camera");
-    mCamera = camera->componentManager()->getComponent<Camera>();
-    gameObject()->renderer()->addPointLight(shared_from_this());
+    if (mLightManager) {
+        mLightManager->addPointLight(shared_from_this());
+    }
+}
+
+void PointLightComponent::finalize() {
+    if (mLightManager) {
+        mLightManager->removePointLight(shared_from_this());
+    }
 }
 
 void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
@@ -46,9 +47,9 @@ void PointLightComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) 
     inspect->emplace_back("Intensity", mIntensity);
 }
 
-void PointLightComponent::draw(const PointLight& pointLight) const {
-    auto scale = Matrix4::createScale(gameObject()->transform()->getScale() * mOuterRadius / pointLight.radius);
-    auto trans = Matrix4::createTranslation(gameObject()->transform()->getPosition());
+void PointLightComponent::draw(const Camera& camera, const PointLight& pointLight) const {
+    auto scale = Matrix4::createScale(transform()->getScale() * mOuterRadius / pointLight.radius);
+    auto trans = Matrix4::createTranslation(transform()->getPosition());
     auto world = scale * trans;
 
     auto shader = pointLight.shader;
@@ -57,10 +58,10 @@ void PointLightComponent::draw(const PointLight& pointLight) const {
     MappedSubResourceDesc msrd;
     if (shader->map(&msrd)) {
         PointLightConstantBuffer cb;
-        cb.wvp = world * mCamera->getViewProjection();
+        cb.wvp = world * camera.getViewProjection();
         cb.wvp.transpose();
-        cb.worldPos = gameObject()->transform()->getPosition();
-        cb.cameraPos = mCamera->gameObject()->transform()->getPosition();
+        cb.worldPos = transform()->getPosition();
+        cb.cameraPos = camera.getPosition();
         cb.windowSize = Vector2(Window::width(), Window::height());
         cb.diffuseColor = mLightColor;
         cb.innerRadius = mInnerRadius;
@@ -101,4 +102,8 @@ void PointLightComponent::setOuterRadius(float radius) {
 
 void PointLightComponent::setIntensity(float value) {
     mIntensity = value;
+}
+
+void PointLightComponent::setLightManager(LightManager* manager) {
+    mLightManager = manager;
 }

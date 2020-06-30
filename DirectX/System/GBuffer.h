@@ -6,7 +6,7 @@
 #include <vector>
 
 class Camera;
-class DirectionalLight;
+class LightManager;
 class IndexBuffer;
 class RenderTargetView;
 class Sampler;
@@ -44,7 +44,7 @@ public:
 
     //GBufferテクスチャ上にレンダリング
     void renderToTexture();
-    void renderFromTexture(const Camera& camera, const DirectionalLight& dirLight, const Vector3& ambient);
+    void renderFromTexture(const Camera& camera, const LightManager& lightManager);
 
     //全シェーダーリソースの登録
     void setVSShaderResources() const;

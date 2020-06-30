@@ -2,7 +2,9 @@
 
 #include "../Math/Math.h"
 #include "../System/GlobalFunction.h"
+#include <rapidjson/document.h>
 #include <memory>
+#include <string>
 #include <vector>
 
 class IMeshLoader;
@@ -28,5 +30,9 @@ struct PointLight {
 
     PointLight();
     ~PointLight();
+    void loadProperties(const rapidjson::Value& inObj);
     void initialize();
+
+private:
+    std::string mMeshFileName;
 };

@@ -2,15 +2,12 @@
 
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
-#include <list>
 #include <memory>
 
 class Camera;
-class DirectionalLight;
 class DrawString;
 class GBuffer;
-struct PointLight;
-class PointLightComponent;
+class LightManager;
 
 class Renderer {
 public:
@@ -18,17 +15,12 @@ public:
     ~Renderer();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
-    void update();
 
     const std::shared_ptr<DrawString>& getDrawString() const;
 
-    const Vector3& getAmbientLight() const;
-    void setAmbientLight(const Vector3& ambient);
-    void addPointLight(const std::shared_ptr<PointLightComponent>& light);
-    void drawPointLights();
-
     void renderToTexture();
-    void renderFromTexture(const Camera& camera, const DirectionalLight& dirLight);
+    void renderFromTexture(const Camera& camera, const LightManager& lightManager);
+
     //スプライト描画共通処理
     void renderSprite() const;
     //2Dスプライト処理
@@ -37,16 +29,10 @@ public:
     void renderSprite3D() const;
     //デバッグ画面処理
     void renderToDebug(Matrix4* proj) const;
-
-private:
-    void removePointLight();
+    //ポイントライト処理
+    void renderPointLight() const;
 
 private:
     std::shared_ptr<DrawString> mDrawString;
     std::unique_ptr<GBuffer> mGBuffer;
-
-    Vector3 mAmbientLight;
-    std::shared_ptr<PointLight> mPointLight;
-
-    std::list<std::weak_ptr<PointLightComponent>> mPointLights;
 };

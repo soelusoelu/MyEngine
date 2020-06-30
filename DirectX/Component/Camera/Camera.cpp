@@ -1,5 +1,4 @@
 ﻿#include "Camera.h"
-#include "../../GameObject/GameObject.h"
 #include "../../GameObject/Transform3D.h"
 #include "../../Math/Plane.h"
 #include "../../System/Window.h"
@@ -49,6 +48,14 @@ const Matrix4& Camera::getProjection() const {
 
 Matrix4 Camera::getViewProjection() const {
     return mView * mProjection;
+}
+
+void Camera::setPosition(const Vector3& pos) {
+    transform()->setPosition(pos);
+}
+
+Vector3 Camera::getPosition() const {
+    return transform()->getPosition();
 }
 
 void Camera::lookAt(const Vector3 & position) {
@@ -152,7 +159,7 @@ bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {
 }
 
 void Camera::calcLookAt() {
-    auto pos = gameObject()->transform()->getPosition();
+    auto pos = getPosition();
     Vector3 zaxis = Vector3::normalize(mLookAt - pos);
     Vector3 xaxis = Vector3::normalize(Vector3::cross(mUp, zaxis));
     Vector3 yaxis = Vector3::normalize(Vector3::cross(zaxis, xaxis));
