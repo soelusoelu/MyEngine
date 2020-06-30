@@ -2,16 +2,8 @@
 #include "GlobalFunction.h"
 #include "Shader.h"
 #include "../DebugLayer/Debug.h"
-#include "../DirectX/BufferDesc.h"
-#include "../DirectX/DirectX.h"
-#include "../DirectX/Format.h"
-#include "../DirectX/IndexBuffer.h"
-#include "../DirectX/Sampler.h"
-#include "../DirectX/SamplerDesc.h"
-#include "../DirectX/ShaderResourceView.h"
-#include "../DirectX/SubResourceDesc.h"
-#include "../DirectX/Usage.h"
-#include "../DirectX/VertexBuffer.h"
+#include "../DirectX/DirectXInclude.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
@@ -107,9 +99,9 @@ void Texture::createIndexBuffer() {
 
 void Texture::createTexture(const std::string & filePath, bool isSprite) {
     if (isSprite) {
-        Directory::setTextureDirectory();
+        World::instance().directory().setTextureDirectory();
     } else {
-        Directory::setModelDirectory(filePath);
+        World::instance().directory().setModelDirectory(filePath);
     }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;

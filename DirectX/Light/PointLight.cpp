@@ -4,6 +4,7 @@
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
 #include "../System/Shader.h"
+#include "../System/World.h"
 #include "../Utility/LevelLoader.h"
 
 PointLight::PointLight() :
@@ -22,10 +23,10 @@ void PointLight::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void PointLight::initialize() {
-    mesh = Singleton<AssetsManager>::instance().createMesh(mMeshFileName);
+    mesh = World::instance().assetsManager().createMesh(mMeshFileName);
     mesh->setInitMaterials(&materials);
     radius = mesh->getRadius();
-    shader = Singleton<AssetsManager>::instance().createShader("PointLight.hlsl");
+    shader = World::instance().assetsManager().createShader("PointLight.hlsl");
 
     //コンスタントバッファ生成
     shader->createConstantBuffer(sizeof(PointLightConstantBuffer));

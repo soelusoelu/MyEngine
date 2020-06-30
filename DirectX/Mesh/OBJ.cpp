@@ -4,6 +4,7 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
 #include "../System/GlobalFunction.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/StringUtil.h"
@@ -18,7 +19,7 @@ OBJ::~OBJ() {
 }
 
 void OBJ::perse(const std::string& filePath) {
-    Directory::setModelDirectory(filePath);
+    World::instance().directory().setModelDirectory(filePath);
 
     //OBJファイルを開いて内容を読み込む
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
@@ -361,7 +362,7 @@ bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath)
             dir += "/" + mInitMaterials[matCount]->textureName;
 
             //テクスチャーを作成
-            mInitMaterials[matCount]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
+            mInitMaterials[matCount]->texture = World::instance().assetsManager().createTexture(dir, false);
         }
     }
 

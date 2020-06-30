@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "Texture.h"
 #include "Window.h"
+#include "World.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../Device/DrawString.h"
 #include "../Device/FPSCounter.h"
@@ -26,11 +27,11 @@ Game::~Game() {
     InputUtility::finalize();
     Texture::finalize();
     DebugUtility::finalize();
-    Directory::finalize();
+    World::instance().finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
-    Directory::initialize();
+    World::instance().directory().initialize();
 
     mInstance = hInstance;
     initialize();

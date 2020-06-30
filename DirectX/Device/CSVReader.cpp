@@ -1,5 +1,5 @@
 ﻿#include "CSVReader.h"
-#include "../System/Game.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 #include <cassert>
 #include <fstream>
@@ -54,7 +54,7 @@ void CSVReader::parse(const std::string& fileName) {
     //中身リセット
     mCSV.clear();
 
-    Directory::setDataDirectory();
+    World::instance().directory().setDataDirectory();
 
     //読み込み開始
     std::ifstream ifs(fileName, std::ios::in);
@@ -84,7 +84,7 @@ void CSVReader::parseString(const std::string& fileName) {
     //中身リセット
     mCSVString.clear();
 
-    Directory::setDataDirectory();
+    World::instance().directory().setDataDirectory();
 
     //読み込み開始
     std::ifstream ifs(fileName, std::ios::in);

@@ -1,16 +1,22 @@
 ﻿#include "AssetsManager.h"
 #include "Sound.h"
+#include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../Utility/FileUtil.h"
+#include <cassert>
 
 AssetsManager::AssetsManager() :
     mSoundBase(std::make_unique<SoundBase>()) {
+    assert(!mInstantiated);
+    mInstantiated = true;
 }
 
-AssetsManager::~AssetsManager() = default;
+AssetsManager::~AssetsManager() {
+    mInstantiated = false;
+}
 
 std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName) {
     std::shared_ptr<Shader> shader = nullptr;
@@ -42,7 +48,12 @@ std::shared_ptr<Sound> AssetsManager::createSound(const std::string& fileName) {
     if (itr != mSounds.end()) { //既に読み込まれている
         sound = itr->second;
     } else { //初読み込み
-        sound = std::make_shared<Sound>();
+        auto ext = FileUtil::getFileExtension(fileName);
+        if (ext == ".wav") {
+            sound = std::make_shared<Sound>();
+        } else {
+            Debug::windowMessage(fileName + ": 対応していない拡張子です");
+        }
         mSoundBase->load(fileName, &sound);
         mSounds.emplace(fileName, sound);
     }
@@ -63,6 +74,8 @@ std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileN
             mesh = std::make_shared<OBJ>();
         } else if (ext == ".fbx") {
             mesh = std::make_shared<FBX>();
+        } else {
+            Debug::windowMessage(fileName + ": 対応していない拡張子です");
         }
         mesh->perse(fileName);
         mMeshLoaders.emplace(fileName, mesh);

@@ -1,6 +1,7 @@
 #include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Sound.h"
+#include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
 SoundComponent::SoundComponent() :
@@ -40,7 +41,7 @@ void SoundComponent::playBGM() {
 }
 
 void SoundComponent::playBGM(const std::string& fileName, float volumeScale) {
-    mSound = Singleton<AssetsManager>::instance().createSound(fileName);
+    mSound = World::instance().assetsManager().createSound(fileName);
 
     mSound->setVolume(volumeScale);
     mSound->play(true);
@@ -51,7 +52,7 @@ void SoundComponent::playSE() {
 }
 
 void SoundComponent::playSE(const std::string& fileName, float volumeScale) {
-    auto sound = Singleton<AssetsManager>::instance().createSound(fileName);
+    auto sound = World::instance().assetsManager().createSound(fileName);
 
     sound->setVolume(volumeScale);
     sound->play();

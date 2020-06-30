@@ -106,6 +106,7 @@
     <ClCompile Include="Component\Sound\SoundComponent.cpp" />
     <ClCompile Include="Light\LightManager.cpp" />
     <ClCompile Include="Component\Text\TextBase.cpp" />
+    <ClCompile Include="System\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -223,5 +224,6 @@
     <ClInclude Include="Light\LightManager.h" />
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Component\Text\TextBase.h" />
+    <ClInclude Include="System\World.h" />
   </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../Mesh/IMeshLoader.h"
-#include "../Utility/Singleton.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -12,17 +11,17 @@ class SoundBase;
 class Texture;
 
 class AssetsManager {
-    friend class Singleton<AssetsManager>;
-
-private:
+public:
     AssetsManager();
     ~AssetsManager();
-
-public:
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
     std::shared_ptr<Sound> createSound(const std::string& fileName);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& fileName);
+
+private:
+    AssetsManager(const AssetsManager&) = delete;
+    AssetsManager& operator=(const AssetsManager&) = delete;
 
 private:
     std::unique_ptr<SoundBase> mSoundBase;
@@ -31,4 +30,6 @@ private:
     std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
     std::unordered_map<std::string, std::shared_ptr<Sound>> mSounds;
     std::unordered_map<std::string, std::shared_ptr<IMeshLoader>> mMeshLoaders;
+
+    static inline bool mInstantiated = false;
 };

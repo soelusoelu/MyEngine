@@ -257,6 +257,7 @@
     <ClCompile Include="DirectX\VertexBuffer.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
+    <ClCompile Include="System\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider\CircleCollider.h" />
@@ -374,6 +375,7 @@
     <ClInclude Include="DirectX\VertexBuffer.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
+    <ClInclude Include="System\World.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">

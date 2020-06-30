@@ -5,10 +5,9 @@
 #include "../Component/Light/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../GameObject/GameObject.h"
-#include "../GameObject/Transform3D.h"
 #include "../Light/LightManager.h"
 #include "../System/SystemInclude.h"
+#include "../System/World.h"
 
 GBuffer::GBuffer() :
     mSampler(nullptr),
@@ -126,7 +125,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
         GBufferShaderConstantBuffer cb;
         cb.dirLightDir = lightManager.getDirectionalLight().getDirection();
         cb.dirLightColor = lightManager.getDirectionalLight().getLightColor();
-        cb.cameraPos = camera.gameObject()->transform()->getPosition();
+        cb.cameraPos = camera.getPosition();
         cb.ambientLight = lightManager.getAmbientLight();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
@@ -166,7 +165,7 @@ void GBuffer::createSampler() {
 
 void GBuffer::createShader() {
     //シェーダー生成
-    mShader = Singleton<AssetsManager>::instance().createShader("Deferred.hlsl");
+    mShader = World::instance().assetsManager().createShader("Deferred.hlsl");
     mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
 }
 

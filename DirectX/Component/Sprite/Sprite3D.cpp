@@ -8,6 +8,7 @@
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
 #include "../../System/Window.h"
+#include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 #include <cassert>
 
@@ -32,8 +33,8 @@ void Sprite3D::awake() {
         return;
     }
 
-    mTexture = Singleton<AssetsManager>::instance().createTexture(mFileName);
-    mShader = Singleton<AssetsManager>::instance().createShader("Texture.hlsl");
+    mTexture = World::instance().assetsManager().createTexture(mFileName);
+    mShader = World::instance().assetsManager().createShader("Texture.hlsl");
 
     //デスクをもとにテクスチャのアスペクト比を取得
     auto desc = mTexture->desc();

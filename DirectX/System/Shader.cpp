@@ -1,12 +1,8 @@
 ﻿#include "Shader.h"
 #include "GlobalFunction.h"
 #include "../DebugLayer/Debug.h"
-#include "../DirectX/Buffer.h"
-#include "../DirectX/BufferDesc.h"
-#include "../DirectX/DirectX.h"
-#include "../DirectX/InputElement.h"
-#include "../DirectX/InputElementDesc.h"
-#include "../DirectX/Usage.h"
+#include "../DirectX/DirectXInclude.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 
 Shader::Shader(const std::string& fileName) :
@@ -82,7 +78,7 @@ void Shader::setInputLayout() const {
 }
 
 void Shader::createVertexShader(const std::string& fileName) {
-    Directory::setShaderDirectory();
+    World::instance().directory().setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");
@@ -97,7 +93,7 @@ void Shader::createVertexShader(const std::string& fileName) {
 
 void Shader::createPixelShader(const std::string& fileName) {
     ID3D10Blob* compiledShader;
-    Directory::setShaderDirectory();
+    World::instance().directory().setShaderDirectory();
     //ブロブからピクセルシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");

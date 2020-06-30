@@ -12,6 +12,7 @@
 #include "../../Mesh/VertexArray.h"
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
+#include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
 TransparentMeshComponent::TransparentMeshComponent() :
@@ -42,13 +43,13 @@ void TransparentMeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList * ins
 }
 
 void TransparentMeshComponent::setMesh(const std::string & fileName) {
-    mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
+    mMesh = World::instance().assetsManager().createMesh(fileName);
     mMesh->setInitMaterials(&mMaterials);
     addToManager(true);
 }
 
 void TransparentMeshComponent::setShader() {
-    mShader = Singleton<AssetsManager>::instance().createShader("Mesh.hlsl");
+    mShader = World::instance().assetsManager().createShader("Mesh.hlsl");
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(sizeof(TransparentConstantBuffer), 0);
     mShader->createConstantBuffer(sizeof(MaterialConstantBuffer), 1);

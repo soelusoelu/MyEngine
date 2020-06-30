@@ -4,6 +4,7 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
 #include "../System/GlobalFunction.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
@@ -22,7 +23,7 @@ FBX::~FBX() {
 }
 
 void FBX::perse(const std::string& filePath) {
-    Directory::setModelDirectory(filePath);
+    World::instance().directory().setModelDirectory(filePath);
 
     //マネージャーを生成
     mManager = FbxManager::Create();
@@ -550,7 +551,7 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
                 dir += "/" + mInitMaterials[i]->textureName;
 
                 //テクスチャーを作成
-                mInitMaterials[i]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
+                mInitMaterials[i]->texture = World::instance().assetsManager().createTexture(dir, false);
 
                 break; //とりあえず今は1枚だけサポート
             }

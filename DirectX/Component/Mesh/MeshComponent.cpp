@@ -10,6 +10,7 @@
 #include "../../Mesh/VertexArray.h"
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
+#include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
 MeshComponent::MeshComponent() :
@@ -90,13 +91,13 @@ bool MeshComponent::isDead() const {
 }
 
 void MeshComponent::setMesh(const std::string& fileName) {
-    mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
+    mMesh = World::instance().assetsManager().createMesh(fileName);
     mMesh->setInitMaterials(&mMaterials);
     addToManager();
 }
 
 void MeshComponent::setShader() {
-    mShader = Singleton<AssetsManager>::instance().createShader("GBuffer.hlsl");
+    mShader = World::instance().assetsManager().createShader("GBuffer.hlsl");
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);
     mShader->createConstantBuffer(sizeof(MaterialConstantBuffer), 1);

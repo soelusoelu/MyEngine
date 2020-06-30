@@ -1,20 +1,17 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
 #include "../Device/AssetsManager.h"
-#include "../DirectX/Buffer.h"
-#include "../DirectX/DirectX.h"
-#include "../DirectX/InputElementDesc.h"
-#include "../DirectX/SubResourceDesc.h"
-#include "../DirectX/TextureDesc.h"
+#include "../DirectX/DirectXInclude.h"
 #include "../GameObject/Transform2D.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
+#include "../System/World.h"
 #include <cassert>
 
 Sprite::Sprite(const std::string& fileName) :
     mTransform(std::make_shared<Transform2D>()),
     mTexture(nullptr),
-    mShader(Singleton<AssetsManager>::instance().createShader("Texture.hlsl")),
+    mShader(World::instance().assetsManager().createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
@@ -140,7 +137,7 @@ void Sprite::changeTexture(const std::string& fileName) {
     if (mTexture) {
         mTexture.reset();
     }
-    mTexture = Singleton<AssetsManager>::instance().createTexture(fileName);
+    mTexture = World::instance().assetsManager().createTexture(fileName);
 
     //デスクをもとにサイズ取得
     const auto& desc = mTexture->desc();

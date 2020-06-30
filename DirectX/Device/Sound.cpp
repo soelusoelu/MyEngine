@@ -1,6 +1,7 @@
 ﻿#include "Sound.h"
 #include "../DebugLayer/Debug.h"
 #include "../System/GlobalFunction.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 
 SoundBase::SoundBase() :
@@ -28,7 +29,7 @@ SoundBase::~SoundBase() {
 }
 
 void SoundBase::load(const std::string& fileName, std::shared_ptr<Sound>* sound) {
-    Directory::setSoundDirectory();
+    World::instance().directory().setSoundDirectory();
 
     HMMIO hMmio = NULL; //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
     unsigned wavSize = 0; //WAVファイル内 WAVデータのサイズ(WAVファイルはWAVデータで占められているので、ほぼファイルサイズと同一)
