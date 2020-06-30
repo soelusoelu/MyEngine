@@ -18,8 +18,9 @@ OBJ::~OBJ() {
 }
 
 void OBJ::perse(const std::string& filePath) {
+    Directory::setModelDirectory(filePath);
+
     //OBJファイルを開いて内容を読み込む
-    Singleton<Directory>::instance().setModelDirectory(filePath);
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {

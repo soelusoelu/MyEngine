@@ -2,14 +2,15 @@
 #include "FileUtil.h"
 #include "../System/SystemInclude.h"
 
-Directory::Directory() = default;
-
-Directory::~Directory() = default;
-
 void Directory::initialize() {
     char dir[1024];
     GetCurrentDirectoryA(sizeof(dir), dir);
     mRootPath = dir;
+}
+
+void Directory::finalize() {
+    std::string temp = "";
+    mRootPath.swap(temp);
 }
 
 void Directory::setRootDirectory() {

@@ -22,7 +22,7 @@ FBX::~FBX() {
 }
 
 void FBX::perse(const std::string& filePath) {
-    Singleton<Directory>::instance().setModelDirectory(filePath);
+    Directory::setModelDirectory(filePath);
 
     //マネージャーを生成
     mManager = FbxManager::Create();

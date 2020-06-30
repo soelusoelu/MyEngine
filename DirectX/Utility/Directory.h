@@ -1,26 +1,27 @@
 ﻿#pragma once
 
-#include "Singleton.h"
 #include <string>
 
 class Directory {
-    friend class Singleton<Directory>;
-
 public:
-    void initialize();
-    void setRootDirectory();
-    void setAssetsDirectory();
-    void setShaderDirectory();
-    void setTextureDirectory();
-    void setSoundDirectory();
-    void setDataDirectory();
-    void setModelDirectory(const std::string& directry);
+    static void initialize();
+    static void finalize();
+    static void setRootDirectory();
+    static void setAssetsDirectory();
+    static void setShaderDirectory();
+    static void setTextureDirectory();
+    static void setSoundDirectory();
+    static void setDataDirectory();
+    static void setModelDirectory(const std::string& directry);
 
 private:
-    Directory();
-    ~Directory();
-    void setCurrentDirectory(const std::string& path);
+    Directory() = delete;
+    ~Directory() = delete;
+    Directory(const Directory&) = delete;
+    Directory& operator=(const Directory&) = delete;
+
+    static void setCurrentDirectory(const std::string& path);
 
 private:
-    std::string mRootPath;
+    static inline std::string mRootPath = "";
 };

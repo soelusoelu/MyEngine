@@ -107,9 +107,9 @@ void Texture::createIndexBuffer() {
 
 void Texture::createTexture(const std::string & filePath, bool isSprite) {
     if (isSprite) {
-        Singleton<Directory>::instance().setTextureDirectory();
+        Directory::setTextureDirectory();
     } else {
-        Singleton<Directory>::instance().setModelDirectory(filePath);
+        Directory::setModelDirectory(filePath);
     }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;

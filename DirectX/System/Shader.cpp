@@ -82,7 +82,7 @@ void Shader::setInputLayout() const {
 }
 
 void Shader::createVertexShader(const std::string& fileName) {
-    Singleton<Directory>::instance().setShaderDirectory();
+    Directory::setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");
@@ -97,7 +97,7 @@ void Shader::createVertexShader(const std::string& fileName) {
 
 void Shader::createPixelShader(const std::string& fileName) {
     ID3D10Blob* compiledShader;
-    Singleton<Directory>::instance().setShaderDirectory();
+    Directory::setShaderDirectory();
     //ブロブからピクセルシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");

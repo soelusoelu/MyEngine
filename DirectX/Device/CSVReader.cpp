@@ -54,7 +54,7 @@ void CSVReader::parse(const std::string& fileName) {
     //中身リセット
     mCSV.clear();
 
-    Singleton<Directory>::instance().setDataDirectory();
+    Directory::setDataDirectory();
 
     //読み込み開始
     std::ifstream ifs(fileName, std::ios::in);
@@ -84,7 +84,7 @@ void CSVReader::parseString(const std::string& fileName) {
     //中身リセット
     mCSVString.clear();
 
-    Singleton<Directory>::instance().setDataDirectory();
+    Directory::setDataDirectory();
 
     //読み込み開始
     std::ifstream ifs(fileName, std::ios::in);

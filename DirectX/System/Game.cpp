@@ -28,10 +28,11 @@ Game::~Game() {
     InputUtility::finalize();
     Texture::finalize();
     DebugUtility::finalize();
+    Directory::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
-    Singleton<Directory>::instance().initialize();
+    Directory::initialize();
 
     mInstance = hInstance;
     initialize();

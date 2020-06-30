@@ -15,7 +15,7 @@ LevelLoader::~LevelLoader() = default;
 
 bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) const {
     //フォルダ階層の移動
-    Singleton<Directory>::instance().setDataDirectory();
+    Directory::setDataDirectory();
 
     //バイナリモードで開き、末尾に移動
     std::ifstream file(fileName, std::ios::in | std::ios::binary | std::ios::ate);
@@ -127,7 +127,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const st
     const char* output = buffer.GetString();
 
     //文字列をファイルに書き込む
-    Singleton<Directory>::instance().setDataDirectory();
+    Directory::setDataDirectory();
     std::ofstream outFile(fileName);
     if (outFile.is_open()) {
         outFile << output;
