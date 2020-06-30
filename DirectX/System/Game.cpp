@@ -4,11 +4,10 @@
 #include "Window.h"
 #include "World.h"
 #include "../DebugLayer/DebugUtility.h"
-#include "../Device/DrawString.h"
 #include "../Device/FPSCounter.h"
 #include "../Device/Random.h"
-#include "../Device/Time.h"
 #include "../DirectX/DirectX.h"
+#include "../GameObject/GameObjectFactory.h"
 #include "../Input/InputUtility.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
@@ -23,8 +22,9 @@ Game::Game() :
 }
 
 Game::~Game() {
-    InputUtility::finalize();
     Texture::finalize();
+    GameObjectCreater::finalize();
+    InputUtility::finalize();
     DebugUtility::finalize();
     World::instance().finalize();
 }
@@ -78,6 +78,7 @@ void Game::initialize() {
     Random::initialize();
     DebugUtility::initialize();
     InputUtility::initialize(mhWnd);
+    GameObjectCreater::initialize();
     mSceneManager->initialize();
 }
 

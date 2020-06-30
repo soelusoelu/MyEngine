@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "../Utility/Singleton.h"
 #include <rapidjson/document.h>
 #include <functional>
 #include <memory>
@@ -10,19 +9,19 @@
 class GameObject;
 
 class GameObjectFactory {
-    friend class Singleton<GameObjectFactory>;
     using GameObjectPtr = std::shared_ptr<GameObject>;
     using ComponentFunc = std::function<void(const GameObjectPtr&, const std::string&, const rapidjson::Value&)>;
 
-private:
+public:
     GameObjectFactory();
     ~GameObjectFactory();
-
-public:
     //ファイルからゲームオブジェクト生成
-    GameObjectPtr loadGameObject(const std::string& type) const;
+    GameObjectPtr loadGameObjectFromFile(const std::string& type) const;
 
 private:
+    GameObjectFactory(const GameObjectFactory&) = delete;
+    GameObjectFactory& operator=(const GameObjectFactory&) = delete;
+
     //アクターの読み込み
     GameObjectPtr loadGameObjectProperties(const rapidjson::Value& inArray, const std::string& type) const;
     //コンポーネントの読み込み
@@ -31,12 +30,22 @@ private:
 private:
     std::unordered_map<std::string, ComponentFunc> mComponents;
     rapidjson::Document mDocument;
+
+    static inline bool mInstantiated = false;
 };
 
 class GameObjectCreater {
 public:
+    static void initialize();
+    static void finalize();
+    static std::shared_ptr<GameObject> create(const std::string& type);
+
+private:
     GameObjectCreater() = delete;
     ~GameObjectCreater() = delete;
+    GameObjectCreater(const GameObjectCreater&) = delete;
+    GameObjectCreater& operator=(const GameObjectCreater&) = delete;
 
-    static std::shared_ptr<GameObject> create(const std::string& type);
+private:
+    static inline GameObjectFactory* mFactory = nullptr;
 };

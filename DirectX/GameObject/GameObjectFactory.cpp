@@ -21,12 +21,17 @@
 #include "../Component/Text/TextFloat.h"
 #include "../Component/Text/TextNumber.h"
 #include "../DebugLayer/Debug.h"
+#include "../System/GlobalFunction.h"
 #include "../Utility/LevelLoader.h"
+#include <cassert>
 
 //練習がてら、ちょい楽できるように
 #define ADD_COMPONENT(className) { mComponents.emplace((#className), &Component::create<className>); }
 
 GameObjectFactory::GameObjectFactory() {
+    assert(!mInstantiated);
+    mInstantiated = true;
+
     ADD_COMPONENT(Camera);
 
     ADD_COMPONENT(CircleCollider);
@@ -60,9 +65,11 @@ GameObjectFactory::GameObjectFactory() {
     }
 }
 
-GameObjectFactory::~GameObjectFactory() = default;
+GameObjectFactory::~GameObjectFactory() {
+    mInstantiated = false;
+}
 
-std::shared_ptr<GameObject> GameObjectFactory::loadGameObject(const std::string& type) const {
+std::shared_ptr<GameObject> GameObjectFactory::loadGameObjectFromFile(const std::string& type) const {
     GameObjectPtr obj = nullptr;
     const auto& objs = mDocument["gameObjects"];
     if (objs.IsArray()) {
@@ -134,6 +141,14 @@ void GameObjectFactory::loadComponents(const GameObjectPtr& gameObject, const ra
     }
 }
 
+void GameObjectCreater::initialize() {
+    mFactory = new GameObjectFactory();
+}
+
+void GameObjectCreater::finalize() {
+    safeDelete(mFactory);
+}
+
 std::shared_ptr<GameObject> GameObjectCreater::create(const std::string& type) {
-    return Singleton<GameObjectFactory>::instance().loadGameObject(type);
+    return mFactory->loadGameObjectFromFile(type);
 }
