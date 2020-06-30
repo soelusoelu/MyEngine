@@ -25,14 +25,10 @@ void MeshManager::draw(const Camera& camera) const {
             continue;
         }
 
-        RasterizerDesc rd;
-
-        rd.cullMode = CullMode::FRONT;
-        dx.rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setCulling(CullMode::FRONT);
         mesh->draw(camera);
 
-        rd.cullMode = CullMode::BACK;
-        dx.rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setCulling(CullMode::BACK);
         mesh->draw(camera);
     }
 }
@@ -49,25 +45,18 @@ void MeshManager::drawTransparent(const Camera& camera) const {
     dx.depthStencilState()->depthTest(true);
     //デプスマスク有効化
     dx.depthStencilState()->depthMask(true);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    dx.blendState()->setBlendState(bd);
+    //半透明合成
+    dx.blendState()->translucent();
 
     for (const auto& mesh : mTransparentMeshes) {
         if (!isDraw(*mesh, camera)) {
             continue;
         }
 
-        RasterizerDesc rd;
-
-        rd.cullMode = CullMode::FRONT;
-        dx.rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setCulling(CullMode::FRONT);
         mesh->draw(camera);
 
-        rd.cullMode = CullMode::BACK;
-        dx.rasterizerState()->setRasterizerState(rd);
+        dx.rasterizerState()->setCulling(CullMode::BACK);
         mesh->draw(camera);
     }
 }

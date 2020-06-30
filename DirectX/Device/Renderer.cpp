@@ -44,9 +44,7 @@ void Renderer::renderSprite() const {
     //半透明合成
     dx.blendState()->translucent();
     //カリングオフ
-    RasterizerDesc rd;
-    rd.cullMode = CullMode::NONE;
-    dx.rasterizerState()->setRasterizerState(rd);
+    dx.rasterizerState()->setCulling(CullMode::NONE);
 }
 
 void Renderer::renderSprite2D(Matrix4* proj) const {

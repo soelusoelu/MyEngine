@@ -11,18 +11,31 @@ RasterizerState::~RasterizerState() = default;
 
 void RasterizerState::setRasterizerState(const RasterizerDesc & desc) {
     mDesc = desc;
+    execute();
+}
 
-    ID3D11RasterizerState* rasterizer;
+void RasterizerState::setCulling(CullMode mode) {
+    mDesc.cullMode = mode;
+    execute();
+}
 
-    Singleton<DirectX>::instance().device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
-
-    Singleton<DirectX>::instance().deviceContext()->RSSetState(rasterizer);
-
-    safeRelease(rasterizer);
+void RasterizerState::setFillMode(FillMode mode) {
+    mDesc.fillMode = mode;
+    execute();
 }
 
 const RasterizerDesc& RasterizerState::desc() const {
     return mDesc;
+}
+
+void RasterizerState::execute() {
+    ID3D11RasterizerState* rasterizer;
+
+    auto& dx = Singleton<DirectX>::instance();
+    dx.device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
+    dx.deviceContext()->RSSetState(rasterizer);
+
+    safeRelease(rasterizer);
 }
 
 D3D11_RASTERIZER_DESC RasterizerState::toRasterizerDesc(const RasterizerDesc & desc) const {
