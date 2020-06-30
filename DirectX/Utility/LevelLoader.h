@@ -1,9 +1,7 @@
 ﻿#pragma once
 
-#include "Singleton.h"
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
-#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -12,28 +10,24 @@
 
 class Game;
 class GameObject;
-class Renderer;
 
 class LevelLoader {
-    friend class Singleton<LevelLoader>;
-
-private:
-    LevelLoader();
-    ~LevelLoader();
-
 public:
     //jsonファイルの読み込み
-    bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc) const;
+    static bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc);
     //グローバルデータを読み込む
-    void loadGlobal(Game* root, const std::string& fileName) const;
+    static void loadGlobal(Game* root, const std::string& fileName);
     //保存
-    void saveLevel(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
+    static void saveLevel(const std::string& fileName);
     //UI情報の保存
-    void saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string& fileName) const;
+    static void saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string& fileName);
 
 private:
-    //グローバルプロパティの保存
-    void saveGlobalProperties(rapidjson::Document::AllocatorType& alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value* inObject) const;
+    LevelLoader() = delete;
+    ~LevelLoader() = delete;
+    LevelLoader(const LevelLoader&) = delete;
+    LevelLoader& operator=(const LevelLoader&) = delete;
+
     //アクターの保存
     //void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
     //コンポーネントの保存

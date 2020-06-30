@@ -1,20 +1,14 @@
 ﻿#include "LevelLoader.h"
 #include "Directory.h"
 #include "../DebugLayer/Debug.h"
-#include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../System/Game.h"
 #include "../System/World.h"
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <fstream>
-#include <vector>
 
-LevelLoader::LevelLoader() = default;
-
-LevelLoader::~LevelLoader() = default;
-
-bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) const {
+bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) {
     //フォルダ階層の移動
     World::instance().directory().setDataDirectory();
 
@@ -45,7 +39,7 @@ bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * o
     return true;
 }
 
-void LevelLoader::loadGlobal(Game * root, const std::string & fileName) const {
+void LevelLoader::loadGlobal(Game * root, const std::string & fileName) {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
@@ -59,7 +53,7 @@ void LevelLoader::loadGlobal(Game * root, const std::string & fileName) const {
     root->loadProperties(globals);
 }
 
-void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
+void LevelLoader::saveLevel(const std::string & fileName) {
     ////ドキュメントとルートオブジェクトを生成
     //rapidjson::Document doc;
     //doc.SetObject();
@@ -91,7 +85,7 @@ void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::strin
     //}
 }
 
-void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string & fileName) const {
+void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string & fileName) {
     //ドキュメントとルートオブジェクトを生成
     rapidjson::Document doc;
     doc.SetObject();
@@ -133,9 +127,6 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const st
     if (outFile.is_open()) {
         outFile << output;
     }
-}
-
-void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value * inObject) const {
 }
 
 //void LevelLoader::saveActors(rapidjson::Document::AllocatorType & alloc, ActorManager * manager, rapidjson::Value * inArray) const {

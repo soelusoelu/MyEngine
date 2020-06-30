@@ -9,7 +9,6 @@
 #include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../DirectX/DirectX.h"
-#include "../GameObject/GameObjectFactory.h"
 #include "../Input/InputUtility.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
@@ -64,13 +63,12 @@ void Game::initialize() {
     mWindow = std::make_unique<Window>();
 
     mFPSCounter = std::make_unique<FPSCounter>();
-    Singleton<GameObjectFactory>::instance().initialize();
     DebugUtility::create();
     InputUtility::create();
     mSceneManager = std::make_unique<SceneManager>();
 
     //ファイルから値を読み込む
-    Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
+    LevelLoader::loadGlobal(this, "Global.json");
 
     mWindow->createWindow(mInstance);
     mhWnd = mWindow->gethWnd();

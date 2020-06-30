@@ -53,16 +53,14 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(Text);
     ADD_COMPONENT(TextFloat);
     ADD_COMPONENT(TextNumber);
-}
 
-GameObjectFactory::~GameObjectFactory() = default;
-
-void GameObjectFactory::initialize() {
     const std::string& fileName = "ActorsList.json";
-    if (!Singleton<LevelLoader>::instance().loadJSON(fileName, &mDocument)) {
+    if (!LevelLoader::loadJSON(fileName, &mDocument)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
     }
 }
+
+GameObjectFactory::~GameObjectFactory() = default;
 
 std::shared_ptr<GameObject> GameObjectFactory::loadGameObject(const std::string& type) const {
     GameObjectPtr obj = nullptr;

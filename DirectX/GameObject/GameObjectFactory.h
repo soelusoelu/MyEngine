@@ -19,7 +19,6 @@ private:
     ~GameObjectFactory();
 
 public:
-    void initialize();
     //ファイルからゲームオブジェクト生成
     GameObjectPtr loadGameObject(const std::string& type) const;
 
