@@ -5,36 +5,31 @@
 
 SoundBase::SoundBase() :
     mXAudio2(nullptr),
-    mMasteringVoice(nullptr) {
-    if (FAILED(CoInitializeEx(NULL, COINIT_MULTITHREADED))) {
-        return;
-    }
-#ifdef _DEBUG
-    if (FAILED(XAudio2Create(&mXAudio2, XAUDIO2_DEBUG_ENGINE))) {
-        CoUninitialize();
-        return;
-    }
-#else
-    if (FAILED(XAudio2Create(&mXAudio2, 0))) {
-        CoUninitialize();
-        return;
-    }
-#endif // _DEBUG
+    mMasteringVoice(nullptr),
+    mSucceedInitialize(false) {
 
-    if (FAILED(mXAudio2->CreateMasteringVoice(&mMasteringVoice))) {
-        CoUninitialize();
+    mSucceedInitialize = comInitialize();
+    if (!mSucceedInitialize) {
         return;
     }
+
+    mSucceedInitialize = createXAudio2();
+    if (!mSucceedInitialize) {
+        return;
+    }
+
+    mSucceedInitialize = createMasteringVoice();
 }
 
 SoundBase::~SoundBase() {
+    mMasteringVoice->DestroyVoice();
     safeRelease(mXAudio2);
     CoUninitialize();
 }
 
 void SoundBase::load(const std::string& fileName, std::shared_ptr<Sound>* sound) {
     HMMIO hMmio = NULL; //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
-    DWORD wavSize = 0; //WAVファイル内 WAVデータのサイズ(WAVファイルはWAVデータで占められているので、ほぼファイルサイズと同一)
+    unsigned wavSize = 0; //WAVファイル内 WAVデータのサイズ(WAVファイルはWAVデータで占められているので、ほぼファイルサイズと同一)
     WAVEFORMATEX* pwfex; //WAVのフォーマット 例)16ビット、44100Hz、ステレオなど
     MMCKINFO ckInfo; //チャンク情報
     MMCKINFO riffckInfo; // 最上部チャンク(RIFFチャンク)保存用
@@ -76,6 +71,41 @@ void SoundBase::createSourceVoice(std::shared_ptr<Sound>* sound) {
     }
 }
 
+bool SoundBase::comInitialize() {
+    if (FAILED(CoInitializeEx(nullptr, COINIT_MULTITHREADED))) {
+        Debug::windowMessage("COMシステムの初期化に失敗しました");
+        return false;
+    }
+    return true;
+}
+
+bool SoundBase::createXAudio2() {
+    if (FAILED(XAudio2Create(&mXAudio2, 0))) {
+        Debug::windowMessage("XAudio2の生成に失敗しました");
+        CoUninitialize();
+        return false;
+    }
+
+    //デバッグ指定
+#ifdef _DEBUG
+    XAUDIO2_DEBUG_CONFIGURATION debug = { 0 };
+    debug.TraceMask = XAUDIO2_LOG_ERRORS | XAUDIO2_LOG_WARNINGS;
+    debug.BreakMask = XAUDIO2_LOG_ERRORS;
+    mXAudio2->SetDebugConfiguration(&debug, 0);
+#endif // _DEBUG
+
+    return true;
+}
+
+bool SoundBase::createMasteringVoice() {
+    if (FAILED(mXAudio2->CreateMasteringVoice(&mMasteringVoice))) {
+        Debug::windowMessage("MasteringVoiceの生成に失敗しました");
+        CoUninitialize();
+        return false;
+    }
+    return true;
+}
+
 
 
 Sound::Sound() :
@@ -87,8 +117,8 @@ Sound::Sound() :
 
 Sound::~Sound() {
     mSourceVoice->DestroyVoice();
-    safeDelete<BYTE>(mWavBuffer);
-    safeDelete<WAVEFORMATEX>(mWavFormat);
+    safeDelete(mWavBuffer);
+    safeDelete(mWavFormat);
 }
 
 void Sound::play(bool isLoop) {
@@ -108,6 +138,12 @@ void Sound::play(bool isLoop) {
 
 void Sound::stop() {
     mSourceVoice->Stop(0, XAUDIO2_COMMIT_NOW);
+}
+
+bool Sound::isFinished() const {
+    XAUDIO2_VOICE_STATE state;
+    mSourceVoice->GetState(&state);
+    return (state.BuffersQueued == 0);
 }
 
 void Sound::setVolume(float volume) {

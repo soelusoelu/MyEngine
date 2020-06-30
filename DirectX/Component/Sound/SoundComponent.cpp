@@ -56,3 +56,10 @@ void SoundComponent::playSE(const std::string& fileName, float volumeScale) {
     sound->setVolume(volumeScale);
     sound->play();
 }
+
+bool SoundComponent::isFinished() const {
+    if (!mSound) {
+        return false;
+    }
+    return mSound->isFinished();
+}

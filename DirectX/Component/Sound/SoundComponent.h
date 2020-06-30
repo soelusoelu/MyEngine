@@ -16,6 +16,7 @@ public:
     void playBGM(const std::string& fileName, float volumeScale = 1.f);
     void playSE();
     void playSE(const std::string& fileName, float volumeScale = 1.f);
+    bool isFinished() const;
 
 private:
     std::shared_ptr<Sound> mSound;

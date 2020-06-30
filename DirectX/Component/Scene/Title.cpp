@@ -1,16 +1,19 @@
 #include "Title.h"
 #include "Scene.h"
+#include "../Sound/SoundComponent.h"
 #include "../../Input/Input.h"
 
 Title::Title() :
     Component(),
-    mScene(nullptr) {
+    mScene(nullptr),
+    mSound(nullptr) {
 }
 
 Title::~Title() = default;
 
 void Title::start() {
     mScene = getComponent<Scene>();
+    mSound = getComponent<SoundComponent>();
 }
 
 void Title::update() {
@@ -20,6 +23,7 @@ void Title::update() {
     }
 
     if (isEnd) {
-        mScene->next("GamePlay");
+        //mScene->next("GamePlay");
+        mSound->playBGM();
     }
 }

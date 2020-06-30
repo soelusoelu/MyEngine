@@ -4,6 +4,7 @@
 #include <memory>
 
 class Scene;
+class SoundComponent;
 
 class Title : public Component {
 public:
@@ -14,4 +15,5 @@ public:
 
 private:
     std::shared_ptr<Scene> mScene;
+    std::shared_ptr<SoundComponent> mSound;
 };

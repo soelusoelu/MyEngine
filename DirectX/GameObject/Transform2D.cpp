@@ -1,5 +1,4 @@
 ﻿#include "Transform2D.h"
-#include "GameObject.h"
 #include "../System/Window.h"
 
 Transform2D::Transform2D() :
@@ -49,6 +48,12 @@ const Vector2& Transform2D::getPosition() const {
 void Transform2D::translate(const Vector2 & translation) {
     mPosition.x += translation.x;
     mPosition.y += translation.y;
+    shouldRecomputeTransform();
+}
+
+void Transform2D::translate(float x, float y) {
+    mPosition.x += x;
+    mPosition.y += y;
     shouldRecomputeTransform();
 }
 

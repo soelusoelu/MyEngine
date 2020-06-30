@@ -56,6 +56,14 @@
           "properties": {
             "fileName": "Title.png"
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "hawk1.wav",
+            "volume": 0.1,
+            "isFirstPlay": false
+          }
         }
       ]
     },

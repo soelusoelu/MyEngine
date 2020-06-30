@@ -2,8 +2,6 @@
 
 #include "Pivot.h"
 #include "../Math/Math.h"
-#include <memory>
-#include <list>
 
 class Transform2D {
 public:
@@ -18,6 +16,7 @@ public:
     void setPosition(const Vector2& pos);
     const Vector2& getPosition() const;
     void translate(const Vector2& translation);
+    void translate(float x, float y);
 
     //回転
     void setRotation(float angle);
