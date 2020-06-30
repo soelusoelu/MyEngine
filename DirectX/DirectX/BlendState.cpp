@@ -4,26 +4,61 @@
 
 BlendState::BlendState() :
     mDesc() {
-    setBlendState(mDesc);
+    execute(0);
 }
 
 BlendState::~BlendState() = default;
 
 void BlendState::setBlendState(const BlendDesc & desc, unsigned renderTarget) {
     mDesc = desc;
+    execute(renderTarget);
+}
 
-    ID3D11BlendState* blend;
+void BlendState::add(unsigned renderTarget) {
+    mDesc.renderTarget.blendOp = BlendOP::ADD;
+    mDesc.renderTarget.srcBlend = Blend::ONE;
+    mDesc.renderTarget.destBlend = Blend::ONE;
+    execute(renderTarget);
+}
 
-    Singleton<DirectX>::instance().device()->CreateBlendState(&toBlendDesc(desc, renderTarget), &blend);
+void BlendState::subtraction(unsigned renderTarget) {
+    mDesc.renderTarget.blendOp = BlendOP::REV_SUBTRACT;
+    mDesc.renderTarget.srcBlend = Blend::ONE;
+    mDesc.renderTarget.destBlend = Blend::ONE;
+    execute(renderTarget);
+}
 
-    unsigned mask = 0xffffffff;
-    Singleton<DirectX>::instance().deviceContext()->OMSetBlendState(blend, nullptr, mask);
+void BlendState::reverseColor(unsigned renderTarget) {
+    mDesc.renderTarget.blendOp = BlendOP::ADD;
+    mDesc.renderTarget.srcBlend = Blend::INV_DEST_COLOR;
+    mDesc.renderTarget.destBlend = Blend::ZERO;
+    execute(renderTarget);
+}
 
-    safeRelease(blend);
+void BlendState::translucent(unsigned renderTarget) {
+    mDesc.renderTarget.blendOp = BlendOP::ADD;
+    mDesc.renderTarget.srcBlend = Blend::SRC_ALPHA;
+    mDesc.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
+    execute(renderTarget);
+}
+
+void BlendState::independentBlendEnable(bool value) {
+    mDesc.independentBlendEnable = value;
 }
 
 const BlendDesc& BlendState::desc() const {
     return mDesc;
+}
+
+void BlendState::execute(unsigned renderTarget) const {
+    ID3D11BlendState* blend;
+
+    auto& dx = Singleton<DirectX>::instance();
+    dx.device()->CreateBlendState(&toBlendDesc(mDesc, renderTarget), &blend);
+    unsigned mask = 0xffffffff;
+    dx.deviceContext()->OMSetBlendState(blend, nullptr, mask);
+
+    safeRelease(blend);
 }
 
 D3D11_BLEND_DESC BlendState::toBlendDesc(const BlendDesc & desc, unsigned renderTarget) const {

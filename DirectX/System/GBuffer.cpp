@@ -98,11 +98,8 @@ void GBuffer::renderToTexture() {
     dx.depthStencilState()->depthTest(true);
     //デプスマスク有効化
     dx.depthStencilState()->depthMask(true);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    dx.blendState()->setBlendState(bd);
+    //通常合成(半透明)
+    dx.blendState()->translucent();
 }
 
 void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {

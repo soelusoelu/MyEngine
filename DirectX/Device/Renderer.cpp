@@ -36,19 +36,17 @@ void Renderer::renderFromTexture(const Camera& camera, const LightManager& light
 }
 
 void Renderer::renderSprite() const {
+    auto& dx = Singleton<DirectX>::instance();
     //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    dx.setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     //インデックスバッファーをセット
     Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+    //半透明合成
+    dx.blendState()->translucent();
     //カリングオフ
     RasterizerDesc rd;
     rd.cullMode = CullMode::NONE;
-    Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+    dx.rasterizerState()->setRasterizerState(rd);
 }
 
 void Renderer::renderSprite2D(Matrix4* proj) const {
@@ -69,13 +67,16 @@ void Renderer::renderSprite3D() const {
     //バーテックスバッファーをセット
     Texture::vertexBuffer3D->setVertexBuffer();
     //デプステスト有効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
-    Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
+    auto& dx = Singleton<DirectX>::instance();
+    dx.depthStencilState()->depthTest(true);
+    dx.depthStencilState()->depthMask(true);
 }
 
 void Renderer::renderToDebug(Matrix4* proj) const {
-    Singleton<DirectX>::instance().setDebugRenderTarget();
-    Singleton<DirectX>::instance().setViewport(Window::debugWidth(), Window::debugHeight());
+    auto& dx = Singleton<DirectX>::instance();
+
+    dx.setDebugRenderTarget();
+    dx.setViewport(Window::debugWidth(), Window::debugHeight());
 
     //原点をスクリーン左上にするために平行移動
     proj->m[3][0] = -1.f;
@@ -87,7 +88,7 @@ void Renderer::renderToDebug(Matrix4* proj) const {
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
     //デプステスト無効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
+    dx.depthStencilState()->depthTest(false);
 }
 
 void Renderer::renderPointLight() const {

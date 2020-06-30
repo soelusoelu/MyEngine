@@ -80,10 +80,7 @@ void LightManager::drawPointLights(const Camera& camera) {
     //デプスマスク無効化
     dx.depthStencilState()->depthMask(false);
     //加算合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::ONE;
-    bd.renderTarget.destBlend = Blend::ONE;
-    dx.blendState()->setBlendState(bd);
+    dx.blendState()->add();
 
     for (const auto& pointLight : mPointLights) {
         pointLight->draw(camera, *mPointLight);
