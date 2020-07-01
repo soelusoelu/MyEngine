@@ -15,8 +15,8 @@
 
 Game::Game() :
     mWindow(nullptr),
-    mSceneManager(nullptr),
     mFPSCounter(nullptr),
+    mSceneManager(nullptr),
     mInstance(nullptr),
     mhWnd(nullptr) {
 }
@@ -26,7 +26,6 @@ Game::~Game() {
     GameObjectCreater::finalize();
     InputUtility::finalize();
     DebugUtility::finalize();
-    World::instance().finalize();
     DirectX::instance().finalize();
 }
 

@@ -23,7 +23,6 @@
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
-    <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
@@ -106,6 +105,10 @@
     <ClCompile Include="Light\LightManager.cpp" />
     <ClCompile Include="Component\Text\TextBase.cpp" />
     <ClCompile Include="System\World.cpp" />
+    <ClCompile Include="Sound\Sound.cpp" />
+    <ClCompile Include="Sound\WAV.cpp" />
+    <ClCompile Include="Sound\SoundBase.cpp" />
+    <ClCompile Include="Sound\SoundLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -120,7 +123,6 @@
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\Material.h" />
@@ -223,5 +225,9 @@
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Component\Text\TextBase.h" />
     <ClInclude Include="System\World.h" />
+    <ClInclude Include="Sound\Sound.h" />
+    <ClInclude Include="Sound\WAV.h" />
+    <ClInclude Include="Sound\SoundBase.h" />
+    <ClInclude Include="Sound\SoundLoader.h" />
   </ItemGroup>
 </Project>

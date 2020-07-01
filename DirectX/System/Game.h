@@ -4,9 +4,9 @@
 #include <rapidjson/document.h>
 #include <memory>
 
+class Window;
 class FPSCounter;
 class SceneManager;
-class Window;
 
 class Game {
 public:
@@ -28,8 +28,8 @@ private:
 
 private:
     std::unique_ptr<Window> mWindow;
-    std::unique_ptr<SceneManager> mSceneManager;
     std::unique_ptr<FPSCounter> mFPSCounter;
+    std::unique_ptr<SceneManager> mSceneManager;
     HINSTANCE mInstance;
     HWND mhWnd;
 };

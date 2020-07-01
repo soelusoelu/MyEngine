@@ -1,12 +1,12 @@
 #include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
-#include "../../Device/Sound.h"
+#include "../../Sound/Sound.h"
 #include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
 SoundComponent::SoundComponent() :
     Component(),
-    mSound(nullptr),
+    mSound(std::make_shared<Sound>()),
     mFileName(""),
     mVolume(1.f),
     mIsFirstPlay(false) {
@@ -20,7 +20,7 @@ SoundComponent::~SoundComponent() {
 
 void SoundComponent::start() {
     if (mIsFirstPlay) {
-        playBGM();
+        //playBGM();
     }
 }
 
@@ -36,23 +36,16 @@ void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const
     inspect->emplace_back("IsFirstPlay", mIsFirstPlay);
 }
 
-void SoundComponent::playBGM() {
-    playBGM(mFileName, mVolume);
+void SoundComponent::play() {
+    //playSE(mFileName, mVolume);
+    World::instance().assetsManager().createSound(&mSound, mFileName);
+
+    mSound->play();
 }
 
-void SoundComponent::playBGM(const std::string& fileName, float volumeScale) {
-    mSound = World::instance().assetsManager().createSound(fileName);
-
-    mSound->setVolume(volumeScale);
-    mSound->play(true);
-}
-
-void SoundComponent::playSE() {
-    playSE(mFileName, mVolume);
-}
-
-void SoundComponent::playSE(const std::string& fileName, float volumeScale) {
-    auto sound = World::instance().assetsManager().createSound(fileName);
+void SoundComponent::play(const std::string& fileName, float volumeScale) {
+    auto sound = std::make_shared<Sound>();
+    World::instance().assetsManager().createSound(&sound, fileName);
 
     sound->setVolume(volumeScale);
     sound->play();

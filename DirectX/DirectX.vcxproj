@@ -199,6 +199,9 @@
     <ClCompile Include="Component\Text\TextFloat.cpp" />
     <ClCompile Include="Component\Collider\SphereCollider.cpp" />
     <ClCompile Include="Component\Text\TextBase.cpp" />
+    <ClCompile Include="Sound\SoundBase.cpp" />
+    <ClCompile Include="Sound\Sound.cpp" />
+    <ClCompile Include="Sound\SoundLoader.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
@@ -209,7 +212,6 @@
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="DirectX\RenderTargetView.cpp" />
     <ClCompile Include="DirectX\ComparisonFunc.cpp" />
-    <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\Sound\SoundComponent.cpp" />
     <ClCompile Include="Component\Collider\Collider.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
@@ -257,6 +259,7 @@
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="System\World.cpp" />
+    <ClCompile Include="Sound\WAV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider\CircleCollider.h" />
@@ -300,6 +303,9 @@
     <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="DebugLayer\Pause.h" />
     <ClInclude Include="Component\Collider\SphereCollider.h" />
+    <ClInclude Include="Sound\SoundBase.h" />
+    <ClInclude Include="Sound\Sound.h" />
+    <ClInclude Include="Sound\SoundLoader.h" />
     <ClInclude Include="System\GlobalFunction.h" />
     <ClInclude Include="System\SystemInclude.h" />
     <ClInclude Include="Component\Text\TextNumber.h" />
@@ -316,7 +322,6 @@
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="DirectX\RenderTargetView.h" />
     <ClInclude Include="DirectX\ComparisonFunc.h" />
-    <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\Sound\SoundComponent.h" />
     <ClInclude Include="Component\Collider\Collider.h" />
     <ClInclude Include="Component\ComponentManager.h" />
@@ -374,6 +379,7 @@
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="System\World.h" />
+    <ClInclude Include="Sound\WAV.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">

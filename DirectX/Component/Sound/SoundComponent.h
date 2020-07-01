@@ -12,10 +12,8 @@ public:
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
-    void playBGM();
-    void playBGM(const std::string& fileName, float volumeScale = 1.f);
-    void playSE();
-    void playSE(const std::string& fileName, float volumeScale = 1.f);
+    void play();
+    void play(const std::string& fileName, float volumeScale = 1.f);
     bool isFinished() const;
 
 private:

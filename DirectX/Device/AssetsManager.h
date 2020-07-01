@@ -8,6 +8,7 @@
 class Shader;
 class Sound;
 class SoundBase;
+class SoundLoader;
 class Texture;
 
 class AssetsManager {
@@ -16,7 +17,7 @@ public:
     ~AssetsManager();
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
-    std::shared_ptr<Sound> createSound(const std::string& fileName);
+    void createSound(std::shared_ptr<Sound>* sound, const std::string& fileName);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& fileName);
 
 private:
@@ -28,7 +29,7 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
     std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
-    std::unordered_map<std::string, std::shared_ptr<Sound>> mSounds;
+    std::unordered_map<std::string, std::shared_ptr<SoundLoader>> mSounds;
     std::unordered_map<std::string, std::shared_ptr<IMeshLoader>> mMeshLoaders;
 
     static inline bool mInstantiated = false;

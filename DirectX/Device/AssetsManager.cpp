@@ -1,8 +1,10 @@
 ﻿#include "AssetsManager.h"
-#include "Sound.h"
 #include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
+#include "../Sound/Sound.h"
+#include "../Sound/SoundBase.h"
+#include "../Sound/WAV.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../Utility/FileUtil.h"
@@ -42,25 +44,23 @@ std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & fileNa
     return texture;
 }
 
-std::shared_ptr<Sound> AssetsManager::createSound(const std::string& fileName) {
-    std::shared_ptr<Sound> sound = nullptr;
+void AssetsManager::createSound(std::shared_ptr<Sound>* sound, const std::string& fileName) {
+    std::shared_ptr<SoundLoader> data = nullptr;
     auto itr = mSounds.find(fileName);
     if (itr != mSounds.end()) { //既に読み込まれている
-        sound = itr->second;
+        data = itr->second;
     } else { //初読み込み
         auto ext = FileUtil::getFileExtension(fileName);
         if (ext == ".wav") {
-            sound = std::make_shared<Sound>();
+            data = std::make_shared<WAV>();
         } else {
             Debug::windowMessage(fileName + ": 対応していない拡張子です");
         }
-        mSoundBase->load(fileName, &sound);
-        mSounds.emplace(fileName, sound);
+        data->loadFromFile(fileName);
+        mSounds.emplace(fileName, data);
     }
 
-    mSoundBase->createSourceVoice(&sound);
-
-    return sound;
+    mSoundBase->createSourceVoice(sound, data);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileName) {
