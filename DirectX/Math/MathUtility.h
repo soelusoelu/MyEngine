@@ -41,10 +41,11 @@ namespace Math {
 
     template <typename T>
     T pow(T value, int pow) {
-        for (int i = 0; i < pow; i++) {
-            value *= value;
+        T result = value;
+        for (int i = 0; i < pow - 1; i++) {
+            result *= value;
         }
-        return value;
+        return result;
     }
 
     inline float abs(float value) {

@@ -14,7 +14,6 @@
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Device\CSVReader.cpp" />
     <ClCompile Include="Device\Physics.cpp" />
-    <ClCompile Include="Device\Random.cpp" />
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
@@ -111,13 +110,14 @@
     <ClCompile Include="Sound\SoundLoader.cpp" />
     <ClCompile Include="Sound\SoundFade.cpp" />
     <ClCompile Include="Sound\SourceVoice.cpp" />
+    <ClCompile Include="Utility\Easing.cpp" />
+    <ClCompile Include="Utility\Random.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Device\CSVReader.h" />
     <ClInclude Include="Device\Physics.h" />
-    <ClInclude Include="Device\Random.h" />
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="Sprite\Sprite.h" />
@@ -234,5 +234,7 @@
     <ClInclude Include="Sound\SoundFade.h" />
     <ClInclude Include="Sound\SourceVoice.h" />
     <ClInclude Include="Sound\SoundBuffer.h" />
+    <ClInclude Include="Utility\Easing.h" />
+    <ClInclude Include="Utility\Random.h" />
   </ItemGroup>
 </Project>

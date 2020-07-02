@@ -4,11 +4,6 @@
 #include <random>
 
 class Random {
-    Random() = delete;
-    ~Random() = delete;
-    Random(const Random&) = delete;
-    Random& operator=(const Random&) = delete;
-
 public:
     static void initialize();
     //0.f <= value <= 1.f
@@ -19,6 +14,12 @@ public:
     static float randomRange(float min, float max);
     static Vector2 randomRange(const Vector2& min, const Vector2& max);
     static Vector3 randomRange(const Vector3& min, const Vector3& max);
+
+private:
+    Random() = delete;
+    ~Random() = delete;
+    Random(const Random&) = delete;
+    Random& operator=(const Random&) = delete;
 
 private:
     static inline std::mt19937 mt;

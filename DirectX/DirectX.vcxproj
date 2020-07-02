@@ -210,6 +210,7 @@
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="DirectX\DirectX.cpp" />
     <ClCompile Include="DebugLayer\Debug.cpp" />
+    <ClCompile Include="Utility\Easing.cpp" />
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="DirectX\RenderTargetView.cpp" />
@@ -220,7 +221,6 @@
     <ClCompile Include="Component\Component.cpp" />
     <ClCompile Include="Device\CSVReader.cpp" />
     <ClCompile Include="Device\Physics.cpp" />
-    <ClCompile Include="Device\Random.cpp" />
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="GameObject\Transform2D.cpp" />
@@ -241,6 +241,7 @@
     <ClCompile Include="DirectX\Texture2D.cpp" />
     <ClCompile Include="DirectX\Usage.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
+    <ClCompile Include="Utility\Random.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -323,6 +324,7 @@
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="DirectX\DirectX.h" />
     <ClInclude Include="DebugLayer\Debug.h" />
+    <ClInclude Include="Utility\Easing.h" />
     <ClInclude Include="Utility\FileUtil.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="DirectX\RenderTargetView.h" />
@@ -333,7 +335,6 @@
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Device\CSVReader.h" />
     <ClInclude Include="Device\Physics.h" />
-    <ClInclude Include="Device\Random.h" />
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="GameObject\Transform2D.h" />
@@ -361,6 +362,7 @@
     <ClInclude Include="DirectX\Texture2D.h" />
     <ClInclude Include="DirectX\Usage.h" />
     <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Utility\Random.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
