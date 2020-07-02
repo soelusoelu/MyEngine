@@ -2,6 +2,8 @@
 #include "../System/World.h"
 #include "../Utility/Directory.h"
 
+#pragma comment(lib, "winmm.lib")
+
 WAV::WAV() = default;
 WAV::~WAV() = default;
 

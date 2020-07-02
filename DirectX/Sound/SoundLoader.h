@@ -25,4 +25,7 @@ protected:
     BYTE* mBuffer; //波形データ(フォーマット等を含まない、純粋に波形データのみ)
     unsigned mSize; //波形データのサイズ
     WAVEFORMATEX* mFormat;
+
+private:
+    unsigned mChannels;
 };

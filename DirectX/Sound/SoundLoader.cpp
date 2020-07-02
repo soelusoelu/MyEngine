@@ -4,7 +4,8 @@
 SoundLoader::SoundLoader() :
     mBuffer(nullptr),
     mSize(0),
-    mFormat(nullptr) {
+    mFormat(nullptr),
+    mChannels() {
 }
 
 SoundLoader::~SoundLoader() {

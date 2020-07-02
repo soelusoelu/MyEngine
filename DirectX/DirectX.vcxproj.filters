@@ -113,6 +113,7 @@
     <ClCompile Include="Utility\Random.cpp" />
     <ClCompile Include="Sound\SoundVolume.cpp" />
     <ClCompile Include="Sound\SoundPlayer.cpp" />
+    <ClCompile Include="Sound\VoiceDetails.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -238,5 +239,6 @@
     <ClInclude Include="Utility\Random.h" />
     <ClInclude Include="Sound\SoundVolume.h" />
     <ClInclude Include="Sound\SoundPlayer.h" />
+    <ClInclude Include="Sound\VoiceDetails.h" />
   </ItemGroup>
 </Project>

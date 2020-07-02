@@ -1,6 +1,7 @@
 ﻿#include "SoundVolume.h"
 #include "SoundFade.h"
 #include "SourceVoice.h"
+#include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 #include "../Math/Math.h"
 
@@ -44,6 +45,16 @@ float SoundVolume::decibelsToAmplitudeRatio(float decibels) {
 
 float SoundVolume::getVolume() const {
     return mCurrentVolume;
+}
+
+void SoundVolume::panning(unsigned outChannels, float volumes[], unsigned operationSet) {
+    auto inputChannels = mSourceVoice.getSoundData().getInputChannels();
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(nullptr, inputChannels, outChannels, volumes, operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed panning.");
+    }
+#endif // _DEBUG
 }
 
 SoundFade& SoundVolume::fade() const {

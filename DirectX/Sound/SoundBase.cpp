@@ -29,6 +29,7 @@ SoundBase::SoundBase() :
 
 SoundBase::~SoundBase() {
     mMasteringVoice->DestroyVoice();
+    mMasteringVoice = nullptr;
     safeRelease(mXAudio2);
     CoUninitialize();
 

@@ -48,6 +48,14 @@ public:
     float getVolume() const;
 
     /// <summary>
+    /// 音をパンする
+    /// </summary>
+    /// <param name="outChannels">出力チャンネル数</param>
+    /// <param name="volumes">各スピーカーの音量</param>
+    /// <param name="operationSet">いつ実行するか</param>
+    void panning(unsigned outChannels, float volumes[], unsigned operationSet = XAUDIO2_COMMIT_NOW);
+
+    /// <summary>
     /// フェード専門クラスにアクセスする
     /// </summary>
     /// <returns>フェードクラス</returns>

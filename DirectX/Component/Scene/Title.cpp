@@ -17,9 +17,11 @@ Title::~Title() = default;
 void Title::start() {
     mScene = getComponent<Scene>();
     mSound = getComponent<SoundComponent>();
-    mSound->getSoundVolume().setVolume(0.f);
-    mSound->getSoundVolume().fade().settings(1.f, 10.f);
-    mSound->getSoundPlayer().play();
+    mSound->getSoundVolume().setVolume(0.5f);
+    //mSound->getSoundVolume().fade().settings(1.f, 10.f);
+    float volumes[] = { 1.f, 0.f };
+    mSound->getSoundVolume().panning(2, volumes);
+    //mSound->getSoundPlayer().play();
 }
 
 void Title::update() {
@@ -27,10 +29,12 @@ void Title::update() {
     if (!isEnd) {
         isEnd = Input::keyboard()->getEnter();
     }
-
-    mSound->getSoundVolume().fade().updateFade();
     if (isEnd) {
-        //mScene->next("GamePlay");
+        mScene->next("GamePlay");
+    }
+
+    //mSound->getSoundVolume().fade().updateFade();
+    if (Input::keyboard()->getKeyDown(KeyCode::Alpha1)) {
         mSound->getSoundPlayer().play();
     }
 }

@@ -5,6 +5,7 @@
 #include <memory>
 
 class SoundLoader;
+class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
 
@@ -24,7 +25,7 @@ public:
     /// サウンドデータを返す
     /// </summary>
     /// <returns></returns>
-    SoundLoader& getSoundData() const;
+    VoiceDetails& getSoundData() const;
 
     /// <summary>
     /// ソースボイスに波形データを追加する
@@ -55,7 +56,7 @@ private:
 
 private:
     IXAudio2SourceVoice* mXAudio2SourceVoice;
-    std::shared_ptr<SoundLoader> mData;
+    std::unique_ptr<VoiceDetails> mData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;
 };

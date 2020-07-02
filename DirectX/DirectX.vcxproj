@@ -264,6 +264,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="System\World.cpp" />
     <ClCompile Include="Sound\WAV.cpp" />
+    <ClCompile Include="Sound\VoiceDetails.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider\CircleCollider.h" />
@@ -389,6 +390,7 @@
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="System\World.h" />
     <ClInclude Include="Sound\WAV.h" />
+    <ClInclude Include="Sound\VoiceDetails.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">

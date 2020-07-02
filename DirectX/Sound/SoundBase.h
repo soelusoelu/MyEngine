@@ -12,6 +12,7 @@ class SoundBase {
 public:
     SoundBase();
     ~SoundBase();
+
     /// <summary>
     /// ソースボイスを作成する
     /// </summary>

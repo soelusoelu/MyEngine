@@ -3,8 +3,7 @@
 #include "../DebugLayer/Debug.h"
 
 SoundPlayer::SoundPlayer(SourceVoice& sourceVoice) :
-    mSourceVoice(sourceVoice)
-{
+    mSourceVoice(sourceVoice) {
 }
 
 SoundPlayer::~SoundPlayer() = default;

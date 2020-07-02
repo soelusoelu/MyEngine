@@ -2,11 +2,12 @@
 #include "SoundLoader.h"
 #include "SoundPlayer.h"
 #include "SoundVolume.h"
+#include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 
 SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const std::shared_ptr<SoundLoader>& data) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
-    mData(data),
+    mData(std::make_unique<VoiceDetails>(*data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
     mSoundVolume(std::make_unique<SoundVolume>(*this)) {
 
@@ -26,7 +27,7 @@ IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
 }
 
-SoundLoader& SourceVoice::getSoundData() const {
+VoiceDetails& SourceVoice::getSoundData() const {
     return *mData;
 }
 
