@@ -60,8 +60,8 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "‚Ö‚¢‚ç‚Á‚µ‚á‚¢.wav",
-            "volume": 0.1,
+            "fileName": "title.wav",
+            "volume": 1.0,
             "isFirstPlay": false
           }
         }

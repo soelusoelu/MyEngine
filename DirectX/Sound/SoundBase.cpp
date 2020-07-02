@@ -58,12 +58,6 @@ void SoundBase::createSourceVoice(std::shared_ptr<Sound>* sound, const std::shar
         return;
     }
 
-    //既に生成済みなら破棄・初期化
-    if ((*sound)->mSourceVoice) {
-        (*sound)->mSourceVoice->DestroyVoice();
-        (*sound)->mSourceVoice = nullptr;
-    }
-
     (*sound)->mSourceVoice = sourceVoice;
     (*sound)->mData = data;
 }

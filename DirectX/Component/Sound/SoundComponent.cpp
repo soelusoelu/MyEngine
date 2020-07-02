@@ -9,6 +9,7 @@ SoundComponent::SoundComponent() :
     mSound(std::make_shared<Sound>()),
     mFileName(""),
     mVolume(1.f),
+    mLastVolume(0.f),
     mIsFirstPlay(false) {
 }
 
@@ -18,9 +19,12 @@ SoundComponent::~SoundComponent() {
     }
 }
 
-void SoundComponent::start() {
+void SoundComponent::awake() {
     if (mIsFirstPlay) {
-        //playBGM();
+
+    }
+    if (!mFileName.empty()) {
+        World::instance().assetsManager().createSound(&mSound, mFileName);
     }
 }
 
@@ -40,6 +44,7 @@ void SoundComponent::play() {
     //playSE(mFileName, mVolume);
     World::instance().assetsManager().createSound(&mSound, mFileName);
 
+    mSound->setVolume(mVolume);
     mSound->play();
 }
 
@@ -56,4 +61,16 @@ bool SoundComponent::isFinished() const {
         return false;
     }
     return mSound->isFinished();
+}
+
+void SoundComponent::setVolume(float volume) {
+    mSound->setVolume(volume);
+}
+
+void SoundComponent::setVolumeByDecibels(float decibels) {
+    mSound->setVolumeByDecibels(decibels);
+}
+
+void SoundComponent::fade(float targetVolume, float targetTime) {
+
 }

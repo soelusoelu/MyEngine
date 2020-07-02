@@ -2,7 +2,7 @@
 #include "../System/SystemInclude.h"
 
 Time::Time(float sec) :
-    mCurrentTime(0.f),
+    mTimeRate(0.f),
     mLimitTime(sec),
     mIsOverLimit(false) {
 }
@@ -10,15 +10,15 @@ Time::Time(float sec) :
 Time::~Time() = default;
 
 void Time::update() {
-    mCurrentTime += Time::deltaTime;
+    mTimeRate += Time::deltaTime;
 
-    if (mCurrentTime >= mLimitTime) {
+    if (mTimeRate >= mLimitTime) {
         mIsOverLimit = true;
     }
 }
 
 void Time::reset() {
-    mCurrentTime = 0.f;
+    mTimeRate = 0.f;
     mIsOverLimit = false;
 }
 
@@ -31,15 +31,15 @@ void Time::setLimitTime(float sec) {
 }
 
 void Time::setCurrentTime(float sec) {
-    mCurrentTime = sec;
+    mTimeRate = sec;
 }
 
 float Time::countUpTime() const {
-    return mCurrentTime;
+    return mTimeRate;
 }
 
 float Time::countDownTime() const {
-    return mLimitTime - mCurrentTime;
+    return mLimitTime - mTimeRate;
 }
 
 float Time::limitTime() const {
@@ -47,7 +47,7 @@ float Time::limitTime() const {
 }
 
 float Time::rate() const {
-    return mCurrentTime / mLimitTime;
+    return mTimeRate / mLimitTime;
 }
 
 unsigned long long Time::time() {

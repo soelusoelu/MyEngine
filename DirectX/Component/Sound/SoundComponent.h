@@ -9,12 +9,14 @@ class SoundComponent : public Component {
 public:
     SoundComponent();
     ~SoundComponent();
-    virtual void start() override;
+    virtual void awake() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void play();
     void play(const std::string& fileName, float volumeScale = 1.f);
     bool isFinished() const;
+    void setVolume(float volume);
+    void setVolumeByDecibels(float decibels);
 
 private:
     std::shared_ptr<Sound> mSound;

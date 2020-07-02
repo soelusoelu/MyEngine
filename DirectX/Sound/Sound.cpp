@@ -1,5 +1,6 @@
 ﻿#include "Sound.h"
 #include "SoundLoader.h"
+#include "SourceVoice.h"
 #include "../DebugLayer/Debug.h"
 
 Sound::Sound() :
@@ -7,28 +8,22 @@ Sound::Sound() :
     mData(nullptr) {
 }
 
-Sound::~Sound() {
-    mSourceVoice->DestroyVoice();
-    mSourceVoice = nullptr;
-}
+Sound::~Sound() = default;
 
 void Sound::play(bool isLoop) {
-    XAUDIO2_BUFFER buffer = { 0 };
-    buffer.pAudioData = mData->buffer();
-    buffer.Flags = XAUDIO2_END_OF_STREAM;
-    buffer.AudioBytes = mData->size();
+    SoundBuffer buffer;
+    buffer.buffer = mData->buffer();
+    buffer.flags = XAUDIO2_END_OF_STREAM;
+    buffer.size = mData->size();
     if (isLoop) {
-        buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
+        buffer.loopCount = XAUDIO2_LOOP_INFINITE;
     }
-    if (FAILED(mSourceVoice->SubmitSourceBuffer(&buffer))) {
-        Debug::windowMessage("ソースボイスにサブミット失敗");
-        return;
-    }
-    mSourceVoice->Start(0, XAUDIO2_COMMIT_NOW);
+    mSourceVoice->submitSourceBuffer(buffer);
+    mSourceVoice->play();
 }
 
-void Sound::stop() {
-    mSourceVoice->Stop(0, XAUDIO2_COMMIT_NOW);
+void Sound::stop() const {
+    mSourceVoice->stop();
 }
 
 bool Sound::isFinished() const {
@@ -37,6 +32,20 @@ bool Sound::isFinished() const {
     return (state.BuffersQueued == 0);
 }
 
-void Sound::setVolume(float volume) {
-    mSourceVoice->SetVolume(volume);
+void Sound::setVolume(float volume) const {
+    float targetVolume = volume * volume;
+    mSourceVoice->setVolume(targetVolume);
+}
+
+void Sound::setVolumeByDecibels(float decibels) const {
+    float volume = decibelsToAmplitudeRatio(decibels);
+    mSourceVoice->setVolume(volume);
+}
+
+float Sound::amplitudeToDecibelsRatio(float volume) const {
+    return XAudio2AmplitudeRatioToDecibels(volume);
+}
+
+float Sound::decibelsToAmplitudeRatio(float decibels) const {
+    return XAudio2DecibelsToAmplitudeRatio(decibels);
 }

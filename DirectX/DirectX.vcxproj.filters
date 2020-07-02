@@ -109,6 +109,8 @@
     <ClCompile Include="Sound\WAV.cpp" />
     <ClCompile Include="Sound\SoundBase.cpp" />
     <ClCompile Include="Sound\SoundLoader.cpp" />
+    <ClCompile Include="Sound\SoundFade.cpp" />
+    <ClCompile Include="Sound\SourceVoice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -229,5 +231,8 @@
     <ClInclude Include="Sound\WAV.h" />
     <ClInclude Include="Sound\SoundBase.h" />
     <ClInclude Include="Sound\SoundLoader.h" />
+    <ClInclude Include="Sound\SoundFade.h" />
+    <ClInclude Include="Sound\SourceVoice.h" />
+    <ClInclude Include="Sound\SoundBuffer.h" />
   </ItemGroup>
 </Project>

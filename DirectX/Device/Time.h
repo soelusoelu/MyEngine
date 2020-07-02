@@ -28,7 +28,7 @@ public:
     static inline float deltaTime = 0.f;
 
 private:
-    float mCurrentTime;
+    float mTimeRate;
     float mLimitTime;
     bool mIsOverLimit;
 };
