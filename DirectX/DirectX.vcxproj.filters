@@ -104,7 +104,6 @@
     <ClCompile Include="Light\LightManager.cpp" />
     <ClCompile Include="Component\Text\TextBase.cpp" />
     <ClCompile Include="System\World.cpp" />
-    <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\WAV.cpp" />
     <ClCompile Include="Sound\SoundBase.cpp" />
     <ClCompile Include="Sound\SoundLoader.cpp" />
@@ -112,6 +111,8 @@
     <ClCompile Include="Sound\SourceVoice.cpp" />
     <ClCompile Include="Utility\Easing.cpp" />
     <ClCompile Include="Utility\Random.cpp" />
+    <ClCompile Include="Sound\SoundVolume.cpp" />
+    <ClCompile Include="Sound\SoundPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -227,7 +228,6 @@
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Component\Text\TextBase.h" />
     <ClInclude Include="System\World.h" />
-    <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\WAV.h" />
     <ClInclude Include="Sound\SoundBase.h" />
     <ClInclude Include="Sound\SoundLoader.h" />
@@ -236,5 +236,7 @@
     <ClInclude Include="Sound\SoundBuffer.h" />
     <ClInclude Include="Utility\Easing.h" />
     <ClInclude Include="Utility\Random.h" />
+    <ClInclude Include="Sound\SoundVolume.h" />
+    <ClInclude Include="Sound\SoundPlayer.h" />
   </ItemGroup>
 </Project>

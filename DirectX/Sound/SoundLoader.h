@@ -17,6 +17,10 @@ public:
     //フォーマットの取得
     WAVEFORMATEX* format() const;
 
+private:
+    SoundLoader(const SoundLoader&) = delete;
+    SoundLoader& operator=(const SoundLoader&) = delete;
+
 protected:
     BYTE* mBuffer; //波形データ(フォーマット等を含まない、純粋に波形データのみ)
     unsigned mSize; //波形データのサイズ

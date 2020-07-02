@@ -201,8 +201,9 @@
     <ClCompile Include="Component\Text\TextBase.cpp" />
     <ClCompile Include="Sound\SoundFade.cpp" />
     <ClCompile Include="Sound\SoundBase.cpp" />
-    <ClCompile Include="Sound\Sound.cpp" />
     <ClCompile Include="Sound\SoundLoader.cpp" />
+    <ClCompile Include="Sound\SoundPlayer.cpp" />
+    <ClCompile Include="Sound\SoundVolume.cpp" />
     <ClCompile Include="Sound\SourceVoice.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -309,8 +310,9 @@
     <ClInclude Include="Sound\SoundBuffer.h" />
     <ClInclude Include="Sound\SoundFade.h" />
     <ClInclude Include="Sound\SoundBase.h" />
-    <ClInclude Include="Sound\Sound.h" />
     <ClInclude Include="Sound\SoundLoader.h" />
+    <ClInclude Include="Sound\SoundPlayer.h" />
+    <ClInclude Include="Sound\SoundVolume.h" />
     <ClInclude Include="Sound\SourceVoice.h" />
     <ClInclude Include="System\GlobalFunction.h" />
     <ClInclude Include="System\SystemInclude.h" />

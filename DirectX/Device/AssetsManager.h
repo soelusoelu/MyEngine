@@ -6,9 +6,9 @@
 #include <unordered_map>
 
 class Shader;
-class Sound;
 class SoundBase;
 class SoundLoader;
+class SourceVoice;
 class Texture;
 
 class AssetsManager {
@@ -17,7 +17,7 @@ public:
     ~AssetsManager();
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
-    void createSound(std::shared_ptr<Sound>* sound, const std::string& fileName);
+    std::shared_ptr<SourceVoice> createSound(const std::string& fileName);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& fileName);
 
 private:

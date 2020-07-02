@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-class Sound;
+class SourceVoice;
 class SoundLoader;
 
 //サウンドAPIの基盤となるクラス
@@ -32,7 +32,12 @@ public:
         const XAUDIO2_EFFECT_CHAIN* effectChain = nullptr
     ) const;
 
-    void createSourceVoice(std::shared_ptr<Sound>* sound, const std::shared_ptr<SoundLoader>& data) const;
+    /// <summary>
+    /// 引数のデータからソースボイスを作成する
+    /// </summary>
+    /// <param name="data">事前に取得してあるサウンドデータ</param>
+    /// <returns>ソースボイスのインスタンス</returns>
+    std::shared_ptr<SourceVoice> createSourceVoice(const std::shared_ptr<SoundLoader>& data) const;
 
 private:
     SoundBase(const SoundBase&) = delete;

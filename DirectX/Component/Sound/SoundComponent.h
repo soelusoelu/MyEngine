@@ -3,7 +3,9 @@
 #include "../Component.h"
 #include <string>
 
-class Sound;
+class SourceVoice;
+class SoundPlayer;
+class SoundVolume;
 
 class SoundComponent : public Component {
 public:
@@ -12,15 +14,12 @@ public:
     virtual void awake() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
-    void play();
-    void play(const std::string& fileName, float volumeScale = 1.f);
-    bool isFinished() const;
-    void setVolume(float volume);
-    void setVolumeByDecibels(float decibels);
+
+    SoundPlayer& getSoundPlayer() const;
+    SoundVolume& getSoundVolume() const;
 
 private:
-    std::shared_ptr<Sound> mSound;
+    std::shared_ptr<SourceVoice> mSound;
     std::string mFileName;
-    float mVolume;
     bool mIsFirstPlay;
 };

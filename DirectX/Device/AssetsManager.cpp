@@ -2,8 +2,8 @@
 #include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
-#include "../Sound/Sound.h"
 #include "../Sound/SoundBase.h"
+#include "../Sound/SourceVoice.h"
 #include "../Sound/WAV.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
@@ -44,7 +44,7 @@ std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & fileNa
     return texture;
 }
 
-void AssetsManager::createSound(std::shared_ptr<Sound>* sound, const std::string& fileName) {
+std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileName) {
     std::shared_ptr<SoundLoader> data = nullptr;
     auto itr = mSounds.find(fileName);
     if (itr != mSounds.end()) { //既に読み込まれている
@@ -60,7 +60,7 @@ void AssetsManager::createSound(std::shared_ptr<Sound>* sound, const std::string
         mSounds.emplace(fileName, data);
     }
 
-    mSoundBase->createSourceVoice(sound, data);
+    return mSoundBase->createSourceVoice(data);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileName) {

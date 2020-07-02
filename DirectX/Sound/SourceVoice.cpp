@@ -1,41 +1,50 @@
 ﻿#include "SourceVoice.h"
+#include "SoundLoader.h"
+#include "SoundPlayer.h"
+#include "SoundVolume.h"
 #include "../DebugLayer/Debug.h"
 
-SourceVoice::SourceVoice() :
-    mSourceVoice(nullptr) {
+SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const std::shared_ptr<SoundLoader>& data) :
+    mXAudio2SourceVoice(XAudio2SourceVoice),
+    mData(data),
+    mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
+    mSoundVolume(std::make_unique<SoundVolume>(*this)) {
+
+    SoundBuffer buffer;
+    buffer.buffer = mData->buffer();
+    buffer.flags = XAUDIO2_END_OF_STREAM;
+    buffer.size = mData->size();
+    submitSourceBuffer(buffer);
 }
 
 SourceVoice::~SourceVoice() {
-    mSourceVoice->DestroyVoice();
-    mSourceVoice = nullptr;
+    mXAudio2SourceVoice->DestroyVoice();
+    mXAudio2SourceVoice = nullptr;
 }
 
-void SourceVoice::play(unsigned flags, unsigned operationSet) const {
-    auto res = mSourceVoice->Start(flags, operationSet);
-    if (FAILED(res)) {
-        Debug::logError("Failed sound play.");
-    }
+IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
+    return mXAudio2SourceVoice;
 }
 
-void SourceVoice::stop(unsigned flags, unsigned operationSet) const {
-    auto res = mSourceVoice->Stop(flags, operationSet);
-    if (FAILED(res)) {
-        Debug::logError("Failed suond stop.");
-    }
+SoundLoader& SourceVoice::getSoundData() const {
+    return *mData;
 }
 
 void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {
-    auto res = mSourceVoice->SubmitSourceBuffer(&toBuffer(buffer), nullptr);
+    auto res = mXAudio2SourceVoice->SubmitSourceBuffer(&toBuffer(buffer), nullptr);
+#ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed submit source buffer.");
     }
+#endif // _DEBUG
 }
 
-void SourceVoice::setVolume(float volume, unsigned operationSet) const {
-    auto res = mSourceVoice->SetVolume(volume, operationSet);
-    if (FAILED(res)) {
-        Debug::logError("Failed volume setting.");
-    }
+SoundPlayer& SourceVoice::getSoundPlayer() const {
+    return *mSoundPlayer;
+}
+
+SoundVolume& SourceVoice::getSoundVolume() const {
+    return *mSoundVolume;
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {

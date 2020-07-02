@@ -1,8 +1,10 @@
 ﻿#include "SoundFade.h"
+#include "SoundVolume.h"
 #include "../Device/Time.h"
 #include "../Math/Math.h"
 
-SoundFade::SoundFade() :
+SoundFade::SoundFade(SoundVolume& soundVolume) :
+    mSoundVolume(soundVolume),
     mTargetVolume(0.f),
     mTargetTime(0.f),
     mBeforeVolume(0.f),
@@ -12,10 +14,10 @@ SoundFade::SoundFade() :
 
 SoundFade::~SoundFade() = default;
 
-void SoundFade::fade(float targetVolume, float targetTime, float currentVolume) {
+void SoundFade::settings(float targetVolume, float targetTime) {
     mTargetVolume = targetVolume;
     mTargetTime = targetTime;
-    mBeforeVolume = currentVolume;
+    mBeforeVolume = mSoundVolume.getVolume();
     mTimeRate = 0.f;
     mIsFading = true;
 }
@@ -24,10 +26,12 @@ void SoundFade::updateFade() {
     if (!mIsFading) {
         return;
     }
-    mTimeRate += Time::deltaTime / mTargetTime;
-    Math::lerp(mBeforeVolume, mTargetVolume, mTimeRate);
 
+    mTimeRate += Time::deltaTime / mTargetTime;
     if (mTimeRate >= 1.f) {
+        mTimeRate = 1.f;
         mIsFading = false;
     }
+    auto nextVolume = Math::lerp(mBeforeVolume, mTargetVolume, mTimeRate);
+    mSoundVolume.setVolume(nextVolume);
 }

@@ -1,6 +1,6 @@
 ﻿#include "SoundBase.h"
-#include "Sound.h"
 #include "SoundLoader.h"
+#include "SourceVoice.h"
 #include "../DebugLayer/Debug.h"
 #include "../System/GlobalFunction.h"
 #include <cassert>
@@ -45,21 +45,26 @@ void SoundBase::createSourceVoice(
     const XAUDIO2_EFFECT_CHAIN* effectChain
 ) const {
     auto res = mXAudio2->CreateSourceVoice(sourceVoice, sourceFormat, flags, maxFrequencyRatio, callback, sendList, effectChain);
+
+#ifdef _DEBUG
     if (FAILED(res)) {
         Debug::windowMessage("ソースボイス作成失敗");
     }
+#endif // _DEBUG
 }
 
-void SoundBase::createSourceVoice(std::shared_ptr<Sound>* sound, const std::shared_ptr<SoundLoader>& data) const {
+std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(const std::shared_ptr<SoundLoader>& data) const {
     IXAudio2SourceVoice* sourceVoice;
     auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data->format());
+
+#ifdef _DEBUG
     if (FAILED(res)) {
         Debug::windowMessage("ソースボイス作成失敗");
-        return;
+        return nullptr;
     }
+#endif // _DEBUG
 
-    (*sound)->mSourceVoice = sourceVoice;
-    (*sound)->mData = data;
+    return std::make_shared<SourceVoice>(sourceVoice, data);
 }
 
 bool SoundBase::comInitialize() {

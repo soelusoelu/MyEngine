@@ -2,26 +2,29 @@
 
 #include "SoundBuffer.h"
 #include <xaudio2.h>
+#include <memory>
+
+class SoundLoader;
+class SoundPlayer;
+class SoundVolume;
 
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
 public:
-    SourceVoice();
+    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const std::shared_ptr<SoundLoader>& data);
     ~SourceVoice();
 
     /// <summary>
-    /// ソースボイスに設定されているサウンドを鳴らす
+    /// IXAudio2SourceVoiceを返す
     /// </summary>
-    /// <param name="flags">0でいい</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void play(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    /// <returns>IXAudio2SourceVoice</returns>
+    IXAudio2SourceVoice* getXAudio2SourceVoice() const;
 
     /// <summary>
-    /// 一時停止する
+    /// サウンドデータを返す
     /// </summary>
-    /// <param name="flags">0でいい</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void stop(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    /// <returns></returns>
+    SoundLoader& getSoundData() const;
 
     /// <summary>
     /// ソースボイスに波形データを追加する
@@ -32,16 +35,27 @@ public:
     void submitSourceBuffer(const SoundBuffer& buffer) const;
 
     /// <summary>
-    /// ボイスの音量を変更する
+    /// サウンド再生クラスを返す
     /// </summary>
-    /// <param name="volume">設定したい音量</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void setVolume(float volume, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    /// <returns></returns>
+    SoundPlayer& getSoundPlayer() const;
+
+    /// <summary>
+    /// サウンド音量設定クラスを返す
+    /// </summary>
+    /// <returns></returns>
+    SoundVolume& getSoundVolume() const;
 
 private:
+    SourceVoice(const SourceVoice&) = delete;
+    SourceVoice& operator=(const SourceVoice&) = delete;
+
     //SoundBufferからXAUDIO2_BUFFERへの変換
     XAUDIO2_BUFFER toBuffer(const SoundBuffer& buffer) const;
 
 private:
-    IXAudio2SourceVoice* mSourceVoice;
+    IXAudio2SourceVoice* mXAudio2SourceVoice;
+    std::shared_ptr<SoundLoader> mData;
+    std::unique_ptr<SoundPlayer> mSoundPlayer;
+    std::unique_ptr<SoundVolume> mSoundVolume;
 };

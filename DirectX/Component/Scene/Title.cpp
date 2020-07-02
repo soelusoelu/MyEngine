@@ -2,8 +2,9 @@
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
 #include "../../Input/Input.h"
-#include "../../Math/Math.h"
-#include "../../Device/Time.h"
+#include "../../Sound/SoundPlayer.h"
+#include "../../Sound/SoundVolume.h"
+#include "../../Sound/SoundFade.h"
 
 Title::Title() :
     Component(),
@@ -16,6 +17,9 @@ Title::~Title() = default;
 void Title::start() {
     mScene = getComponent<Scene>();
     mSound = getComponent<SoundComponent>();
+    mSound->getSoundVolume().setVolume(0.f);
+    mSound->getSoundVolume().fade().settings(1.f, 10.f);
+    mSound->getSoundPlayer().play();
 }
 
 void Title::update() {
@@ -24,11 +28,9 @@ void Title::update() {
         isEnd = Input::keyboard()->getEnter();
     }
 
-    static float volume = 0.f;
-    volume += Time::deltaTime * 60.f;
-    mSound->setVolume(Math::abs(Math::cos(volume)));
+    mSound->getSoundVolume().fade().updateFade();
     if (isEnd) {
         //mScene->next("GamePlay");
-        mSound->play();
+        mSound->getSoundPlayer().play();
     }
 }
