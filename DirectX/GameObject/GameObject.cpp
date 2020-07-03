@@ -1,6 +1,6 @@
 ﻿#include "GameObject.h"
 #include "GameObjectManager.h"
-#include "Transform3D.h"
+#include "../Transform/Transform3D.h"
 #include "../Component/ComponentManager.h"
 
 GameObject::GameObject() :

@@ -1,7 +1,7 @@
 ﻿#include "Camera.h"
-#include "../../GameObject/Transform3D.h"
 #include "../../Math/Plane.h"
 #include "../../System/Window.h"
+#include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 Camera::Camera() :

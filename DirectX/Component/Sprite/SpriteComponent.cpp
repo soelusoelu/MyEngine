@@ -7,11 +7,11 @@
 #include "../../DirectX/IndexBuffer.h"
 #include "../../DirectX/VertexBuffer.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Pivot.h"
-#include "../../GameObject/Transform2D.h"
 #include "../../Sprite/Sprite.h"
 #include "../../Sprite/SpriteManager.h"
 #include "../../System/Texture.h"
+#include "../../Transform/Pivot.h"
+#include "../../Transform/Transform2D.h"
 #include "../../Utility/LevelLoader.h"
 
 SpriteComponent::SpriteComponent() :

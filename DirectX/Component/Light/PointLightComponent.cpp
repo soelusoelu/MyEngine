@@ -1,7 +1,6 @@
 ﻿#include "PointLightComponent.h"
 #include "../Camera/Camera.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../GameObject/Transform3D.h"
 #include "../../Light/LightManager.h"
 #include "../../Light/PointLight.h"
 #include "../../Mesh/IMeshLoader.h"
@@ -9,6 +8,7 @@
 #include "../../Mesh/VertexArray.h"
 #include "../../System/Shader.h"
 #include "../../System/Window.h"
+#include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 PointLightComponent::PointLightComponent() :

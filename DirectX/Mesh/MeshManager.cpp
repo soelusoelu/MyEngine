@@ -2,7 +2,7 @@
 #include "../Component/Camera/Camera.h"
 #include "../Component/Mesh/MeshComponent.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../GameObject/Transform3D.h"
+#include "../Transform/Transform3D.h"
 
 MeshManager::MeshManager() = default;
 MeshManager::~MeshManager() = default;

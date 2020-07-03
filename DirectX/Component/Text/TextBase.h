@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "../Component.h"
-#include "../../GameObject/Pivot.h"
 #include "../../Math/Math.h"
+#include "../../Transform/Pivot.h"
 #include <string>
 
 class DrawString;

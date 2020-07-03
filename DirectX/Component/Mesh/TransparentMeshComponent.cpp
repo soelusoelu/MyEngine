@@ -6,13 +6,13 @@
 #include "../../DirectX/DirectX.h"
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectManager.h"
-#include "../../GameObject/Transform3D.h"
 #include "../../Mesh/IMeshLoader.h"
 #include "../../Mesh/Material.h"
 #include "../../Mesh/VertexArray.h"
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
 #include "../../System/World.h"
+#include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 TransparentMeshComponent::TransparentMeshComponent() :

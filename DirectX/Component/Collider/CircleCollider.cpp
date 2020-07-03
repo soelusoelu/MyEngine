@@ -1,7 +1,7 @@
 ﻿#include "CircleCollider.h"
 #include "../Sprite/SpriteComponent.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Transform2D.h"
+#include "../../Transform/Transform2D.h"
 
 CircleCollider::CircleCollider() :
     Collider(),

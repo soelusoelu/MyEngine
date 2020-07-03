@@ -1,5 +1,5 @@
 ﻿#include "DirectionalLight.h"
-#include "../../GameObject/Transform3D.h"
+#include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 DirectionalLight::DirectionalLight() :

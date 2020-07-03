@@ -3,7 +3,6 @@
 #include "../../Device/AssetsManager.h"
 #include "../../DirectX/DirectXInclude.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Transform3D.h"
 #include "../../Mesh/IMeshLoader.h"
 #include "../../Mesh/Material.h"
 #include "../../Mesh/MeshManager.h"
@@ -11,6 +10,7 @@
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
 #include "../../System/World.h"
+#include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 MeshComponent::MeshComponent() :

@@ -1,8 +1,7 @@
 ﻿#pragma once
 
-#include "../GameObject/Pivot.h"
-#include "../GameObject/Transform2D.h"
 #include "../Math/Math.h"
+#include "../Transform/Pivot.h"
 #include <rapidjson/document.h>
 #include <list>
 #include <memory>

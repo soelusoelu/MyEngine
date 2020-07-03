@@ -3,12 +3,12 @@
 #include "../../Device/AssetsManager.h"
 #include "../../DirectX/DirectX.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Transform3D.h"
 #include "../../Sprite/SpriteManager.h"
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
 #include "../../System/Window.h"
 #include "../../System/World.h"
+#include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 #include <cassert>
 

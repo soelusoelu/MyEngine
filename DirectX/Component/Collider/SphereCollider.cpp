@@ -1,7 +1,7 @@
 ﻿#include "SphereCollider.h"
 #include "../Mesh/MeshComponent.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Transform3D.h"
+#include "../../Transform/Transform3D.h"
 
 SphereCollider::SphereCollider() :
     Collider(),

@@ -46,7 +46,7 @@ public:
         for (const auto& c : mComponents) {
             comp = std::dynamic_pointer_cast<T>(c);
             if (comp) {
-                break;
+                return comp;
             }
         }
         //最後まで見つからなければnullptrを返す
@@ -69,7 +69,6 @@ public:
                 components.emplace_back(comp);
             }
         }
-        //最後まで見つからなければnullptrを返す
         return components;
     }
 

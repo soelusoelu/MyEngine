@@ -1,5 +1,6 @@
 ﻿#include "DrawString.h"
 #include "../Sprite/Sprite.h"
+#include "../Transform/Transform2D.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 

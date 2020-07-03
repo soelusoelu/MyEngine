@@ -4,8 +4,8 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../GameObject/GameObject.h"
-#include "../GameObject/Transform3D.h"
 #include "../System/Window.h"
+#include "../Transform/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 #include <list>

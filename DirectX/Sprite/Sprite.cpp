@@ -2,10 +2,10 @@
 #include "SpriteManager.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../GameObject/Transform2D.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../System/World.h"
+#include "../Transform/Transform2D.h"
 #include <cassert>
 
 Sprite::Sprite(const std::string& fileName) :

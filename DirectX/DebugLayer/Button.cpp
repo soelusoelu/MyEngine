@@ -1,7 +1,7 @@
 ﻿#include "Button.h"
 #include "../Device/AssetsManager.h"
-#include "../GameObject/Transform2D.h"
 #include "../Sprite/Sprite.h"
+#include "../Transform/Transform2D.h"
 
 Button::Button(std::function<void()> onClick, const Vector2& pos, const Vector2& dims) :
     mOnClick(onClick),
