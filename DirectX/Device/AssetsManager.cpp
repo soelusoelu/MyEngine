@@ -35,20 +35,29 @@ std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName
     return shader;
 }
 
-std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & filePath, bool isSprite) {
+std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & filePath) {
     std::shared_ptr<Texture> texture = nullptr;
     auto itr = mTextures.find(filePath);
     if (itr != mTextures.end()) { //既に読み込まれている
         texture = itr->second;
     } else { //初読み込み
-        if (isSprite) {
-            mDirectory->setTextureDirectory(filePath);
-        } else {
-            //World::instance().directory().setModelDirectory(filePath);
-        }
+        mDirectory->setTextureDirectory(filePath);
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
         texture = std::make_shared<Texture>(fileName);
         mTextures.emplace(filePath, texture);
+    }
+    return texture;
+}
+
+std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string& fileName) {
+    std::shared_ptr<Texture> texture = nullptr;
+    auto itr = mTextures.find(fileName);
+    if (itr != mTextures.end()) { //既に読み込まれている
+        texture = itr->second;
+    } else { //初読み込み
+        //モデルからテクスチャを生成したい場合、事前にディレクトリを移動させている必要がある
+        texture = std::make_shared<Texture>(fileName);
+        mTextures.emplace(fileName, texture);
     }
     return texture;
 }

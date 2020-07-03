@@ -543,9 +543,9 @@ void FBX::getMaterial(FbxMesh* mesh) {
                 //テクスチャ名
                 mInitMaterials[i]->textureName = texture->GetName();
 
-                //テクスチャーを作成
+                //テクスチャを作成
                 //ディレクトリが変わってない前提
-                mInitMaterials[i]->texture = World::instance().assetsManager().createTexture(mInitMaterials[i]->textureName, false);
+                mInitMaterials[i]->texture = World::instance().assetsManager().createTextureFromModel(mInitMaterials[i]->textureName);
 
                 break; //とりあえず今は1枚だけサポート
             }

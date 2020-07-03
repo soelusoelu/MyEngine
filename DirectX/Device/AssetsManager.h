@@ -18,7 +18,8 @@ public:
     AssetsManager();
     ~AssetsManager();
     std::shared_ptr<Shader> createShader(const std::string& fileName);
-    std::shared_ptr<Texture> createTexture(const std::string& filePath, bool isSprite = true);
+    std::shared_ptr<Texture> createTexture(const std::string& filePath);
+    std::shared_ptr<Texture> createTextureFromModel(const std::string& fileName);
     std::shared_ptr<SourceVoice> createSound(const std::string& filePath, const SourceVoiceInitParam& param);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& filePath);
     void setDataDirectory(const std::string& filePath) const;

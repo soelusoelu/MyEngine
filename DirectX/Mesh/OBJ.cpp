@@ -354,7 +354,7 @@ bool OBJ::materialLoad(const std::string& materialName) {
 
             //テクスチャーを作成
             //ディレクトリが変わってない前提
-            mInitMaterials[matCount]->texture = World::instance().assetsManager().createTexture(mInitMaterials[matCount]->textureName, false);
+            mInitMaterials[matCount]->texture = World::instance().assetsManager().createTextureFromModel(mInitMaterials[matCount]->textureName);
         }
     }
 
