@@ -36,27 +36,16 @@ SoundBase::~SoundBase() {
     mInstantiated = false;
 }
 
-void SoundBase::createSourceVoice(
-    IXAudio2SourceVoice** sourceVoice,
-    const WAVEFORMATEX* sourceFormat,
+std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(
+    const SoundLoader& data,
     unsigned flags,
     float maxFrequencyRatio,
     IXAudio2VoiceCallback* callback,
     const XAUDIO2_VOICE_SENDS* sendList,
     const XAUDIO2_EFFECT_CHAIN* effectChain
 ) const {
-    auto res = mXAudio2->CreateSourceVoice(sourceVoice, sourceFormat, flags, maxFrequencyRatio, callback, sendList, effectChain);
-
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::windowMessage("ソースボイス作成失敗");
-    }
-#endif // _DEBUG
-}
-
-std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(const std::shared_ptr<SoundLoader>& data) const {
     IXAudio2SourceVoice* sourceVoice;
-    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data->format());
+    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), flags, maxFrequencyRatio, callback, sendList, effectChain);
 
 #ifdef _DEBUG
     if (FAILED(res)) {

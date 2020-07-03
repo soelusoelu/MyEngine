@@ -1,6 +1,7 @@
 #include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Sound/SourceVoice.h"
+#include "../../Sound/SourceVoiceInitParam.h"
 #include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
@@ -15,7 +16,8 @@ SoundComponent::~SoundComponent() = default;
 
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
-        mSound = World::instance().assetsManager().createSound(mFileName);
+        SourceVoiceInitParam param;
+        mSound = World::instance().assetsManager().createSound(mFileName, param);
     }
     if (mIsFirstPlay) {
 

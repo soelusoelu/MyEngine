@@ -4,6 +4,7 @@
 
 class SourceVoice;
 
+//音の再生を扱うクラス
 class SoundPlayer {
 public:
     SoundPlayer(SourceVoice& sourceVoice);

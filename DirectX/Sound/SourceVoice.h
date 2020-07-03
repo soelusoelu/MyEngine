@@ -12,7 +12,7 @@ class SoundVolume;
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
 public:
-    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const std::shared_ptr<SoundLoader>& data);
+    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data);
     ~SourceVoice();
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿#include "SoundVolume.h"
+#include "Frequency.h"
 #include "SoundFade.h"
 #include "SourceVoice.h"
 #include "VoiceDetails.h"
@@ -8,6 +9,7 @@
 SoundVolume::SoundVolume(SourceVoice& sourceVoice) :
     mSourceVoice(sourceVoice),
     mFader(std::make_unique<SoundFade>(*this)),
+    mFrequency(std::make_unique<Frequency>(sourceVoice)),
     mCurrentVolume(1.f) {
 }
 
@@ -59,4 +61,8 @@ void SoundVolume::panning(unsigned outChannels, float volumes[], unsigned operat
 
 SoundFade& SoundVolume::fade() const {
     return *mFader;
+}
+
+Frequency& SoundVolume::frequency() const {
+    return *mFrequency;
 }

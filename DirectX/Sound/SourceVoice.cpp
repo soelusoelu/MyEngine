@@ -5,9 +5,9 @@
 #include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 
-SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const std::shared_ptr<SoundLoader>& data) :
+SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
-    mData(std::make_unique<VoiceDetails>(*data)),
+    mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
     mSoundVolume(std::make_unique<SoundVolume>(*this)) {
 

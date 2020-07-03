@@ -44,7 +44,7 @@ std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & fileNa
     return texture;
 }
 
-std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileName) {
+std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileName, const SourceVoiceInitParam& param) {
     std::shared_ptr<SoundLoader> data = nullptr;
     auto itr = mSounds.find(fileName);
     if (itr != mSounds.end()) { //既に読み込まれている
@@ -60,7 +60,7 @@ std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileN
         mSounds.emplace(fileName, data);
     }
 
-    return mSoundBase->createSourceVoice(data);
+    return mSoundBase->createSourceVoice(*data, param.flags, param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileName) {

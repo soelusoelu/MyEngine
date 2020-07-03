@@ -41,6 +41,10 @@ public:
     unsigned getBitRate() const;
 
 private:
+    VoiceDetails(const VoiceDetails&) = delete;
+    VoiceDetails& operator=(const VoiceDetails&) = delete;
+
+private:
     //ヘッダ等を含まない純粋な波形データ
     const BYTE* mBuffer;
     //波形データのサイズ

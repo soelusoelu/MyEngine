@@ -6,8 +6,9 @@
 
 class SourceVoice;
 class SoundFade;
+class Frequency;
 
-//サウンドの音量を扱うクラス
+//ボイスの音量を扱うクラス
 class SoundVolume {
 public:
     SoundVolume(SourceVoice& sourceVoice);
@@ -58,8 +59,14 @@ public:
     /// <summary>
     /// フェード専門クラスにアクセスする
     /// </summary>
-    /// <returns>フェードクラス</returns>
+    /// <returns></returns>
     SoundFade& fade() const;
+
+    /// <summary>
+    /// 周波数専門クラスにアクセスする
+    /// </summary>
+    /// <returns></returns>
+    Frequency& frequency() const;
 
 private:
     SoundVolume(const SoundVolume&) = delete;
@@ -68,5 +75,6 @@ private:
 private:
     SourceVoice& mSourceVoice;
     std::unique_ptr<SoundFade> mFader;
+    std::unique_ptr<Frequency> mFrequency;
     float mCurrentVolume;
 };
