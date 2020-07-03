@@ -1,5 +1,6 @@
 ﻿#include "Frequency.h"
 #include "SourceVoice.h"
+#include "../DebugLayer/Debug.h"
 
 Frequency::Frequency(SourceVoice& sourceVoice) :
     mSourceVoice(sourceVoice) {
@@ -8,5 +9,10 @@ Frequency::Frequency(SourceVoice& sourceVoice) :
 Frequency::~Frequency() = default;
 
 void Frequency::setFrequencyRatio(float pitch, unsigned operationSet) {
-    mSourceVoice.getXAudio2SourceVoice()->SetFrequencyRatio(pitch, operationSet);
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetFrequencyRatio(pitch, operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed change frequency ratio.");
+    }
+#endif // _DEBUG
 }

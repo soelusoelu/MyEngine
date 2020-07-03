@@ -9,12 +9,14 @@ SoundPlayer::SoundPlayer(SourceVoice& sourceVoice) :
 SoundPlayer::~SoundPlayer() = default;
 
 void SoundPlayer::play(unsigned flags, unsigned operationSet) const {
-    auto res = mSourceVoice.getXAudio2SourceVoice()->Start(flags, operationSet);
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::logError("Failed sound play.");
-    }
-#endif // _DEBUG
+    const auto& buf = mSourceVoice.getSoundBuffer();
+    playFromSoundBuffer(buf, flags, operationSet);
+}
+
+void SoundPlayer::playInfinity(unsigned flags, unsigned operationSet) const {
+    auto& buf = mSourceVoice.getSoundBuffer();
+    buf.loopCount = XAUDIO2_LOOP_INFINITE;
+    playFromSoundBuffer(buf, flags, operationSet);
 }
 
 void SoundPlayer::stop(unsigned flags, unsigned operationSet) const {
@@ -30,4 +32,14 @@ bool SoundPlayer::isFinished() const {
     XAUDIO2_VOICE_STATE state;
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     return (state.BuffersQueued == 0);
+}
+
+void SoundPlayer::playFromSoundBuffer(const SoundBuffer& buffer, unsigned flags, unsigned operationSet) const {
+    mSourceVoice.submitSourceBuffer(buffer);
+    auto res = mSourceVoice.getXAudio2SourceVoice()->Start(flags, operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed sound play.");
+    }
+#endif // _DEBUG
 }

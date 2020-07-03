@@ -22,6 +22,12 @@ public:
     IXAudio2SourceVoice* getXAudio2SourceVoice() const;
 
     /// <summary>
+    /// バッファを返す
+    /// </summary>
+    /// <returns></returns>
+    SoundBuffer& getSoundBuffer();
+
+    /// <summary>
     /// サウンドデータを返す
     /// </summary>
     /// <returns></returns>
@@ -34,6 +40,13 @@ public:
     /// </summary>
     /// <param name="buffer">追加する波形データ</param>
     void submitSourceBuffer(const SoundBuffer& buffer) const;
+
+    /// <summary>
+    /// ソースボイスに自身が管理している波形データを追加する
+    /// 初めての場合は最初に、既に他のデータが充填されている場合はその次の再生データとして後ろに追加される
+    /// 充填できる最大はXAUDIO2_MAX_QUEUED_BUFFERSで64個
+    /// </summary>
+    void submitSourceBuffer() const;
 
     /// <summary>
     /// サウンド再生クラスを返す
@@ -56,6 +69,7 @@ private:
 
 private:
     IXAudio2SourceVoice* mXAudio2SourceVoice;
+    std::unique_ptr<SoundBuffer> mSoundBuffer;
     std::unique_ptr<VoiceDetails> mData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;

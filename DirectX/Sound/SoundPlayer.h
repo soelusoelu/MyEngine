@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "SoundBuffer.h"
 #include <xaudio2.h>
 
 class SourceVoice;
@@ -11,18 +12,25 @@ public:
     ~SoundPlayer();
 
     /// <summary>
-    /// ソースボイスに設定されているサウンドを鳴らす
+    /// ソースボイスに設定されているサウンドを再生する
     /// </summary>
     /// <param name="flags">0でいい</param>
     /// <param name="operationSet">いつ実行するか</param>
     void play(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
     /// <summary>
+    /// ソースボイスに設定されているサウンドをループ再生する
+    /// </summary>
+    /// <param name="flags">0でいい</param>
+    /// <param name="operationSet">いつ実行するか</param>
+    void playInfinity(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+
+    /// <summary>
     /// 一時停止する
     /// </summary>
     /// <param name="flags">0でいい</param>
     /// <param name="operationSet">いつ実行するか</param>
-    void stop(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    void stop(unsigned flags = XAUDIO2_PLAY_TAILS, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
     /// <summary>
     /// 再生が終了しているか
@@ -33,6 +41,14 @@ public:
 private:
     SoundPlayer(const SoundPlayer&) = delete;
     SoundPlayer& operator=(const SoundPlayer&) = delete;
+
+    /// <summary>
+    /// 引数のバッファからサウンドを再生する
+    /// </summary>
+    /// <param name="buffer">波形データ</param>
+    /// <param name="flags">0でいい</param>
+    /// <param name="operationSet">いつ実行するか</param>
+    void playFromSoundBuffer(const SoundBuffer& buffer, unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
 private:
     SourceVoice& mSourceVoice;

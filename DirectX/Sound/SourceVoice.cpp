@@ -7,15 +7,13 @@
 
 SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
+    mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
     mSoundVolume(std::make_unique<SoundVolume>(*this)) {
 
-    SoundBuffer buffer;
-    buffer.buffer = mData->buffer();
-    buffer.flags = XAUDIO2_END_OF_STREAM;
-    buffer.size = mData->size();
-    submitSourceBuffer(buffer);
+    mSoundBuffer->buffer = mData->buffer();
+    mSoundBuffer->size = mData->size();
 }
 
 SourceVoice::~SourceVoice() {
@@ -25,6 +23,10 @@ SourceVoice::~SourceVoice() {
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
+}
+
+SoundBuffer& SourceVoice::getSoundBuffer() {
+    return *mSoundBuffer;
 }
 
 VoiceDetails& SourceVoice::getSoundData() const {
@@ -38,6 +40,10 @@ void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {
         Debug::logError("Failed submit source buffer.");
     }
 #endif // _DEBUG
+}
+
+void SourceVoice::submitSourceBuffer() const {
+    submitSourceBuffer(*mSoundBuffer);
 }
 
 SoundPlayer& SourceVoice::getSoundPlayer() const {
