@@ -14,20 +14,20 @@ struct SoundBuffer {
     unsigned size;
     //ヘッダ等を含まない波形データ本体の先頭アドレス
     const BYTE* buffer;
-    //再生の開始位置(単位: サンプル)
+    //再生の開始位置(単位: 秒)
     //これより前のデータは無視される
     //0だと頭から再生
-    unsigned playBegin;
-    //再生領域の長さ(単位: サンプル)
+    float playBegin;
+    //再生領域の長さ(単位: 秒)
     //playBegin + playLengthより後ろのデータは無視される
     //0だと全体再生
-    unsigned playLength;
-    //ループの開始位置(単位: サンプル)
+    float playLength;
+    //ループの開始位置(単位: 秒)
     //ループして折り返す際に戻る位置
-    unsigned loopBegin;
-    //ループの長さ(単位: サンプル)
+    float loopBegin;
+    //ループの長さ(単位: 秒)
     //loopBegin + loopLengthが実際の折り返し位置
-    unsigned loopLength;
+    float loopLength;
     //ループする回数
     //0でループなし、XAUDIO2_LOOP_INFINITEで永久ループ
     unsigned loopCount;
@@ -38,10 +38,10 @@ struct SoundBuffer {
         flags(XAUDIO2_END_OF_STREAM),
         size(0),
         buffer(0),
-        playBegin(0),
-        playLength(0),
-        loopBegin(0),
-        loopLength(0),
+        playBegin(0.f),
+        playLength(0.f),
+        loopBegin(0.f),
+        loopLength(0.f),
         loopCount(0),
         context(nullptr) {
     }

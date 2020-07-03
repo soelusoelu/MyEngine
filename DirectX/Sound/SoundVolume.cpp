@@ -15,6 +15,10 @@ SoundVolume::SoundVolume(SourceVoice& sourceVoice) :
 
 SoundVolume::~SoundVolume() = default;
 
+void SoundVolume::update() {
+    mFader->updateFade();
+}
+
 void SoundVolume::setVolume(float volume, unsigned operationSet) {
     //前回とほぼ同じ値だったら変更しない
     if (Math::nearZero(mCurrentVolume - volume)) {

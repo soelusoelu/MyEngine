@@ -21,11 +21,15 @@ SourceVoice::~SourceVoice() {
     mXAudio2SourceVoice = nullptr;
 }
 
+void SourceVoice::update() {
+    mSoundVolume->update();
+}
+
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
 }
 
-SoundBuffer& SourceVoice::getSoundBuffer() {
+SoundBuffer& SourceVoice::getSoundBuffer() const {
     return *mSoundBuffer;
 }
 
@@ -55,14 +59,16 @@ SoundVolume& SourceVoice::getSoundVolume() const {
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {
+    unsigned sampleRate = mData->getSampleRate();
+
     XAUDIO2_BUFFER buf;
     buf.Flags = buffer.flags;
     buf.AudioBytes = buffer.size;
     buf.pAudioData = buffer.buffer;
-    buf.PlayBegin = buffer.playBegin;
-    buf.PlayLength = buffer.playLength;
-    buf.LoopBegin = buffer.loopBegin;
-    buf.LoopLength = buffer.loopLength;
+    buf.PlayBegin = static_cast<unsigned>(buffer.playBegin * sampleRate);
+    buf.PlayLength = static_cast<unsigned>(buffer.playLength * sampleRate);
+    buf.LoopBegin = static_cast<unsigned>(buffer.loopBegin * sampleRate);
+    buf.LoopLength = static_cast<unsigned>(buffer.loopLength * sampleRate);
     buf.LoopCount = buffer.loopCount;
     buf.pContext = buffer.context;
 

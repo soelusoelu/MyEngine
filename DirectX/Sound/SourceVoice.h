@@ -16,6 +16,11 @@ public:
     ~SourceVoice();
 
     /// <summary>
+    /// 毎フレーム更新
+    /// </summary>
+    void update();
+
+    /// <summary>
     /// IXAudio2SourceVoiceを返す
     /// </summary>
     /// <returns>IXAudio2SourceVoice</returns>
@@ -25,7 +30,7 @@ public:
     /// バッファを返す
     /// </summary>
     /// <returns></returns>
-    SoundBuffer& getSoundBuffer();
+    SoundBuffer& getSoundBuffer() const;
 
     /// <summary>
     /// サウンドデータを返す

@@ -25,8 +25,12 @@ void SoundComponent::awake() {
         mSound = World::instance().assetsManager().createSound(mFileName, param);
     }
     if (mIsFirstPlay) {
-
+        //mSound->getSoundPlayer().play();
     }
+}
+
+void SoundComponent::update() {
+    mSound->update();
 }
 
 void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
@@ -37,6 +41,10 @@ void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
 
 void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
+}
+
+SoundBuffer& SoundComponent::getSoundBuffer() const {
+    return mSound->getSoundBuffer();
 }
 
 SoundPlayer& SoundComponent::getSoundPlayer() const {

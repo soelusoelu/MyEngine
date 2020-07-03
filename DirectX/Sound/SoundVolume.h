@@ -15,6 +15,11 @@ public:
     ~SoundVolume();
 
     /// <summary>
+    /// 毎フレーム更新
+    /// </summary>
+    void update();
+
+    /// <summary>
     /// ボイスの音量を変更する
     /// </summary>
     /// <param name="volume">設定したい音量</param>
