@@ -34,6 +34,15 @@ bool SoundPlayer::isFinished() const {
     return (state.BuffersQueued == 0);
 }
 
+void SoundPlayer::exitLoop(unsigned operationSet) const {
+    auto res = mSourceVoice.getXAudio2SourceVoice()->ExitLoop(operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed exit loop.");
+    }
+#endif // _DEBUG
+}
+
 void SoundPlayer::playFromSoundBuffer(const SoundBuffer& buffer, unsigned flags, unsigned operationSet) const {
     mSourceVoice.submitSourceBuffer(buffer);
     auto res = mSourceVoice.getXAudio2SourceVoice()->Start(flags, operationSet);

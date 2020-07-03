@@ -5,9 +5,6 @@
 #include "../Device/AssetsManager.h"
 #include "../System/GlobalFunction.h"
 #include "../System/World.h"
-#include "../Utility/Directory.h"
-#include "../Utility/FileUtil.h"
-#include "../Utility/StringUtil.h"
 
 OBJ::OBJ() :
     mVertexArray(std::make_shared<VertexArray>()),
@@ -18,20 +15,17 @@ OBJ::~OBJ() {
     safeDeleteArray<MeshVertex>(mVertices);
 }
 
-void OBJ::perse(const std::string& filePath) {
-    World::instance().directory().setModelDirectory(filePath);
-
+void OBJ::perse(const std::string& fileName) {
     //OBJファイルを開いて内容を読み込む
-    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        Debug::windowMessage(filePath + "ファイルが存在しません");
+        Debug::windowMessage(fileName + ": ファイルが存在しません");
         return;
     }
 
     //事前に頂点数などを調べる
     if (!preload(ifs, fileName)) {
-        Debug::windowMessage(filePath + "ファイルの事前読み込み失敗");
+        Debug::windowMessage(fileName + ": ファイルの事前読み込み失敗");
         return;
     }
 
@@ -247,7 +241,7 @@ float OBJ::getRadius() const {
     return (max - min) / 2.f;
 }
 
-bool OBJ::preload(std::ifstream& stream, const std::string& filePath) {
+bool OBJ::preload(std::ifstream& stream, const std::string& fileName) {
     //OBJファイルを開いて内容を読み込む
     unsigned numVert = 0;
     unsigned numNormal = 0;
@@ -270,7 +264,7 @@ bool OBJ::preload(std::ifstream& stream, const std::string& filePath) {
         //マテリアル読み込み
         if (strcmp(s, "mtllib") == 0) {
             auto mat = line.substr(7); //「mtllib 」の文字数分
-            if (!materialLoad(mat, filePath)) {
+            if (!materialLoad(mat)) {
                 return false;
             }
         }
@@ -304,10 +298,10 @@ bool OBJ::preload(std::ifstream& stream, const std::string& filePath) {
     return true;
 }
 
-bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath) {
-    std::ifstream ifs(fileName, std::ios::in);
+bool OBJ::materialLoad(const std::string& materialName) {
+    std::ifstream ifs(materialName, std::ios::in);
     if (ifs.fail()) {
-        Debug::windowMessage(FileUtil::getDirectryFromFilePath(filePath) + "/" + fileName + "ファイルが存在しません");
+        Debug::windowMessage(materialName + ": ファイルが存在しません");
         return false;
     }
 
@@ -358,11 +352,9 @@ bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath)
         if (strcmp(s, "map_Kd") == 0) {
             mInitMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
 
-            auto dir = FileUtil::getDirectryFromFilePath(filePath);
-            dir += "/" + mInitMaterials[matCount]->textureName;
-
             //テクスチャーを作成
-            mInitMaterials[matCount]->texture = World::instance().assetsManager().createTexture(dir, false);
+            //ディレクトリが変わってない前提
+            mInitMaterials[matCount]->texture = World::instance().assetsManager().createTexture(mInitMaterials[matCount]->textureName, false);
         }
     }
 

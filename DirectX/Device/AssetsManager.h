@@ -17,9 +17,9 @@ public:
     AssetsManager();
     ~AssetsManager();
     std::shared_ptr<Shader> createShader(const std::string& fileName);
-    std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
-    std::shared_ptr<SourceVoice> createSound(const std::string& fileName, const SourceVoiceInitParam& param);
-    std::shared_ptr<IMeshLoader> createMesh(const std::string& fileName);
+    std::shared_ptr<Texture> createTexture(const std::string& filePath, bool isSprite = true);
+    std::shared_ptr<SourceVoice> createSound(const std::string& filePath, const SourceVoiceInitParam& param);
+    std::shared_ptr<IMeshLoader> createMesh(const std::string& filePath);
 
 private:
     AssetsManager(const AssetsManager&) = delete;

@@ -10,10 +10,10 @@ public:
     void setRootDirectory();
     void setAssetsDirectory();
     void setShaderDirectory();
-    void setTextureDirectory();
-    void setSoundDirectory();
+    void setTextureDirectory(const std::string& filePath);
+    void setSoundDirectory(const std::string& filePath);
     void setDataDirectory();
-    void setModelDirectory(const std::string& directry);
+    void setModelDirectory(const std::string& filePath);
 
 private:
     Directory(const Directory&) = delete;

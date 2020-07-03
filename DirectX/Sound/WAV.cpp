@@ -1,6 +1,4 @@
 ﻿#include "WAV.h"
-#include "../System/World.h"
-#include "../Utility/Directory.h"
 
 #pragma comment(lib, "winmm.lib")
 
@@ -8,8 +6,6 @@ WAV::WAV() = default;
 WAV::~WAV() = default;
 
 void WAV::loadFromFile(const std::string& fileName) {
-    World::instance().directory().setSoundDirectory();
-
     HMMIO hMmio = NULL; //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
     MMCKINFO ckInfo; //チャンク情報
     MMCKINFO riffckInfo; //最上部チャンク(RIFFチャンク)保存用

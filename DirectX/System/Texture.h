@@ -25,7 +25,7 @@ class VertexBuffer;
 
 class Texture {
 public:
-    Texture(const std::string& fileName, bool isSprite);
+    Texture(const std::string& fileName);
     ~Texture();
     static void finalize();
     const TextureDesc& desc() const;
@@ -39,7 +39,7 @@ public:
 private:
     void createVertexBuffer();
     void createIndexBuffer();
-    void createTexture(const std::string& filePath, bool isSprite);
+    void createTexture(const std::string& fileName);
     void createSampler();
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;

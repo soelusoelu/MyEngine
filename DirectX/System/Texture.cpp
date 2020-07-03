@@ -3,11 +3,9 @@
 #include "Shader.h"
 #include "../DebugLayer/Debug.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../System/World.h"
-#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
-Texture::Texture(const std::string& fileName, bool isSprite) :
+Texture::Texture(const std::string& fileName) :
     mShaderResourceView(nullptr),
     mSampler(nullptr),
     mDesc() {
@@ -18,7 +16,7 @@ Texture::Texture(const std::string& fileName, bool isSprite) :
         createIndexBuffer();
     }
     //テクスチャー作成
-    createTexture(fileName, isSprite);
+    createTexture(fileName);
     //テクスチャー用サンプラー作成
     createSampler();
 }
@@ -97,15 +95,9 @@ void Texture::createIndexBuffer() {
     indexBuffer = new IndexBuffer(bd, &sub);
 }
 
-void Texture::createTexture(const std::string & filePath, bool isSprite) {
-    if (isSprite) {
-        World::instance().directory().setTextureDirectory();
-    } else {
-        World::instance().directory().setModelDirectory(filePath);
-    }
+void Texture::createTexture(const std::string & fileName) {
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;
-    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     D3DX11GetImageInfoFromFileA(fileName.c_str(), nullptr, &info, nullptr);
 
     mDesc.width = info.Width;

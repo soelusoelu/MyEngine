@@ -24,7 +24,7 @@ std::string FileUtil::getFileNameFromDirectry(const std::string& filePath) {
 std::string FileUtil::getDirectryFromFilePath(const std::string& filePath) {
     auto pos = filePath.find_last_of('/');
     if (pos == std::string::npos) {
-        return filePath;
+        return "";
     }
     return filePath.substr(0, pos);
 }

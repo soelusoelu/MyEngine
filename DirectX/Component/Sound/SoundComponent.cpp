@@ -2,6 +2,7 @@
 #include "../../Device/AssetsManager.h"
 #include "../../Sound/SourceVoice.h"
 #include "../../Sound/SourceVoiceInitParam.h"
+#include "../../Sound/SoundPlayer.h"
 #include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
@@ -12,7 +13,11 @@ SoundComponent::SoundComponent() :
     mIsFirstPlay(false) {
 }
 
-SoundComponent::~SoundComponent() = default;
+SoundComponent::~SoundComponent() {
+    if (mSound) {
+        mSound->getSoundPlayer().stop();
+    }
+}
 
 void SoundComponent::awake() {
     if (!mFileName.empty()) {

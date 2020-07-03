@@ -5,7 +5,6 @@
 #include "../Device/AssetsManager.h"
 #include "../System/GlobalFunction.h"
 #include "../System/World.h"
-#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
 FBX::FBX() :
@@ -22,9 +21,7 @@ FBX::~FBX() {
     }
 }
 
-void FBX::perse(const std::string& filePath) {
-    World::instance().directory().setModelDirectory(filePath);
-
+void FBX::perse(const std::string& fileName) {
     //マネージャーを生成
     mManager = FbxManager::Create();
 
@@ -34,9 +31,8 @@ void FBX::perse(const std::string& filePath) {
 
     //Importerを生成
     FbxImporter* importer = FbxImporter::Create(mManager, "");
-    auto fileName = filePath.substr(filePath.find_last_of('/') + 1);
     if (!importer->Initialize(fileName.c_str(), -1, mManager->GetIOSettings())) {
-        Debug::windowMessage(filePath + "ファイルは存在しません");
+        Debug::windowMessage(fileName + ": ファイルは存在しません");
         return;
     }
 
@@ -52,7 +48,7 @@ void FBX::perse(const std::string& filePath) {
     //Scene解析
     FbxNode* root = scene->GetRootNode();
     if (root) {
-        perse(filePath, root, 0);
+        perse(root, 0);
     }
 
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
@@ -139,7 +135,7 @@ float FBX::getRadius() const {
     return (max - min) / 2.f;
 }
 
-void FBX::perse(const std::string& filePath, FbxNode* node, int indent) {
+void FBX::perse(FbxNode* node, int indent) {
     int attrCount = node->GetNodeAttributeCount();
 
     for (size_t i = 0; i < attrCount; i++) {
@@ -154,7 +150,7 @@ void FBX::perse(const std::string& filePath, FbxNode* node, int indent) {
                 getVertex(mesh);
                 getNormals(mesh);
                 getUV(mesh);
-                getMaterial(filePath, mesh);
+                getMaterial(mesh);
                 break;
             default:
                 break;
@@ -164,7 +160,7 @@ void FBX::perse(const std::string& filePath, FbxNode* node, int indent) {
 
     int childCount = node->GetChildCount();
     for (int i = 0; i < childCount; ++i) {
-        perse(filePath, node->GetChild(i), indent + 1);
+        perse(node->GetChild(i), indent + 1);
     }
 }
 
@@ -432,7 +428,7 @@ void FBX::getUV(FbxMesh* mesh) {
     }
 }
 
-void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
+void FBX::getMaterial(FbxMesh* mesh) {
     FbxNode* node = mesh->GetNode();
     if (!node) {
         return;
@@ -547,11 +543,9 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
                 //テクスチャ名
                 mInitMaterials[i]->textureName = texture->GetName();
 
-                auto dir = FileUtil::getDirectryFromFilePath(filePath);
-                dir += "/" + mInitMaterials[i]->textureName;
-
                 //テクスチャーを作成
-                mInitMaterials[i]->texture = World::instance().assetsManager().createTexture(dir, false);
+                //ディレクトリが変わってない前提
+                mInitMaterials[i]->texture = World::instance().assetsManager().createTexture(mInitMaterials[i]->textureName, false);
 
                 break; //とりあえず今は1枚だけサポート
             }

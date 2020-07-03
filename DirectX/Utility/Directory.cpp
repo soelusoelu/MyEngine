@@ -24,33 +24,37 @@ void Directory::setRootDirectory() {
 }
 
 void Directory::setAssetsDirectory() {
-    auto temp = mRootPath + "\\Assets";
+    auto temp = mRootPath + "\\Assets/";
     setCurrentDirectory(temp);
 }
 
 void Directory::setShaderDirectory() {
-    auto temp = mRootPath + "\\Shader";
+    auto temp = mRootPath + "\\Shader/";
     setCurrentDirectory(temp);
 }
 
-void Directory::setTextureDirectory() {
-    auto temp = mRootPath + "\\Assets/Texture";
+void Directory::setTextureDirectory(const std::string& filePath) {
+    auto temp = mRootPath + "\\Assets/Texture/";
+    temp += FileUtil::getDirectryFromFilePath(filePath);
+
     setCurrentDirectory(temp);
 }
 
-void Directory::setSoundDirectory() {
-    auto temp = mRootPath + "\\Assets/Sound";
+void Directory::setSoundDirectory(const std::string& filePath) {
+    auto temp = mRootPath + "\\Assets/Sound/";
+    temp += FileUtil::getDirectryFromFilePath(filePath);
+
     setCurrentDirectory(temp);
 }
 
 void Directory::setDataDirectory() {
-    auto temp = mRootPath + "\\Assets/Data";
+    auto temp = mRootPath + "\\Assets/Data/";
     setCurrentDirectory(temp);
 }
 
-void Directory::setModelDirectory(const std::string& directry) {
+void Directory::setModelDirectory(const std::string& filePath) {
     auto temp = mRootPath + "\\Assets/Model/";
-    temp += FileUtil::getDirectryFromFilePath(directry);
+    temp += FileUtil::getDirectryFromFilePath(filePath);
 
     setCurrentDirectory(temp);
 }

@@ -28,7 +28,7 @@ public:
     /// <summary>
     /// 一時停止する
     /// </summary>
-    /// <param name="flags">0でいい</param>
+    /// <param name="flags">XAUDIO2_PLAY_TAILSはエフェクトの効果は再生し続けるというもの</param>
     /// <param name="operationSet">いつ実行するか</param>
     void stop(unsigned flags = XAUDIO2_PLAY_TAILS, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
@@ -37,6 +37,12 @@ public:
     /// </summary>
     /// <returns></returns>
     bool isFinished() const;
+
+    /// <summary>
+    /// ループを終了する(再生は続く)
+    /// </summary>
+    /// <param name="operationSet">いつ実行するか</param>
+    void exitLoop(unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
 private:
     SoundPlayer(const SoundPlayer&) = delete;

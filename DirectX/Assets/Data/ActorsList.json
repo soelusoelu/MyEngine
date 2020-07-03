@@ -60,7 +60,7 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "title.wav",
+            "fileName": "çgò@âÿ.wav",
             "volume": 1.0,
             "isFirstPlay": false
           }
@@ -85,13 +85,14 @@
     {
       "type": "Test",
       "properties": {
-        "rotation": [ -90.0, -90.0, 0.0 ]
+        "rotation": [ -90.0, -90.0, 0.0 ],
+        "scale": [ 5.0, 5.0, 5.0 ]
       },
       "components": [
         {
           "type": "MeshComponent",
           "properties": {
-            "fileName": "/Player.fbx"
+            "fileName": "Test/Chips.fbx"
           }
         }
       ]
