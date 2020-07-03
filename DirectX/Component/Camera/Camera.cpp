@@ -51,11 +51,11 @@ Matrix4 Camera::getViewProjection() const {
 }
 
 void Camera::setPosition(const Vector3& pos) {
-    transform()->setPosition(pos);
+    transform().setPosition(pos);
 }
 
 Vector3 Camera::getPosition() const {
-    return transform()->getPosition();
+    return transform().getPosition();
 }
 
 void Camera::lookAt(const Vector3 & position) {

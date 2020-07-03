@@ -25,7 +25,7 @@ void LightManager::initialize() {
 
 void LightManager::createDirectionalLight() {
     auto dirLight = GameObjectCreater::create("DirectionalLight");
-    mDirectionalLight = dirLight->componentManager()->getComponent<DirectionalLight>();
+    mDirectionalLight = dirLight->componentManager().getComponent<DirectionalLight>();
 }
 
 void LightManager::loadProperties(const rapidjson::Value & inObj) {

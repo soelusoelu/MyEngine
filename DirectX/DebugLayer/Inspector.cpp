@@ -63,9 +63,9 @@ void Inspector::drawInspect() const {
     }
 
     drawTag(*actor);
-    drawTransform(*actor->transform());
+    drawTransform(actor->transform());
 
-    const auto& compList = actor->componentManager()->getAllComponents();
+    const auto& compList = actor->componentManager().getAllComponents();
     //アクターがコンポーネントを所持していなければ終了
     if (compList.empty()) {
         return;

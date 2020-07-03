@@ -56,20 +56,20 @@ const std::string& GameObject::tag() const {
     return mTag;
 }
 
-const std::shared_ptr<Transform3D>& GameObject::transform() const {
-    return mTransform;
+Transform3D& GameObject::transform() const {
+    return *mTransform;
 }
 
-const std::shared_ptr<ComponentManager>& GameObject::componentManager() const {
-    return mComponentManager;
+ComponentManager& GameObject::componentManager() const {
+    return *mComponentManager;
 }
 
 void GameObject::setGameObjectManager(GameObjectManager* manager) {
     mGameObjectManager = manager;
 }
 
-GameObjectManager* GameObject::getGameObjectManager() {
-    return mGameObjectManager;
+GameObjectManager& GameObject::getGameObjectManager() {
+    return *mGameObjectManager;
 }
 
 std::shared_ptr<GameObject> GameObject::create() {
@@ -83,8 +83,8 @@ void GameObject::initialize() {
         mGameObjectManager->add(shared_from_this());
     }
 
-    mTransform = std::make_shared<Transform3D>(shared_from_this());
-    mComponentManager = std::make_shared<ComponentManager>();
+    mTransform = std::make_unique<Transform3D>(shared_from_this());
+    mComponentManager = std::make_unique<ComponentManager>();
 }
 
 void GameObject::computeWorldTransform() {

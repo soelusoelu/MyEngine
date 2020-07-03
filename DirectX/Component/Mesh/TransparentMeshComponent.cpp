@@ -26,8 +26,8 @@ TransparentMeshComponent::~TransparentMeshComponent() = default;
 void TransparentMeshComponent::awake() {
     MeshComponent::awake();
 
-    const auto& dirLight = gameObject()->getGameObjectManager()->find("DirectionalLight");
-    mDirLight = dirLight->componentManager()->getComponent<DirectionalLight>();
+    const auto& dirLight = gameObject()->getGameObjectManager().find("DirectionalLight");
+    mDirLight = dirLight->componentManager().getComponent<DirectionalLight>();
 }
 
 void TransparentMeshComponent::loadProperties(const rapidjson::Value & inObj) {
@@ -63,7 +63,7 @@ void TransparentMeshComponent::setShader() {
     mShader->createInputLayout(layout, numElements);
 }
 
-void TransparentMeshComponent::draw(const Camera& camera) {
+void TransparentMeshComponent::draw(const Camera& camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -78,11 +78,10 @@ void TransparentMeshComponent::draw(const Camera& camera) {
     if (mShader->map(&msrd, 0)) {
         TransparentConstantBuffer cb;
         //ワールド行列を渡す
-        auto trans = gameObject()->transform();
-        cb.world = trans->getWorldTransform();
+        cb.world = transform().getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = trans->getWorldTransform() * camera.getViewProjection();
+        cb.WVP = transform().getWorldTransform() * camera.getViewProjection();
         cb.WVP.transpose();
         cb.lightDir = mDirLight->getDirection();
         cb.cameraPos = camera.getPosition();

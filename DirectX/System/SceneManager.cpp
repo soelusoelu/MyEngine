@@ -46,13 +46,13 @@ SceneManager::~SceneManager() {
     safeDelete(mLightManager);
     safeDelete(mTextDrawer);
 
-    //GameObject::setGameObjectManager(nullptr);
-    //MeshComponent::setMeshManager(nullptr);
-    //SpriteComponent::setSpriteManager(nullptr);
-    //Sprite3D::setSpriteManager(nullptr);
-    //Collider::setPhysics(nullptr);
-    //PointLightComponent::setLightManager(nullptr);
-    //Text::setDrawString(nullptr);
+    GameObject::setGameObjectManager(nullptr);
+    MeshComponent::setMeshManager(nullptr);
+    SpriteComponent::setSpriteManager(nullptr);
+    Sprite3D::setSpriteManager(nullptr);
+    Collider::setPhysics(nullptr);
+    PointLightComponent::setLightManager(nullptr);
+    TextBase::setDrawString(nullptr);
 }
 
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
@@ -74,7 +74,7 @@ void SceneManager::initialize() {
     TextBase::setDrawString(mTextDrawer);
 
     auto cam = GameObjectCreater::create("Camera");
-    mCamera = cam->componentManager()->getComponent<Camera>();
+    mCamera = cam->componentManager().getComponent<Camera>();
 
     mLightManager->createDirectionalLight();
 
@@ -164,5 +164,5 @@ void SceneManager::change(const StringSet& tags) {
 
 void SceneManager::createScene(const std::string& name) {
     auto scene = GameObjectCreater::create(name);
-    mCurrentScene = scene->componentManager()->getComponent<Scene>();
+    mCurrentScene = scene->componentManager().getComponent<Scene>();
 }

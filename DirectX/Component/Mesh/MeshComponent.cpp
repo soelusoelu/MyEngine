@@ -111,7 +111,7 @@ void MeshComponent::setShader() {
     mShader->createInputLayout(layout, numElements);
 }
 
-void MeshComponent::draw(const Camera& camera) {
+void MeshComponent::draw(const Camera& camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -126,10 +126,10 @@ void MeshComponent::draw(const Camera& camera) {
     if (mShader->map(&msrd, 0)) {
         MeshConstantBuffer cb;
         //ワールド行列を渡す
-        cb.world = transform()->getWorldTransform();
+        cb.world = transform().getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = transform()->getWorldTransform() * camera.getViewProjection();
+        cb.WVP = transform().getWorldTransform() * camera.getViewProjection();
         cb.WVP.transpose();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));

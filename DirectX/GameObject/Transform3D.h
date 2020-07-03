@@ -82,6 +82,9 @@ public:
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
 
 private:
+    Transform3D(const Transform3D&) = delete;
+    Transform3D& operator=(const Transform3D&) = delete;
+
     //親の設定
     void setParent(const TransformPtr& parent);
     //ワールド行列の計算が必要になった際のフラグ設定

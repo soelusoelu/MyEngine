@@ -11,12 +11,12 @@ DirectionalLight::DirectionalLight() :
 DirectionalLight::~DirectionalLight() = default;
 
 void DirectionalLight::onUpdateWorldTransform() {
-    mDirection = Vector3::transform(Vector3::up, transform()->getRotation());
+    mDirection = Vector3::transform(Vector3::up, transform().getRotation());
 }
 
 void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
     if (JsonHelper::getVector3(inObj, "direction", &mDirection)) {
-        transform()->rotate(mDirection);
+        transform().rotate(mDirection);
     }
     JsonHelper::getVector3(inObj, "color", &mLightColor);
 }

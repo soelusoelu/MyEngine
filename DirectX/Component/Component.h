@@ -50,19 +50,19 @@ public:
     //コンポーネントがアタッチされているゲームオブジェクトを返す
     GameObjectPtr gameObject() const;
     //トランスフォームの取得
-    const std::shared_ptr<Transform3D>& transform() const;
+    Transform3D& transform() const;
     //コンポーネントの名前を返す
     const std::string& getComponentName() const;
 
     //コンポーネントの取得
     template<typename T>
     std::shared_ptr<T> getComponent() const {
-        return componentManager()->getComponent<T>();
+        return componentManager().getComponent<T>();
     }
     //指定した型のコンポーネントをすべて取得
     template<typename T>
     std::vector<std::shared_ptr<T>> getComponents() const {
-        return componentManager()->getComponents<T>();
+        return componentManager().getComponents<T>();
     }
 
     //指定されたプロパティでコンポーネントを生成
@@ -71,14 +71,14 @@ public:
         auto t = std::make_shared<T>();
         t->mGameObject = gameObject;
         t->mComponentName = componentName;
-        t->gameObject()->componentManager()->addComponent(t);
+        t->gameObject()->componentManager().addComponent(t);
         t->loadProperties(inObj);
         t->awake();
     }
 
 private:
     //自身を管理しているマネージャーを返す
-    const std::shared_ptr<ComponentManager>& componentManager() const;
+    ComponentManager& componentManager() const;
 
 private:
     std::weak_ptr<GameObject> mGameObject;

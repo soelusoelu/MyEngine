@@ -19,9 +19,7 @@ void Title::start() {
     mSound = getComponent<SoundComponent>();
     mSound->getSoundVolume().setVolume(0.5f);
     //mSound->getSoundVolume().fade().settings(1.f, 10.f);
-    float volumes[] = { 1.f, 0.f };
-    mSound->getSoundVolume().panning(2, volumes);
-    //mSound->getSoundPlayer().play();
+    mSound->getSoundPlayer().play();
 }
 
 void Title::update() {

@@ -61,7 +61,7 @@ public:
 
     virtual void setMesh(const std::string& fileName);
     virtual void setShader();
-    virtual void draw(const Camera& camera);
+    virtual void draw(const Camera& camera) const;
 
     static void setMeshManager(MeshManager* manager);
 

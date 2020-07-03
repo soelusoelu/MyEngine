@@ -34,27 +34,30 @@ public:
     const std::string& tag() const;
 
     //トランスフォームの取得
-    const std::shared_ptr<Transform3D>& transform() const;
+    Transform3D& transform() const;
     //コンポーネント管理者の取得
-    const std::shared_ptr<ComponentManager>& componentManager() const;
+    ComponentManager& componentManager() const;
 
     //GameObjectManagerの登録
     static void setGameObjectManager(GameObjectManager* manager);
     //GameObjectManagerの取得
-    GameObjectManager* getGameObjectManager();
+    GameObjectManager& getGameObjectManager();
 
     //ゲームオブジェクトを生成
     static std::shared_ptr<GameObject> create();
 
 private:
+    GameObject(const GameObject&) = delete;
+    GameObject& operator=(const GameObject&) = delete;
+
     //初期化
     void initialize();
     //ワールド行列の更新
     void computeWorldTransform();
 
 private:
-    std::shared_ptr<Transform3D> mTransform;
-    std::shared_ptr<ComponentManager> mComponentManager;
+    std::unique_ptr<Transform3D> mTransform;
+    std::unique_ptr<ComponentManager> mComponentManager;
     std::string mTag;
     bool mIsActive;
 

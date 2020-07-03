@@ -38,8 +38,8 @@ void SphereCollider::onUpdateWorldTransform() {
         return;
     }
 
-    auto center = mDefaultCenter + transform()->getPosition();
-    auto scale = transform()->getScale();
+    auto center = mDefaultCenter + transform().getPosition();
+    auto scale = transform().getScale();
     auto maxScaleValue = Math::Max<float>(scale.x, Math::Max<float>(scale.y, scale.z));
     auto radius = mDefaultRadius * maxScaleValue;
 

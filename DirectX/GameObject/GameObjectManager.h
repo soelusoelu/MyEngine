@@ -31,14 +31,14 @@ public:
     GameObjectPtrArray findGameObjects(const std::string& tag) const;
 
 private:
+    //コピー禁止
+    GameObjectManager(const GameObjectManager&) = delete;
+    GameObjectManager& operator=(const GameObjectManager&) = delete;
+
     //ゲームオブジェクトの削除
     void remove();
     //待機中のゲームオブジェクトをメインリストに移す
     void movePendingToMain();
-
-    //コピー禁止
-    GameObjectManager(const GameObjectManager&) = delete;
-    GameObjectManager& operator=(const GameObjectManager&) = delete;
 
 private:
     //ゲームオブジェクトリスト
