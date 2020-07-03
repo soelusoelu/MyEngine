@@ -1,6 +1,7 @@
 ﻿#include "CSVReader.h"
+#include "AssetsManager.h"
 #include "../System/World.h"
-#include "../Utility/Directory.h"
+#include "../Utility/FileUtil.h"
 #include <cassert>
 #include <fstream>
 #include <sstream>
@@ -50,11 +51,12 @@ int CSVReader::getHeight() {
     return mHeightCount;
 }
 
-void CSVReader::parse(const std::string& fileName) {
+void CSVReader::parse(const std::string& filePath) {
     //中身リセット
     mCSV.clear();
 
-    World::instance().directory().setDataDirectory();
+    World::instance().assetsManager().setDataDirectory(filePath);
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
 
     //読み込み開始
     std::ifstream ifs(fileName, std::ios::in);
@@ -80,11 +82,12 @@ void CSVReader::parse(const std::string& fileName) {
     mHeightCount = mCSV.size() / mWidthCount;
 }
 
-void CSVReader::parseString(const std::string& fileName) {
+void CSVReader::parseString(const std::string& filePath) {
     //中身リセット
     mCSVString.clear();
 
-    World::instance().directory().setDataDirectory();
+    World::instance().assetsManager().setDataDirectory(filePath);
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
 
     //読み込み開始
     std::ifstream ifs(fileName, std::ios::in);

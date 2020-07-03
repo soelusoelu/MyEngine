@@ -14,13 +14,13 @@ class GameObject;
 class LevelLoader {
 public:
     //jsonファイルの読み込み
-    static bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc);
+    static bool loadJSON(const std::string& filePath, rapidjson::Document* outDoc);
     //グローバルデータを読み込む
-    static void loadGlobal(Game* root, const std::string& fileName);
+    static void loadGlobal(Game* root, const std::string& filePath);
     //保存
-    static void saveLevel(const std::string& fileName);
+    static void saveLevel(const std::string& filePath);
     //UI情報の保存
-    static void saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string& fileName);
+    static void saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string& filePath);
 
 private:
     LevelLoader() = delete;

@@ -2,14 +2,11 @@
 #include "SceneManager.h"
 #include "Texture.h"
 #include "Window.h"
-#include "World.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../Device/FPSCounter.h"
 #include "../DirectX/DirectX.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Input/InputUtility.h"
-#include "../Utility/Directory.h"
-#include "../Utility/FileUtil.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/Random.h"
 
@@ -30,8 +27,6 @@ Game::~Game() {
 }
 
 void Game::run(HINSTANCE hInstance) {
-    World::instance().directory().initialize();
-
     mInstance = hInstance;
     initialize();
 

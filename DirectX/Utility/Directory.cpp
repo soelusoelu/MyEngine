@@ -7,16 +7,14 @@ Directory::Directory() :
     mRootPath("") {
     assert(!mInstantiated);
     mInstantiated = true;
+
+    char dir[1024];
+    GetCurrentDirectoryA(sizeof(dir), dir);
+    mRootPath = dir;
 }
 
 Directory::~Directory() {
     mInstantiated = false;
-}
-
-void Directory::initialize() {
-    char dir[1024];
-    GetCurrentDirectoryA(sizeof(dir), dir);
-    mRootPath = dir;
 }
 
 void Directory::setRootDirectory() {
@@ -47,8 +45,10 @@ void Directory::setSoundDirectory(const std::string& filePath) {
     setCurrentDirectory(temp);
 }
 
-void Directory::setDataDirectory() {
+void Directory::setDataDirectory(const std::string& filePath) {
     auto temp = mRootPath + "\\Assets/Data/";
+    temp += FileUtil::getDirectryFromFilePath(filePath);
+
     setCurrentDirectory(temp);
 }
 

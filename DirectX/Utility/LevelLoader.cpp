@@ -1,6 +1,7 @@
 ﻿#include "LevelLoader.h"
-#include "Directory.h"
+#include "FileUtil.h"
 #include "../DebugLayer/Debug.h"
+#include "../Device/AssetsManager.h"
 #include "../GameObject/GameObject.h"
 #include "../System/Game.h"
 #include "../System/World.h"
@@ -8,14 +9,17 @@
 #include <rapidjson/prettywriter.h>
 #include <fstream>
 
-bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) {
+bool LevelLoader::loadJSON(const std::string & filePath, rapidjson::Document * outDoc) {
     //フォルダ階層の移動
-    World::instance().directory().setDataDirectory();
+    World::instance().assetsManager().setDataDirectory(filePath);
+
+    //ファイル名の取得
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
 
     //バイナリモードで開き、末尾に移動
     std::ifstream file(fileName, std::ios::in | std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
-        Debug::windowMessage(fileName + "ファイルが見つかりません");
+        Debug::windowMessage(filePath + "ファイルが見つかりません");
         return false;
     }
 
@@ -32,28 +36,28 @@ bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * o
     //生データをRapidJSONドキュメントにロードする
     outDoc->Parse(bytes.data());
     if (!outDoc->IsObject()) {
-        Debug::windowMessage(fileName + "ファイルは有効ではありません");
+        Debug::windowMessage(filePath + "ファイルは有効ではありません");
         return false;
     }
 
     return true;
 }
 
-void LevelLoader::loadGlobal(Game * root, const std::string & fileName) {
+void LevelLoader::loadGlobal(Game * root, const std::string & filePath) {
     rapidjson::Document doc;
-    if (!loadJSON(fileName, &doc)) {
-        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
+    if (!loadJSON(filePath, &doc)) {
+        Debug::windowMessage(filePath + ": レベルファイルのロードに失敗しました");
     }
 
     const rapidjson::Value& globals = doc["globalProperties"];
     if (!globals.IsObject()) {
-        Debug::windowMessage(fileName + ": [globalProperties]が見つからないか、正しいオブジェクトではありません");
+        Debug::windowMessage(filePath + ": [globalProperties]が見つからないか、正しいオブジェクトではありません");
     }
 
     root->loadProperties(globals);
 }
 
-void LevelLoader::saveLevel(const std::string & fileName) {
+void LevelLoader::saveLevel(const std::string & filePath) {
     ////ドキュメントとルートオブジェクトを生成
     //rapidjson::Document doc;
     //doc.SetObject();
@@ -79,13 +83,13 @@ void LevelLoader::saveLevel(const std::string & fileName) {
     //const char* output = buffer.GetString();
 
     ////文字列をファイルに書き込む
-    //std::ofstream outFile(fileName);
+    //std::ofstream outFile(filePath);
     //if (outFile.is_open()) {
     //    outFile << output;
     //}
 }
 
-void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string & fileName) {
+void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string & filePath) {
     //ドキュメントとルートオブジェクトを生成
     rapidjson::Document doc;
     doc.SetObject();
@@ -122,7 +126,8 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const st
     const char* output = buffer.GetString();
 
     //文字列をファイルに書き込む
-    World::instance().directory().setDataDirectory();
+    World::instance().assetsManager().setDataDirectory(filePath);
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ofstream outFile(fileName);
     if (outFile.is_open()) {
         outFile << output;

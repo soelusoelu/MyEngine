@@ -16,8 +16,8 @@ public:
     int getHeight();
 
 private:
-    void parse(const std::string& fileName);
-    void parseString(const std::string& fileName);
+    void parse(const std::string& filePath);
+    void parseString(const std::string& filePath);
 
 private:
     std::vector<int> mCSV;

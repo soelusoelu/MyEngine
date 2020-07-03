@@ -7,12 +7,12 @@
 #include "../Sound/WAV.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
-#include "../System/World.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include <cassert>
 
 AssetsManager::AssetsManager() :
+    mDirectory(std::make_unique<Directory>()),
     mSoundBase(std::make_unique<SoundBase>()) {
     assert(!mInstantiated);
     mInstantiated = true;
@@ -28,6 +28,7 @@ std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName
     if (itr != mShaders.end()) { //既に読み込まれている
         shader = itr->second;
     } else { //初読み込み
+        mDirectory->setShaderDirectory();
         shader = std::make_shared<Shader>(fileName);
         mShaders.emplace(fileName, shader);
     }
@@ -41,7 +42,7 @@ std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & filePa
         texture = itr->second;
     } else { //初読み込み
         if (isSprite) {
-            World::instance().directory().setTextureDirectory(filePath);
+            mDirectory->setTextureDirectory(filePath);
         } else {
             //World::instance().directory().setModelDirectory(filePath);
         }
@@ -64,7 +65,7 @@ std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileP
         } else {
             Debug::windowMessage(filePath + ": 対応していない拡張子です");
         }
-        World::instance().directory().setSoundDirectory(filePath);
+        mDirectory->setSoundDirectory(filePath);
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
         data->loadFromFile(fileName);
         mSounds.emplace(filePath, data);
@@ -87,10 +88,14 @@ std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileP
         } else {
             Debug::windowMessage(filePath + ": 対応していない拡張子です");
         }
-        World::instance().directory().setModelDirectory(filePath);
+        mDirectory->setModelDirectory(filePath);
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
         mesh->perse(fileName);
         mMeshLoaders.emplace(filePath, mesh);
     }
     return mesh;
+}
+
+void AssetsManager::setDataDirectory(const std::string& filePath) const {
+    mDirectory->setDataDirectory(filePath);
 }

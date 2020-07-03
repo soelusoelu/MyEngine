@@ -6,6 +6,7 @@
 #include <string>
 #include <unordered_map>
 
+class Directory;
 class Shader;
 class SoundBase;
 class SoundLoader;
@@ -20,12 +21,14 @@ public:
     std::shared_ptr<Texture> createTexture(const std::string& filePath, bool isSprite = true);
     std::shared_ptr<SourceVoice> createSound(const std::string& filePath, const SourceVoiceInitParam& param);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& filePath);
+    void setDataDirectory(const std::string& filePath) const;
 
 private:
     AssetsManager(const AssetsManager&) = delete;
     AssetsManager& operator=(const AssetsManager&) = delete;
 
 private:
+    std::unique_ptr<Directory> mDirectory;
     std::unique_ptr<SoundBase> mSoundBase;
 
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;

@@ -6,13 +6,12 @@ class Directory {
 public:
     Directory();
     ~Directory();
-    void initialize();
     void setRootDirectory();
     void setAssetsDirectory();
     void setShaderDirectory();
     void setTextureDirectory(const std::string& filePath);
     void setSoundDirectory(const std::string& filePath);
-    void setDataDirectory();
+    void setDataDirectory(const std::string& filePath);
     void setModelDirectory(const std::string& filePath);
 
 private:
