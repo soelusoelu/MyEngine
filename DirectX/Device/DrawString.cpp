@@ -108,11 +108,12 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
     computePositionFromPivot(&pos, size, pivot);
 
     //数字を文字列化し、1文字ずつ取り出す
-    mNumberSprite->transform()->setScale(scale);
+    auto& t = mNumberSprite->transform();
+    t.setScale(scale);
     mNumberSprite->setColor(color);
     mNumberSprite->setAlpha(alpha);
     for (const auto& n : std::to_string(number)) {
-        mNumberSprite->transform()->setPosition(pos);
+        t.setPosition(pos);
         //数字のテクスチャが数字1つにつき幅32高さ64
         //文字と文字を引き算し、整数値を取得している
         float num = (n - '0') * WIDTH;
@@ -120,7 +121,7 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
         mNumberSprite->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
 
         //ワールド座標を更新し、描画
-        mNumberSprite->transform()->computeWorldTransform();
+        t.computeWorldTransform();
         mNumberSprite->draw(proj);
 
         //1文字描画したら1桁分右にずらす
@@ -155,11 +156,12 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
     computePositionFromPivot(&pos, size, pivot);
 
     //数字を文字列化し、1文字ずつ取り出す
-    mNumberSprite->transform()->setScale(scale);
+    auto& t = mNumberSprite->transform();
+    t.setScale(scale);
     mNumberSprite->setColor(color);
     mNumberSprite->setAlpha(alpha);
     for (const auto& n : num) {
-        mNumberSprite->transform()->setPosition(pos);
+        t.setPosition(pos);
         //数字のテクスチャが数字1つにつき幅32高さ64
         //文字と文字を引き算し、整数値を取得している
         float offsetX = 0.f;
@@ -179,7 +181,7 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
         }
 
         //ワールド座標を更新し、描画
-        mNumberSprite->transform()->computeWorldTransform();
+        t.computeWorldTransform();
         mNumberSprite->draw(proj);
 
         pos.x += offsetX;
@@ -202,11 +204,12 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     //ピボットから描画位置を調整
     computePositionFromPivot(&pos, size, pivot);
 
-    mFontSprite->transform()->setScale(scale);
+    auto& trans = mFontSprite->transform();
+    trans.setScale(scale);
     mFontSprite->setColor(color);
     mFontSprite->setAlpha(alpha);
     for (const auto& c : alphabet) {
-        mFontSprite->transform()->setPosition(pos);
+        trans.setPosition(pos);
 
         int t = static_cast<int>(c);
         t = Math::clamp<int>(t, 32, 127);
@@ -219,7 +222,7 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
         mFontSprite->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
 
         //ワールド座標を更新し、描画
-        mFontSprite->transform()->computeWorldTransform();
+        trans.computeWorldTransform();
         mFontSprite->draw(proj);
 
         //描画位置を1文字分ずらす

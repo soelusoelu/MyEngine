@@ -180,8 +180,8 @@ void Transform3D::addChild(const TransformPtr& child) {
     child->setParent(shared_from_this());
 }
 
-void Transform3D::removeChild(const TransformPtr& child) {
-    removeChild(child->gameObject()->tag());
+void Transform3D::removeChild(const Transform3D& child) {
+    removeChild(child.gameObject()->tag());
 }
 
 void Transform3D::removeChild(const std::string& tag) {

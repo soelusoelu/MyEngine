@@ -9,7 +9,7 @@
 #include <cassert>
 
 Sprite::Sprite(const std::string& fileName) :
-    mTransform(std::make_shared<Transform2D>()),
+    mTransform(std::make_unique<Transform2D>()),
     mTexture(nullptr),
     mShader(World::instance().assetsManager().createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
@@ -73,8 +73,8 @@ void Sprite::draw(const Matrix4& proj) const {
     DirectX::instance().drawIndexed(6);
 }
 
-const std::shared_ptr<Transform2D>& Sprite::transform() const {
-    return mTransform;
+Transform2D& Sprite::transform() const {
+    return *mTransform;
 }
 
 void Sprite::setColor(const Vector3 & color) {

@@ -34,5 +34,5 @@ private:
     Vector3 mAmbientLight;
     std::shared_ptr<DirectionalLight> mDirectionalLight;
     PointLightPtrList mPointLights;
-    std::shared_ptr<PointLight> mPointLight;
+    std::unique_ptr<PointLight> mPointLight;
 };

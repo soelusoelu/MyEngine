@@ -46,9 +46,9 @@ void Button::onClick() {
 
 SpriteButton::SpriteButton(std::function<void()> onClick, const std::string& fileName, const Vector2& pos) :
     mOnClick(onClick),
-    mSprite(std::make_shared<Sprite>(fileName)),
+    mSprite(std::make_unique<Sprite>(fileName)),
     mHighlighted(false) {
-    mSprite->transform()->setPosition(pos);
+    mSprite->transform().setPosition(pos);
 }
 
 SpriteButton::~SpriteButton() = default;
@@ -58,7 +58,7 @@ void SpriteButton::setClickFunc(std::function<void()> onClick) {
 }
 
 const Vector2& SpriteButton::getPosition() const {
-    return mSprite->transform()->getPosition();
+    return mSprite->transform().getPosition();
 }
 
 void SpriteButton::setHighlighted(bool set) {
@@ -70,7 +70,7 @@ bool SpriteButton::getHighlighted() const {
 }
 
 bool SpriteButton::containsPoint(const Vector2& pt) const {
-    const auto& pos = mSprite->transform()->getPosition();
+    const auto& pos = mSprite->transform().getPosition();
     const auto& size = mSprite->getTextureSize();
 
     bool no = pt.x < (pos.x) ||
@@ -87,6 +87,6 @@ void SpriteButton::onClick() {
 }
 
 void SpriteButton::draw(const Matrix4& proj) const {
-    mSprite->transform()->computeWorldTransform();
+    mSprite->transform().computeWorldTransform();
     mSprite->draw(proj);
 }

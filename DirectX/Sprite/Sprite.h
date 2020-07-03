@@ -19,7 +19,7 @@ public:
     //描画
     void draw(const Matrix4& proj) const;
     //Transform
-    const std::shared_ptr<Transform2D>& transform() const;
+    Transform2D& transform() const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
@@ -45,7 +45,11 @@ public:
     const std::string& fileName() const;
 
 private:
-    std::shared_ptr<Transform2D> mTransform;
+    Sprite(const Sprite&) = delete;
+    Sprite& operator=(const Sprite&) = delete;
+
+private:
+    std::unique_ptr<Transform2D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
     Vector2 mTextureSize;

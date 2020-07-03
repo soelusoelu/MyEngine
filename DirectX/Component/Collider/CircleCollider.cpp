@@ -54,9 +54,9 @@ void CircleCollider::circleUpdate() {
     const auto& t = mSprite->transform();
     const auto& size = mSprite->getTextureSize();
     auto maxSize = Math::Max<float>(size.x, size.y);
-    const auto& scale = t->getScale();
+    const auto& scale = t.getScale();
     auto maxScale = Math::Max<float>(scale.x, scale.y);
     auto radius = maxSize / 2.f * maxScale;
 
-    mCircle->set(t->getPosition(), radius);
+    mCircle->set(t.getPosition(), radius);
 }

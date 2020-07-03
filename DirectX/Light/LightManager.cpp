@@ -14,7 +14,7 @@
 
 LightManager::LightManager() :
     mAmbientLight(Vector3::zero),
-    mPointLight(std::make_shared<PointLight>()) {
+    mPointLight(std::make_unique<PointLight>()) {
 }
 
 LightManager::~LightManager() = default;

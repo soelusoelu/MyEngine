@@ -69,7 +69,7 @@ public:
 
     //親子関係
     void addChild(const TransformPtr& child);
-    void removeChild(const TransformPtr& child);
+    void removeChild(const Transform3D& child);
     void removeChild(const std::string& tag);
     TransformPtr getChild(const std::string& tag) const;
     TransformPtrList getChildren() const;

@@ -28,7 +28,7 @@ public:
     //スプライトを生成しセット
     void setSprite(const std::string& fileName);
     //トランスフォーム
-    const std::shared_ptr<Transform2D>& transform() const;
+    Transform2D& transform() const;
     //色味
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
@@ -61,7 +61,7 @@ private:
     void addToManager();
 
 protected:
-    std::shared_ptr<Sprite> mSprite;
+    std::unique_ptr<Sprite> mSprite;
     int mDrawOrder;
 
     static inline SpriteManager* mSpriteManager = nullptr;

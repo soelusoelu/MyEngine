@@ -37,6 +37,9 @@ public:
     const Vector2& getSize() const;
 
 private:
+    Transform2D(const Transform2D&) = delete;
+    Transform2D& operator=(const Transform2D&) = delete;
+
     void shouldRecomputeTransform();
 
 private:

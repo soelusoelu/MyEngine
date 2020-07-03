@@ -43,6 +43,6 @@ public:
 
 private:
     std::function<void()> mOnClick;
-    std::shared_ptr<Sprite> mSprite;
+    std::unique_ptr<Sprite> mSprite;
     bool mHighlighted;
 };

@@ -14,7 +14,7 @@
 
 Sprite3D::Sprite3D() :
     Component(),
-    mTransform(std::make_shared<Transform3D>()),
+    mTransform(std::make_unique<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
     mTextureAspect(Vector2::zero),
@@ -165,8 +165,8 @@ void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
     DirectX::instance().drawIndexed(6);
 }
 
-const std::shared_ptr<Transform3D>& Sprite3D::transform() const {
-    return mTransform;
+Transform3D& Sprite3D::transform() const {
+    return *mTransform;
 }
 
 void Sprite3D::setColor(const Vector3& color) {

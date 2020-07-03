@@ -52,14 +52,14 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     }
     Vector2 vec2;
     if (JsonHelper::getVector2(inObj, "position", &vec2)) {
-        transform()->setPosition(vec2);
+        transform().setPosition(vec2);
     }
     float value;
     if (JsonHelper::getFloat(inObj, "rotation", &value)) {
-        transform()->setRotation(value);
+        transform().setRotation(value);
     }
     if (JsonHelper::getVector2(inObj, "scale", &vec2)) {
-        transform()->setScale(vec2);
+        transform().setScale(vec2);
     }
     Vector3 vec3;
     if (JsonHelper::getVector3(inObj, "color", &vec3)) {
@@ -75,15 +75,15 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     if (JsonHelper::getString(inObj, "pivot", &str)) {
         Pivot pivot = Pivot::NONE;
         PivotFunc::stringToPivot(str, &pivot);
-        transform()->setPivot(pivot);
+        transform().setPivot(pivot);
     }
 }
 
 void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", fileName());
-    inspect->emplace_back("Position", transform()->getPosition());
-    inspect->emplace_back("Rotation", transform()->getRotation());
-    inspect->emplace_back("Scale", transform()->getScale());
+    inspect->emplace_back("Position", transform().getPosition());
+    inspect->emplace_back("Rotation", transform().getRotation());
+    inspect->emplace_back("Scale", transform().getScale());
 }
 
 void SpriteComponent::draw(const Matrix4& proj) const {
@@ -91,11 +91,11 @@ void SpriteComponent::draw(const Matrix4& proj) const {
 }
 
 void SpriteComponent::setSprite(const std::string& fileName) {
-    mSprite = std::make_shared<Sprite>(fileName);
+    mSprite = std::make_unique<Sprite>(fileName);
     addToManager();
 }
 
-const std::shared_ptr<Transform2D>& SpriteComponent::transform() const {
+Transform2D& SpriteComponent::transform() const {
     return mSprite->transform();
 }
 

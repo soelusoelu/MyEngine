@@ -25,7 +25,7 @@ public:
     //ビルボードで描画
     void drawBillboard(const Matrix4& invView, const Matrix4& viewProj);
     //トランスフォーム
-    const std::shared_ptr<Transform3D>& transform() const;
+    Transform3D& transform() const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
@@ -58,7 +58,7 @@ protected:
     void addToManager();
 
 protected:
-    std::shared_ptr<Transform3D> mTransform;
+    std::unique_ptr<Transform3D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
     Vector2 mTextureAspect;
