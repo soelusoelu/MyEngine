@@ -35,3 +35,7 @@ void SoundFade::updateFade() {
     auto nextVolume = Math::lerp(mBeforeVolume, mTargetVolume, mTimeRate);
     mSoundVolume.setVolume(nextVolume);
 }
+
+bool SoundFade::isFading() const {
+    return mIsFading;
+}

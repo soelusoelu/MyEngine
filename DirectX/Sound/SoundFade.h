@@ -20,6 +20,12 @@ public:
     /// </summary>
     void updateFade();
 
+    /// <summary>
+    /// フェードしている途中か
+    /// </summary>
+    /// <returns></returns>
+    bool isFading() const;
+
 private:
     SoundFade(const SoundFade&) = delete;
     SoundFade& operator=(const SoundFade&) = delete;

@@ -19,6 +19,15 @@ public:
     void play(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
     /// <summary>
+    /// フェードインしながら、ソースボイスに設定されているサウンドを再生する
+    /// </summary>
+    /// <param name="targetVolume">目標の音量</param>
+    /// <param name="targetTime">何秒かけてフェードするか</param>
+    /// <param name="flags">0でいい</param>
+    /// <param name="operationSet">いつ実行するか</param>
+    void playFadeIn(float targetVolume, float targetTime, unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+
+    /// <summary>
     /// ソースボイスに設定されているサウンドをループ再生する
     /// </summary>
     /// <param name="flags">0でいい</param>
@@ -26,17 +35,36 @@ public:
     void playInfinity(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
     /// <summary>
-    /// 一時停止する
+    /// 再生を即一時停止する
     /// </summary>
     /// <param name="flags">XAUDIO2_PLAY_TAILSはエフェクトの効果は再生し続けるというもの</param>
     /// <param name="operationSet">いつ実行するか</param>
-    void stop(unsigned flags = XAUDIO2_PLAY_TAILS, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    void pause(unsigned flags = XAUDIO2_PLAY_TAILS, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
     /// <summary>
-    /// 再生が終了しているか
+    /// フェードアウトしながら再生を一時停止する
+    /// </summary>
+    /// <param name="targetTime">何秒かけてフェードするか</param>
+    void pauseFadeOut(float targetTime) const;
+
+    /// <summary>
+    /// 再生を即停止する
+    /// </summary>
+    /// <param name="flags">0でいい</param>
+    /// <param name="operationSet">いつ実行するか</param>
+    void stop(unsigned flags = 0, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+
+    /// <summary>
+    /// フェードアウトしながら再生を停止する
+    /// </summary>
+    /// <param name="targetTime">何秒かけてフェードするか</param>
+    void stopFadeOut(float targetTime) const;
+
+    /// <summary>
+    /// 再生が停止しているか
     /// </summary>
     /// <returns></returns>
-    bool isFinished() const;
+    bool isStop() const;
 
     /// <summary>
     /// ループを終了する(再生は続く)

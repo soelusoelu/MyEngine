@@ -13,11 +13,7 @@ SoundComponent::SoundComponent() :
     mIsFirstPlay(false) {
 }
 
-SoundComponent::~SoundComponent() {
-    if (mSound) {
-        mSound->getSoundPlayer().stop();
-    }
-}
+SoundComponent::~SoundComponent() = default;
 
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
@@ -31,6 +27,12 @@ void SoundComponent::awake() {
 
 void SoundComponent::update() {
     mSound->update();
+}
+
+void SoundComponent::finalize() {
+    if (mSound) {
+        mSound->getSoundPlayer().stop();
+    }
 }
 
 void SoundComponent::loadProperties(const rapidjson::Value& inObj) {

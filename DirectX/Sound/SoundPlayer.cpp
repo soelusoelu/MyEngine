@@ -1,4 +1,6 @@
 ﻿#include "SoundPlayer.h"
+#include "SoundFade.h"
+#include "SoundVolume.h"
 #include "SourceVoice.h"
 #include "../DebugLayer/Debug.h"
 
@@ -13,10 +15,29 @@ void SoundPlayer::play(unsigned flags, unsigned operationSet) const {
     playFromSoundBuffer(buf, flags, operationSet);
 }
 
+void SoundPlayer::playFadeIn(float targetVolume, float targetTime, unsigned flags, unsigned operationSet) const {
+    mSourceVoice.getSoundVolume().setVolume(0.f);
+    mSourceVoice.getSoundVolume().fade().settings(targetVolume, targetTime);
+    play(flags, operationSet);
+}
+
 void SoundPlayer::playInfinity(unsigned flags, unsigned operationSet) const {
     auto& buf = mSourceVoice.getSoundBuffer();
     buf.loopCount = XAUDIO2_LOOP_INFINITE;
     playFromSoundBuffer(buf, flags, operationSet);
+}
+
+void SoundPlayer::pause(unsigned flags, unsigned operationSet) const {
+    auto res = mSourceVoice.getXAudio2SourceVoice()->Stop(flags, operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed suond pause.");
+    }
+#endif // _DEBUG
+}
+
+void SoundPlayer::pauseFadeOut(float targetTime) const {
+    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime);
 }
 
 void SoundPlayer::stop(unsigned flags, unsigned operationSet) const {
@@ -28,7 +49,11 @@ void SoundPlayer::stop(unsigned flags, unsigned operationSet) const {
 #endif // _DEBUG
 }
 
-bool SoundPlayer::isFinished() const {
+void SoundPlayer::stopFadeOut(float targetTime) const {
+    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime);
+}
+
+bool SoundPlayer::isStop() const {
     XAUDIO2_VOICE_STATE state;
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     return (state.BuffersQueued == 0);
