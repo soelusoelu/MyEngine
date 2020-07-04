@@ -37,7 +37,7 @@ void SoundPlayer::pause(unsigned flags, unsigned operationSet) const {
 }
 
 void SoundPlayer::pauseFadeOut(float targetTime) const {
-    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime);
+    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime, [&]() { pause(); });
 }
 
 void SoundPlayer::stop(unsigned flags, unsigned operationSet) const {
@@ -50,7 +50,7 @@ void SoundPlayer::stop(unsigned flags, unsigned operationSet) const {
 }
 
 void SoundPlayer::stopFadeOut(float targetTime) const {
-    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime);
+    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime, [&]() { stop(); });
 }
 
 bool SoundPlayer::isStop() const {

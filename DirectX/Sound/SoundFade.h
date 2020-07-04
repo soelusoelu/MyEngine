@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <functional>
+
 class SoundVolume;
 
 //サウンドフェード専門クラス
@@ -13,7 +15,8 @@ public:
     /// </summary>
     /// <param name="targetVolume">目標の音量</param>
     /// <param name="targetTime">何秒かけてフェードするか</param>
-    void settings(float targetVolume, float targetTime);
+    /// <param name="f">フェード終了時に設定されている関数を実行する</param>
+    void settings(float targetVolume, float targetTime, const std::function<void()>& f = nullptr);
 
     /// <summary>
     /// フェードを進める
@@ -32,6 +35,7 @@ private:
 
 private:
     SoundVolume& mSoundVolume;
+    std::function<void()> mFadeEndFunc;
     float mTargetVolume;
     float mTargetTime;
     float mBeforeVolume;

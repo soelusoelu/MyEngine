@@ -27,7 +27,7 @@ void Title::start() {
     //mSound->getSoundBuffer().playLength = 30.f;
     //mSound->getSoundBuffer().loopBegin = 60.f;
     //mSound->getSoundBuffer().loopLength = 30.f;
-    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+    mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
 }
 
 void Title::update() {
@@ -40,8 +40,8 @@ void Title::update() {
     }
 
     if (Input::keyboard()->getKeyDown(KeyCode::Alpha1)) {
-        mSound->getSoundPlayer().play();
+        mSound->getSoundPlayer().playFadeIn(1.f, 1.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha2)) {
-        mSound->getSoundPlayer().pauseFadeOut(1.f);
+        mSound->getSoundPlayer().stopFadeOut(1.f);
     }
 }
