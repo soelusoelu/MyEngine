@@ -28,7 +28,8 @@ void Title::start() {
     //mSound->getSoundBuffer().playLength = 30.f;
     //mSound->getSoundBuffer().loopBegin = 60.f;
     //mSound->getSoundBuffer().loopLength = 30.f;
-    mSound->getSoundEffect().lowPassFilter(500.f);
+    //mSound->getSoundEffect().lowPassFilter(2500.f);
+    //mSound->getSoundEffect().highPassFilter(250.f);
     mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
 }
 
@@ -46,6 +47,6 @@ void Title::update() {
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha2)) {
         mSound->getSoundPlayer().pauseFadeOut(1.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha3)) {
-        mSound->getSoundEffect().resetLowPassFilter();
+        mSound->getSoundEffect().resetFilter();
     }
 }
