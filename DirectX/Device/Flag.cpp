@@ -17,3 +17,7 @@ void Flag::reset(unsigned value) {
 bool Flag::check(unsigned value) const {
     return ((mFlags & value) != 0);
 }
+
+unsigned Flag::get() const {
+    return mFlags;
+}

@@ -7,7 +7,7 @@ class SourceVoice;
 //サウンドエフェクト専門クラス
 class SoundEffect {
 public:
-    SoundEffect(SourceVoice& sourceVoice);
+    SoundEffect(SourceVoice& sourceVoice, bool useEffects);
     ~SoundEffect();
 
     /// <summary>
@@ -56,7 +56,10 @@ private:
     float frequencyToRadianFrequency(float frequency) const;
     //Qの逆数を安全範囲内にクランプする
     float clampOneOverQ(float oneOverQ) const;
+    //エフェクト使用許可が出ていない場合警告
+    void printWarnigUseEffects() const;
 
 private:
     SourceVoice& mSourceVoice;
+    bool mUseEffects;
 };

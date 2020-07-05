@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "SourceVoiceInitParam.h"
 #include "SoundBuffer.h"
 #include <xaudio2.h>
 #include <memory>
@@ -13,7 +14,7 @@ class SoundEffect;
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
 public:
-    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data);
+    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data, const SourceVoiceInitParam& param);
     ~SourceVoice();
 
     /// <summary>

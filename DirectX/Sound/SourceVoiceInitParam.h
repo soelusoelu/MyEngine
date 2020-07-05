@@ -1,11 +1,12 @@
 ﻿#pragma once
 
+#include "../Device/Flag.h"
 #include <xaudio2.h>
 
 //ソースボイス作成時の初期化パラメータ
 struct SourceVoiceInitParam {
     //ボイスに属性を設定するフラグ
-    unsigned flags;
+    Flag flags;
     //ボイスの最大許容再生速度を設定する
     //最大XAUDIO2_MAX_FREQ_RATIO(1024倍)まで可能
     float maxFrequencyRatio;
@@ -20,7 +21,7 @@ struct SourceVoiceInitParam {
     const XAUDIO2_EFFECT_CHAIN* effectChain;
 
     SourceVoiceInitParam() :
-        flags(0),
+        flags(),
         maxFrequencyRatio(2.f),
         callback(nullptr),
         sendList(nullptr),

@@ -2,6 +2,7 @@
 #include "SoundLoader.h"
 #include "SourceVoice.h"
 #include "../DebugLayer/Debug.h"
+#include "../Device/Flag.h"
 #include "../System/GlobalFunction.h"
 #include <cassert>
 
@@ -36,16 +37,9 @@ SoundBase::~SoundBase() {
     mInstantiated = false;
 }
 
-std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(
-    const SoundLoader& data,
-    unsigned flags,
-    float maxFrequencyRatio,
-    IXAudio2VoiceCallback* callback,
-    const XAUDIO2_VOICE_SENDS* sendList,
-    const XAUDIO2_EFFECT_CHAIN* effectChain
-) const {
+std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const {
     IXAudio2SourceVoice* sourceVoice;
-    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), flags, maxFrequencyRatio, callback, sendList, effectChain);
+    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
 #ifdef _DEBUG
     if (FAILED(res)) {
@@ -54,7 +48,7 @@ std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(
     }
 #endif // _DEBUG
 
-    return std::make_shared<SourceVoice>(sourceVoice, data);
+    return std::make_shared<SourceVoice>(sourceVoice, data, param);
 }
 
 bool SoundBase::comInitialize() {

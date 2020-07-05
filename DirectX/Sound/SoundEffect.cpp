@@ -5,13 +5,19 @@
 #include "../Math/Math.h"
 #include <xaudio2.h>
 
-SoundEffect::SoundEffect(SourceVoice& sourceVoice) :
-    mSourceVoice(sourceVoice) {
+SoundEffect::SoundEffect(SourceVoice& sourceVoice, bool useEffects) :
+    mSourceVoice(sourceVoice),
+    mUseEffects(useEffects) {
 }
 
 SoundEffect::~SoundEffect() = default;
 
 void SoundEffect::lowPassFilter(float frequency, float oneOverQ, unsigned operationSet) const {
+    if (!mUseEffects) {
+        printWarnigUseEffects();
+        return;
+    }
+
     XAUDIO2_FILTER_PARAMETERS filterParams;
     filterParams.Type = XAUDIO2_FILTER_TYPE::LowPassFilter;
     filterParams.Frequency = frequencyToRadianFrequency(frequency);
@@ -27,6 +33,11 @@ void SoundEffect::lowPassFilter(float frequency, float oneOverQ, unsigned operat
 }
 
 void SoundEffect::highPassFilter(float frequency, float oneOverQ, unsigned operationSet) const {
+    if (!mUseEffects) {
+        printWarnigUseEffects();
+        return;
+    }
+
     XAUDIO2_FILTER_PARAMETERS filterParams;
     filterParams.Type = XAUDIO2_FILTER_TYPE::HighPassFilter;
     filterParams.Frequency = frequencyToRadianFrequency(frequency);
@@ -42,6 +53,11 @@ void SoundEffect::highPassFilter(float frequency, float oneOverQ, unsigned opera
 }
 
 void SoundEffect::bandPassFilter(float frequency, float oneOverQ, unsigned operationSet) const {
+    if (!mUseEffects) {
+        printWarnigUseEffects();
+        return;
+    }
+
     XAUDIO2_FILTER_PARAMETERS filterParams;
     filterParams.Type = XAUDIO2_FILTER_TYPE::BandPassFilter;
     filterParams.Frequency = frequencyToRadianFrequency(frequency);
@@ -57,6 +73,11 @@ void SoundEffect::bandPassFilter(float frequency, float oneOverQ, unsigned opera
 }
 
 void SoundEffect::notchFilter(float frequency, float oneOverQ, unsigned operationSet) const {
+    if (!mUseEffects) {
+        printWarnigUseEffects();
+        return;
+    }
+
     XAUDIO2_FILTER_PARAMETERS filterParams;
     filterParams.Type = XAUDIO2_FILTER_TYPE::NotchFilter;
     filterParams.Frequency = frequencyToRadianFrequency(frequency);
@@ -88,4 +109,10 @@ float SoundEffect::clampOneOverQ(float oneOverQ) const {
         f = XAUDIO2_MAX_FILTER_ONEOVERQ;
     }
     return f;
+}
+
+void SoundEffect::printWarnigUseEffects() const {
+#ifdef _DEBUG
+    Debug::logWarning("Effect use flag is not set.");
+#endif // _DEBUG
 }

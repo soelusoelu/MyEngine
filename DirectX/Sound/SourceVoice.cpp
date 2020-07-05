@@ -5,14 +5,15 @@
 #include "SoundVolume.h"
 #include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
+#include "../Device/Flag.h"
 
-SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data) :
+SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
     mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
     mSoundVolume(std::make_unique<SoundVolume>(*this)),
-    mSoundEffect(std::make_unique<SoundEffect>(*this)) {
+    mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(XAUDIO2_VOICE_USEFILTER))) {
 
     mSoundBuffer->buffer = mData->buffer();
     mSoundBuffer->size = mData->size();

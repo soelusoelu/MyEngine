@@ -80,7 +80,7 @@ std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileP
         mSounds.emplace(filePath, data);
     }
 
-    return mSoundBase->createSourceVoice(*data, param.flags, param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
+    return mSoundBase->createSourceVoice(*data, param);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath) {

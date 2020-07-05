@@ -1,5 +1,6 @@
 #include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
+#include "../../Device/Flag.h"
 #include "../../Sound/SourceVoice.h"
 #include "../../Sound/SourceVoiceInitParam.h"
 #include "../../Sound/SoundPlayer.h"
@@ -18,7 +19,7 @@ SoundComponent::~SoundComponent() = default;
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
         SourceVoiceInitParam param;
-        param.flags = XAUDIO2_VOICE_USEFILTER;
+        param.flags.set(XAUDIO2_VOICE_USEFILTER);
         param.maxFrequencyRatio = 16.f;
         mSound = World::instance().assetsManager().createSound(mFileName, param);
     }
