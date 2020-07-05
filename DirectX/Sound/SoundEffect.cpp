@@ -41,6 +41,36 @@ void SoundEffect::highPassFilter(float frequency, float oneOverQ, unsigned opera
 #endif // _DEBUG
 }
 
+void SoundEffect::bandPassFilter(float frequency, float oneOverQ, unsigned operationSet) const {
+    XAUDIO2_FILTER_PARAMETERS filterParams;
+    filterParams.Type = XAUDIO2_FILTER_TYPE::BandPassFilter;
+    filterParams.Frequency = frequencyToRadianFrequency(frequency);
+    filterParams.OneOverQ = clampOneOverQ(oneOverQ);
+
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetFilterParameters(&filterParams, operationSet);
+
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed band pass filter.");
+    }
+#endif // _DEBUG
+}
+
+void SoundEffect::notchFilter(float frequency, float oneOverQ, unsigned operationSet) const {
+    XAUDIO2_FILTER_PARAMETERS filterParams;
+    filterParams.Type = XAUDIO2_FILTER_TYPE::NotchFilter;
+    filterParams.Frequency = frequencyToRadianFrequency(frequency);
+    filterParams.OneOverQ = clampOneOverQ(oneOverQ);
+
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetFilterParameters(&filterParams, operationSet);
+
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed notch filter.");
+    }
+#endif // _DEBUG
+}
+
 void SoundEffect::resetFilter() {
     highPassFilter(0.f, 1.f);
 }

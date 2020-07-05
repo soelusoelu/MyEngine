@@ -30,6 +30,7 @@ void Title::start() {
     //mSound->getSoundBuffer().loopLength = 30.f;
     //mSound->getSoundEffect().lowPassFilter(2500.f);
     //mSound->getSoundEffect().highPassFilter(250.f);
+    //mSound->getSoundEffect().bandPassFilter(1000.f);
     mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
 }
 
