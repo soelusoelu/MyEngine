@@ -116,6 +116,8 @@
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Sound\Frequency.cpp" />
     <ClCompile Include="Sound\SoundEffect.cpp" />
+    <ClCompile Include="Sound\SubmixVoice.cpp" />
+    <ClCompile Include="Device\Flag.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -245,5 +247,7 @@
     <ClInclude Include="Sound\Frequency.h" />
     <ClInclude Include="Sound\SourceVoiceInitParam.h" />
     <ClInclude Include="Sound\SoundEffect.h" />
+    <ClInclude Include="Sound\SubmixVoice.h" />
+    <ClInclude Include="Device\Flag.h" />
   </ItemGroup>
 </Project>
