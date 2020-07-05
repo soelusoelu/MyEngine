@@ -25,7 +25,7 @@ public:
     SoundEffect& getSoundEffect() const;
 
 private:
-    std::shared_ptr<SourceVoice> mSound;
+    std::unique_ptr<SourceVoice> mSound;
     std::string mFileName;
     bool mIsFirstPlay;
 };

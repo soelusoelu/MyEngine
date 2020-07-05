@@ -11,7 +11,7 @@ class Frequency;
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(SourceVoice& sourceVoice);
+    SoundVolume(SourceVoice& sourceVoice, float maxFrequencyRatio);
     ~SoundVolume();
 
     /// <summary>

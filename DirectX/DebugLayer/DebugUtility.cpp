@@ -51,20 +51,16 @@ void DebugUtility::update() {
 }
 
 void DebugUtility::windowMessage(const std::string& message) {
-#ifdef _DEBUG
     MessageBoxA(0, message.c_str(), 0, MB_OK);
-#endif // _DEBUG
 }
 
 void DebugUtility::draw(const Matrix4& proj) {
-#ifdef _DEBUG
     mLog->drawLogs(mDrawString);
     mFixedDebugInfo->draw();
     mHierarchy->drawActors();
     mInspector->drawInspect();
     mPause->drawButton(proj);
     mDrawString->drawAll(proj);
-#endif // _DEBUG
 }
 
 void DebugUtility::drawStringClear() {

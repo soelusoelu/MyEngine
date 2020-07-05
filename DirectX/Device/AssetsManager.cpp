@@ -62,7 +62,7 @@ std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string
     return texture;
 }
 
-std::shared_ptr<SourceVoice> AssetsManager::createSound(const std::string& filePath, const SourceVoiceInitParam& param) {
+std::unique_ptr<SourceVoice> AssetsManager::createSound(const std::string& filePath, const SourceVoiceInitParam& param) {
     std::shared_ptr<SoundLoader> data = nullptr;
     auto itr = mSounds.find(filePath);
     if (itr != mSounds.end()) { //既に読み込まれている

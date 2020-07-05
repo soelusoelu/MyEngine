@@ -6,10 +6,10 @@
 #include "../DebugLayer/Debug.h"
 #include "../Math/Math.h"
 
-SoundVolume::SoundVolume(SourceVoice& sourceVoice) :
+SoundVolume::SoundVolume(SourceVoice& sourceVoice, float maxFrequencyRatio) :
     mSourceVoice(sourceVoice),
     mFader(std::make_unique<SoundFade>(*this)),
-    mFrequency(std::make_unique<Frequency>(sourceVoice)),
+    mFrequency(std::make_unique<Frequency>(sourceVoice, maxFrequencyRatio)),
     mCurrentVolume(1.f) {
 }
 

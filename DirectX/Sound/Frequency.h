@@ -7,7 +7,7 @@ class SourceVoice;
 //周波数を扱うクラス
 class Frequency {
 public:
-    Frequency(SourceVoice& sourceVoice);
+    Frequency(SourceVoice& sourceVoice, float maxFrequencyRatio);
     ~Frequency();
 
     /// <summary>
@@ -23,4 +23,5 @@ private:
 
 private:
     SourceVoice& mSourceVoice;
+    float mMaxFrequencyRatio;
 };

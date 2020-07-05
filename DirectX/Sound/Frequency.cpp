@@ -2,13 +2,21 @@
 #include "SourceVoice.h"
 #include "../DebugLayer/Debug.h"
 
-Frequency::Frequency(SourceVoice& sourceVoice) :
-    mSourceVoice(sourceVoice) {
+Frequency::Frequency(SourceVoice& sourceVoice, float maxFrequencyRatio) :
+    mSourceVoice(sourceVoice),
+    mMaxFrequencyRatio(maxFrequencyRatio) {
 }
 
 Frequency::~Frequency() = default;
 
 void Frequency::setFrequencyRatio(float pitch, unsigned operationSet) {
+    if (pitch > mMaxFrequencyRatio) {
+        pitch = mMaxFrequencyRatio;
+#ifdef _DEBUG
+        Debug::logWarning("Pitch is over max frequency.");
+#endif // _DEBUG
+    }
+
     auto res = mSourceVoice.getXAudio2SourceVoice()->SetFrequencyRatio(pitch, operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {

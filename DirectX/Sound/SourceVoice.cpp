@@ -12,7 +12,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoa
     mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
-    mSoundVolume(std::make_unique<SoundVolume>(*this)),
+    mSoundVolume(std::make_unique<SoundVolume>(*this, param.maxFrequencyRatio)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(XAUDIO2_VOICE_USEFILTER))) {
 
     mSoundBuffer->buffer = mData->buffer();

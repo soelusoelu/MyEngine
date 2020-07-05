@@ -20,7 +20,7 @@ public:
     /// <param name="data">事前に取得してあるサウンドデータ</param>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したソースボイス</returns>
-    std::shared_ptr<SourceVoice> createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const;
+    std::unique_ptr<SourceVoice> createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const;
 
 private:
     SoundBase(const SoundBase&) = delete;

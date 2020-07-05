@@ -37,7 +37,7 @@ SoundBase::~SoundBase() {
     mInstantiated = false;
 }
 
-std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const {
+std::unique_ptr<SourceVoice> SoundBase::createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const {
     IXAudio2SourceVoice* sourceVoice;
     auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
@@ -48,7 +48,7 @@ std::shared_ptr<SourceVoice> SoundBase::createSourceVoice(const SoundLoader& dat
     }
 #endif // _DEBUG
 
-    return std::make_shared<SourceVoice>(sourceVoice, data, param);
+    return std::make_unique<SourceVoice>(sourceVoice, data, param);
 }
 
 bool SoundBase::comInitialize() {

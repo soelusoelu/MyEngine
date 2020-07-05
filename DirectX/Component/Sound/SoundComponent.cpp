@@ -20,7 +20,7 @@ void SoundComponent::awake() {
     if (!mFileName.empty()) {
         SourceVoiceInitParam param;
         param.flags.set(XAUDIO2_VOICE_USEFILTER);
-        param.maxFrequencyRatio = 16.f;
+        //param.maxFrequencyRatio = 16.f;
         mSound = World::instance().assetsManager().createSound(mFileName, param);
     }
     if (mIsFirstPlay) {
