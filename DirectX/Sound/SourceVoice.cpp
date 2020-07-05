@@ -1,4 +1,5 @@
 ﻿#include "SourceVoice.h"
+#include "SoundEffect.h"
 #include "SoundLoader.h"
 #include "SoundPlayer.h"
 #include "SoundVolume.h"
@@ -10,7 +11,8 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoa
     mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
-    mSoundVolume(std::make_unique<SoundVolume>(*this)) {
+    mSoundVolume(std::make_unique<SoundVolume>(*this)),
+    mSoundEffect(std::make_unique<SoundEffect>(*this)) {
 
     mSoundBuffer->buffer = mData->buffer();
     mSoundBuffer->size = mData->size();
@@ -56,6 +58,10 @@ SoundPlayer& SourceVoice::getSoundPlayer() const {
 
 SoundVolume& SourceVoice::getSoundVolume() const {
     return *mSoundVolume;
+}
+
+SoundEffect& SourceVoice::getSoundEffect() const {
+    return *mSoundEffect;
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {

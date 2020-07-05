@@ -169,6 +169,7 @@
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Sound\Frequency.cpp" />
+    <ClCompile Include="Sound\SoundEffect.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="Sound\Frequency.h" />
+    <ClInclude Include="Sound\SoundEffect.h" />
     <ClInclude Include="Sound\SourceVoiceInitParam.h" />
     <ClInclude Include="Transform\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />

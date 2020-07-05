@@ -4,6 +4,7 @@
 #include "../../Input/Input.h"
 #include "../../Sound/Frequency.h"
 #include "../../Sound/SoundBuffer.h"
+#include "../../Sound/SoundEffect.h"
 #include "../../Sound/SoundFade.h"
 #include "../../Sound/SoundPlayer.h"
 #include "../../Sound/SoundVolume.h"
@@ -27,6 +28,7 @@ void Title::start() {
     //mSound->getSoundBuffer().playLength = 30.f;
     //mSound->getSoundBuffer().loopBegin = 60.f;
     //mSound->getSoundBuffer().loopLength = 30.f;
+    mSound->getSoundEffect().lowPassFilter(500.f);
     mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
 }
 
@@ -42,6 +44,8 @@ void Title::update() {
     if (Input::keyboard()->getKeyDown(KeyCode::Alpha1)) {
         mSound->getSoundPlayer().playFadeIn(1.f, 1.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha2)) {
-        mSound->getSoundPlayer().stopFadeOut(1.f);
+        mSound->getSoundPlayer().pauseFadeOut(1.f);
+    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha3)) {
+        mSound->getSoundEffect().resetLowPassFilter();
     }
 }

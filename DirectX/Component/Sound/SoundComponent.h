@@ -7,6 +7,7 @@
 class SourceVoice;
 class SoundPlayer;
 class SoundVolume;
+class SoundEffect;
 
 class SoundComponent : public Component {
 public:
@@ -21,6 +22,7 @@ public:
     SoundBuffer& getSoundBuffer() const;
     SoundPlayer& getSoundPlayer() const;
     SoundVolume& getSoundVolume() const;
+    SoundEffect& getSoundEffect() const;
 
 private:
     std::shared_ptr<SourceVoice> mSound;

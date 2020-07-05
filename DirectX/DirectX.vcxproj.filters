@@ -115,6 +115,7 @@
     <ClCompile Include="Transform\Transform2D.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Sound\Frequency.cpp" />
+    <ClCompile Include="Sound\SoundEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -243,5 +244,6 @@
     <ClInclude Include="Transform\Transform2D.h" />
     <ClInclude Include="Sound\Frequency.h" />
     <ClInclude Include="Sound\SourceVoiceInitParam.h" />
+    <ClInclude Include="Sound\SoundEffect.h" />
   </ItemGroup>
 </Project>

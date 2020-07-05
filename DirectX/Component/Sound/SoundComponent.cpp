@@ -18,6 +18,8 @@ SoundComponent::~SoundComponent() = default;
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
         SourceVoiceInitParam param;
+        param.flags = XAUDIO2_VOICE_USEFILTER;
+        param.maxFrequencyRatio = 16.f;
         mSound = World::instance().assetsManager().createSound(mFileName, param);
     }
     if (mIsFirstPlay) {
@@ -55,4 +57,8 @@ SoundPlayer& SoundComponent::getSoundPlayer() const {
 
 SoundVolume& SoundComponent::getSoundVolume() const {
     return mSound->getSoundVolume();
+}
+
+SoundEffect& SoundComponent::getSoundEffect() const {
+    return mSound->getSoundEffect();
 }

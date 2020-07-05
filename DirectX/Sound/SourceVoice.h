@@ -8,6 +8,7 @@ class SoundLoader;
 class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
+class SoundEffect;
 
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
@@ -65,6 +66,12 @@ public:
     /// <returns></returns>
     SoundVolume& getSoundVolume() const;
 
+    /// <summary>
+    /// サウンドエフェクト設定クラスを返す
+    /// </summary>
+    /// <returns></returns>
+    SoundEffect& getSoundEffect() const;
+
 private:
     SourceVoice(const SourceVoice&) = delete;
     SourceVoice& operator=(const SourceVoice&) = delete;
@@ -78,4 +85,5 @@ private:
     std::unique_ptr<VoiceDetails> mData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;
+    std::unique_ptr<SoundEffect> mSoundEffect;
 };
