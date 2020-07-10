@@ -16,7 +16,8 @@ struct SourceVoiceInitParam {
     //nullだとマスターボイス直結になる
     //後からsetOutputVoicesで設定可能
     const XAUDIO2_VOICE_SENDS* sendList;
-    //エフェクト指定 nullだと使用しない
+    //エフェクト指定
+    //nullだと使用しない
     //後からsetEffectChainsで設定可能
     const XAUDIO2_EFFECT_CHAIN* effectChain;
 

@@ -1,6 +1,7 @@
 ﻿#include "SoundBase.h"
 #include "SoundLoader.h"
 #include "SourceVoice.h"
+#include "SubmixVoice.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/Flag.h"
 #include "../System/GlobalFunction.h"
@@ -41,14 +42,24 @@ std::unique_ptr<SourceVoice> SoundBase::createSourceVoice(const SoundLoader& dat
     IXAudio2SourceVoice* sourceVoice;
     auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
-#ifdef _DEBUG
     if (FAILED(res)) {
         Debug::windowMessage("ソースボイス作成失敗");
         return nullptr;
     }
-#endif // _DEBUG
 
     return std::make_unique<SourceVoice>(sourceVoice, data, param);
+}
+
+std::unique_ptr<SubmixVoice> SoundBase::createSubmixVoice(const SubmixVoiceInitParam& param) const {
+    IXAudio2SubmixVoice* submixVoice;
+    auto res = mXAudio2->CreateSubmixVoice(&submixVoice, param.inputChannels, param.inputSampleRate, param.flags.get(), param.processingStage, param.sendList, param.effectChain);
+
+    if (FAILED(res)) {
+        Debug::windowMessage("サブミックスボイス作成失敗");
+        return nullptr;
+    }
+
+    return std::make_unique<SubmixVoice>(submixVoice, param);
 }
 
 bool SoundBase::comInitialize() {

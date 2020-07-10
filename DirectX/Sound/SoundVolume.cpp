@@ -53,12 +53,12 @@ float SoundVolume::getVolume() const {
     return mCurrentVolume;
 }
 
-void SoundVolume::panning(unsigned outChannels, float volumes[], unsigned operationSet) {
-    auto inputChannels = mSourceVoice.getSoundData().getInputChannels();
-    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(nullptr, inputChannels, outChannels, volumes, operationSet);
+void SoundVolume::pan(float volumes[], unsigned operationSet) {
+    const auto inputChannels = mSourceVoice.getSoundData().getInputChannels();
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(NULL, inputChannels, 2, volumes, operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {
-        Debug::logError("Failed panning.");
+        Debug::logError("Failed pan.");
     }
 #endif // _DEBUG
 }

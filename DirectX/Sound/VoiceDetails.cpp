@@ -5,9 +5,9 @@
 VoiceDetails::VoiceDetails(const SoundLoader& loader) :
     mBuffer(loader.buffer()),
     mSize(loader.size()),
-    mInputChannels(loader.format()->nChannels),
-    mSamplesPerSec(loader.format()->nSamplesPerSec),
-    mBitsPerSample(loader.format()->wBitsPerSample) {
+    INPUT_CHANNELS(loader.format()->nChannels),
+    SAMPLES_PER_SEC(loader.format()->nSamplesPerSec),
+    BITS_PER_SAMPLE(loader.format()->wBitsPerSample) {
 }
 
 VoiceDetails::~VoiceDetails() = default;
@@ -20,14 +20,14 @@ unsigned VoiceDetails::size() const {
     return mSize;
 }
 
-unsigned VoiceDetails::getInputChannels() const {
-    return mInputChannels;
+const unsigned VoiceDetails::getInputChannels() const {
+    return INPUT_CHANNELS;
 }
 
-unsigned VoiceDetails::getSampleRate() const {
-    return mSamplesPerSec;
+const unsigned VoiceDetails::getSampleRate() const {
+    return SAMPLES_PER_SEC;
 }
 
-unsigned VoiceDetails::getBitRate() const {
-    return mBitsPerSample;
+const unsigned VoiceDetails::getBitRate() const {
+    return BITS_PER_SAMPLE;
 }

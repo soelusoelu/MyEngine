@@ -1,9 +1,10 @@
 #include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
+#include "../../Sound/SoundFlag.h"
+#include "../../Sound/SoundPlayer.h"
 #include "../../Sound/SourceVoice.h"
 #include "../../Sound/SourceVoiceInitParam.h"
-#include "../../Sound/SoundPlayer.h"
 #include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
@@ -19,7 +20,7 @@ SoundComponent::~SoundComponent() = default;
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
         SourceVoiceInitParam param;
-        param.flags.set(XAUDIO2_VOICE_USEFILTER);
+        param.flags.set(static_cast<unsigned>(SoundFlag::USE_FILTER));
         //param.maxFrequencyRatio = 16.f;
         mSound = World::instance().assetsManager().createSound(mFileName, param);
     }
@@ -60,6 +61,6 @@ SoundVolume& SoundComponent::getSoundVolume() const {
     return mSound->getSoundVolume();
 }
 
-SoundEffect& SoundComponent::getSoundEffect() const {
-    return mSound->getSoundEffect();
+SoundFilter& SoundComponent::getSoundFilter() const {
+    return mSound->getSoundFilter();
 }

@@ -1,5 +1,6 @@
 ﻿#include "SourceVoice.h"
-#include "SoundEffect.h"
+#include "SoundFilter.h"
+#include "SoundFlag.h"
 #include "SoundLoader.h"
 #include "SoundPlayer.h"
 #include "SoundVolume.h"
@@ -13,7 +14,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoa
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this)),
     mSoundVolume(std::make_unique<SoundVolume>(*this, param.maxFrequencyRatio)),
-    mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(XAUDIO2_VOICE_USEFILTER))) {
+    mSoundFilter(std::make_unique<SoundFilter>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mSoundBuffer->buffer = mData->buffer();
     mSoundBuffer->size = mData->size();
@@ -32,14 +33,6 @@ IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
 }
 
-SoundBuffer& SourceVoice::getSoundBuffer() const {
-    return *mSoundBuffer;
-}
-
-VoiceDetails& SourceVoice::getSoundData() const {
-    return *mData;
-}
-
 void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {
     auto res = mXAudio2SourceVoice->SubmitSourceBuffer(&toBuffer(buffer), nullptr);
 #ifdef _DEBUG
@@ -53,6 +46,18 @@ void SourceVoice::submitSourceBuffer() const {
     submitSourceBuffer(*mSoundBuffer);
 }
 
+void SourceVoice::setOutputVoices(const XAUDIO2_VOICE_SENDS& sendlist) {
+    mXAudio2SourceVoice->SetOutputVoices(&sendlist);
+}
+
+SoundBuffer& SourceVoice::getSoundBuffer() const {
+    return *mSoundBuffer;
+}
+
+VoiceDetails& SourceVoice::getSoundData() const {
+    return *mData;
+}
+
 SoundPlayer& SourceVoice::getSoundPlayer() const {
     return *mSoundPlayer;
 }
@@ -61,8 +66,8 @@ SoundVolume& SourceVoice::getSoundVolume() const {
     return *mSoundVolume;
 }
 
-SoundEffect& SourceVoice::getSoundEffect() const {
-    return *mSoundEffect;
+SoundFilter& SourceVoice::getSoundFilter() const {
+    return *mSoundFilter;
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {

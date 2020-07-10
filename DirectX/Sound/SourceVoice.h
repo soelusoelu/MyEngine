@@ -9,7 +9,7 @@ class SoundLoader;
 class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
-class SoundEffect;
+class SoundFilter;
 
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
@@ -25,20 +25,8 @@ public:
     /// <summary>
     /// IXAudio2SourceVoiceを返す
     /// </summary>
-    /// <returns>IXAudio2SourceVoice</returns>
+    /// <returns></returns>
     IXAudio2SourceVoice* getXAudio2SourceVoice() const;
-
-    /// <summary>
-    /// バッファを返す
-    /// </summary>
-    /// <returns></returns>
-    SoundBuffer& getSoundBuffer() const;
-
-    /// <summary>
-    /// サウンドデータを返す
-    /// </summary>
-    /// <returns></returns>
-    VoiceDetails& getSoundData() const;
 
     /// <summary>
     /// ソースボイスに波形データを追加する
@@ -54,6 +42,20 @@ public:
     /// 充填できる最大はXAUDIO2_MAX_QUEUED_BUFFERSで64個
     /// </summary>
     void submitSourceBuffer() const;
+
+    void setOutputVoices(const XAUDIO2_VOICE_SENDS& sendlist);
+
+    /// <summary>
+    /// バッファを返す
+    /// </summary>
+    /// <returns></returns>
+    SoundBuffer& getSoundBuffer() const;
+
+    /// <summary>
+    /// サウンドデータを返す
+    /// </summary>
+    /// <returns></returns>
+    VoiceDetails& getSoundData() const;
 
     /// <summary>
     /// サウンド再生クラスを返す
@@ -71,7 +73,7 @@ public:
     /// サウンドエフェクト設定クラスを返す
     /// </summary>
     /// <returns></returns>
-    SoundEffect& getSoundEffect() const;
+    SoundFilter& getSoundFilter() const;
 
 private:
     SourceVoice(const SourceVoice&) = delete;
@@ -86,5 +88,5 @@ private:
     std::unique_ptr<VoiceDetails> mData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;
-    std::unique_ptr<SoundEffect> mSoundEffect;
+    std::unique_ptr<SoundFilter> mSoundFilter;
 };

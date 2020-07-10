@@ -4,11 +4,11 @@
 
 class SourceVoice;
 
-//サウンドエフェクト専門クラス
-class SoundEffect {
+//サウンドフィルター専門クラス
+class SoundFilter {
 public:
-    SoundEffect(SourceVoice& sourceVoice, bool useEffects);
-    ~SoundEffect();
+    SoundFilter(SourceVoice& sourceVoice, bool useFilters);
+    ~SoundFilter();
 
     /// <summary>
     /// ローパスフィルター
@@ -52,14 +52,19 @@ public:
     void resetFilter();
 
 private:
+    SoundFilter(const SoundFilter&) = delete;
+    SoundFilter& operator=(const SoundFilter&) = delete;
+
+    //フィルタを設定する
+    HRESULT setFilterParameters(XAUDIO2_FILTER_TYPE type, float frequency, float oneOverQ, unsigned operationSet) const;
     //カットオフ周波数からラジアン周波数に変換する
     float frequencyToRadianFrequency(float frequency) const;
     //Qの逆数を安全範囲内にクランプする
     float clampOneOverQ(float oneOverQ) const;
     //エフェクト使用許可が出ていない場合警告
-    void printWarnigUseEffects() const;
+    void printWarnigUseFilters() const;
 
 private:
     SourceVoice& mSourceVoice;
-    bool mUseEffects;
+    bool mUseFilters;
 };

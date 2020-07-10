@@ -26,19 +26,19 @@ public:
     /// 入力チャンネル数を返す
     /// </summary>
     /// <returns></returns>
-    unsigned getInputChannels() const;
+    const unsigned getInputChannels() const;
 
     /// <summary>
     /// サンプリングレートを返す
     /// </summary>
     /// <returns></returns>
-    unsigned getSampleRate() const;
+    const unsigned getSampleRate() const;
 
     /// <summary>
     /// ビットレートを返す
     /// </summary>
     /// <returns></returns>
-    unsigned getBitRate() const;
+    const unsigned getBitRate() const;
 
 private:
     VoiceDetails(const VoiceDetails&) = delete;
@@ -50,9 +50,9 @@ private:
     //波形データのサイズ
     unsigned mSize;
     //入力チャンネル数
-    unsigned mInputChannels;
+    const unsigned INPUT_CHANNELS;
     //サンプリングレート
-    unsigned mSamplesPerSec;
+    const unsigned SAMPLES_PER_SEC;
     //ビットレート
-    unsigned mBitsPerSample;
+    const unsigned BITS_PER_SAMPLE;
 };
