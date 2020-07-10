@@ -5,6 +5,7 @@
 #include "../Sound/SoundBase.h"
 #include "../Sound/SourceVoice.h"
 #include "../Sound/WAV.h"
+#include "../Sound/XAudio2.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../Utility/Directory.h"
@@ -63,6 +64,11 @@ std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string
 }
 
 std::unique_ptr<SourceVoice> AssetsManager::createSound(const std::string& filePath, const SourceVoiceInitParam& param) {
+    //使用できない状態ならnullptrを返す
+    if (mSoundBase->isNull()) {
+        return nullptr;
+    }
+
     std::shared_ptr<SoundLoader> data = nullptr;
     auto itr = mSounds.find(filePath);
     if (itr != mSounds.end()) { //既に読み込まれている
@@ -80,7 +86,7 @@ std::unique_ptr<SourceVoice> AssetsManager::createSound(const std::string& fileP
         mSounds.emplace(filePath, data);
     }
 
-    return mSoundBase->createSourceVoice(*data, param);
+    return mSoundBase->getXAudio2().createSourceVoice(*data, param);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath) {

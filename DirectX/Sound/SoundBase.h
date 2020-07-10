@@ -1,35 +1,31 @@
 ﻿#pragma once
 
-#include "SourceVoiceInitParam.h"
-#include "SubmixVoiceInitParam.h"
-#include <XAudio2.h>
-#include <memory>
-#include <string>
+class XAudio2;
+class MasteringVoice;
 
-class SourceVoice;
-class SoundLoader;
-class SubmixVoice;
-
-//サウンドAPIの基盤となるクラス
+//サウンド最上位管理クラス
 class SoundBase {
 public:
     SoundBase();
     ~SoundBase();
 
     /// <summary>
-    /// ソースボイスを作成する
+    /// XAudio2を返す
     /// </summary>
-    /// <param name="data">事前に取得してあるサウンドデータ</param>
-    /// <param name="param">初期化用パラメータ</param>
-    /// <returns>作成したソースボイス</returns>
-    std::unique_ptr<SourceVoice> createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const;
+    /// <returns></returns>
+    XAudio2& getXAudio2() const;
 
     /// <summary>
-    /// サブミックスボイスを作成する
+    /// マスターボイスを返す
     /// </summary>
-    /// <param name="param">初期化用パラメータ</param>
-    /// <returns>作成したサブミックスボイス</returns>
-    std::unique_ptr<SubmixVoice> createSubmixVoice(const SubmixVoiceInitParam& param) const;
+    /// <returns></returns>
+    MasteringVoice& getMasteringVoice() const;
+
+    /// <summary>
+    /// このクラスが使用できるか
+    /// </summary>
+    /// <returns></returns>
+    bool isNull() const;
 
 private:
     SoundBase(const SoundBase&) = delete;
@@ -37,14 +33,11 @@ private:
 
     //COMシステムの初期化
     bool comInitialize();
-    //XAudio2の生成
-    bool createXAudio2();
-    //マスターボイスの生成
-    bool createMasteringVoice();
 
 private:
-    IXAudio2* mXAudio2;
-    IXAudio2MasteringVoice* mMasteringVoice;
+    //削除順を制御するために生ポインタ
+    XAudio2* mXAudio2;
+    MasteringVoice* mMasteringVoice;
     bool mSucceedInitialize;
 
     static inline bool mInstantiated = false;

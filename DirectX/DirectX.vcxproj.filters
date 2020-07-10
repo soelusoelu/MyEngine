@@ -118,6 +118,8 @@
     <ClCompile Include="Sound\SubmixVoice.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
     <ClCompile Include="Sound\SoundFilter.cpp" />
+    <ClCompile Include="Sound\MasteringVoice.cpp" />
+    <ClCompile Include="Sound\XAudio2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -251,5 +253,8 @@
     <ClInclude Include="Sound\SoundFilter.h" />
     <ClInclude Include="Sound\SubmixVoiceInitParam.h" />
     <ClInclude Include="Sound\SoundFlag.h" />
+    <ClInclude Include="Sound\MasteringVoice.h" />
+    <ClInclude Include="Sound\OutputVoiceDetails.h" />
+    <ClInclude Include="Sound\XAudio2.h" />
   </ItemGroup>
 </Project>

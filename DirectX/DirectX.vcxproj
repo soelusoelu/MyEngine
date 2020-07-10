@@ -170,6 +170,7 @@
     <ClCompile Include="Device\Flag.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Sound\Frequency.cpp" />
+    <ClCompile Include="Sound\MasteringVoice.cpp" />
     <ClCompile Include="Sound\SoundFilter.cpp" />
     <ClCompile Include="Sound\SubmixVoice.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
@@ -269,6 +270,7 @@
     <ClCompile Include="System\World.cpp" />
     <ClCompile Include="Sound\WAV.cpp" />
     <ClCompile Include="Sound\VoiceDetails.cpp" />
+    <ClCompile Include="Sound\XAudio2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider\CircleCollider.h" />
@@ -282,6 +284,8 @@
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="Sound\Frequency.h" />
+    <ClInclude Include="Sound\MasteringVoice.h" />
+    <ClInclude Include="Sound\OutputVoiceDetails.h" />
     <ClInclude Include="Sound\SoundFilter.h" />
     <ClInclude Include="Sound\SoundFlag.h" />
     <ClInclude Include="Sound\SourceVoiceInitParam.h" />
@@ -402,6 +406,7 @@
     <ClInclude Include="System\World.h" />
     <ClInclude Include="Sound\WAV.h" />
     <ClInclude Include="Sound\VoiceDetails.h" />
+    <ClInclude Include="Sound\XAudio2.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">
