@@ -1,14 +1,13 @@
 ﻿#include "SourceVoice.h"
 #include "SoundFilter.h"
 #include "SoundFlag.h"
-#include "SoundLoader.h"
 #include "SoundPlayer.h"
 #include "SoundVolume.h"
 #include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/Flag.h"
 
-SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data, const SourceVoiceInitParam& param) :
+SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const WaveformData& data, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
     mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),

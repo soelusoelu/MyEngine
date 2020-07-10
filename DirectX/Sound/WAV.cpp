@@ -5,7 +5,7 @@
 WAV::WAV() = default;
 WAV::~WAV() = default;
 
-void WAV::loadFromFile(const std::string& fileName) {
+void WAV::loadFromFile(std::shared_ptr<WaveformData>* data, const std::string& fileName) {
     HMMIO hMmio = NULL; //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
     MMCKINFO ckInfo; //チャンク情報
     MMCKINFO riffckInfo; //最上部チャンク(RIFFチャンク)保存用
@@ -24,16 +24,16 @@ void WAV::loadFromFile(const std::string& fileName) {
     //フォーマットを読み込む
     PCMWAVEFORMAT pcmWaveForm;
     mmioRead(hMmio, reinterpret_cast<HPSTR>(&pcmWaveForm), sizeof(pcmWaveForm));
-    mFormat = reinterpret_cast<WAVEFORMATEX*>(new CHAR[sizeof(WAVEFORMATEX)]);
-    memcpy(mFormat, &pcmWaveForm, sizeof(pcmWaveForm));
-    mFormat->cbSize = 0;
+    (*data)->format = reinterpret_cast<WAVEFORMATEX*>(new CHAR[sizeof(WAVEFORMATEX)]);
+    memcpy((*data)->format, &pcmWaveForm, sizeof(pcmWaveForm));
+    (*data)->format->cbSize = 0;
     mmioAscend(hMmio, &ckInfo, 0);
 
     //WAVファイル内の音データの読み込み
     ckInfo.ckid = mmioFOURCC('d', 'a', 't', 'a');
     mmioDescend(hMmio, &ckInfo, &riffckInfo, MMIO_FINDCHUNK); //データチャンクにセット
-    mSize = ckInfo.cksize;
-    mBuffer = new BYTE[mSize];
+    (*data)->size = ckInfo.cksize;
+    (*data)->buffer = new BYTE[(*data)->size];
     DWORD offset = ckInfo.dwDataOffset;
-    mmioRead(hMmio, reinterpret_cast<HPSTR>(mBuffer), mSize);
+    mmioRead(hMmio, reinterpret_cast<HPSTR>((*data)->buffer), (*data)->size);
 }

@@ -2,10 +2,10 @@
 
 #include "SourceVoiceInitParam.h"
 #include "SoundBuffer.h"
+#include "WaveformData.h"
 #include <xaudio2.h>
 #include <memory>
 
-class SoundLoader;
 class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
@@ -14,7 +14,7 @@ class SoundFilter;
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
 public:
-    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const SoundLoader& data, const SourceVoiceInitParam& param);
+    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const WaveformData& data, const SourceVoiceInitParam& param);
     ~SourceVoice();
 
     /// <summary>

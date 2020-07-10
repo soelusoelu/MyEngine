@@ -2,6 +2,7 @@
 #include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
+#include "../Sound/ISoundLoader.h"
 #include "../Sound/SoundBase.h"
 #include "../Sound/SourceVoice.h"
 #include "../Sound/WAV.h"
@@ -64,25 +65,27 @@ std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string
 }
 
 std::unique_ptr<SourceVoice> AssetsManager::createSound(const std::string& filePath, const SourceVoiceInitParam& param) {
-    //使用できない状態ならnullptrを返す
+    //サウンドAPIが使用できない状態ならnullptrを返す
     if (mSoundBase->isNull()) {
         return nullptr;
     }
 
-    std::shared_ptr<SoundLoader> data = nullptr;
+    std::shared_ptr<WaveformData> data;
     auto itr = mSounds.find(filePath);
     if (itr != mSounds.end()) { //既に読み込まれている
         data = itr->second;
     } else { //初読み込み
+        std::shared_ptr<ISoundLoader> loader = nullptr;
         auto ext = FileUtil::getFileExtension(filePath);
         if (ext == ".wav") {
-            data = std::make_shared<WAV>();
+            loader = std::make_shared<WAV>();
         } else {
             Debug::windowMessage(filePath + ": 対応していない拡張子です");
         }
         mDirectory->setSoundDirectory(filePath);
+        data = std::make_shared<WaveformData>();
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-        data->loadFromFile(fileName);
+        loader->loadFromFile(&data, fileName);
         mSounds.emplace(filePath, data);
     }
 

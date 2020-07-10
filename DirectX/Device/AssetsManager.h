@@ -2,6 +2,7 @@
 
 #include "../Mesh/IMeshLoader.h"
 #include "../Sound/SourceVoiceInitParam.h"
+#include "../Sound/WaveformData.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
@@ -9,7 +10,6 @@
 class Directory;
 class Shader;
 class SoundBase;
-class SoundLoader;
 class SourceVoice;
 class Texture;
 
@@ -34,7 +34,7 @@ private:
 
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
     std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
-    std::unordered_map<std::string, std::shared_ptr<SoundLoader>> mSounds;
+    std::unordered_map<std::string, std::shared_ptr<WaveformData>> mSounds;
     std::unordered_map<std::string, std::shared_ptr<IMeshLoader>> mMeshLoaders;
 
     static inline bool mInstantiated = false;

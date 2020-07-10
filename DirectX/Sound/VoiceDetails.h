@@ -1,13 +1,12 @@
 ﻿#pragma once
 
+#include "WaveformData.h"
 #include "../System/SystemInclude.h"
-
-class SoundLoader;
 
 //サウンドデータ保存クラス
 class VoiceDetails {
 public:
-    VoiceDetails(const SoundLoader& loader);
+    VoiceDetails(const WaveformData& data);
     ~VoiceDetails();
 
     /// <summary>
@@ -46,7 +45,7 @@ private:
 
 private:
     //ヘッダ等を含まない純粋な波形データ
-    const BYTE* mBuffer;
+    const BYTE* BUFFER;
     //波形データのサイズ
     unsigned mSize;
     //入力チャンネル数

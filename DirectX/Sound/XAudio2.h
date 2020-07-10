@@ -2,12 +2,12 @@
 
 #include "SourceVoiceInitParam.h"
 #include "SubmixVoiceInitParam.h"
+#include "WaveformData.h"
 #include <xaudio2.h>
 #include <memory>
 
 class MasteringVoice;
 class SourceVoice;
-class SoundLoader;
 class SubmixVoice;
 
 //IXAudio2ラッパークラス
@@ -28,7 +28,7 @@ public:
     /// <param name="data">事前に取得してあるサウンドデータ</param>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したソースボイス</returns>
-    std::unique_ptr<SourceVoice> createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const;
+    std::unique_ptr<SourceVoice> createSourceVoice(const WaveformData& data, const SourceVoiceInitParam& param) const;
 
     /// <summary>
     /// サブミックスボイスを作成する

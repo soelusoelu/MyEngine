@@ -1,19 +1,18 @@
 ﻿#include "VoiceDetails.h"
-#include "SoundLoader.h"
 #include <xaudio2.h>
 
-VoiceDetails::VoiceDetails(const SoundLoader& loader) :
-    mBuffer(loader.buffer()),
-    mSize(loader.size()),
-    INPUT_CHANNELS(loader.format()->nChannels),
-    SAMPLES_PER_SEC(loader.format()->nSamplesPerSec),
-    BITS_PER_SAMPLE(loader.format()->wBitsPerSample) {
+VoiceDetails::VoiceDetails(const WaveformData& data) :
+    BUFFER(data.buffer),
+    mSize(data.size),
+    INPUT_CHANNELS(data.format->nChannels),
+    SAMPLES_PER_SEC(data.format->nSamplesPerSec),
+    BITS_PER_SAMPLE(data.format->wBitsPerSample) {
 }
 
 VoiceDetails::~VoiceDetails() = default;
 
 const BYTE* VoiceDetails::buffer() const {
-    return mBuffer;
+    return BUFFER;
 }
 
 unsigned VoiceDetails::size() const {

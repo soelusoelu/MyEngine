@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "SoundLoader.h"
+#include "ISoundLoader.h"
 
-class WAV : public SoundLoader {
+class WAV : public ISoundLoader {
 public:
     WAV();
     ~WAV();
-    virtual void loadFromFile(const std::string& fileName) override;
+    virtual void loadFromFile(std::shared_ptr<WaveformData>* data, const std::string& fileName) override;
 };

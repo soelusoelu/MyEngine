@@ -1,6 +1,5 @@
 ﻿#include "XAudio2.h"
 #include "MasteringVoice.h"
-#include "SoundLoader.h"
 #include "SourceVoice.h"
 #include "SubmixVoice.h"
 #include "../DebugLayer/Debug.h"
@@ -35,9 +34,9 @@ MasteringVoice* XAudio2::createMasteringVoice() const {
     return new MasteringVoice(masteringVoice);
 }
 
-std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(const SoundLoader& data, const SourceVoiceInitParam& param) const {
+std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(const WaveformData& data, const SourceVoiceInitParam& param) const {
     IXAudio2SourceVoice* sourceVoice;
-    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
+    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format, param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
         Debug::logError("Failed created source voice.");

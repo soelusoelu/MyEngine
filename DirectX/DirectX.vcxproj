@@ -206,7 +206,6 @@
     <ClCompile Include="Component\Text\TextBase.cpp" />
     <ClCompile Include="Sound\SoundFade.cpp" />
     <ClCompile Include="Sound\SoundBase.cpp" />
-    <ClCompile Include="Sound\SoundLoader.cpp" />
     <ClCompile Include="Sound\SoundPlayer.cpp" />
     <ClCompile Include="Sound\SoundVolume.cpp" />
     <ClCompile Include="Sound\SourceVoice.cpp" />
@@ -284,6 +283,7 @@
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="Sound\Frequency.h" />
+    <ClInclude Include="Sound\ISoundLoader.h" />
     <ClInclude Include="Sound\MasteringVoice.h" />
     <ClInclude Include="Sound\OutputVoiceDetails.h" />
     <ClInclude Include="Sound\SoundFilter.h" />
@@ -291,6 +291,7 @@
     <ClInclude Include="Sound\SourceVoiceInitParam.h" />
     <ClInclude Include="Sound\SubmixVoice.h" />
     <ClInclude Include="Sound\SubmixVoiceInitParam.h" />
+    <ClInclude Include="Sound\WaveformData.h" />
     <ClInclude Include="Transform\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
@@ -326,7 +327,6 @@
     <ClInclude Include="Sound\SoundBuffer.h" />
     <ClInclude Include="Sound\SoundFade.h" />
     <ClInclude Include="Sound\SoundBase.h" />
-    <ClInclude Include="Sound\SoundLoader.h" />
     <ClInclude Include="Sound\SoundPlayer.h" />
     <ClInclude Include="Sound\SoundVolume.h" />
     <ClInclude Include="Sound\SourceVoice.h" />
