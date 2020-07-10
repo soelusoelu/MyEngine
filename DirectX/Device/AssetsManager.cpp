@@ -2,11 +2,8 @@
 #include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
-#include "../Sound/ISoundLoader.h"
-#include "../Sound/SoundBase.h"
+#include "../Sound/SoundCreater.h"
 #include "../Sound/SourceVoice.h"
-#include "../Sound/WAV.h"
-#include "../Sound/XAudio2.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../Utility/Directory.h"
@@ -15,7 +12,7 @@
 
 AssetsManager::AssetsManager() :
     mDirectory(std::make_unique<Directory>()),
-    mSoundBase(std::make_unique<SoundBase>()) {
+    mSoundCreater(std::make_unique<SoundCreater>()) {
     assert(!mInstantiated);
     mInstantiated = true;
 }
@@ -65,31 +62,8 @@ std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string
 }
 
 std::unique_ptr<SourceVoice> AssetsManager::createSound(const std::string& filePath, const SourceVoiceInitParam& param) {
-    //サウンドAPIが使用できない状態ならnullptrを返す
-    if (mSoundBase->isNull()) {
-        return nullptr;
-    }
-
-    std::shared_ptr<WaveformData> data;
-    auto itr = mSounds.find(filePath);
-    if (itr != mSounds.end()) { //既に読み込まれている
-        data = itr->second;
-    } else { //初読み込み
-        std::shared_ptr<ISoundLoader> loader = nullptr;
-        auto ext = FileUtil::getFileExtension(filePath);
-        if (ext == ".wav") {
-            loader = std::make_shared<WAV>();
-        } else {
-            Debug::windowMessage(filePath + ": 対応していない拡張子です");
-        }
-        mDirectory->setSoundDirectory(filePath);
-        data = std::make_shared<WaveformData>();
-        auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-        loader->loadFromFile(&data, fileName);
-        mSounds.emplace(filePath, data);
-    }
-
-    return mSoundBase->getXAudio2().createSourceVoice(*data, param);
+    mDirectory->setSoundDirectory(filePath);
+    return mSoundCreater->create(filePath, param);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath) {
