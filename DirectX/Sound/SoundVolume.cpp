@@ -1,15 +1,13 @@
 ﻿#include "SoundVolume.h"
-#include "Frequency.h"
 #include "SoundFade.h"
 #include "SourceVoice.h"
 #include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 #include "../Math/Math.h"
 
-SoundVolume::SoundVolume(SourceVoice& sourceVoice, float maxFrequencyRatio) :
+SoundVolume::SoundVolume(SourceVoice& sourceVoice) :
     mSourceVoice(sourceVoice),
     mFader(std::make_unique<SoundFade>(*this)),
-    mFrequency(std::make_unique<Frequency>(sourceVoice, maxFrequencyRatio)),
     mCurrentVolume(1.f) {
 }
 
@@ -65,8 +63,4 @@ void SoundVolume::pan(float volumes[], unsigned operationSet) {
 
 SoundFade& SoundVolume::fade() const {
     return *mFader;
-}
-
-Frequency& SoundVolume::frequency() const {
-    return *mFrequency;
 }

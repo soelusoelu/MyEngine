@@ -43,7 +43,7 @@ std::unique_ptr<SourceVoice> SoundBase::createSourceVoice(const SoundLoader& dat
     auto res = mXAudio2->CreateSourceVoice(&sourceVoice, data.format(), param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
-        Debug::windowMessage("ソースボイス作成失敗");
+        Debug::logError("Failed created source voice.");
         return nullptr;
     }
 
@@ -55,7 +55,7 @@ std::unique_ptr<SubmixVoice> SoundBase::createSubmixVoice(const SubmixVoiceInitP
     auto res = mXAudio2->CreateSubmixVoice(&submixVoice, param.inputChannels, param.inputSampleRate, param.flags.get(), param.processingStage, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
-        Debug::windowMessage("サブミックスボイス作成失敗");
+        Debug::logError("Failed created submix voice.");
         return nullptr;
     }
 
@@ -64,7 +64,7 @@ std::unique_ptr<SubmixVoice> SoundBase::createSubmixVoice(const SubmixVoiceInitP
 
 bool SoundBase::comInitialize() {
     if (FAILED(CoInitializeEx(nullptr, COINIT_MULTITHREADED))) {
-        Debug::windowMessage("COMシステムの初期化に失敗しました");
+        Debug::windowMessage("サウンドCOMシステムの初期化に失敗しました");
         return false;
     }
     return true;

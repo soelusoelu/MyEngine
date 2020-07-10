@@ -2,13 +2,15 @@
 
 #include "SoundBuffer.h"
 #include <xaudio2.h>
+#include <memory>
 
 class SourceVoice;
+class Frequency;
 
 //音の再生を扱うクラス
 class SoundPlayer {
 public:
-    SoundPlayer(SourceVoice& sourceVoice);
+    SoundPlayer(SourceVoice& sourceVoice, float maxFrequencyRatio);
     ~SoundPlayer();
 
     /// <summary>
@@ -72,6 +74,12 @@ public:
     /// <param name="operationSet">いつ実行するか</param>
     void exitLoop(unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
 
+    /// <summary>
+    /// 周波数専門クラスにアクセスする
+    /// </summary>
+    /// <returns></returns>
+    Frequency& frequency() const;
+
 private:
     SoundPlayer(const SoundPlayer&) = delete;
     SoundPlayer& operator=(const SoundPlayer&) = delete;
@@ -86,4 +94,5 @@ private:
 
 private:
     SourceVoice& mSourceVoice;
+    std::unique_ptr<Frequency> mFrequency;
 };

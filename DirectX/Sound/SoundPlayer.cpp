@@ -1,11 +1,13 @@
 ﻿#include "SoundPlayer.h"
+#include "Frequency.h"
 #include "SoundFade.h"
 #include "SoundVolume.h"
 #include "SourceVoice.h"
 #include "../DebugLayer/Debug.h"
 
-SoundPlayer::SoundPlayer(SourceVoice& sourceVoice) :
-    mSourceVoice(sourceVoice) {
+SoundPlayer::SoundPlayer(SourceVoice& sourceVoice, float maxFrequencyRatio) :
+    mSourceVoice(sourceVoice),
+    mFrequency(std::make_unique<Frequency>(sourceVoice, maxFrequencyRatio)) {
 }
 
 SoundPlayer::~SoundPlayer() = default;
@@ -66,6 +68,10 @@ void SoundPlayer::exitLoop(unsigned operationSet) const {
         Debug::logError("Failed exit loop.");
     }
 #endif // _DEBUG
+}
+
+Frequency& SoundPlayer::frequency() const {
+    return *mFrequency;
 }
 
 void SoundPlayer::playFromSoundBuffer(const SoundBuffer& buffer, unsigned flags, unsigned operationSet) const {

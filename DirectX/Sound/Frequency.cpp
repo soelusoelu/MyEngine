@@ -12,12 +12,11 @@ Frequency::~Frequency() = default;
 void Frequency::setFrequencyRatio(float pitch, unsigned operationSet) {
     if (pitch > mMaxFrequencyRatio) {
         pitch = mMaxFrequencyRatio;
-#ifdef _DEBUG
         Debug::logWarning("Pitch is over max frequency.");
-#endif // _DEBUG
     }
 
     auto res = mSourceVoice.getXAudio2SourceVoice()->SetFrequencyRatio(pitch, operationSet);
+
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed change frequency ratio.");

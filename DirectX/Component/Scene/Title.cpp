@@ -22,7 +22,7 @@ void Title::start() {
     mSound = getComponent<SoundComponent>();
     //mSound->getSoundVolume().setVolume(0.f);
     //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
-    //mSound->getSoundVolume().frequency().setFrequencyRatio(4.f);
+    //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
     //mSound->getSoundBuffer().loopCount = 1;
     //mSound->getSoundBuffer().playBegin = 60.f;
     //mSound->getSoundBuffer().playLength = 30.f;
