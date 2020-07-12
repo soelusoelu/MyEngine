@@ -169,6 +169,7 @@
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
+    <ClCompile Include="Sound\Effects\SoundEffect.cpp" />
     <ClCompile Include="Sound\SoundCreater.cpp" />
     <ClCompile Include="Sound\Frequency.cpp" />
     <ClCompile Include="Sound\MasteringVoice.cpp" />
@@ -283,6 +284,8 @@
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="GameObject\Object.h" />
+    <ClInclude Include="Sound\IVoice.h" />
+    <ClInclude Include="Sound\Effects\SoundEffect.h" />
     <ClInclude Include="Sound\SoundCreater.h" />
     <ClInclude Include="Sound\Frequency.h" />
     <ClInclude Include="Sound\ISoundLoader.h" />

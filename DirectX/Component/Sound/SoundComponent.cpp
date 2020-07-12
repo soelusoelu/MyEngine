@@ -50,6 +50,10 @@ void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const
     inspect->emplace_back("FileName", mFileName);
 }
 
+SourceVoice& SoundComponent::getSourceVoice() const {
+    return *mSound;
+}
+
 SoundBuffer& SoundComponent::getSoundBuffer() const {
     return mSound->getSoundBuffer();
 }

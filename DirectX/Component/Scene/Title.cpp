@@ -6,10 +6,12 @@
 #include "../../Sound/Frequency.h"
 #include "../../Sound/SoundBuffer.h"
 #include "../../Sound/SoundCreater.h"
+#include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/SoundFade.h"
 #include "../../Sound/SoundFilter.h"
 #include "../../Sound/SoundPlayer.h"
 #include "../../Sound/SoundVolume.h"
+#include "../../Sound/SourceVoice.h"
 #include "../../Sound/SubmixVoice.h"
 #include "../../Sound/SubmixVoiceInitParam.h"
 #include "../../Sound/VoiceDetails.h"
@@ -46,11 +48,16 @@ void Title::start() {
     //mSound->getSoundVolume().pan(*volumes);
     //float volumes[] = { 1.f, 1.f, 0.f, 0.f };
     //mSound->getSoundVolume().pan(volumes);
-    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
     SubmixVoiceInitParam param;
     param.inputChannels = mSound->getSoundData().getInputChannels();
     param.inputSampleRate = mSound->getSoundData().getSampleRate();
     mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+    mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
+
+    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+    mSubmixVoice->getSoundEffect().reverb();
+    mSubmixVoice->getSoundEffect().set();
+
 }
 
 void Title::update() {

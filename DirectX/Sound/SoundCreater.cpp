@@ -48,7 +48,7 @@ std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceIn
         return nullptr;
     }
 
-    return mSoundBase->getXAudio2().createSubmixVoice(param);
+    return mSoundBase->getXAudio2().createSubmixVoice(mSoundBase->getMasteringVoice(), param);
 }
 
 void SoundCreater::loadSound(std::shared_ptr<WaveformData>* data, const std::string& filePath, const SourceVoiceInitParam& param) {

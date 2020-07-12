@@ -5,12 +5,13 @@
 #include <memory>
 
 class SourceVoice;
+class MasteringVoice;
 class SoundFade;
 
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(SourceVoice& sourceVoice);
+    SoundVolume(SourceVoice& sourceVoice, MasteringVoice& masteringVoice);
     ~SoundVolume();
 
     /// <summary>
@@ -71,6 +72,7 @@ private:
 
 private:
     SourceVoice& mSourceVoice;
+    MasteringVoice& mMasteringVoice;
     std::unique_ptr<SoundFade> mFader;
     float mCurrentVolume;
 };

@@ -7,8 +7,9 @@
 #include "../DebugLayer/Debug.h"
 #include "../Math/Math.h"
 
-SoundVolume::SoundVolume(SourceVoice& sourceVoice) :
+SoundVolume::SoundVolume(SourceVoice& sourceVoice, MasteringVoice& masteringVoice) :
     mSourceVoice(sourceVoice),
+    mMasteringVoice(masteringVoice),
     mFader(std::make_unique<SoundFade>(*this)),
     mCurrentVolume(1.f) {
 }
@@ -55,7 +56,7 @@ float SoundVolume::getVolume() const {
 
 void SoundVolume::pan(float volumes[], unsigned operationSet) {
     const auto inputChannels = mSourceVoice.getSoundData().getInputChannels();
-    const auto outputChannels = mSourceVoice.getMasteringVoice().getDetails().outputChannels;
+    const auto outputChannels = mMasteringVoice.getDetails().outputChannels;
     auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(NULL, inputChannels, outputChannels, volumes, operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {

@@ -120,6 +120,7 @@
     <ClCompile Include="Sound\MasteringVoice.cpp" />
     <ClCompile Include="Sound\XAudio2.cpp" />
     <ClCompile Include="Sound\SoundCreater.cpp" />
+    <ClCompile Include="Sound\Effects\SoundEffect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -258,5 +259,7 @@
     <ClInclude Include="Sound\WaveformData.h" />
     <ClInclude Include="Sound\ISoundLoader.h" />
     <ClInclude Include="Sound\SoundCreater.h" />
+    <ClInclude Include="Sound\IVoice.h" />
+    <ClInclude Include="Sound\Effects\SoundEffect.h" />
   </ItemGroup>
 </Project>

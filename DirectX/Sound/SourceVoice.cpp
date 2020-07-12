@@ -3,6 +3,7 @@
 #include "SoundFlag.h"
 #include "SoundPlayer.h"
 #include "SoundVolume.h"
+#include "SubmixVoice.h"
 #include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/Flag.h"
@@ -13,7 +14,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
-    mSoundVolume(std::make_unique<SoundVolume>(*this)),
+    mSoundVolume(std::make_unique<SoundVolume>(*this, masteringVoice)),
     mSoundFilter(std::make_unique<SoundFilter>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mSoundBuffer->buffer = mData->buffer();
@@ -25,16 +26,16 @@ SourceVoice::~SourceVoice() {
     mXAudio2SourceVoice = nullptr;
 }
 
+IXAudio2Voice* SourceVoice::getXAudio2Voice() const {
+    return mXAudio2SourceVoice;
+}
+
 void SourceVoice::update() {
     mSoundVolume->update();
 }
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
-}
-
-MasteringVoice& SourceVoice::getMasteringVoice() const {
-    return mMasteringVoice;
 }
 
 void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {
@@ -50,8 +51,20 @@ void SourceVoice::submitSourceBuffer() const {
     submitSourceBuffer(*mSoundBuffer);
 }
 
-void SourceVoice::setOutputVoices(const XAUDIO2_VOICE_SENDS& sendlist) {
-    mXAudio2SourceVoice->SetOutputVoices(&sendlist);
+void SourceVoice::setOutputVoice(SubmixVoice& voice, bool useFilter) {
+    XAUDIO2_SEND_DESCRIPTOR desc;
+    desc.Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
+    desc.pOutputVoice = voice.getXAudio2Voice();
+    XAUDIO2_VOICE_SENDS sends;
+    sends.SendCount = 1;
+    sends.pSends = &desc;
+    auto res = mXAudio2SourceVoice->SetOutputVoices(&sends);
+
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed set output voices.");
+    }
+#endif // _DEBUG
 }
 
 SoundBuffer& SourceVoice::getSoundBuffer() const {

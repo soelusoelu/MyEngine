@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IVoice.h"
 #include "SourceVoiceInitParam.h"
 #include "SoundBuffer.h"
 #include "WaveformData.h"
@@ -11,12 +12,15 @@ class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
 class SoundFilter;
+class SubmixVoice;
 
 //IXAudio2SourceVoiceラッパークラス
-class SourceVoice {
+class SourceVoice : public IVoice {
 public:
     SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param);
     ~SourceVoice();
+
+    virtual IXAudio2Voice* getXAudio2Voice() const override;
 
     /// <summary>
     /// 毎フレーム更新
@@ -28,12 +32,6 @@ public:
     /// </summary>
     /// <returns></returns>
     IXAudio2SourceVoice* getXAudio2SourceVoice() const;
-
-    /// <summary>
-    /// マスターボイスを返す
-    /// </summary>
-    /// <returns></returns>
-    MasteringVoice& getMasteringVoice() const;
 
     /// <summary>
     /// ソースボイスに波形データを追加する
@@ -50,7 +48,12 @@ public:
     /// </summary>
     void submitSourceBuffer() const;
 
-    void setOutputVoices(const XAUDIO2_VOICE_SENDS& sendlist);
+    /// <summary>
+    /// 出力先ボイスを設定する
+    /// </summary>
+    /// <param name="voice">設定したいボイス</param>
+    /// <param name="useFilter">フィルターを使用するか</param>
+    void setOutputVoice(SubmixVoice& voice, bool useFilter = false);
 
     /// <summary>
     /// バッファを返す
