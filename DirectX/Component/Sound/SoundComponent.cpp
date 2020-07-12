@@ -1,6 +1,7 @@
 #include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
+#include "../../Sound/SoundCreater.h"
 #include "../../Sound/SoundFlag.h"
 #include "../../Sound/SoundPlayer.h"
 #include "../../Sound/SourceVoice.h"
@@ -22,7 +23,7 @@ void SoundComponent::awake() {
         SourceVoiceInitParam param;
         param.flags.set(static_cast<unsigned>(SoundFlag::USE_FILTER));
         //param.maxFrequencyRatio = 16.f;
-        mSound = World::instance().assetsManager().createSound(mFileName, param);
+        mSound = World::instance().assetsManager().getSoundCreater().createSourceVoice(mFileName, param);
     }
     if (mIsFirstPlay) {
         //mSound->getSoundPlayer().play();
@@ -51,6 +52,10 @@ void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const
 
 SoundBuffer& SoundComponent::getSoundBuffer() const {
     return mSound->getSoundBuffer();
+}
+
+VoiceDetails& SoundComponent::getSoundData() const {
+    return mSound->getSoundData();
 }
 
 SoundPlayer& SoundComponent::getSoundPlayer() const {

@@ -1,25 +1,23 @@
 ﻿#pragma once
 
 #include "../Mesh/IMeshLoader.h"
-#include "../Sound/SourceVoiceInitParam.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
 
 class Directory;
-class Shader;
 class SoundCreater;
-class SourceVoice;
+class Shader;
 class Texture;
 
 class AssetsManager {
 public:
     AssetsManager();
     ~AssetsManager();
+    SoundCreater& getSoundCreater() const;
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& filePath);
     std::shared_ptr<Texture> createTextureFromModel(const std::string& fileName);
-    std::unique_ptr<SourceVoice> createSound(const std::string& filePath, const SourceVoiceInitParam& param);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& filePath);
     void setDataDirectory(const std::string& filePath) const;
 

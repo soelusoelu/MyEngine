@@ -1,18 +1,26 @@
 #include "Title.h"
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
+#include "../../Device/AssetsManager.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Frequency.h"
 #include "../../Sound/SoundBuffer.h"
+#include "../../Sound/SoundCreater.h"
 #include "../../Sound/SoundFade.h"
 #include "../../Sound/SoundFilter.h"
 #include "../../Sound/SoundPlayer.h"
 #include "../../Sound/SoundVolume.h"
+#include "../../Sound/SubmixVoice.h"
+#include "../../Sound/SubmixVoiceInitParam.h"
+#include "../../Sound/VoiceDetails.h"
+#include "../../System/World.h"
 
 Title::Title() :
     Component(),
     mScene(nullptr),
-    mSound(nullptr) {
+    mSound(nullptr),
+    mSubmixVoice(nullptr)
+{
 }
 
 Title::~Title() = default;
@@ -38,7 +46,11 @@ void Title::start() {
     //mSound->getSoundVolume().pan(*volumes);
     //float volumes[] = { 1.f, 1.f, 0.f, 0.f };
     //mSound->getSoundVolume().pan(volumes);
-    mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
+    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+    SubmixVoiceInitParam param;
+    param.inputChannels = mSound->getSoundData().getInputChannels();
+    param.inputSampleRate = mSound->getSoundData().getSampleRate();
+    mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
 }
 
 void Title::update() {

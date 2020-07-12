@@ -1,13 +1,16 @@
 ﻿#include "SoundCreater.h"
 #include "SoundBase.h"
 #include "SourceVoice.h"
+#include "SubmixVoice.h"
 #include "WAV.h"
 #include "XAudio2.h"
 #include "../DebugLayer/Debug.h"
+#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include <cassert>
 
-SoundCreater::SoundCreater() :
+SoundCreater::SoundCreater(Directory& directory) :
+    mDirectory(directory),
     mSoundBase(std::make_unique<SoundBase>()) {
     assert(!mInstantiated);
     mInstantiated = true;
@@ -17,26 +20,44 @@ SoundCreater::~SoundCreater() {
     mInstantiated = false;
 }
 
-std::unique_ptr<SourceVoice> SoundCreater::create(const std::string& filePath, const SourceVoiceInitParam& param) {
+std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& filePath, const SourceVoiceInitParam& param) {
     //サウンドAPIが使用できない状態ならnullptrを返す
     if (mSoundBase->isNull()) {
         return nullptr;
     }
 
-    std::shared_ptr<WaveformData> data;
+    std::shared_ptr<WaveformData> data = nullptr;
     auto itr = mSounds.find(filePath);
     if (itr != mSounds.end()) { //既に読み込まれている
         data = itr->second;
     } else { //初読み込み
         loadSound(&data, filePath, param);
+        //データの読み込みに失敗していたら
+        if (!data) {
+            return nullptr;
+        }
         mSounds.emplace(filePath, data);
     }
 
-    return mSoundBase->getXAudio2().createSourceVoice(*data, param);
+    return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), *data, param);
+}
+
+std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
+    //サウンドAPIが使用できない状態ならnullptrを返す
+    if (mSoundBase->isNull()) {
+        return nullptr;
+    }
+
+    return mSoundBase->getXAudio2().createSubmixVoice(param);
 }
 
 void SoundCreater::loadSound(std::shared_ptr<WaveformData>* data, const std::string& filePath, const SourceVoiceInitParam& param) {
     auto loader = createLoaderFromFilePath(filePath);
+    if (!loader) {
+        return;
+    }
+
+    mDirectory.setSoundDirectory(filePath);
     *data = std::make_shared<WaveformData>();
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     loader->loadFromFile(data, fileName);

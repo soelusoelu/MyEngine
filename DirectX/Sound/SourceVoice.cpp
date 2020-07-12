@@ -7,8 +7,9 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/Flag.h"
 
-SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const WaveformData& data, const SourceVoiceInitParam& param) :
+SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
+    mMasteringVoice(masteringVoice),
     mSoundBuffer(std::make_unique<SoundBuffer>()),
     mData(std::make_unique<VoiceDetails>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
@@ -30,6 +31,10 @@ void SourceVoice::update() {
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
+}
+
+MasteringVoice& SourceVoice::getMasteringVoice() const {
+    return mMasteringVoice;
 }
 
 void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {

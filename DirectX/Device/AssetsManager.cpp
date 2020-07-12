@@ -12,13 +12,17 @@
 
 AssetsManager::AssetsManager() :
     mDirectory(std::make_unique<Directory>()),
-    mSoundCreater(std::make_unique<SoundCreater>()) {
+    mSoundCreater(std::make_unique<SoundCreater>(*mDirectory)) {
     assert(!mInstantiated);
     mInstantiated = true;
 }
 
 AssetsManager::~AssetsManager() {
     mInstantiated = false;
+}
+
+SoundCreater& AssetsManager::getSoundCreater() const {
+    return *mSoundCreater;
 }
 
 std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName) {
@@ -59,11 +63,6 @@ std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string
         mTextures.emplace(fileName, texture);
     }
     return texture;
-}
-
-std::unique_ptr<SourceVoice> AssetsManager::createSound(const std::string& filePath, const SourceVoiceInitParam& param) {
-    mDirectory->setSoundDirectory(filePath);
-    return mSoundCreater->create(filePath, param);
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath) {

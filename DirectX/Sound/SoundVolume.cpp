@@ -1,4 +1,6 @@
 ﻿#include "SoundVolume.h"
+#include "MasteringVoice.h"
+#include "OutputVoiceDetails.h"
 #include "SoundFade.h"
 #include "SourceVoice.h"
 #include "VoiceDetails.h"
@@ -53,7 +55,8 @@ float SoundVolume::getVolume() const {
 
 void SoundVolume::pan(float volumes[], unsigned operationSet) {
     const auto inputChannels = mSourceVoice.getSoundData().getInputChannels();
-    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(NULL, inputChannels, 2, volumes, operationSet);
+    const auto outputChannels = mSourceVoice.getMasteringVoice().getDetails().outputChannels;
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(NULL, inputChannels, outputChannels, volumes, operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed pan.");

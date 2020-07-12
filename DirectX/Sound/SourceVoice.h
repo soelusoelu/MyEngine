@@ -6,6 +6,7 @@
 #include <xaudio2.h>
 #include <memory>
 
+class MasteringVoice;
 class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
@@ -14,7 +15,7 @@ class SoundFilter;
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice {
 public:
-    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, const WaveformData& data, const SourceVoiceInitParam& param);
+    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param);
     ~SourceVoice();
 
     /// <summary>
@@ -27,6 +28,12 @@ public:
     /// </summary>
     /// <returns></returns>
     IXAudio2SourceVoice* getXAudio2SourceVoice() const;
+
+    /// <summary>
+    /// マスターボイスを返す
+    /// </summary>
+    /// <returns></returns>
+    MasteringVoice& getMasteringVoice() const;
 
     /// <summary>
     /// ソースボイスに波形データを追加する
@@ -84,6 +91,7 @@ private:
 
 private:
     IXAudio2SourceVoice* mXAudio2SourceVoice;
+    MasteringVoice& mMasteringVoice;
     std::unique_ptr<SoundBuffer> mSoundBuffer;
     std::unique_ptr<VoiceDetails> mData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;

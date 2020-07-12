@@ -5,6 +5,7 @@
 #include <string>
 
 class SourceVoice;
+class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
 class SoundFilter;
@@ -20,6 +21,7 @@ public:
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     SoundBuffer& getSoundBuffer() const;
+    VoiceDetails& getSoundData() const;
     SoundPlayer& getSoundPlayer() const;
     SoundVolume& getSoundVolume() const;
     SoundFilter& getSoundFilter() const;
