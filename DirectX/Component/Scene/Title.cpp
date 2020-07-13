@@ -30,27 +30,30 @@ Title::~Title() = default;
 void Title::start() {
     mScene = getComponent<Scene>();
     mSound = getComponent<SoundComponent>();
-    //mSound->getSoundVolume().setVolume(0.f);
-    //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
-    //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
-    //mSound->getSoundBuffer().loopCount = 1;
-    //mSound->getSoundBuffer().playBegin = 60.f;
-    //mSound->getSoundBuffer().playLength = 30.f;
-    //mSound->getSoundBuffer().loopBegin = 60.f;
-    //mSound->getSoundBuffer().loopLength = 30.f;
-    //mSound->getSoundFilter().lowPassFilter(2500.f);
-    //mSound->getSoundFilter().highPassFilter(250.f);
-    //mSound->getSoundFilter().bandPassFilter(1000.f);
-    //mSound->getSoundVolume().pan(0.f);
-    SubmixVoiceInitParam param;
-    param.inputChannels = mSound->getSoundData().getInputChannels();
-    param.inputSampleRate = mSound->getSoundData().getSampleRate();
-    mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
-    mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
+    if (mSound && !mSound->isNull()) {
+        //mSound->getSoundVolume().setVolume(0.f);
+        //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
+        //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
+        //mSound->getSoundBuffer().loopCount = 1;
+        //mSound->getSoundBuffer().playBegin = 60.f;
+        //mSound->getSoundBuffer().playLength = 30.f;
+        //mSound->getSoundBuffer().loopBegin = 60.f;
+        //mSound->getSoundBuffer().loopLength = 30.f;
+        //mSound->getSoundFilter().lowPassFilter(2500.f);
+        //mSound->getSoundFilter().highPassFilter(250.f);
+        //mSound->getSoundFilter().bandPassFilter(1000.f);
+        //mSound->getSoundVolume().pan(0.f);
 
-    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
-    //mSubmixVoice->getSoundEffect().reverb();
-    //mSubmixVoice->getSoundEffect().set();
+        //SubmixVoiceInitParam param;
+        //param.inputChannels = mSound->getSoundData().getInputChannels();
+        //param.inputSampleRate = mSound->getSoundData().getSampleRate();
+        //mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+        //mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
+
+        mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+        //mSubmixVoice->getSoundEffect().reverb();
+        //mSubmixVoice->getSoundEffect().set();
+    }
 }
 
 void Title::update() {

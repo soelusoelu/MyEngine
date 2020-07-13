@@ -20,6 +20,9 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
+    //使用可能状態か
+    bool isNull() const;
+
     SourceVoice& getSourceVoice() const;
     SoundBuffer& getSoundBuffer() const;
     VoiceDetails& getSoundData() const;

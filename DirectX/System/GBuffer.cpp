@@ -24,8 +24,8 @@ void GBuffer::create() {
     RenderTargetViewDesc rtvDesc;
 
     //カラー
-    desc.width = Window::width();
-    desc.height = Window::height();
+    desc.width = Window::standardWidth();
+    desc.height = Window::standardHeight();
     desc.format = Format::FORMAT_RGBA16_FLOAT;
     desc.usage = Usage::USAGE_DEFAULT;
     desc.bindFlags =
@@ -80,7 +80,7 @@ void GBuffer::renderToTexture() {
     auto& dx = DirectX::instance();
 
     //各テクスチャをレンダーターゲットに設定
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
     ID3D11RenderTargetView* views[numGBuffer];
     for (size_t i = 0; i < numGBuffer; i++) {
         views[i] = mRenderTargets[i]->getRenderTarget();
@@ -144,14 +144,14 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
 }
 
 void GBuffer::setVSShaderResources() const {
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
         mShaderResourceViews[i]->setVSShaderResources(i);
     }
 }
 
 void GBuffer::setPSShaderResources() const {
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
         mShaderResourceViews[i]->setPSShaderResources(i);
     }

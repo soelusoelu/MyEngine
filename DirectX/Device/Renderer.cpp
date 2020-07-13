@@ -16,16 +16,20 @@ void Renderer::initialize() {
 }
 
 void Renderer::renderToTexture() {
-    DirectX::instance().setViewport(Window::width(), Window::height());
+    DirectX::instance().setViewport(Window::standardWidth(), Window::standardHeight());
     mGBuffer->renderToTexture();
 }
 
 void Renderer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {
+    DirectX::instance().setViewport(Window::width(), Window::height());
     mGBuffer->renderFromTexture(camera, lightManager);
 }
 
 void Renderer::renderSprite() const {
     auto& dx = DirectX::instance();
+
+    //ビューポートの設定
+    dx.setViewport(Window::width(), Window::height());
     //プリミティブ・トポロジーをセット
     dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //インデックスバッファーをセット

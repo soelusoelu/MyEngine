@@ -19,7 +19,6 @@ void Log::loadProperties(const rapidjson::Value & inObj) {
 
 void Log::initialize() {
     mNumRowsToDisplay = (Window::debugHeight() - Window::height()) / (DrawString::HEIGHT * mScale.y);
-    mLogs.resize(mNumRowsToDisplay);
 }
 
 void Log::update() {
@@ -39,14 +38,16 @@ void Log::logWarning(const std::string & message) {
 }
 
 void Log::drawLogs(DrawString* drawString) const {
-    auto pos = Vector2(0.f, Window::debugHeight() - DrawString::HEIGHT * mNumRowsToDisplay * mScale.y);
+    const float height = DrawString::HEIGHT * mScale.y;
+    auto pos = Vector2(0.f, Window::debugHeight() - height);
     for (const auto& log : mLogs) {
         drawString->drawString(log.first, pos, mScale, log.second);
-        pos.y += DrawString::HEIGHT * mScale.y;
+        pos.y -= height;
     }
 }
 
 void Log::adjustCapacity() {
+    //表示できる量を超えてたら、古いログから削除
     while (mLogs.size() > mNumRowsToDisplay) {
         mLogs.pop_front();
     }

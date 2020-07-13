@@ -31,7 +31,9 @@ void SoundComponent::awake() {
 }
 
 void SoundComponent::update() {
-    mSound->update();
+    if (mSound) {
+        mSound->update();
+    }
 }
 
 void SoundComponent::finalize() {
@@ -48,6 +50,10 @@ void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
 
 void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
+}
+
+bool SoundComponent::isNull() const {
+    return (mSound) ? false : true;
 }
 
 SourceVoice& SoundComponent::getSourceVoice() const {

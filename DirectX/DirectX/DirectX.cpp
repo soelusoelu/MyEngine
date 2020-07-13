@@ -13,6 +13,7 @@ DirectX::DirectX() :
     mSwapChain(nullptr),
     mDepthStencilView(nullptr),
     mRenderTargetView(nullptr),
+    mDebugRenderTargetView(nullptr),
     mBlendState(nullptr),
     mDepthStencilState(nullptr),
     mRasterizerState(nullptr) {
@@ -149,8 +150,12 @@ void DirectX::createDeviceAndSwapChain(const HWND& hWnd) {
 
     D3D_FEATURE_LEVEL featureLevels = D3D_FEATURE_LEVEL_11_0;
     D3D_FEATURE_LEVEL* featureLevel = NULL;
+    unsigned flags = 0;
+#ifdef _DEBUG
+    flags |= D3D11_CREATE_DEVICE_DEBUG;
+#endif // _DEBUG
 
-    D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevels, 1, D3D11_SDK_VERSION, &sd, &mSwapChain, &mDevice, featureLevel, &mDeviceContext);
+    D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, flags, &featureLevels, 1, D3D11_SDK_VERSION, &sd, &mSwapChain, &mDevice, featureLevel, &mDeviceContext);
 }
 
 void DirectX::createRenderTargetView() {
