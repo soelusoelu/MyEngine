@@ -1,4 +1,4 @@
-#include "Title.h"
+ï»¿#include "Title.h"
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
 #include "../../Device/AssetsManager.h"
@@ -41,13 +41,7 @@ void Title::start() {
     //mSound->getSoundFilter().lowPassFilter(2500.f);
     //mSound->getSoundFilter().highPassFilter(250.f);
     //mSound->getSoundFilter().bandPassFilter(1000.f);
-    //float volumes[2][2] = {
-    //    { 1.f, 1.f }, //¶ƒXƒs[ƒJ[
-    //    { 0.f, 0.f }  //‰EƒXƒs[ƒJ[
-    //};
-    //mSound->getSoundVolume().pan(*volumes);
-    //float volumes[] = { 1.f, 1.f, 0.f, 0.f };
-    //mSound->getSoundVolume().pan(volumes);
+    //mSound->getSoundVolume().pan(0.f);
     SubmixVoiceInitParam param;
     param.inputChannels = mSound->getSoundData().getInputChannels();
     param.inputSampleRate = mSound->getSoundData().getSampleRate();
@@ -55,9 +49,8 @@ void Title::start() {
     mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
 
     mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
-    mSubmixVoice->getSoundEffect().reverb();
-    mSubmixVoice->getSoundEffect().set();
-
+    //mSubmixVoice->getSoundEffect().reverb();
+    //mSubmixVoice->getSoundEffect().set();
 }
 
 void Title::update() {

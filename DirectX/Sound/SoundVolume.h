@@ -54,11 +54,11 @@ public:
     float getVolume() const;
 
     /// <summary>
-    /// 音をパンする
+    /// 位置によって音をパンする
     /// </summary>
-    /// <param name="volumes">各スピーカーの音量</param>
+    /// <param name="positionX">音を鳴らす位置(0～1920)</param>
     /// <param name="operationSet">いつ実行するか</param>
-    void pan(float volumes[], unsigned operationSet = XAUDIO2_COMMIT_NOW);
+    void pan(float positionX, unsigned operationSet = XAUDIO2_COMMIT_NOW);
 
     /// <summary>
     /// フェード専門クラスにアクセスする

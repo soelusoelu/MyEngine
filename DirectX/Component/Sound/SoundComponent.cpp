@@ -1,4 +1,4 @@
-#include "SoundComponent.h"
+﻿#include "SoundComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
 #include "../../Sound/SoundCreater.h"

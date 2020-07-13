@@ -6,6 +6,8 @@
 #include "VoiceDetails.h"
 #include "../DebugLayer/Debug.h"
 #include "../Math/Math.h"
+#include "../System/Window.h"
+#include <vector>
 
 SoundVolume::SoundVolume(SourceVoice& sourceVoice, MasteringVoice& masteringVoice) :
     mSourceVoice(sourceVoice),
@@ -54,10 +56,18 @@ float SoundVolume::getVolume() const {
     return mCurrentVolume;
 }
 
-void SoundVolume::pan(float volumes[], unsigned operationSet) {
-    const auto inputChannels = mSourceVoice.getSoundData().getInputChannels();
-    const auto outputChannels = mMasteringVoice.getDetails().outputChannels;
-    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(NULL, inputChannels, outputChannels, volumes, operationSet);
+void SoundVolume::pan(float positionX, unsigned operationSet) {
+    const unsigned inputChannels = mSourceVoice.getSoundData().getInputChannels();
+    const unsigned outputChannels = mMasteringVoice.getDetails().outputChannels;
+    const float width = static_cast<float>(Window::standardWidth());
+
+    auto posX = Math::clamp<float>(positionX, 0.f, width);
+    float rot = posX / width * 90.f;
+    std::vector<float> volumes(inputChannels * outputChannels);
+    volumes[0] = volumes[1] = Math::cos(rot);
+    volumes[2] = volumes[3] = Math::sin(rot);
+
+    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(nullptr, inputChannels, outputChannels, volumes.data(), operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed pan.");
