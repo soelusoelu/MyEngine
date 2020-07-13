@@ -1,10 +1,11 @@
 ﻿#include "Buffer.h"
 #include "DirectX.h"
-#include "../System/GlobalFunction.h"
 #include "Usage.h"
+#include "../System/GlobalFunction.h"
 
 Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data) :
-    mDesc(desc) {
+    mDesc(desc),
+    mBuffer(nullptr) {
     auto dev = DirectX::instance().device();
     //バッファの作成
     if (data) {

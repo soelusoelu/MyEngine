@@ -14,6 +14,7 @@
 #include "../../System/World.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
+#include <vector>
 
 TransparentMeshComponent::TransparentMeshComponent() :
     MeshComponent(),
@@ -54,13 +55,12 @@ void TransparentMeshComponent::setShader() {
     mShader->createConstantBuffer(sizeof(TransparentConstantBuffer), 0);
     mShader->createConstantBuffer(sizeof(MaterialConstantBuffer), 1);
     //インプットレイアウトの生成
-    constexpr InputElementDesc layout[] = {
+    std::vector<InputElementDesc> layout = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
     };
-    constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
-    mShader->createInputLayout(layout, numElements);
+    mShader->createInputLayout(layout);
 }
 
 void TransparentMeshComponent::draw(const Camera& camera) const {

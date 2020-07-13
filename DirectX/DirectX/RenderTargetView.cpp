@@ -2,29 +2,26 @@
 #include "DirectX.h"
 #include "Format.h"
 #include "Texture2D.h"
-#include "../System/GlobalFunction.h"
 
-RenderTargetView::RenderTargetView(const std::shared_ptr<Texture2D>& texture2D, const RenderTargetViewDesc* desc) :
+RenderTargetView::RenderTargetView(const Texture2D& texture2D, const RenderTargetViewDesc* desc) :
     mRenderTargetView(nullptr) {
     auto dev = DirectX::instance().device();
     if (desc) {
-        dev->CreateRenderTargetView(texture2D->texture2D(), &toRTVDesc(desc), &mRenderTargetView);
+        dev->CreateRenderTargetView(texture2D.texture2D(), &toRTVDesc(desc), &mRenderTargetView);
     } else {
-        dev->CreateRenderTargetView(texture2D->texture2D(), nullptr, &mRenderTargetView);
+        dev->CreateRenderTargetView(texture2D.texture2D(), nullptr, &mRenderTargetView);
     }
 }
 
-RenderTargetView::~RenderTargetView() {
-    safeRelease(mRenderTargetView);
-}
+RenderTargetView::~RenderTargetView() = default;
 
 ID3D11RenderTargetView* RenderTargetView::getRenderTarget() const {
-    return mRenderTargetView;
+    return mRenderTargetView.Get();
 }
 
 void RenderTargetView::clearRenderTarget(float r, float g, float b, float a) const {
     const float clearColor[4] = { r, g, b, a };
-    DirectX::instance().deviceContext()->ClearRenderTargetView(mRenderTargetView, clearColor);
+    DirectX::instance().deviceContext()->ClearRenderTargetView(mRenderTargetView.Get(), clearColor);
 }
 
 D3D11_RENDER_TARGET_VIEW_DESC RenderTargetView::toRTVDesc(const RenderTargetViewDesc* desc) const {

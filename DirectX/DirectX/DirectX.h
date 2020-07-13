@@ -60,10 +60,10 @@ private:
 private:
     static inline DirectX* mInstance = nullptr;
 
-    ID3D11Device* mDevice;
-    ID3D11DeviceContext* mDeviceContext;
-    IDXGISwapChain* mSwapChain;
-    ID3D11DepthStencilView* mDepthStencilView;
+    Microsoft::WRL::ComPtr<ID3D11Device> mDevice;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> mDeviceContext;
+    Microsoft::WRL::ComPtr<IDXGISwapChain> mSwapChain;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthStencilView;
 
     std::unique_ptr<RenderTargetView> mRenderTargetView;
     std::unique_ptr<RenderTargetView> mDebugRenderTargetView;

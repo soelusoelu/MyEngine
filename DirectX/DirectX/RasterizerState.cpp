@@ -1,10 +1,9 @@
 ﻿#include "RasterizerState.h"
 #include "DirectX.h"
-#include "../System/GlobalFunction.h"
 
 RasterizerState::RasterizerState() :
     mDesc() {
-    setRasterizerState(mDesc);
+    execute();
 }
 
 RasterizerState::~RasterizerState() = default;
@@ -29,13 +28,11 @@ const RasterizerDesc& RasterizerState::desc() const {
 }
 
 void RasterizerState::execute() {
-    ID3D11RasterizerState* rasterizer;
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizer;
 
     auto& dx = DirectX::instance();
     dx.device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
-    dx.deviceContext()->RSSetState(rasterizer);
-
-    safeRelease(rasterizer);
+    dx.deviceContext()->RSSetState(rasterizer.Get());
 }
 
 D3D11_RASTERIZER_DESC RasterizerState::toRasterizerDesc(const RasterizerDesc & desc) const {

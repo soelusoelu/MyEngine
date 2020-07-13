@@ -6,7 +6,7 @@
 
 class InputElement {
 public:
-    InputElement(const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile);
+    InputElement(const std::vector<InputElementDesc>& desc, ID3DBlob* compile);
     ~InputElement();
     //ディスクリプタの要素数を返す
     size_t size() const;
@@ -26,6 +26,6 @@ private:
     //ディスクリプタ配列
     std::vector<InputElementDesc> mDesc;
     //頂点レイアウト
-    ID3D11InputLayout* mInputLayout;
+    Microsoft::WRL::ComPtr<ID3D11InputLayout> mInputLayout;
 };
 

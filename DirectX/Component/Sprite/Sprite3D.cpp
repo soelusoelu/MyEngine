@@ -11,6 +11,7 @@
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 #include <cassert>
+#include <vector>
 
 Sprite3D::Sprite3D() :
     Component(),
@@ -45,12 +46,11 @@ void Sprite3D::awake() {
     mShader->createConstantBuffer(sizeof(TextureConstantBuffer));
 
     //インプットレイアウトの生成
-    static constexpr InputElementDesc layout[] = {
+    std::vector<InputElementDesc> layout = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
     };
-    constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
-    mShader->createInputLayout(layout, numElements);
+    mShader->createInputLayout(layout);
 
     addToManager();
 

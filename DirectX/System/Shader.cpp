@@ -1,5 +1,4 @@
 ﻿#include "Shader.h"
-#include "GlobalFunction.h"
 #include "../DebugLayer/Debug.h"
 #include "../DirectX/DirectXInclude.h"
 
@@ -13,11 +12,7 @@ Shader::Shader(const std::string& fileName) :
     createPixelShader(fileName);
 }
 
-Shader::~Shader() {
-    safeRelease(mCompileShader);
-    safeRelease(mVertexShader);
-    safeRelease(mPixelShader);
-}
+Shader::~Shader() = default;
 
 bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {
     auto msr = toMappedSubResource(data);
@@ -35,11 +30,11 @@ void Shader::unmap(unsigned index, unsigned sub) const {
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
-    DirectX::instance().deviceContext()->VSSetShader(mVertexShader, &classInstances, numClassInstances);
+    DirectX::instance().deviceContext()->VSSetShader(mVertexShader.Get(), &classInstances, numClassInstances);
 }
 
 void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
-    DirectX::instance().deviceContext()->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+    DirectX::instance().deviceContext()->PSSetShader(mPixelShader.Get(), &classInstances, numClassInstances);
 }
 
 void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
@@ -67,8 +62,8 @@ void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) const {
     DirectX::instance().deviceContext()->PSSetConstantBuffers(index, numBuffers, &buf);
 }
 
-void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElements) {
-    mVertexLayout = std::make_unique<InputElement>(layout, numElements, mCompileShader);
+void Shader::createInputLayout(const std::vector<InputElementDesc>& layout) {
+    mVertexLayout = std::make_unique<InputElement>(layout, mCompileShader.Get());
 }
 
 void Shader::setInputLayout() const {
@@ -82,25 +77,22 @@ void Shader::createVertexShader(const std::string& fileName) {
         return;
     }
     if (FAILED(DirectX::instance().device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
-        safeRelease<ID3D10Blob>(mCompileShader);
         Debug::windowMessage(fileName + ": バーテックスシェーダー作成失敗");
         return;
     }
 }
 
 void Shader::createPixelShader(const std::string& fileName) {
-    ID3D10Blob* compiledShader;
+    Microsoft::WRL::ComPtr<ID3DBlob> compiledShader;
     //ブロブからピクセルシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
         Debug::windowMessage(fileName + ": hlsl読み込み失敗");
         return;
     }
     if (FAILED(DirectX::instance().device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
-        safeRelease<ID3D10Blob>(compiledShader);
         Debug::windowMessage(fileName + ": ピクセルシェーダー作成失敗");
         return;
     }
-    safeRelease<ID3D10Blob>(compiledShader);
 }
 
 D3D11_MAPPED_SUBRESOURCE Shader::toMappedSubResource(const MappedSubResourceDesc* desc) const {

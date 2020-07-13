@@ -31,43 +31,43 @@ void GBuffer::create() {
     desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);
-    auto texture = std::make_shared<Texture2D>(desc);
+    auto texture = std::make_unique<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture, &srvDesc));
 
     //ノーマル
     desc.format = Format::FORMAT_R10G10B10A2_UNORM;
-    auto texture2 = std::make_shared<Texture2D>(desc);
+    auto texture2 = std::make_unique<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture2, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture2, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture2, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture2, &srvDesc));
 
     //ポジション
     desc.format = Format::FORMAT_RGBA16_FLOAT;
-    auto texture3 = std::make_shared<Texture2D>(desc);
+    auto texture3 = std::make_unique<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture3, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture3, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture3, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture3, &srvDesc));
 
     //スペキュラ
     desc.format = Format::FORMAT_RGBA16_FLOAT;
-    auto texture4 = std::make_shared<Texture2D>(desc);
+    auto texture4 = std::make_unique<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture4, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture4, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture4, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture4, &srvDesc));
 
     //各種生成
     createSampler();
@@ -97,8 +97,8 @@ void GBuffer::renderToTexture() {
     dx.depthStencilState()->depthTest(true);
     //デプスマスク有効化
     dx.depthStencilState()->depthMask(true);
-    //通常合成(半透明)
-    dx.blendState()->translucent();
+    //通常合成
+    dx.blendState()->normal();
 }
 
 void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {

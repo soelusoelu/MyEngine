@@ -1,6 +1,5 @@
 ﻿#include "BlendState.h"
 #include "DirectX.h"
-#include "../System/GlobalFunction.h"
 
 BlendState::BlendState() :
     mDesc() {
@@ -11,6 +10,13 @@ BlendState::~BlendState() = default;
 
 void BlendState::setBlendState(const BlendDesc & desc, unsigned renderTarget) {
     mDesc = desc;
+    execute(renderTarget);
+}
+
+void BlendState::normal(unsigned renderTarget) {
+    mDesc.renderTarget.blendOp = BlendOP::ADD;
+    mDesc.renderTarget.srcBlend = Blend::ONE;
+    mDesc.renderTarget.destBlend = Blend::ZERO;
     execute(renderTarget);
 }
 
@@ -51,14 +57,12 @@ const BlendDesc& BlendState::desc() const {
 }
 
 void BlendState::execute(unsigned renderTarget) const {
-    ID3D11BlendState* blend;
+    Microsoft::WRL::ComPtr<ID3D11BlendState> blend;
 
     auto& dx = DirectX::instance();
     dx.device()->CreateBlendState(&toBlendDesc(mDesc, renderTarget), &blend);
     unsigned mask = 0xffffffff;
-    dx.deviceContext()->OMSetBlendState(blend, nullptr, mask);
-
-    safeRelease(blend);
+    dx.deviceContext()->OMSetBlendState(blend.Get(), nullptr, mask);
 }
 
 D3D11_BLEND_DESC BlendState::toBlendDesc(const BlendDesc & desc, unsigned renderTarget) const {

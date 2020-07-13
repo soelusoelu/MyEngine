@@ -19,12 +19,7 @@ DirectX::DirectX() :
     mRasterizerState(nullptr) {
 }
 
-DirectX::~DirectX() {
-    safeRelease(mDepthStencilView);
-    safeRelease(mSwapChain);
-    safeRelease(mDeviceContext);
-    safeRelease(mDevice);
-}
+DirectX::~DirectX() = default;
 
 DirectX& DirectX::instance() {
     if (!mInstance) {
@@ -50,11 +45,11 @@ void DirectX::finalize() {
 }
 
 ID3D11Device* DirectX::device() const {
-    return mDevice;
+    return mDevice.Get();
 }
 
 ID3D11DeviceContext* DirectX::deviceContext() const {
-    return mDeviceContext;
+    return mDeviceContext.Get();
 }
 
 const std::shared_ptr<BlendState>& DirectX::blendState() const {
@@ -83,16 +78,16 @@ void DirectX::setViewport(float width, float height, float x, float y) const {
 
 void DirectX::setRenderTarget() const {
     auto rt = mRenderTargetView->getRenderTarget();
-    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView);
+    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView.Get());
 }
 
 void DirectX::setDebugRenderTarget() const {
     auto rt = mDebugRenderTargetView->getRenderTarget();
-    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView);
+    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView.Get());
 }
 
 void DirectX::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) const {
-    mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView);
+    mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView.Get());
 }
 
 void DirectX::setPrimitive(PrimitiveType primitive) const {
@@ -120,7 +115,7 @@ void DirectX::clearDepthStencilView(bool depth, bool stencil) {
     if (stencil) {
         mask |= D3D11_CLEAR_STENCIL;
     }
-    mDeviceContext->ClearDepthStencilView(mDepthStencilView, mask, 1.f, 0); //深度バッファクリア
+    mDeviceContext->ClearDepthStencilView(mDepthStencilView.Get(), mask, 1.f, 0); //深度バッファクリア
 }
 
 void DirectX::present() {
@@ -161,10 +156,10 @@ void DirectX::createDeviceAndSwapChain(const HWND& hWnd) {
 void DirectX::createRenderTargetView() {
     ID3D11Texture2D* backBuffer;
     mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-    auto tex = std::make_shared<Texture2D>(backBuffer);
-    mRenderTargetView = std::make_unique<RenderTargetView>(tex);
+    auto tex = std::make_unique<Texture2D>(backBuffer);
+    mRenderTargetView = std::make_unique<RenderTargetView>(*tex);
 
-    mDebugRenderTargetView = std::make_unique<RenderTargetView>(tex);
+    mDebugRenderTargetView = std::make_unique<RenderTargetView>(*tex);
 }
 
 void DirectX::createDepthStencilView() {

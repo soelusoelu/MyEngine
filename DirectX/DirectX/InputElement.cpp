@@ -1,23 +1,18 @@
 ﻿#include "InputElement.h"
 #include "DirectX.h"
-#include "../System/GlobalFunction.h"
 
-InputElement::InputElement(const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile) :
-    mDesc(&desc[0], &desc[numElements]) {
-    auto mElements = new D3D11_INPUT_ELEMENT_DESC[numElements];
-    for (unsigned i = 0; i < numElements; ++i) {
+InputElement::InputElement(const std::vector<InputElementDesc>& desc, ID3DBlob* compile) :
+    mDesc(desc) {
+
+    std::vector<D3D11_INPUT_ELEMENT_DESC> mElements(mDesc.size());
+    for (size_t i = 0; i < mElements.size(); i++) {
         mElements[i] = toElement(mDesc[i]);
     }
-
     //頂点インプットレイアウトを作成
-    DirectX::instance().device()->CreateInputLayout(mElements, numElements, compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
-
-    safeDeleteArray(mElements);
+    DirectX::instance().device()->CreateInputLayout(mElements.data(), mDesc.size(), compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
 }
 
-InputElement::~InputElement() {
-    safeRelease(mInputLayout);
-}
+InputElement::~InputElement() = default;
 
 size_t InputElement::size() const {
     return mDesc.size();
@@ -28,7 +23,7 @@ const InputElementDesc& InputElement::desc(unsigned index) const {
 }
 
 ID3D11InputLayout* InputElement::layout() const {
-    return mInputLayout;
+    return mInputLayout.Get();
 }
 
 D3D11_INPUT_ELEMENT_DESC InputElement::toElement(const InputElementDesc& desc) {

@@ -4,13 +4,13 @@
 #include "Texture2D.h"
 #include "../System/GlobalFunction.h"
 
-ShaderResourceView::ShaderResourceView(std::shared_ptr<Texture2D> texture2D, const ShaderResourceViewDesc* desc) :
+ShaderResourceView::ShaderResourceView(const Texture2D& texture2D, const ShaderResourceViewDesc* desc) :
     mShaderResourceView(nullptr) {
     auto dev = DirectX::instance().device();
     if (desc) {
-        dev->CreateShaderResourceView(texture2D->texture2D(), &toSRVDesc(desc), &mShaderResourceView);
+        dev->CreateShaderResourceView(texture2D.texture2D(), &toSRVDesc(desc), &mShaderResourceView);
     } else {
-        dev->CreateShaderResourceView(texture2D->texture2D(), nullptr, &mShaderResourceView);
+        dev->CreateShaderResourceView(texture2D.texture2D(), nullptr, &mShaderResourceView);
     }
 }
 

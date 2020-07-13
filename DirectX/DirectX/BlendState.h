@@ -8,6 +8,8 @@ public:
     BlendState();
     ~BlendState();
     void setBlendState(const BlendDesc& desc, unsigned renderTarget = 0);
+    //通常合成
+    void normal(unsigned renderTarget = 0);
     //加算合成
     void add(unsigned renderTarget = 0);
     //減算合成

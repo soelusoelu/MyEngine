@@ -26,7 +26,7 @@ public:
     void setVSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1) const;
     void setPSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1) const;
     //インプットレイアウトの生成
-    void createInputLayout(const InputElementDesc layout[], unsigned numElements);
+    void createInputLayout(const std::vector<InputElementDesc>& layout);
     //自身を登録
     void setInputLayout() const;
 
@@ -37,9 +37,9 @@ private:
     D3D11_MAPPED_SUBRESOURCE toMappedSubResource(const MappedSubResourceDesc* desc) const;
 
 private:
-    ID3D10Blob* mCompileShader;
-    ID3D11VertexShader* mVertexShader;
-    ID3D11PixelShader* mPixelShader;
+    Microsoft::WRL::ComPtr<ID3DBlob> mCompileShader;
+    Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader;
+    Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader;
     std::vector<std::unique_ptr<Buffer>> mConstantBuffers;
     std::unique_ptr<InputElement> mVertexLayout;
 };
