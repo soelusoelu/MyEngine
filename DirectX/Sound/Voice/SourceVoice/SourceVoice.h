@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "IVoice.h"
 #include "SourceVoiceInitParam.h"
-#include "SoundBuffer.h"
-#include "WaveformData.h"
+#include "../IVoice.h"
+#include "../../Data/SoundBuffer.h"
+#include "../../Loader/WaveformData.h"
 #include <xaudio2.h>
 #include <memory>
 

@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "ISoundLoader.h"
-#include "SourceVoiceInitParam.h"
-#include "SubmixVoiceInitParam.h"
-#include "WaveformData.h"
+#include "../Sound/Loader/ISoundLoader.h"
+#include "../Sound/Loader/WaveformData.h"
+#include "../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
+#include "../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include <memory>
 #include <string>
 #include <unordered_map>

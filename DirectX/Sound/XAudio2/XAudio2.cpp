@@ -1,10 +1,10 @@
 ﻿#include "XAudio2.h"
-#include "MasteringVoice.h"
-#include "SourceVoice.h"
-#include "SubmixVoice.h"
-#include "../DebugLayer/Debug.h"
-#include "../Device/Flag.h"
-#include "../System/GlobalFunction.h"
+#include "../Voice/MasteringVoice/MasteringVoice.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
+#include "../Voice/SubmixVoice/SubmixVoice.h"
+#include "../../DebugLayer/Debug.h"
+#include "../../Device/Flag.h"
+#include "../../System/GlobalFunction.h"
 #include <cassert>
 
 XAudio2::XAudio2(bool* successFlag) :

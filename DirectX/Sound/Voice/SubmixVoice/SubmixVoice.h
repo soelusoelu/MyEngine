@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "IVoice.h"
 #include "SubmixVoiceInitParam.h"
+#include "../IVoice.h"
 #include <xaudio2.h>
 #include <memory>
 

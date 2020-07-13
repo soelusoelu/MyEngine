@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "SourceVoiceInitParam.h"
-#include "SubmixVoiceInitParam.h"
-#include "WaveformData.h"
+#include "../Loader/WaveformData.h"
+#include "../Voice/SourceVoice/SourceVoiceInitParam.h"
+#include "../Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include <xaudio2.h>
 #include <memory>
 

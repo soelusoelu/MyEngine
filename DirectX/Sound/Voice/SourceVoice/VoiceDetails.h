@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "WaveformData.h"
-#include "../System/SystemInclude.h"
+#include "../../Loader/WaveformData.h"
+#include "../../../System/SystemInclude.h"
 
 //サウンドデータ保存クラス
 class VoiceDetails {

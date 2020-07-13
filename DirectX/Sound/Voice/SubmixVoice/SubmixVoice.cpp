@@ -1,5 +1,5 @@
 ﻿#include "SubmixVoice.h"
-#include "Effects/SoundEffect.h"
+#include "../../Effects/SoundEffect.h"
 
 SubmixVoice::SubmixVoice(IXAudio2SubmixVoice* XAudio2SubmixVoice, MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) :
     mXAudio2SubmixVoice(XAudio2SubmixVoice),

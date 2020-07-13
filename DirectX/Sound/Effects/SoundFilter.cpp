@@ -1,8 +1,8 @@
 ﻿#include "SoundFilter.h"
-#include "SourceVoice.h"
-#include "VoiceDetails.h"
-#include "../DebugLayer/Debug.h"
-#include "../Math/Math.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
+#include "../Voice/SourceVoice/VoiceDetails.h"
+#include "../../DebugLayer/Debug.h"
+#include "../../Math/Math.h"
 
 SoundFilter::SoundFilter(SourceVoice& sourceVoice, bool useFilters) :
     mSourceVoice(sourceVoice),

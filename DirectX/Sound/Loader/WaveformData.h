@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../System/GlobalFunction.h"
+#include "../../System/GlobalFunction.h"
 #include <xaudio2.h>
 
 //波形データ構造体

@@ -1,7 +1,7 @@
 ﻿#include "SoundFade.h"
 #include "SoundVolume.h"
-#include "../Device/Time.h"
-#include "../Math/Math.h"
+#include "../../Device/Time.h"
+#include "../../Math/Math.h"
 
 SoundFade::SoundFade(SoundVolume& soundVolume) :
     mSoundVolume(soundVolume),

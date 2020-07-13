@@ -1,12 +1,12 @@
 ﻿#include "SourceVoice.h"
-#include "SoundFilter.h"
-#include "SoundFlag.h"
-#include "SoundPlayer.h"
-#include "SoundVolume.h"
-#include "SubmixVoice.h"
 #include "VoiceDetails.h"
-#include "../DebugLayer/Debug.h"
-#include "../Device/Flag.h"
+#include "../SubmixVoice/SubmixVoice.h"
+#include "../../Effects/SoundFilter.h"
+#include "../../Flag/SoundFlag.h"
+#include "../../Player/SoundPlayer.h"
+#include "../../Volume/SoundVolume.h"
+#include "../../../DebugLayer/Debug.h"
+#include "../../../Device/Flag.h"
 
 SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),

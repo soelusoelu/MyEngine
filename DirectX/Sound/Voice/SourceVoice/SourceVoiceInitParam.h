@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Device/Flag.h"
+#include "../../../Device/Flag.h"
 #include <xaudio2.h>
 
 //ソースボイス作成時の初期化パラメータ

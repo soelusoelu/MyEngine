@@ -1,5 +1,4 @@
 ﻿#include "VoiceDetails.h"
-#include <xaudio2.h>
 
 VoiceDetails::VoiceDetails(const WaveformData& data) :
     BUFFER(data.buffer),

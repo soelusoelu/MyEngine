@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../IVoice.h"
+#include "../Voice/IVoice.h"
 #include <xaudio2.h>
 #include <xaudio2fx.h>
 #include <vector>

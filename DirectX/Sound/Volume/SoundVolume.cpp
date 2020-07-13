@@ -1,12 +1,12 @@
 ﻿#include "SoundVolume.h"
-#include "MasteringVoice.h"
-#include "OutputVoiceDetails.h"
 #include "SoundFade.h"
-#include "SourceVoice.h"
-#include "VoiceDetails.h"
-#include "../DebugLayer/Debug.h"
-#include "../Math/Math.h"
-#include "../System/Window.h"
+#include "../Voice/MasteringVoice/MasteringVoice.h"
+#include "../Voice/MasteringVoice/OutputVoiceDetails.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
+#include "../Voice/SourceVoice/VoiceDetails.h"
+#include "../../DebugLayer/Debug.h"
+#include "../../Math/Math.h"
+#include "../../System/Window.h"
 #include <vector>
 
 SoundVolume::SoundVolume(SourceVoice& sourceVoice, MasteringVoice& masteringVoice) :

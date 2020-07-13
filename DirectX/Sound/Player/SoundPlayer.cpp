@@ -1,9 +1,9 @@
 ﻿#include "SoundPlayer.h"
 #include "Frequency.h"
-#include "SoundFade.h"
-#include "SoundVolume.h"
-#include "SourceVoice.h"
-#include "../DebugLayer/Debug.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
+#include "../Volume/SoundFade.h"
+#include "../Volume/SoundVolume.h"
+#include "../../DebugLayer/Debug.h"
 
 SoundPlayer::SoundPlayer(SourceVoice& sourceVoice, float maxFrequencyRatio) :
     mSourceVoice(sourceVoice),

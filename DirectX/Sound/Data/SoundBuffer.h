@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "../System/SystemInclude.h"
 #include <xaudio2.h>
 
 //波形データの構造体

@@ -1,6 +1,6 @@
 ﻿#include "Frequency.h"
-#include "SourceVoice.h"
-#include "../DebugLayer/Debug.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
+#include "../../DebugLayer/Debug.h"
 
 Frequency::Frequency(SourceVoice& sourceVoice, float maxFrequencyRatio) :
     mSourceVoice(sourceVoice),

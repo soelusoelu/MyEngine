@@ -1,6 +1,6 @@
 ﻿#include "SoundEffect.h"
-#include "../MasteringVoice.h"
-#include "../OutputVoiceDetails.h"
+#include "../Voice/MasteringVoice/MasteringVoice.h"
+#include "../Voice/MasteringVoice/OutputVoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 
 SoundEffect::SoundEffect(IVoice& voice, MasteringVoice& masteringVoice) :

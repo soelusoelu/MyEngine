@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../Component.h"
-#include "../../Sound/SoundBuffer.h"
+#include "../../Sound/Data/SoundBuffer.h"
 #include <string>
 
 class SourceVoice;
