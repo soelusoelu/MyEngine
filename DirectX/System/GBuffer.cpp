@@ -81,11 +81,11 @@ void GBuffer::renderToTexture() {
 
     //各テクスチャをレンダーターゲットに設定
     static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
-    ID3D11RenderTargetView* views[numGBuffer];
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> views[numGBuffer];
     for (size_t i = 0; i < numGBuffer; i++) {
         views[i] = mRenderTargets[i]->getRenderTarget();
     }
-    dx.setRenderTargets(views, numGBuffer);
+    dx.setRenderTargets(views->GetAddressOf(), numGBuffer);
 
     //クリア
     for (size_t i = 0; i < numGBuffer; i++) {

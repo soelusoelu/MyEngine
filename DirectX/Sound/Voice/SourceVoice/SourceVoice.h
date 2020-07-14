@@ -53,7 +53,7 @@ public:
     /// </summary>
     /// <param name="voice">設定したいボイス</param>
     /// <param name="useFilter">フィルターを使用するか</param>
-    void setOutputVoice(SubmixVoice& voice, bool useFilter = false);
+    void setOutputVoice(const IVoice& voice, bool useFilter = false);
 
     /// <summary>
     /// バッファを返す

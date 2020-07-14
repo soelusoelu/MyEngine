@@ -44,15 +44,16 @@ void Title::start() {
         //mSound->getSoundFilter().bandPassFilter(1000.f);
         //mSound->getSoundVolume().pan(0.f);
 
-        //SubmixVoiceInitParam param;
-        //param.inputChannels = mSound->getSoundData().getInputChannels();
-        //param.inputSampleRate = mSound->getSoundData().getSampleRate();
-        //mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
-        //mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
+        SubmixVoiceInitParam param;
+        param.inputChannels = mSound->getSoundData().getInputChannels();
+        param.inputSampleRate = mSound->getSoundData().getSampleRate();
+        mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+        mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
+
+        int reverbID = mSubmixVoice->getSoundEffect().reverb();
+        mSubmixVoice->getSoundEffect().apply();
 
         mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
-        //mSubmixVoice->getSoundEffect().reverb();
-        //mSubmixVoice->getSoundEffect().set();
     }
 }
 

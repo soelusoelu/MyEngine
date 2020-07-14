@@ -51,7 +51,7 @@ void SourceVoice::submitSourceBuffer() const {
     submitSourceBuffer(*mSoundBuffer);
 }
 
-void SourceVoice::setOutputVoice(SubmixVoice& voice, bool useFilter) {
+void SourceVoice::setOutputVoice(const IVoice& voice, bool useFilter) {
     XAUDIO2_SEND_DESCRIPTOR desc;
     desc.Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
     desc.pOutputVoice = voice.getXAudio2Voice();

@@ -121,6 +121,8 @@
     <ClCompile Include="Sound\XAudio2\SoundBase.cpp" />
     <ClCompile Include="Sound\Voice\SourceVoice\VoiceDetails.cpp" />
     <ClCompile Include="Device\SoundCreater.cpp" />
+    <ClCompile Include="Sound\Effects\Reverb.cpp" />
+    <ClCompile Include="Sound\Effects\SoundEffectBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -261,5 +263,7 @@
     <ClInclude Include="Sound\Voice\SourceVoice\VoiceDetails.h" />
     <ClInclude Include="Sound\Loader\WaveformData.h" />
     <ClInclude Include="Device\SoundCreater.h" />
+    <ClInclude Include="Sound\Effects\Reverb.h" />
+    <ClInclude Include="Sound\Effects\SoundEffectBase.h" />
   </ItemGroup>
 </Project>
