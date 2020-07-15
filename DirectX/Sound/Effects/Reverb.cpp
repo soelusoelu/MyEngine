@@ -1,24 +1,29 @@
 ﻿#include "Reverb.h"
-#include "../Voice/MasteringVoice/MasteringVoice.h"
-#include "../Voice/MasteringVoice/OutputVoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 
-Reverb::Reverb(IVoice& voice, MasteringVoice& masteringVoice) :
-    SoundEffectBase(voice, masteringVoice) {
+Reverb::Reverb() :
+    mXAPO(nullptr) {
 }
 
 Reverb::~Reverb() = default;
 
-bool Reverb::create(XAUDIO2_EFFECT_DESCRIPTOR* desc, bool initialState) {
+bool Reverb::create(XAUDIO2_EFFECT_DESCRIPTOR* desc) {
     auto res = XAudio2CreateReverb(&mXAPO);
     if (FAILED(res)) {
         Debug::logError("Failed created reverb.");
         return false;
     }
 
-    desc->InitialState = initialState;
-    desc->OutputChannels = mMasteringVoice.getDetails().outputChannels;
     desc->pEffect = mXAPO.Get();
 
     return true;
+}
+
+XAUDIO2FX_REVERB_PARAMETERS Reverb::getParameters() {
+    XAUDIO2FX_REVERB_I3DL2_PARAMETERS i3dl2Param = XAUDIO2FX_I3DL2_PRESET_BATHROOM;
+    XAUDIO2FX_REVERB_PARAMETERS reverbParam;
+
+    ReverbConvertI3DL2ToNative(&i3dl2Param, &reverbParam);
+
+    return reverbParam;
 }

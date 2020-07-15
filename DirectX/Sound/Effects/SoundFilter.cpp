@@ -1,6 +1,6 @@
 ﻿#include "SoundFilter.h"
+#include "../Voice/VoiceDetails.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
-#include "../Voice/SourceVoice/VoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 
@@ -86,7 +86,7 @@ HRESULT SoundFilter::setFilterParameters(XAUDIO2_FILTER_TYPE type, float frequen
 }
 
 float SoundFilter::frequencyToRadianFrequency(float frequency) const {
-    float f = frequency / mSourceVoice.getSoundData().getSampleRate() * 6.f;
+    float f = frequency / mSourceVoice.getVoiceDetails().samplesPerSec * 6.f;
     return Math::clamp<float>(f, 0.f, XAUDIO2_MAX_FILTER_FREQUENCY);
 }
 

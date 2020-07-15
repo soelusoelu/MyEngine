@@ -169,7 +169,6 @@
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
-    <ClCompile Include="Sound\Effects\SoundEffectBase.cpp" />
     <ClCompile Include="Sound\Effects\Reverb.cpp" />
     <ClCompile Include="Sound\Effects\SoundEffect.cpp" />
     <ClCompile Include="Device\SoundCreater.cpp" />
@@ -177,6 +176,7 @@
     <ClCompile Include="Sound\Voice\MasteringVoice\MasteringVoice.cpp" />
     <ClCompile Include="Sound\Effects\SoundFilter.cpp" />
     <ClCompile Include="Sound\Voice\SubmixVoice\SubmixVoice.cpp" />
+    <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
@@ -272,7 +272,6 @@
     <ClCompile Include="Math\Vector4.cpp" />
     <ClCompile Include="System\World.cpp" />
     <ClCompile Include="Sound\Loader\WAV.cpp" />
-    <ClCompile Include="Sound\Voice\SourceVoice\VoiceDetails.cpp" />
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -286,7 +285,7 @@
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="GameObject\Object.h" />
-    <ClInclude Include="Sound\Effects\SoundEffectBase.h" />
+    <ClInclude Include="Sound\Effects\ISoundEffect.h" />
     <ClInclude Include="Sound\Effects\Reverb.h" />
     <ClInclude Include="Sound\Voice\IVoice.h" />
     <ClInclude Include="Sound\Effects\SoundEffect.h" />
@@ -301,6 +300,8 @@
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoice.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoiceInitParam.h" />
     <ClInclude Include="Sound\Loader\WaveformData.h" />
+    <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
+    <ClInclude Include="Sound\Voice\VoiceDetails.h" />
     <ClInclude Include="Transform\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
@@ -414,7 +415,6 @@
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="System\World.h" />
     <ClInclude Include="Sound\Loader\WAV.h" />
-    <ClInclude Include="Sound\Voice\SourceVoice\VoiceDetails.h" />
     <ClInclude Include="Sound\XAudio2\XAudio2.h" />
   </ItemGroup>
   <ItemGroup>

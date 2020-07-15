@@ -32,7 +32,7 @@ public:
     /// </summary>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したサブミックスボイス</returns>
-    std::unique_ptr<SubmixVoice> createSubmixVoice(const SubmixVoiceInitParam& param) const;
+    std::shared_ptr<SubmixVoice> createSubmixVoice(const SubmixVoiceInitParam& param) const;
 
 private:
     SoundCreater(const SoundCreater&) = delete;

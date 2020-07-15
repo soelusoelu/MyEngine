@@ -11,11 +11,13 @@ class Title : public Component {
 public:
     Title();
     ~Title();
+    virtual void awake() override;
     virtual void start() override;
     virtual void update() override;
 
 private:
     std::shared_ptr<Scene> mScene;
     std::shared_ptr<SoundComponent> mSound;
-    std::unique_ptr<SubmixVoice> mSubmixVoice;
+    std::shared_ptr<SubmixVoice> mWetSubmix;
+    std::shared_ptr<SubmixVoice> mDrySubmix;
 };

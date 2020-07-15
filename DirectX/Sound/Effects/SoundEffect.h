@@ -41,4 +41,5 @@ private:
     IVoice& mVoice;
     MasteringVoice& mMasteringVoice;
     std::vector<XAUDIO2_EFFECT_DESCRIPTOR> mDescs;
+    bool mIsApplied;
 };

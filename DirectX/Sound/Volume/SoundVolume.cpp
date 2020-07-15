@@ -1,16 +1,15 @@
 ﻿#include "SoundVolume.h"
 #include "SoundFade.h"
+#include "../Voice/VoiceDetails.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../Voice/MasteringVoice/OutputVoiceDetails.h"
-#include "../Voice/SourceVoice/SourceVoice.h"
-#include "../Voice/SourceVoice/VoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 #include "../../System/Window.h"
 #include <vector>
 
-SoundVolume::SoundVolume(SourceVoice& sourceVoice, MasteringVoice& masteringVoice) :
-    mSourceVoice(sourceVoice),
+SoundVolume::SoundVolume(IVoice& voice, MasteringVoice& masteringVoice) :
+    mVoice(voice),
     mMasteringVoice(masteringVoice),
     mFader(std::make_unique<SoundFade>(*this)),
     mCurrentVolume(1.f) {
@@ -30,7 +29,7 @@ void SoundVolume::setVolume(float volume, unsigned operationSet) {
 
     mCurrentVolume = volume;
     float targetVolume = mCurrentVolume * mCurrentVolume;
-    auto res = mSourceVoice.getXAudio2SourceVoice()->SetVolume(targetVolume, operationSet);
+    auto res = mVoice.getXAudio2Voice()->SetVolume(targetVolume, operationSet);
 
 #ifdef _DEBUG
     if (FAILED(res)) {
@@ -57,7 +56,7 @@ float SoundVolume::getVolume() const {
 }
 
 void SoundVolume::pan(float positionX, unsigned operationSet) {
-    const unsigned inputChannels = mSourceVoice.getSoundData().getInputChannels();
+    const unsigned inputChannels = mVoice.getVoiceDetails().inputChannels;
     const unsigned outputChannels = mMasteringVoice.getDetails().outputChannels;
     const float width = static_cast<float>(Window::standardWidth());
 
@@ -67,7 +66,7 @@ void SoundVolume::pan(float positionX, unsigned operationSet) {
     volumes[0] = volumes[1] = Math::cos(rot);
     volumes[2] = volumes[3] = Math::sin(rot);
 
-    auto res = mSourceVoice.getXAudio2SourceVoice()->SetOutputMatrix(nullptr, inputChannels, outputChannels, volumes.data(), operationSet);
+    auto res = mVoice.getXAudio2Voice()->SetOutputMatrix(nullptr, inputChannels, outputChannels, volumes.data(), operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed pan.");

@@ -17,8 +17,6 @@ XAudio2::XAudio2(bool* successFlag) :
 }
 
 XAudio2::~XAudio2() {
-    safeRelease(mXAudio2);
-
     mInstantiated = false;
 }
 
@@ -46,7 +44,7 @@ std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masterin
     return std::make_unique<SourceVoice>(sourceVoice, masteringVoice, data, param);
 }
 
-std::unique_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const {
+std::shared_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const {
     IXAudio2SubmixVoice* submixVoice;
     auto res = mXAudio2->CreateSubmixVoice(&submixVoice, param.inputChannels, param.inputSampleRate, param.flags.get(), param.processingStage, param.sendList, param.effectChain);
 
@@ -55,7 +53,7 @@ std::unique_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masterin
         return nullptr;
     }
 
-    return std::make_unique<SubmixVoice>(submixVoice, masteringVoice, param);
+    return std::make_shared<SubmixVoice>(submixVoice, masteringVoice, param);
 }
 
 bool XAudio2::createXAudio2() {

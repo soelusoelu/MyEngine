@@ -1,4 +1,5 @@
 ﻿#include "SoundComponent.h"
+#include "SubmixVoiceComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
 #include "../../Device/SoundCreater.h"
@@ -12,8 +13,7 @@
 SoundComponent::SoundComponent() :
     Component(),
     mSound(nullptr),
-    mFileName(""),
-    mIsFirstPlay(false) {
+    mFileName("") {
 }
 
 SoundComponent::~SoundComponent() = default;
@@ -24,9 +24,6 @@ void SoundComponent::awake() {
         param.flags.set(static_cast<unsigned>(SoundFlag::USE_FILTER));
         //param.maxFrequencyRatio = 16.f;
         mSound = World::instance().assetsManager().getSoundCreater().createSourceVoice(mFileName, param);
-    }
-    if (mIsFirstPlay) {
-        //mSound->getSoundPlayer().play();
     }
 }
 
@@ -44,8 +41,6 @@ void SoundComponent::finalize() {
 
 void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getString(inObj, "fileName", &mFileName);
-    //JsonHelper::getFloat(inObj, "volume", &mVolume);
-    JsonHelper::getBool(inObj, "isFirstPlay", &mIsFirstPlay);
 }
 
 void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
@@ -56,15 +51,19 @@ bool SoundComponent::isNull() const {
     return (mSound) ? false : true;
 }
 
-SourceVoice& SoundComponent::getSourceVoice() const {
-    return *mSound;
+void SoundComponent::setOutputVoice(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter) {
+    mSound->setOutputVoices(voices, useFilter);
 }
 
 SoundBuffer& SoundComponent::getSoundBuffer() const {
     return mSound->getSoundBuffer();
 }
 
-VoiceDetails& SoundComponent::getSoundData() const {
+const VoiceDetails& SoundComponent::getVoiceDetails() const {
+    return mSound->getVoiceDetails();
+}
+
+SoundData& SoundComponent::getSoundData() const {
     return mSound->getSoundData();
 }
 

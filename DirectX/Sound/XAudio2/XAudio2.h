@@ -3,6 +3,7 @@
 #include "../Loader/WaveformData.h"
 #include "../Voice/SourceVoice/SourceVoiceInitParam.h"
 #include "../Voice/SubmixVoice/SubmixVoiceInitParam.h"
+#include "../../System/SystemInclude.h"
 #include <xaudio2.h>
 #include <memory>
 
@@ -37,7 +38,7 @@ public:
     /// <param name="masteringVoice">マスターボイス</param>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したサブミックスボイス</returns>
-    std::unique_ptr<SubmixVoice> createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const;
+    std::shared_ptr<SubmixVoice> createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const;
 
 private:
     XAudio2(const XAudio2&) = delete;
@@ -47,7 +48,7 @@ private:
     bool createXAudio2();
 
 private:
-    IXAudio2* mXAudio2;
+    Microsoft::WRL::ComPtr<IXAudio2> mXAudio2;
 
     static inline bool mInstantiated = false;
 };

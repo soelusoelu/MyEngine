@@ -6,13 +6,11 @@
 #include "../../Loader/WaveformData.h"
 #include <xaudio2.h>
 #include <memory>
+#include <vector>
 
 class MasteringVoice;
-class VoiceDetails;
 class SoundPlayer;
-class SoundVolume;
 class SoundFilter;
-class SubmixVoice;
 
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice : public IVoice {
@@ -20,7 +18,23 @@ public:
     SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param);
     ~SourceVoice();
 
+    /// <summary>
+    /// XAudio2ボイスインターフェースを返す
+    /// </summary>
+    /// <returns></returns>
     virtual IXAudio2Voice* getXAudio2Voice() const override;
+
+    /// <summary>
+    /// ボイスの詳細を返す
+    /// </summary>
+    /// <returns></returns>
+    virtual const VoiceDetails& getVoiceDetails() const override;
+
+    /// <summary>
+    /// サウンド音量設定クラスを返す
+    /// </summary>
+    /// <returns></returns>
+    virtual SoundVolume& getSoundVolume() const override;
 
     /// <summary>
     /// 毎フレーム更新
@@ -53,7 +67,7 @@ public:
     /// </summary>
     /// <param name="voice">設定したいボイス</param>
     /// <param name="useFilter">フィルターを使用するか</param>
-    void setOutputVoice(const IVoice& voice, bool useFilter = false);
+    void setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter = false);
 
     /// <summary>
     /// バッファを返す
@@ -65,19 +79,13 @@ public:
     /// サウンドデータを返す
     /// </summary>
     /// <returns></returns>
-    VoiceDetails& getSoundData() const;
+    SoundData& getSoundData() const;
 
     /// <summary>
     /// サウンド再生クラスを返す
     /// </summary>
     /// <returns></returns>
     SoundPlayer& getSoundPlayer() const;
-
-    /// <summary>
-    /// サウンド音量設定クラスを返す
-    /// </summary>
-    /// <returns></returns>
-    SoundVolume& getSoundVolume() const;
 
     /// <summary>
     /// サウンドエフェクト設定クラスを返す
@@ -96,7 +104,8 @@ private:
     IXAudio2SourceVoice* mXAudio2SourceVoice;
     MasteringVoice& mMasteringVoice;
     std::unique_ptr<SoundBuffer> mSoundBuffer;
-    std::unique_ptr<VoiceDetails> mData;
+    VoiceDetails mDetails;
+    std::unique_ptr<SoundData> mSoundData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;
     std::unique_ptr<SoundFilter> mSoundFilter;

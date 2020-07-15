@@ -2,10 +2,13 @@
 
 #include "../Component.h"
 #include "../../Sound/Data/SoundBuffer.h"
+#include "../../Sound/Voice/IVoice.h"
+#include "../../Sound/Voice/VoiceDetails.h"
+#include <memory>
 #include <string>
+#include <vector>
 
 class SourceVoice;
-class VoiceDetails;
 class SoundPlayer;
 class SoundVolume;
 class SoundFilter;
@@ -22,10 +25,12 @@ public:
 
     //使用可能状態か
     bool isNull() const;
+    //ボイスの出力先を指定
+    void setOutputVoice(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter = false);
 
-    SourceVoice& getSourceVoice() const;
     SoundBuffer& getSoundBuffer() const;
-    VoiceDetails& getSoundData() const;
+    const VoiceDetails& getVoiceDetails() const;
+    SoundData& getSoundData() const;
     SoundPlayer& getSoundPlayer() const;
     SoundVolume& getSoundVolume() const;
     SoundFilter& getSoundFilter() const;
@@ -33,5 +38,4 @@ public:
 private:
     std::unique_ptr<SourceVoice> mSound;
     std::string mFileName;
-    bool mIsFirstPlay;
 };

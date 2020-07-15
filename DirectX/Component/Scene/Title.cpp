@@ -1,36 +1,52 @@
 ﻿#include "Title.h"
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
+#include "../Sound/SubmixVoiceComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Data/SoundBuffer.h"
+#include "../../Sound/Effects/Reverb.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundFilter.h"
 #include "../../Sound/Player/Frequency.h"
 #include "../../Sound/Player/SoundPlayer.h"
+#include "../../Sound/Voice/IVoice.h"
+#include "../../Sound/Voice/VoiceDetails.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoice.h"
-#include "../../Sound/Voice/SourceVoice/VoiceDetails.h"
 #include "../../Sound/Voice/SubmixVoice/SubmixVoice.h"
 #include "../../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include "../../Sound/Volume/SoundFade.h"
 #include "../../Sound/Volume/SoundVolume.h"
 #include "../../System/World.h"
+#include <vector>
 
 Title::Title() :
     Component(),
     mScene(nullptr),
     mSound(nullptr),
-    mSubmixVoice(nullptr)
+    mWetSubmix(nullptr),
+    mDrySubmix(nullptr)
 {
 }
 
 Title::~Title() = default;
 
+void Title::awake() {
+}
+
 void Title::start() {
     mScene = getComponent<Scene>();
     mSound = getComponent<SoundComponent>();
-    if (mSound && !mSound->isNull()) {
+
+    SubmixVoiceInitParam param;
+    const auto& data = mSound->getVoiceDetails();
+    param.inputChannels = data.inputChannels;
+    param.inputSampleRate = data.samplesPerSec;
+    mWetSubmix = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+    mDrySubmix = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+
+    if (mSound && !mSound->isNull() && mWetSubmix && mDrySubmix) {
         //mSound->getSoundVolume().setVolume(0.f);
         //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
         //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
@@ -44,14 +60,18 @@ void Title::start() {
         //mSound->getSoundFilter().bandPassFilter(1000.f);
         //mSound->getSoundVolume().pan(0.f);
 
-        SubmixVoiceInitParam param;
-        param.inputChannels = mSound->getSoundData().getInputChannels();
-        param.inputSampleRate = mSound->getSoundData().getSampleRate();
-        mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
-        mSound->getSourceVoice().setOutputVoice(*mSubmixVoice);
+        std::vector<std::shared_ptr<IVoice>> voices = { mWetSubmix, mDrySubmix };
+        mSound->setOutputVoice(voices);
 
-        int reverbID = mSubmixVoice->getSoundEffect().reverb();
-        mSubmixVoice->getSoundEffect().apply();
+        //サウンドエフェクト
+        int reverbID = mWetSubmix->getSoundEffect().reverb();
+        mWetSubmix->getSoundEffect().apply();
+
+        //auto reverbParam = Reverb::getParameters();
+        //reverbParam.WetDryMix = 20.f;
+        //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
+        mWetSubmix->getSoundVolume().setVolume(0.5f);
+        mDrySubmix->getSoundVolume().setVolume(0.5f);
 
         mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
     }

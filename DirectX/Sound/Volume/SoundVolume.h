@@ -1,17 +1,17 @@
 ﻿#pragma once
 
 #define XAUDIO2_HELPER_FUNCTIONS
+#include "../Voice/IVoice.h"
 #include <xaudio2.h>
 #include <memory>
 
-class SourceVoice;
 class MasteringVoice;
 class SoundFade;
 
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(SourceVoice& sourceVoice, MasteringVoice& masteringVoice);
+    SoundVolume(IVoice& voice, MasteringVoice& masteringVoice);
     ~SoundVolume();
 
     /// <summary>
@@ -71,7 +71,7 @@ private:
     SoundVolume& operator=(const SoundVolume&) = delete;
 
 private:
-    SourceVoice& mSourceVoice;
+    IVoice& mVoice;
     MasteringVoice& mMasteringVoice;
     std::unique_ptr<SoundFade> mFader;
     float mCurrentVolume;

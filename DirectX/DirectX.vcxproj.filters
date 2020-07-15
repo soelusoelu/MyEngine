@@ -119,10 +119,9 @@
     <ClCompile Include="Sound\Player\Frequency.cpp" />
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundBase.cpp" />
-    <ClCompile Include="Sound\Voice\SourceVoice\VoiceDetails.cpp" />
     <ClCompile Include="Device\SoundCreater.cpp" />
     <ClCompile Include="Sound\Effects\Reverb.cpp" />
-    <ClCompile Include="Sound\Effects\SoundEffectBase.cpp" />
+    <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -260,10 +259,11 @@
     <ClInclude Include="Sound\XAudio2\SoundBase.h" />
     <ClInclude Include="Sound\Flag\SoundFlag.h" />
     <ClInclude Include="Sound\Data\SoundBuffer.h" />
-    <ClInclude Include="Sound\Voice\SourceVoice\VoiceDetails.h" />
     <ClInclude Include="Sound\Loader\WaveformData.h" />
     <ClInclude Include="Device\SoundCreater.h" />
     <ClInclude Include="Sound\Effects\Reverb.h" />
-    <ClInclude Include="Sound\Effects\SoundEffectBase.h" />
+    <ClInclude Include="Sound\Effects\ISoundEffect.h" />
+    <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
+    <ClInclude Include="Sound\Voice\VoiceDetails.h" />
   </ItemGroup>
 </Project>

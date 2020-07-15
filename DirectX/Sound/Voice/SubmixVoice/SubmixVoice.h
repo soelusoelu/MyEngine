@@ -15,6 +15,8 @@ public:
     ~SubmixVoice();
 
     virtual IXAudio2Voice* getXAudio2Voice() const override;
+    virtual const VoiceDetails& getVoiceDetails() const override;
+    virtual SoundVolume& getSoundVolume() const override;
 
     /// <summary>
     /// サウンドエフェクト設定クラスを返す
@@ -28,6 +30,7 @@ private:
 
 private:
     IXAudio2SubmixVoice* mXAudio2SubmixVoice;
-    MasteringVoice& mMasteringVoice;
+    VoiceDetails mDetails;
+    std::unique_ptr<SoundVolume> mSoundVolume;
     std::unique_ptr<SoundEffect> mSoundEffect;
 };

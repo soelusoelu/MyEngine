@@ -15,6 +15,7 @@
 #include "../Component/Scene/Scene.h"
 #include "../Component/Scene/Title.h"
 #include "../Component/Sound/SoundComponent.h"
+#include "../Component/Sound/SubmixVoiceComponent.h"
 #include "../Component/Sprite/Sprite3D.h"
 #include "../Component/Sprite/SpriteComponent.h"
 #include "../Component/Text/Text.h"
@@ -51,6 +52,7 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(Title);
 
     ADD_COMPONENT(SoundComponent);
+    ADD_COMPONENT(SubmixVoiceComponent);
 
     ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteComponent);

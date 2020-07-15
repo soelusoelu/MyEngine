@@ -1,22 +1,24 @@
 ﻿#pragma once
 
-#include "SoundEffectBase.h"
-#include "../Voice/IVoice.h"
+#include "ISoundEffect.h"
+#include "../../System/SystemInclude.h"
 #include <xaudio2.h>
 #include <xaudio2fx.h>
 
 #pragma comment(lib, "XAudio2.lib")
 
-class MasteringVoice;
-
 //リバーブ
-class Reverb : public SoundEffectBase {
+class Reverb : public ISoundEffect {
 public:
-    Reverb(IVoice& voice, MasteringVoice& masteringVoice);
+    Reverb();
     ~Reverb();
-     virtual bool create(XAUDIO2_EFFECT_DESCRIPTOR* desc, bool initialState = true) override;
+     virtual bool create(XAUDIO2_EFFECT_DESCRIPTOR* desc) override;
+     static XAUDIO2FX_REVERB_PARAMETERS getParameters();
 
 private:
     Reverb(const Reverb&) = delete;
     Reverb& operator=(const Reverb&) = delete;
+
+private:
+    Microsoft::WRL::ComPtr<IUnknown> mXAPO;
 };

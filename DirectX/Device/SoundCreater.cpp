@@ -42,7 +42,7 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
     return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), *data, param);
 }
 
-std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
+std::shared_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
     //サウンドAPIが使用できない状態ならnullptrを返す
     if (mSoundBase->isNull()) {
         return nullptr;

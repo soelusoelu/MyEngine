@@ -1,5 +1,4 @@
 ﻿#include "SourceVoice.h"
-#include "VoiceDetails.h"
 #include "../SubmixVoice/SubmixVoice.h"
 #include "../../Effects/SoundFilter.h"
 #include "../../Flag/SoundFlag.h"
@@ -12,13 +11,16 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mXAudio2SourceVoice(XAudio2SourceVoice),
     mMasteringVoice(masteringVoice),
     mSoundBuffer(std::make_unique<SoundBuffer>()),
-    mData(std::make_unique<VoiceDetails>(data)),
+    mDetails(),
+    mSoundData(std::make_unique<SoundData>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
     mSoundVolume(std::make_unique<SoundVolume>(*this, masteringVoice)),
     mSoundFilter(std::make_unique<SoundFilter>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
-    mSoundBuffer->buffer = mData->buffer();
-    mSoundBuffer->size = mData->size();
+    mDetails.inputChannels = data.format->nChannels;
+    mDetails.samplesPerSec = data.format->nSamplesPerSec;
+    mSoundBuffer->buffer = data.buffer;
+    mSoundBuffer->size = data.size;
 }
 
 SourceVoice::~SourceVoice() {
@@ -28,6 +30,14 @@ SourceVoice::~SourceVoice() {
 
 IXAudio2Voice* SourceVoice::getXAudio2Voice() const {
     return mXAudio2SourceVoice;
+}
+
+const VoiceDetails& SourceVoice::getVoiceDetails() const {
+    return mDetails;
+}
+
+SoundVolume& SourceVoice::getSoundVolume() const {
+    return *mSoundVolume;
 }
 
 void SourceVoice::update() {
@@ -51,13 +61,23 @@ void SourceVoice::submitSourceBuffer() const {
     submitSourceBuffer(*mSoundBuffer);
 }
 
-void SourceVoice::setOutputVoice(const IVoice& voice, bool useFilter) {
-    XAUDIO2_SEND_DESCRIPTOR desc;
-    desc.Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
-    desc.pOutputVoice = voice.getXAudio2Voice();
+void SourceVoice::setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter) {
+    if (voices.empty()) {
+        Debug::logWarning("Output voices is empty.");
+        return;
+    }
+
+    //設定するボイスの数に合わせてデスクリプタを作成する
+    const size_t voiceSize = voices.size();
+    std::vector<XAUDIO2_SEND_DESCRIPTOR> descs(voiceSize);
+    for (size_t i = 0; i < voiceSize; i++) {
+        descs[i].Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
+        descs[i].pOutputVoice = voices[i]->getXAudio2Voice();
+    }
+    //実際に送るデータの設定
     XAUDIO2_VOICE_SENDS sends;
-    sends.SendCount = 1;
-    sends.pSends = &desc;
+    sends.SendCount = voiceSize;
+    sends.pSends = descs.data();
     auto res = mXAudio2SourceVoice->SetOutputVoices(&sends);
 
 #ifdef _DEBUG
@@ -71,16 +91,12 @@ SoundBuffer& SourceVoice::getSoundBuffer() const {
     return *mSoundBuffer;
 }
 
-VoiceDetails& SourceVoice::getSoundData() const {
-    return *mData;
+SoundData& SourceVoice::getSoundData() const {
+    return *mSoundData;
 }
 
 SoundPlayer& SourceVoice::getSoundPlayer() const {
     return *mSoundPlayer;
-}
-
-SoundVolume& SourceVoice::getSoundVolume() const {
-    return *mSoundVolume;
 }
 
 SoundFilter& SourceVoice::getSoundFilter() const {
@@ -88,7 +104,7 @@ SoundFilter& SourceVoice::getSoundFilter() const {
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {
-    unsigned sampleRate = mData->getSampleRate();
+    const unsigned sampleRate = mDetails.samplesPerSec;
 
     XAUDIO2_BUFFER buf;
     buf.Flags = buffer.flags;
