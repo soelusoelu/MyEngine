@@ -122,6 +122,7 @@
     <ClCompile Include="Device\SoundCreater.cpp" />
     <ClCompile Include="Sound\Effects\Reverb.cpp" />
     <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
+    <ClCompile Include="Sound\Output\OutputVoices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -265,5 +266,6 @@
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />
     <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
+    <ClInclude Include="Sound\Output\OutputVoices.h" />
   </ItemGroup>
 </Project>

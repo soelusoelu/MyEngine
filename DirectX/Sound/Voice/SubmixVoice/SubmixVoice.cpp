@@ -1,11 +1,13 @@
 ﻿#include "SubmixVoice.h"
 #include "../../Effects/SoundEffect.h"
+#include "../../Output/OutputVoices.h"
 #include "../../Volume/SoundVolume.h"
 
 SubmixVoice::SubmixVoice(IXAudio2SubmixVoice* XAudio2SubmixVoice, MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) :
     mXAudio2SubmixVoice(XAudio2SubmixVoice),
     mDetails(),
     mSoundVolume(std::make_unique<SoundVolume>(*this, masteringVoice)),
+    mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, masteringVoice)) {
 
     mDetails.inputChannels = param.inputChannels;
@@ -31,4 +33,8 @@ SoundVolume& SubmixVoice::getSoundVolume() const {
 
 SoundEffect& SubmixVoice::getSoundEffect() const {
     return *mSoundEffect;
+}
+
+OutputVoices& SubmixVoice::getOutputVoices() const {
+    return *mOutputVoices;
 }

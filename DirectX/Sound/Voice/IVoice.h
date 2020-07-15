@@ -4,6 +4,7 @@
 #include <xaudio2.h>
 
 class SoundVolume;
+class OutputVoices;
 
 //ボイスインターフェース
 class IVoice {
@@ -12,4 +13,5 @@ public:
     virtual IXAudio2Voice* getXAudio2Voice() const = 0;
     virtual const VoiceDetails& getVoiceDetails() const = 0;
     virtual SoundVolume& getSoundVolume() const = 0;
+    virtual OutputVoices& getOutputVoices() const = 0;
 };

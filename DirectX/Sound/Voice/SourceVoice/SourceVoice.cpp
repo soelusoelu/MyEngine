@@ -2,6 +2,7 @@
 #include "../SubmixVoice/SubmixVoice.h"
 #include "../../Effects/SoundFilter.h"
 #include "../../Flag/SoundFlag.h"
+#include "../../Output/OutputVoices.h"
 #include "../../Player/SoundPlayer.h"
 #include "../../Volume/SoundVolume.h"
 #include "../../../DebugLayer/Debug.h"
@@ -15,6 +16,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mSoundData(std::make_unique<SoundData>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
     mSoundVolume(std::make_unique<SoundVolume>(*this, masteringVoice)),
+    mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundFilter(std::make_unique<SoundFilter>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mDetails.inputChannels = data.format->nChannels;
@@ -40,8 +42,13 @@ SoundVolume& SourceVoice::getSoundVolume() const {
     return *mSoundVolume;
 }
 
+OutputVoices& SourceVoice::getOutputVoices() const {
+    return *mOutputVoices;
+}
+
 void SourceVoice::update() {
     mSoundVolume->update();
+    mOutputVoices->update();
 }
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
@@ -59,32 +66,6 @@ void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {
 
 void SourceVoice::submitSourceBuffer() const {
     submitSourceBuffer(*mSoundBuffer);
-}
-
-void SourceVoice::setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter) {
-    if (voices.empty()) {
-        Debug::logWarning("Output voices is empty.");
-        return;
-    }
-
-    //設定するボイスの数に合わせてデスクリプタを作成する
-    const size_t voiceSize = voices.size();
-    std::vector<XAUDIO2_SEND_DESCRIPTOR> descs(voiceSize);
-    for (size_t i = 0; i < voiceSize; i++) {
-        descs[i].Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
-        descs[i].pOutputVoice = voices[i]->getXAudio2Voice();
-    }
-    //実際に送るデータの設定
-    XAUDIO2_VOICE_SENDS sends;
-    sends.SendCount = voiceSize;
-    sends.pSends = descs.data();
-    auto res = mXAudio2SourceVoice->SetOutputVoices(&sends);
-
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::logError("Failed set output voices.");
-    }
-#endif // _DEBUG
 }
 
 SoundBuffer& SourceVoice::getSoundBuffer() const {

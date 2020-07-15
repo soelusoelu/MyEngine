@@ -37,6 +37,12 @@ public:
     virtual SoundVolume& getSoundVolume() const override;
 
     /// <summary>
+    /// ボイスの出力先管理クラスを返す
+    /// </summary>
+    /// <returns></returns>
+    virtual OutputVoices& getOutputVoices() const override;
+
+    /// <summary>
     /// 毎フレーム更新
     /// </summary>
     void update();
@@ -61,13 +67,6 @@ public:
     /// 充填できる最大はXAUDIO2_MAX_QUEUED_BUFFERSで64個
     /// </summary>
     void submitSourceBuffer() const;
-
-    /// <summary>
-    /// 出力先ボイスを設定する
-    /// </summary>
-    /// <param name="voice">設定したいボイス</param>
-    /// <param name="useFilter">フィルターを使用するか</param>
-    void setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter = false);
 
     /// <summary>
     /// バッファを返す
@@ -108,5 +107,6 @@ private:
     std::unique_ptr<SoundData> mSoundData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;
+    std::unique_ptr<OutputVoices> mOutputVoices;
     std::unique_ptr<SoundFilter> mSoundFilter;
 };
