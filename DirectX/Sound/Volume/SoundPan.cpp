@@ -26,13 +26,24 @@ void SoundPan::pan(float positionX, unsigned operationSet) {
     volumes[0] = volumes[1] = Math::cos(rot);
     volumes[2] = volumes[3] = Math::sin(rot);
 
+    selectOutput(volumes.data(), operationSet);
+}
+
+void SoundPan::panCenter(unsigned operationSet) {
+    static constexpr float centerVolume = 0.707f;
+    std::vector<float> volumes(INPUT_CHANNELS * OUTPUT_CHANNELS, centerVolume);
+
+    selectOutput(volumes.data(), operationSet);
+}
+
+void SoundPan::selectOutput(const float volumes[], unsigned operationSet) {
     auto descSize = mOutputVoices.size();
     if (descSize == 0) {
-        setOutputMatrix(nullptr, volumes.data(), operationSet);
+        setOutputMatrix(nullptr, volumes, operationSet);
     } else {
         for (size_t i = 0; i < descSize; i++) {
             const auto& desc = mOutputVoices.getDesc(i);
-            setOutputMatrix(desc.pOutputVoice, volumes.data(), operationSet);
+            setOutputMatrix(desc.pOutputVoice, volumes, operationSet);
         }
     }
 }

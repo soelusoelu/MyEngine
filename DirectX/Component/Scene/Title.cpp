@@ -49,9 +49,8 @@ void Title::start() {
     mDrySubmix = soundCreater.createSubmixVoice(param);
 
     if (mSound && !mSound->isNull() && mWetSubmix && mDrySubmix) {
-        mSound->getOutputVoices().addOutputVoice(*mWetSubmix);
+        mSound->getOutputVoices().addOutputVoice(*mWetSubmix, false, false);
         mSound->getOutputVoices().addOutputVoice(*mDrySubmix);
-        mSound->getOutputVoices().apply();
 
         //mSound->getSoundVolume().setVolume(0.f);
         //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
@@ -65,6 +64,7 @@ void Title::start() {
         //mSound->getSoundFilter().highPassFilter(250.f);
         //mSound->getSoundFilter().bandPassFilter(1000.f);
         mSound->getSoundVolume().getSoundPan().pan(0.f);
+        mSound->getSoundVolume().getSoundPan().panCenter();
 
         //サウンドエフェクト
         int reverbID = mWetSubmix->getSoundEffect().reverb();
@@ -97,5 +97,7 @@ void Title::update() {
         mSound->getSoundFilter().resetFilter();
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha0)) {
         mSound->getSoundVolume().getSoundPan().pan(0.f);
+    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha9)) {
+        mSound->getSoundVolume().getSoundPan().panCenter();
     }
 }

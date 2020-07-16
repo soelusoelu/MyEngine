@@ -12,11 +12,6 @@ public:
     ~OutputVoices();
 
     /// <summary>
-    /// 毎フレーム更新
-    /// </summary>
-    void update();
-
-    /// <summary>
     /// 出力先ボイスを設定する
     /// </summary>
     /// <param name="voice">設定したいボイス</param>
@@ -28,7 +23,8 @@ public:
     /// </summary>
     /// <param name="voice">設定したいボイス</param>
     /// <param name="useFilter">フィルターを使用するか</param>
-    void addOutputVoice(IVoice& voice, bool useFilter = false);
+    /// <param name="isApply">設定を即適用するか</param>
+    void addOutputVoice(IVoice& voice, bool useFilter = false, bool isApply = true);
 
     /// <summary>
     /// 添字に対応するディスクリプタを返す
@@ -43,15 +39,14 @@ public:
     /// <returns></returns>
     size_t size() const;
 
-    //設定を適用する
-    void apply();
-
 private:
     OutputVoices(const OutputVoices&) = delete;
     OutputVoices& operator=(const OutputVoices&) = delete;
 
+    //設定を適用する
+    void apply();
+
 private:
     IVoice& mVoice;
     std::vector<XAUDIO2_SEND_DESCRIPTOR> mDescs;
-    bool mHasChangedDescs;
 };

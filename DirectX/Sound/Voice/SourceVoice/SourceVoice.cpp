@@ -49,7 +49,6 @@ OutputVoices& SourceVoice::getOutputVoices() const {
 }
 
 void SourceVoice::update() {
-    mOutputVoices->update();
     mSoundVolume->update();
 }
 

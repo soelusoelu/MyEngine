@@ -6,6 +6,7 @@
 class MasteringVoice;
 class OutputVoices;
 
+//音の定位を扱うクラス
 class SoundPan {
 public:
     SoundPan(IVoice& voice, MasteringVoice& masteringVoice, OutputVoices& outputVoices);
@@ -18,10 +19,18 @@ public:
     /// <param name="operationSet">いつ実行するか</param>
     void pan(float positionX, unsigned operationSet = XAUDIO2_COMMIT_NOW);
 
+    /// <summary>
+    /// 音の定位を中心に戻す
+    /// </summary>
+    /// <param name="operationSet"></param>
+    void panCenter(unsigned operationSet = XAUDIO2_COMMIT_NOW);
+
 private:
     SoundPan(const SoundPan&) = delete;
     SoundPan& operator=(const SoundPan&) = delete;
 
+    //出力先を決定する
+    void selectOutput(const float volumes[], unsigned operationSet);
     //パンを実行する
     void setOutputMatrix(IXAudio2Voice* outputVoice, const float volumes[], unsigned operationSet);
 
