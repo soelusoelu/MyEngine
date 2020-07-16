@@ -12,6 +12,7 @@ class SourceVoice;
 class SoundPlayer;
 class SoundVolume;
 class SoundFilter;
+class OutputVoices;
 
 class SoundComponent : public Component {
 public:
@@ -25,14 +26,13 @@ public:
 
     //使用可能状態か
     bool isNull() const;
-    //ボイスの出力先を指定
-    void setOutputVoice(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter = false);
 
     SoundBuffer& getSoundBuffer() const;
     const VoiceDetails& getVoiceDetails() const;
     SoundData& getSoundData() const;
     SoundPlayer& getSoundPlayer() const;
     SoundVolume& getSoundVolume() const;
+    OutputVoices& getOutputVoices() const;
     SoundFilter& getSoundFilter() const;
 
 private:

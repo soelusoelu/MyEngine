@@ -1,5 +1,6 @@
 ﻿#include "OutputVoices.h"
 #include "../../DebugLayer/Debug.h"
+#include <cassert>
 
 OutputVoices::OutputVoices(IVoice& voice) :
     mVoice(voice),
@@ -11,7 +12,6 @@ OutputVoices::~OutputVoices() = default;
 void OutputVoices::update() {
     if (mHasChangedDescs) {
         apply();
-        mHasChangedDescs = false;
     }
 }
 
@@ -40,7 +40,21 @@ void OutputVoices::addOutputVoice(IVoice& voice, bool useFilter) {
     mHasChangedDescs = true;
 }
 
+const XAUDIO2_SEND_DESCRIPTOR& OutputVoices::getDesc(unsigned index) const {
+    assert(index < mDescs.size());
+    return mDescs[index];
+}
+
+size_t OutputVoices::size() const {
+    return mDescs.size();
+}
+
 void OutputVoices::apply() {
+    if (mDescs.size() == 0) {
+        Debug::logWarning("Descriptors is empty.");
+        return;
+    }
+
     XAUDIO2_VOICE_SENDS sends;
     sends.SendCount = mDescs.size();
     sends.pSends = mDescs.data();
@@ -51,4 +65,6 @@ void OutputVoices::apply() {
         Debug::logError("Failed set output voices.");
     }
 #endif // _DEBUG
+
+    mHasChangedDescs = false;
 }

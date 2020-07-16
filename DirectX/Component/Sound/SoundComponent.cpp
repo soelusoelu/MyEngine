@@ -51,10 +51,6 @@ bool SoundComponent::isNull() const {
     return (mSound) ? false : true;
 }
 
-void SoundComponent::setOutputVoice(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter) {
-    mSound->setOutputVoices(voices, useFilter);
-}
-
 SoundBuffer& SoundComponent::getSoundBuffer() const {
     return mSound->getSoundBuffer();
 }
@@ -73,6 +69,10 @@ SoundPlayer& SoundComponent::getSoundPlayer() const {
 
 SoundVolume& SoundComponent::getSoundVolume() const {
     return mSound->getSoundVolume();
+}
+
+OutputVoices& SoundComponent::getOutputVoices() const {
+    return mSound->getOutputVoices();
 }
 
 SoundFilter& SoundComponent::getSoundFilter() const {

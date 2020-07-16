@@ -9,6 +9,7 @@
 #include "../../Sound/Effects/Reverb.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundFilter.h"
+#include "../../Sound/Output/OutputVoices.h"
 #include "../../Sound/Player/Frequency.h"
 #include "../../Sound/Player/SoundPlayer.h"
 #include "../../Sound/Voice/IVoice.h"
@@ -17,9 +18,9 @@
 #include "../../Sound/Voice/SubmixVoice/SubmixVoice.h"
 #include "../../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include "../../Sound/Volume/SoundFade.h"
+#include "../../Sound/Volume/SoundPan.h"
 #include "../../Sound/Volume/SoundVolume.h"
 #include "../../System/World.h"
-#include <vector>
 
 Title::Title() :
     Component(),
@@ -43,10 +44,15 @@ void Title::start() {
     const auto& data = mSound->getVoiceDetails();
     param.inputChannels = data.inputChannels;
     param.inputSampleRate = data.samplesPerSec;
-    mWetSubmix = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
-    mDrySubmix = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+    auto& soundCreater = World::instance().assetsManager().getSoundCreater();
+    mWetSubmix = soundCreater.createSubmixVoice(param);
+    mDrySubmix = soundCreater.createSubmixVoice(param);
 
     if (mSound && !mSound->isNull() && mWetSubmix && mDrySubmix) {
+        mSound->getOutputVoices().addOutputVoice(*mWetSubmix);
+        mSound->getOutputVoices().addOutputVoice(*mDrySubmix);
+        mSound->getOutputVoices().apply();
+
         //mSound->getSoundVolume().setVolume(0.f);
         //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
         //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
@@ -58,10 +64,7 @@ void Title::start() {
         //mSound->getSoundFilter().lowPassFilter(2500.f);
         //mSound->getSoundFilter().highPassFilter(250.f);
         //mSound->getSoundFilter().bandPassFilter(1000.f);
-        //mSound->getSoundVolume().pan(0.f);
-
-        std::vector<std::shared_ptr<IVoice>> voices = { mWetSubmix, mDrySubmix };
-        mSound->setOutputVoice(voices);
+        mSound->getSoundVolume().getSoundPan().pan(0.f);
 
         //サウンドエフェクト
         int reverbID = mWetSubmix->getSoundEffect().reverb();
@@ -92,5 +95,7 @@ void Title::update() {
         mSound->getSoundPlayer().pauseFadeOut(1.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha3)) {
         mSound->getSoundFilter().resetFilter();
+    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha0)) {
+        mSound->getSoundVolume().getSoundPan().pan(0.f);
     }
 }

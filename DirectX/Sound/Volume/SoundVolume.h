@@ -6,12 +6,14 @@
 #include <memory>
 
 class MasteringVoice;
+class OutputVoices;
 class SoundFade;
+class SoundPan;
 
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(IVoice& voice, MasteringVoice& masteringVoice);
+    SoundVolume(IVoice& voice, MasteringVoice& masteringVoice, OutputVoices& outputVoices);
     ~SoundVolume();
 
     /// <summary>
@@ -54,17 +56,16 @@ public:
     float getVolume() const;
 
     /// <summary>
-    /// 位置によって音をパンする
-    /// </summary>
-    /// <param name="positionX">音を鳴らす位置(0～1920)</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void pan(float positionX, unsigned operationSet = XAUDIO2_COMMIT_NOW);
-
-    /// <summary>
-    /// フェード専門クラスにアクセスする
+    /// フェード専門クラスを返す
     /// </summary>
     /// <returns></returns>
     SoundFade& fade() const;
+
+    /// <summary>
+    /// パンニング専門クラスを返す
+    /// </summary>
+    /// <returns></returns>
+    SoundPan& getSoundPan() const;
 
 private:
     SoundVolume(const SoundVolume&) = delete;
@@ -72,7 +73,7 @@ private:
 
 private:
     IVoice& mVoice;
-    MasteringVoice& mMasteringVoice;
     std::unique_ptr<SoundFade> mFader;
+    std::unique_ptr<SoundPan> mSoundPan;
     float mCurrentVolume;
 };

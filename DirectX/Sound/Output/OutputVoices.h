@@ -30,12 +30,25 @@ public:
     /// <param name="useFilter">フィルターを使用するか</param>
     void addOutputVoice(IVoice& voice, bool useFilter = false);
 
-private:
-    OutputVoices(const OutputVoices&) = delete;
-    OutputVoices& operator=(const OutputVoices&) = delete;
+    /// <summary>
+    /// 添字に対応するディスクリプタを返す
+    /// </summary>
+    /// <param name="index">配列の添字</param>
+    /// <returns></returns>
+    const XAUDIO2_SEND_DESCRIPTOR& getDesc(unsigned index) const;
+
+    /// <summary>
+    /// ディスクリプタ配列のサイズを返す
+    /// </summary>
+    /// <returns></returns>
+    size_t size() const;
 
     //設定を適用する
     void apply();
+
+private:
+    OutputVoices(const OutputVoices&) = delete;
+    OutputVoices& operator=(const OutputVoices&) = delete;
 
 private:
     IVoice& mVoice;

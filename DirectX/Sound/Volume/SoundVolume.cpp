@@ -1,17 +1,13 @@
 ﻿#include "SoundVolume.h"
 #include "SoundFade.h"
-#include "../Voice/VoiceDetails.h"
-#include "../Voice/MasteringVoice/MasteringVoice.h"
-#include "../Voice/MasteringVoice/OutputVoiceDetails.h"
+#include "SoundPan.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
-#include "../../System/Window.h"
-#include <vector>
 
-SoundVolume::SoundVolume(IVoice& voice, MasteringVoice& masteringVoice) :
+SoundVolume::SoundVolume(IVoice& voice, MasteringVoice& masteringVoice, OutputVoices& outputVoices) :
     mVoice(voice),
-    mMasteringVoice(masteringVoice),
     mFader(std::make_unique<SoundFade>(*this)),
+    mSoundPan(std::make_unique<SoundPan>(voice, masteringVoice, outputVoices)),
     mCurrentVolume(1.f) {
 }
 
@@ -55,25 +51,10 @@ float SoundVolume::getVolume() const {
     return mCurrentVolume;
 }
 
-void SoundVolume::pan(float positionX, unsigned operationSet) {
-    const unsigned inputChannels = mVoice.getVoiceDetails().inputChannels;
-    const unsigned outputChannels = mMasteringVoice.getDetails().outputChannels;
-    const float width = static_cast<float>(Window::standardWidth());
-
-    auto posX = Math::clamp<float>(positionX, 0.f, width);
-    float rot = posX / width * 90.f;
-    std::vector<float> volumes(inputChannels * outputChannels);
-    volumes[0] = volumes[1] = Math::cos(rot);
-    volumes[2] = volumes[3] = Math::sin(rot);
-
-    auto res = mVoice.getXAudio2Voice()->SetOutputMatrix(nullptr, inputChannels, outputChannels, volumes.data(), operationSet);
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::logError("Failed pan.");
-    }
-#endif // _DEBUG
-}
-
 SoundFade& SoundVolume::fade() const {
     return *mFader;
+}
+
+SoundPan& SoundVolume::getSoundPan() const {
+    return *mSoundPan;
 }
