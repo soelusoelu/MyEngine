@@ -17,7 +17,7 @@ struct Material {
     std::string matName; //newmtl
     std::string textureName; //テクスチャーファイル名
     std::shared_ptr<Texture> texture;
-    unsigned numFace; //そのマテリアルであるポリゴン数
+    unsigned numIndices;
 
     Material() :
         ambient(Vector3::zero),
@@ -30,6 +30,6 @@ struct Material {
         matName(""),
         textureName(""),
         texture(nullptr),
-        numFace(0) {
+        numIndices(0) {
     }
 };

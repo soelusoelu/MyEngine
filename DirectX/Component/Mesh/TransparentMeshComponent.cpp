@@ -103,7 +103,7 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
     for (size_t i = 0; i < getNumMaterial(); i++) {
         //使用されていないマテリアル対策
         auto mat = getMaterial(i);
-        if (mat->numFace == 0) {
+        if (mat->numIndices == 0) {
             continue;
         }
         //インデックスバッファーをセット
@@ -128,7 +128,7 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
         }
 
         //プリミティブをレンダリング
-        DirectX::instance().drawIndexed(mat->numFace * 3);
+        DirectX::instance().drawIndexed(mat->numIndices);
     }
 }
 

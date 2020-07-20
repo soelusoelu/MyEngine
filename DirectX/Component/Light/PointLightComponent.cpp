@@ -77,14 +77,14 @@ void PointLightComponent::draw(const Camera& camera, const PointLight& pointLigh
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < mats.size(); i++) {
         //使用されていないマテリアル対策
-        if (mats[i]->numFace == 0) {
+        if (mats[i]->numIndices == 0) {
             continue;
         }
         //インデックスバッファーをセット
         mesh->getVertexArray()->setIndexBuffer(i);
 
         //プリミティブをレンダリング
-        DirectX::instance().drawIndexed(mats[i]->numFace * 3);
+        DirectX::instance().drawIndexed(mats[i]->numIndices);
     }
 }
 

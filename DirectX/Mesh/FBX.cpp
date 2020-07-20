@@ -66,7 +66,7 @@ void FBX::setInitMaterials(MaterialPtrArray* rhs) const {
         mat->matName = lhs->matName;
         mat->textureName = lhs->textureName;
         mat->texture = lhs->texture;
-        mat->numFace = lhs->numFace;
+        mat->numIndices = lhs->numIndices;
 
         rhs->emplace_back(mat);
     }
@@ -168,6 +168,9 @@ void FBX::getIndex(FbxMesh* mesh) {
         mIndexArray.emplace_back(mesh->GetPolygonVertex(i, 1));
         mIndexArray.emplace_back(mesh->GetPolygonVertex(i, 2));
     }
+    mVertexArray->createIndexBuffer(0, mIndexArray.size(), mIndexArray.data());
+    mInitMaterials.emplace_back(std::make_shared<Material>());
+    mInitMaterials[0]->numIndices = mIndexArray.size(); //そのマテリアル内のポリゴン数
 }
 
 void FBX::getVertex(FbxMesh* mesh) {
@@ -562,7 +565,7 @@ void FBX::getMaterial(FbxMesh* mesh) {
             }
         }
         mVertexArray->createIndexBuffer(i, count, indices);
-        mInitMaterials[i]->numFace = count / 3; //そのマテリアル内のポリゴン数
+        mInitMaterials[i]->numIndices = count; //そのマテリアル内のポリゴン数
 
         delete[] indices;
     }

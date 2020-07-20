@@ -28,7 +28,7 @@ private:
     void getMaterial(FbxMesh* mesh);
 
 private:
-    std::vector<int> mIndexArray;
+    std::vector<unsigned> mIndexArray;
     std::vector<MeshVertex> mVertices;
     MaterialPtrArray mInitMaterials;
     std::shared_ptr<VertexArray> mVertexArray;

@@ -150,7 +150,7 @@ void OBJ::perse(const std::string& fileName) {
         //インデックスバッファーを作成
         mVertexArray->createIndexBuffer(i, fCount * 3, faceBuffer);
 
-        mInitMaterials[i]->numFace = fCount;
+        mInitMaterials[i]->numIndices = fCount * 3;
     }
 
     delete[] vertices;
@@ -179,7 +179,7 @@ void OBJ::setInitMaterials(MaterialPtrArray* rhs) const {
         mat->matName = lhs->matName;
         mat->textureName = lhs->textureName;
         mat->texture = lhs->texture;
-        mat->numFace = lhs->numFace;
+        mat->numIndices = lhs->numIndices;
 
         rhs->emplace_back(mat);
     }
