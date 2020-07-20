@@ -3,46 +3,37 @@
 #include "VertexArray.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
-#include "../System/GlobalFunction.h"
 #include "../System/World.h"
 #include "../Utility/FileUtil.h"
 
 FBX::FBX() :
-    mManager(nullptr),
-    mVertices(nullptr),
     mVertexArray(std::make_shared<VertexArray>()) {
 }
 
-FBX::~FBX() {
-    safeDeleteArray<MeshVertex>(mVertices);
-    //マネージャー解放
-    if (mManager) {
-        mManager->Destroy();
-    }
-}
+FBX::~FBX() = default;
 
 void FBX::perse(const std::string& fileName) {
     //マネージャーを生成
-    mManager = FbxManager::Create();
+    auto manager = FbxManager::Create();
 
     //IOSettingを生成
-    FbxIOSettings* ioSettings = FbxIOSettings::Create(mManager, IOSROOT);
-    mManager->SetIOSettings(ioSettings);
+    FbxIOSettings* ioSettings = FbxIOSettings::Create(manager, IOSROOT);
+    manager->SetIOSettings(ioSettings);
 
     //Importerを生成
-    FbxImporter* importer = FbxImporter::Create(mManager, "");
-    if (!importer->Initialize(fileName.c_str(), -1, mManager->GetIOSettings())) {
+    FbxImporter* importer = FbxImporter::Create(manager, "");
+    if (!importer->Initialize(fileName.c_str(), -1, manager->GetIOSettings())) {
         Debug::windowMessage(fileName + ": ファイルは存在しません");
         return;
     }
 
     //SceneオブジェクトにFBXファイル内の情報を流し込む
-    FbxScene* scene = FbxScene::Create(mManager, "scene");
+    FbxScene* scene = FbxScene::Create(manager, "scene");
     importer->Import(scene);
     importer->Destroy(); //シーンを流し込んだらImporterは解放していい
 
     //四角ポリゴンを三角ポリゴンに変換
-    FbxGeometryConverter geometryConverter(mManager);
+    FbxGeometryConverter geometryConverter(manager);
     geometryConverter.Triangulate(scene, true);
 
     //Scene解析
@@ -51,7 +42,10 @@ void FBX::perse(const std::string& fileName) {
         perse(root, 0);
     }
 
-    mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
+    mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices.data());
+
+    //マネージャー解放
+    manager->Destroy();
 }
 
 void FBX::setInitMaterials(MaterialPtrArray* rhs) const {
@@ -184,9 +178,9 @@ void FBX::getVertex(FbxMesh* mesh) {
     mVertexArray->setNumTex(uvNum);
 
     if (uvNum > vertexNum) {
-        mVertices = new MeshVertex[uvNum];
+        mVertices.resize(uvNum);
     } else {
-        mVertices = new MeshVertex[vertexNum];
+        mVertices.resize(vertexNum);
     }
 
     //頂点座標配列

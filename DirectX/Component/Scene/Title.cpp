@@ -27,8 +27,7 @@ Title::Title() :
     mScene(nullptr),
     mSound(nullptr),
     mWetSubmix(nullptr),
-    mDrySubmix(nullptr)
-{
+    mDrySubmix(nullptr) {
 }
 
 Title::~Title() = default;
@@ -40,6 +39,10 @@ void Title::start() {
     mScene = getComponent<Scene>();
     mSound = getComponent<SoundComponent>();
 
+    if (!mSound || mSound->isNull()) {
+        return;
+    }
+
     SubmixVoiceInitParam param;
     const auto& data = mSound->getVoiceDetails();
     param.inputChannels = data.inputChannels;
@@ -48,36 +51,38 @@ void Title::start() {
     mWetSubmix = soundCreater.createSubmixVoice(param);
     mDrySubmix = soundCreater.createSubmixVoice(param);
 
-    if (mSound && !mSound->isNull() && mWetSubmix && mDrySubmix) {
-        mSound->getOutputVoices().addOutputVoice(*mWetSubmix, false, false);
-        mSound->getOutputVoices().addOutputVoice(*mDrySubmix);
-
-        //mSound->getSoundVolume().setVolume(0.f);
-        //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
-        //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
-        //mSound->getSoundBuffer().loopCount = 1;
-        //mSound->getSoundBuffer().playBegin = 60.f;
-        //mSound->getSoundBuffer().playLength = 30.f;
-        //mSound->getSoundBuffer().loopBegin = 60.f;
-        //mSound->getSoundBuffer().loopLength = 30.f;
-        //mSound->getSoundFilter().lowPassFilter(2500.f);
-        //mSound->getSoundFilter().highPassFilter(250.f);
-        //mSound->getSoundFilter().bandPassFilter(1000.f);
-        mSound->getSoundVolume().getSoundPan().pan(0.f);
-        mSound->getSoundVolume().getSoundPan().panCenter();
-
-        //サウンドエフェクト
-        int reverbID = mWetSubmix->getSoundEffect().reverb();
-        mWetSubmix->getSoundEffect().apply();
-
-        //auto reverbParam = Reverb::getParameters();
-        //reverbParam.WetDryMix = 20.f;
-        //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
-        mWetSubmix->getSoundVolume().setVolume(0.5f);
-        mDrySubmix->getSoundVolume().setVolume(0.5f);
-
-        mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+    if (!mWetSubmix || !mDrySubmix) {
+        return;
     }
+
+    mSound->getOutputVoices().addOutputVoice(mWetSubmix, false, false);
+    mSound->getOutputVoices().addOutputVoice(mDrySubmix);
+
+    //mSound->getSoundVolume().setVolume(0.f);
+    //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
+    //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
+    //mSound->getSoundBuffer().loopCount = 1;
+    //mSound->getSoundBuffer().playBegin = 60.f;
+    //mSound->getSoundBuffer().playLength = 30.f;
+    //mSound->getSoundBuffer().loopBegin = 60.f;
+    //mSound->getSoundBuffer().loopLength = 30.f;
+    //mSound->getSoundFilter().lowPassFilter(2500.f);
+    //mSound->getSoundFilter().highPassFilter(250.f);
+    //mSound->getSoundFilter().bandPassFilter(1000.f);
+    mSound->getSoundVolume().getSoundPan().pan(0.f);
+    mSound->getSoundVolume().getSoundPan().panCenter();
+
+    //サウンドエフェクト
+    int reverbID = mWetSubmix->getSoundEffect().reverb();
+    mWetSubmix->getSoundEffect().apply();
+
+    //auto reverbParam = Reverb::getParameters();
+    //reverbParam.WetDryMix = 20.f;
+    //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
+    mWetSubmix->getSoundVolume().setVolume(0.5f);
+    mDrySubmix->getSoundVolume().setVolume(0.5f);
+
+    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
 }
 
 void Title::update() {

@@ -28,9 +28,8 @@ private:
     void getMaterial(FbxMesh* mesh);
 
 private:
-    FbxManager* mManager;
     std::vector<int> mIndexArray;
-    MeshVertex* mVertices;
+    std::vector<MeshVertex> mVertices;
     MaterialPtrArray mInitMaterials;
     std::shared_ptr<VertexArray> mVertexArray;
 };
