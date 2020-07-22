@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "ISoundEffect.h"
 #include "../Voice/IVoice.h"
 #include <xaudio2.h>
 #include <vector>
@@ -20,6 +21,13 @@ public:
     int reverb(bool initialState = true);
 
     /// <summary>
+    /// エコーを掛ける
+    /// </summary>
+    /// <param name="initialState">初期状態でエフェクトを有効化するか</param>
+    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
+    int echo(bool initialState = true);
+
+    /// <summary>
     /// 作成した全エフェクトを適用する
     /// </summary>
     void apply();
@@ -36,6 +44,9 @@ public:
 private:
     SoundEffect(const SoundEffect&) = delete;
     SoundEffect& operator=(const SoundEffect&) = delete;
+
+    //エフェクトを生成する
+    int createEffect(ISoundEffect* target, bool initialState);
 
 private:
     IVoice& mVoice;

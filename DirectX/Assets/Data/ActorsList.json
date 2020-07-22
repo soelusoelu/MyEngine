@@ -60,9 +60,7 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "çgò@âÿ.wav",
-            "volume": 1.0,
-            "isFirstPlay": false
+            "fileName": "çgò@âÿ.wav"
           }
         }
       ]

@@ -14,7 +14,7 @@ bool Reverb::create(XAUDIO2_EFFECT_DESCRIPTOR* desc) {
         return false;
     }
 
-    desc->pEffect = mXAPO.Get();
+    desc->pEffect = mXAPO;
 
     return true;
 }

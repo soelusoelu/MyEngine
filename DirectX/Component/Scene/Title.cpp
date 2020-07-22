@@ -73,7 +73,8 @@ void Title::start() {
     mSound->getSoundVolume().getSoundPan().panCenter();
 
     //サウンドエフェクト
-    int reverbID = mWetSubmix->getSoundEffect().reverb();
+    //int reverbID = mWetSubmix->getSoundEffect().reverb();
+    int echoID = mWetSubmix->getSoundEffect().echo();
     mWetSubmix->getSoundEffect().apply();
 
     //auto reverbParam = Reverb::getParameters();

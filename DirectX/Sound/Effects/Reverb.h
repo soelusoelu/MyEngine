@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "ISoundEffect.h"
-#include "../../System/SystemInclude.h"
 #include <xaudio2.h>
 #include <xaudio2fx.h>
 
@@ -20,5 +19,5 @@ private:
     Reverb& operator=(const Reverb&) = delete;
 
 private:
-    Microsoft::WRL::ComPtr<IUnknown> mXAPO;
+    IUnknown* mXAPO;
 };
