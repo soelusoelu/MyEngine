@@ -21,6 +21,12 @@ public:
     int reverb();
 
     /// <summary>
+    /// 簡易版リバーブを掛ける
+    /// </summary>
+    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
+    int simpleReverb();
+
+    /// <summary>
     /// エコーを掛ける
     /// </summary>
     /// <returns>作成したエフェクトのID 失敗したら-1</returns>

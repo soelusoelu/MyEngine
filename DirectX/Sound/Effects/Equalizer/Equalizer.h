@@ -3,6 +3,7 @@
 #include "../ISoundEffect.h"
 #include <xapofx.h>
 
+//イコライザー
 class Equalizer : public ISoundEffect {
 public:
     Equalizer();

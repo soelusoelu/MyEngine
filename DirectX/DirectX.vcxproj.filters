@@ -126,6 +126,7 @@
     <ClCompile Include="Sound\Effects\Equalizer\Equalizer.cpp" />
     <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\Reverb.cpp" />
+    <ClCompile Include="Sound\Effects\Reverb\SimpleReverb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -275,5 +276,7 @@
     <ClInclude Include="Sound\Effects\Echo\Echo.h" />
     <ClInclude Include="Sound\Effects\Echo\EchoParam.h" />
     <ClInclude Include="Sound\Effects\Reverb\Reverb.h" />
+    <ClInclude Include="Sound\Effects\Reverb\SimpleReverb.h" />
+    <ClInclude Include="Sound\Effects\Reverb\SimpleReverbParam.h" />
   </ItemGroup>
 </Project>

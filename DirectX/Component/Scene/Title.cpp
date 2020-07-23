@@ -7,6 +7,8 @@
 #include "../../Input/Input.h"
 #include "../../Sound/Data/SoundBuffer.h"
 #include "../../Sound/Effects/Reverb/Reverb.h"
+#include "../../Sound/Effects/Reverb/SimpleReverb.h"
+#include "../../Sound/Effects/Reverb/SimpleReverbParam.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundFilter.h"
 #include "../../Sound/Output/OutputVoices.h"
@@ -74,16 +76,21 @@ void Title::start() {
 
     //サウンドエフェクト
     //int reverbID = mWetSubmix->getSoundEffect().reverb();
-    int echoID = mWetSubmix->getSoundEffect().echo();
+    //int echoID = mWetSubmix->getSoundEffect().echo();
+    //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     mWetSubmix->getSoundEffect().apply();
 
     //auto reverbParam = Reverb::getParameters();
     //reverbParam.WetDryMix = 20.f;
     //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
+    //SimpleReverbParam reverbParam;
+    //reverbParam.diffusion = 0.2f;
+    //reverbParam.roomSize = 0.3f;
+    //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
     mWetSubmix->getSoundVolume().setVolume(0.5f);
     mDrySubmix->getSoundVolume().setVolume(0.5f);
 
-    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+    mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
 }
 
 void Title::update() {

@@ -2,6 +2,7 @@
 #include "Echo/Echo.h"
 #include "Equalizer/Equalizer.h"
 #include "Reverb/Reverb.h"
+#include "Reverb/SimpleReverb.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../Voice/MasteringVoice/OutputVoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
@@ -23,6 +24,11 @@ SoundEffect::~SoundEffect() {
 
 int SoundEffect::reverb() {
     Reverb reverb;
+    return createEffect(&reverb);
+}
+
+int SoundEffect::simpleReverb() {
+    SimpleReverb reverb;
     return createEffect(&reverb);
 }
 
