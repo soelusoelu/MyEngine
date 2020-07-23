@@ -1,6 +1,7 @@
 ﻿#include "SoundEffect.h"
-#include "Echo.h"
-#include "Reverb.h"
+#include "Echo/Echo.h"
+#include "Equalizer/Equalizer.h"
+#include "Reverb/Reverb.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../Voice/MasteringVoice/OutputVoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
@@ -28,6 +29,11 @@ int SoundEffect::reverb() {
 int SoundEffect::echo() {
     Echo echo;
     return createEffect(&echo);
+}
+
+int SoundEffect::equalizer() {
+    Equalizer equalizer;
+    return createEffect(&equalizer);
 }
 
 void SoundEffect::apply() {

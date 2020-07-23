@@ -27,6 +27,12 @@ public:
     int echo();
 
     /// <summary>
+    /// イコライザー
+    /// </summary>
+    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
+    int equalizer();
+
+    /// <summary>
     /// 作成した全エフェクトを適用する
     /// </summary>
     void apply();

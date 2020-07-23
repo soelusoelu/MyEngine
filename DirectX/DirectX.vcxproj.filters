@@ -120,11 +120,12 @@
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundBase.cpp" />
     <ClCompile Include="Device\SoundCreater.cpp" />
-    <ClCompile Include="Sound\Effects\Reverb.cpp" />
     <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
     <ClCompile Include="Sound\Output\OutputVoices.cpp" />
     <ClCompile Include="Sound\Volume\SoundPan.cpp" />
-    <ClCompile Include="Sound\Effects\Echo.cpp" />
+    <ClCompile Include="Sound\Effects\Equalizer\Equalizer.cpp" />
+    <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
+    <ClCompile Include="Sound\Effects\Reverb\Reverb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -264,13 +265,15 @@
     <ClInclude Include="Sound\Data\SoundBuffer.h" />
     <ClInclude Include="Sound\Loader\WaveformData.h" />
     <ClInclude Include="Device\SoundCreater.h" />
-    <ClInclude Include="Sound\Effects\Reverb.h" />
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />
     <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
     <ClInclude Include="Sound\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Volume\SoundPan.h" />
-    <ClInclude Include="Sound\Effects\Echo.h" />
-    <ClInclude Include="Sound\Effects\EchoParam.h" />
+    <ClInclude Include="Sound\Effects\Equalizer\Equalizer.h" />
+    <ClInclude Include="Sound\Effects\Equalizer\EqualizerParam.h" />
+    <ClInclude Include="Sound\Effects\Echo\Echo.h" />
+    <ClInclude Include="Sound\Effects\Echo\EchoParam.h" />
+    <ClInclude Include="Sound\Effects\Reverb\Reverb.h" />
   </ItemGroup>
 </Project>

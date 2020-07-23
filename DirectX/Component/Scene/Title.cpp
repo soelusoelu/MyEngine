@@ -6,7 +6,7 @@
 #include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Data/SoundBuffer.h"
-#include "../../Sound/Effects/Reverb.h"
+#include "../../Sound/Effects/Reverb/Reverb.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundFilter.h"
 #include "../../Sound/Output/OutputVoices.h"

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "ISoundEffect.h"
+#include "../ISoundEffect.h"
 #include <xapofx.h>
 
 //エコー
