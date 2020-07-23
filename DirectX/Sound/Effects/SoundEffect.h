@@ -6,6 +6,7 @@
 #include <vector>
 
 class MasteringVoice;
+class Echo;
 
 //サウンドエフェクト専用クラス
 class SoundEffect {
@@ -16,16 +17,14 @@ public:
     /// <summary>
     /// リバーブ効果(残響)を掛ける
     /// </summary>
-    /// <param name="initialState">初期状態でエフェクトを有効化するか</param>
     /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int reverb(bool initialState = true);
+    int reverb();
 
     /// <summary>
     /// エコーを掛ける
     /// </summary>
-    /// <param name="initialState">初期状態でエフェクトを有効化するか</param>
     /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int echo(bool initialState = true);
+    int echo();
 
     /// <summary>
     /// 作成した全エフェクトを適用する
@@ -46,7 +45,7 @@ private:
     SoundEffect& operator=(const SoundEffect&) = delete;
 
     //エフェクトを生成する
-    int createEffect(ISoundEffect* target, bool initialState);
+    int createEffect(ISoundEffect* target);
 
 private:
     IVoice& mVoice;

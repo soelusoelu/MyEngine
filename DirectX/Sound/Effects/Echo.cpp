@@ -8,7 +8,8 @@ Echo::Echo() :
 Echo::~Echo() = default;
 
 bool Echo::create(XAUDIO2_EFFECT_DESCRIPTOR* desc) {
-    auto res = CreateFX(__uuidof(FXEcho), &mXAPO);
+    float maxDelay = 2000.f;
+    auto res = CreateFX(__uuidof(FXEcho), &mXAPO, &maxDelay, sizeof(float));
     if (FAILED(res)) {
         Debug::logError("Failed created echo.");
         return false;

@@ -289,6 +289,7 @@
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="Sound\Effects\Echo.h" />
     <ClInclude Include="GameObject\Object.h" />
+    <ClInclude Include="Sound\Effects\EchoParam.h" />
     <ClInclude Include="Sound\Volume\SoundPan.h" />
     <ClInclude Include="Sound\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />

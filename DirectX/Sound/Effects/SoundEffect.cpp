@@ -20,14 +20,14 @@ SoundEffect::~SoundEffect() {
     }
 }
 
-int SoundEffect::reverb(bool initialState) {
+int SoundEffect::reverb() {
     Reverb reverb;
-    return createEffect(&reverb, initialState);
+    return createEffect(&reverb);
 }
 
-int SoundEffect::echo(bool initialState) {
+int SoundEffect::echo() {
     Echo echo;
-    return createEffect(&echo, initialState);
+    return createEffect(&echo);
 }
 
 void SoundEffect::apply() {
@@ -73,9 +73,9 @@ void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsi
 #endif // _DEBUG
 }
 
-int SoundEffect::createEffect(ISoundEffect* target, bool initialState) {
+int SoundEffect::createEffect(ISoundEffect* target) {
     XAUDIO2_EFFECT_DESCRIPTOR desc;
-    desc.InitialState = initialState;
+    desc.InitialState = true;
     desc.OutputChannels = mMasteringVoice.getDetails().outputChannels;
     bool res = target->create(&desc);
     if (!res) { //エフェクトの作成に失敗していたら-1

@@ -271,5 +271,6 @@
     <ClInclude Include="Sound\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Volume\SoundPan.h" />
     <ClInclude Include="Sound\Effects\Echo.h" />
+    <ClInclude Include="Sound\Effects\EchoParam.h" />
   </ItemGroup>
 </Project>
