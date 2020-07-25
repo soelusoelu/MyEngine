@@ -127,6 +127,9 @@
     <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\Reverb.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\SimpleReverb.cpp" />
+    <ClCompile Include="Sound\Effects\TestEffect.cpp" />
+    <ClCompile Include="Sound\Effects\TestEffectParameters.cpp" />
+    <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -278,5 +281,9 @@
     <ClInclude Include="Sound\Effects\Reverb\Reverb.h" />
     <ClInclude Include="Sound\Effects\Reverb\SimpleReverb.h" />
     <ClInclude Include="Sound\Effects\Reverb\SimpleReverbParam.h" />
+    <ClInclude Include="Sound\Effects\TestEffect.h" />
+    <ClInclude Include="Sound\Effects\TestEffectParameters.h" />
+    <ClInclude Include="Sound\Effects\VolumeMeter\VolumeMeter.h" />
+    <ClInclude Include="Sound\Effects\SoundEffectUtility.h" />
   </ItemGroup>
 </Project>

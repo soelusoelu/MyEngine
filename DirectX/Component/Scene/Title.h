@@ -11,7 +11,6 @@ class Title : public Component {
 public:
     Title();
     ~Title();
-    virtual void awake() override;
     virtual void start() override;
     virtual void update() override;
 
@@ -20,4 +19,5 @@ private:
     std::shared_ptr<SoundComponent> mSound;
     std::shared_ptr<SubmixVoice> mWetSubmix;
     std::shared_ptr<SubmixVoice> mDrySubmix;
+    std::shared_ptr<SubmixVoice> mVolumeMeter;
 };

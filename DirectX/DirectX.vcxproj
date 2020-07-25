@@ -182,6 +182,8 @@
     <ClCompile Include="Sound\Effects\SoundFilter.cpp" />
     <ClCompile Include="Sound\Voice\SubmixVoice\SubmixVoice.cpp" />
     <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
+    <ClCompile Include="Sound\Effects\TestEffect.cpp" />
+    <ClCompile Include="Sound\Effects\TestEffectParameters.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
@@ -278,6 +280,7 @@
     <ClCompile Include="System\World.cpp" />
     <ClCompile Include="Sound\Loader\WAV.cpp" />
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
+    <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider\CircleCollider.h" />
@@ -296,6 +299,7 @@
     <ClInclude Include="Sound\Effects\Echo\EchoParam.h" />
     <ClInclude Include="Sound\Effects\Equalizer\EqualizerParam.h" />
     <ClInclude Include="Sound\Effects\Reverb\SimpleReverbParam.h" />
+    <ClInclude Include="Sound\Effects\SoundEffectUtility.h" />
     <ClInclude Include="Sound\Volume\SoundPan.h" />
     <ClInclude Include="Sound\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />
@@ -315,6 +319,8 @@
     <ClInclude Include="Sound\Loader\WaveformData.h" />
     <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
+    <ClInclude Include="Sound\Effects\TestEffect.h" />
+    <ClInclude Include="Sound\Effects\TestEffectParameters.h" />
     <ClInclude Include="Transform\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
@@ -429,6 +435,7 @@
     <ClInclude Include="System\World.h" />
     <ClInclude Include="Sound\Loader\WAV.h" />
     <ClInclude Include="Sound\XAudio2\XAudio2.h" />
+    <ClInclude Include="Sound\Effects\VolumeMeter\VolumeMeter.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">

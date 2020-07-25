@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
 #include "../Sound/SubmixVoiceComponent.h"
+#include "../../DebugLayer/Debug.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
@@ -23,19 +24,19 @@
 #include "../../Sound/Volume/SoundPan.h"
 #include "../../Sound/Volume/SoundVolume.h"
 #include "../../System/World.h"
+#include "../../Utility/StringUtil.h"
 
 Title::Title() :
     Component(),
     mScene(nullptr),
     mSound(nullptr),
     mWetSubmix(nullptr),
-    mDrySubmix(nullptr) {
+    mDrySubmix(nullptr),
+    mVolumeMeter(nullptr)
+{
 }
 
 Title::~Title() = default;
-
-void Title::awake() {
-}
 
 void Title::start() {
     mScene = getComponent<Scene>();
@@ -52,13 +53,16 @@ void Title::start() {
     auto& soundCreater = World::instance().assetsManager().getSoundCreater();
     mWetSubmix = soundCreater.createSubmixVoice(param);
     mDrySubmix = soundCreater.createSubmixVoice(param);
+    mVolumeMeter = soundCreater.createSubmixVoice(param);
 
     if (!mWetSubmix || !mDrySubmix) {
         return;
     }
 
-    mSound->getOutputVoices().addOutputVoice(mWetSubmix, false, false);
-    mSound->getOutputVoices().addOutputVoice(mDrySubmix);
+    auto& outputVoice = mSound->getOutputVoices();
+    outputVoice.addOutputVoice(mWetSubmix, false, false);
+    outputVoice.addOutputVoice(mDrySubmix, false, false);
+    outputVoice.addOutputVoice(mVolumeMeter);
 
     //mSound->getSoundVolume().setVolume(0.f);
     //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
@@ -77,8 +81,10 @@ void Title::start() {
     //サウンドエフェクト
     //int reverbID = mWetSubmix->getSoundEffect().reverb();
     //int echoID = mWetSubmix->getSoundEffect().echo();
-    //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
+    int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     mWetSubmix->getSoundEffect().apply();
+    mVolumeMeter->getSoundEffect().volumeMeter();
+    mVolumeMeter->getSoundEffect().apply();
 
     //auto reverbParam = Reverb::getParameters();
     //reverbParam.WetDryMix = 20.f;
@@ -89,8 +95,9 @@ void Title::start() {
     //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
     mWetSubmix->getSoundVolume().setVolume(0.5f);
     mDrySubmix->getSoundVolume().setVolume(0.5f);
+    mVolumeMeter->getSoundVolume().setVolume(0.5f);
 
-    mSound->getSoundPlayer().playFadeIn(1.f, 2.f);
+    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
 }
 
 void Title::update() {
@@ -113,4 +120,8 @@ void Title::update() {
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha9)) {
         mSound->getSoundVolume().getSoundPan().panCenter();
     }
+
+    float param = 0.f;
+    mVolumeMeter->getSoundEffect().getEffectParameters(0, &param, sizeof(float));
+    Debug::log(StringUtil::floatToString(param, 6));
 }
