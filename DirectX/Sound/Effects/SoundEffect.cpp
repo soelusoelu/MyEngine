@@ -74,7 +74,7 @@ void SoundEffect::apply() {
 }
 
 void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize, unsigned operationSet) {
-    if (!canAccessEffects(effectID)) {
+    if (!canAccessEffects(effectID, parameters)) {
         return;
     }
 
@@ -87,7 +87,7 @@ void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsi
 }
 
 void SoundEffect::getEffectParameters(int effectID, void* parameters, unsigned parametersByteSize) const {
-    if (!canAccessEffects(effectID)) {
+    if (!canAccessEffects(effectID, parameters)) {
         return;
     }
 
@@ -112,7 +112,7 @@ int SoundEffect::createEffect(ISoundEffect* target) {
     return mDescs.size() - 1;
 }
 
-bool SoundEffect::canAccessEffects(int effectID) const {
+bool SoundEffect::canAccessEffects(int effectID, const void* parameters) const {
     //エフェクトを適用してあるか
     if (!mIsApplied) {
         Debug::logWarning("Effect not applied.");
@@ -121,6 +121,11 @@ bool SoundEffect::canAccessEffects(int effectID) const {
     //IDが有効か
     if (effectID == -1) {
         Debug::logWarning("Invalid Effect ID.");
+        return false;
+    }
+    //パラメーターが有効か
+    if (!parameters) {
+        Debug::logWarning("Effect parameter is null");
         return false;
     }
     //配列の範囲内か

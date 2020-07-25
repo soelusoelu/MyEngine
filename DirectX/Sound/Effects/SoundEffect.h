@@ -73,7 +73,7 @@ private:
     //エフェクトを生成する
     int createEffect(ISoundEffect* target);
     //エフェクトにアクセスできる状態か
-    bool canAccessEffects(int effectID) const;
+    bool canAccessEffects(int effectID, const void* parameters) const;
 
 private:
     IVoice& mVoice;

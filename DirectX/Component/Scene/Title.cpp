@@ -95,7 +95,6 @@ void Title::start() {
     //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
     mWetSubmix->getSoundVolume().setVolume(0.5f);
     mDrySubmix->getSoundVolume().setVolume(0.5f);
-    mVolumeMeter->getSoundVolume().setVolume(0.5f);
 
     mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
 }

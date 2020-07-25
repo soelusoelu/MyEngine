@@ -26,6 +26,11 @@ STDMETHODIMP_(void __stdcall) VolumeMeter::Process(UINT32 InputProcessParameterC
     float* outBuf = static_cast<float*>(outParam.pBuffer);
 
     if (IsEnabled) { //有効
+        if (inParam.BufferFlags == XAPO_BUFFER_FLAGS::XAPO_BUFFER_SILENT) {
+            outParam.BufferFlags = inParam.BufferFlags;
+            return;
+        }
+
         //3配列のうち有効なアドレスの取得
         float* param = reinterpret_cast<float*>(BeginProcess());
 
@@ -52,8 +57,8 @@ STDMETHODIMP_(void __stdcall) VolumeMeter::Process(UINT32 InputProcessParameterC
 
         *param = mMaxVolume;
 
-        //outParam.ValidFrameCount = inParam.ValidFrameCount;
-        //outParam.BufferFlags = inParam.BufferFlags;
+        outParam.ValidFrameCount = inParam.ValidFrameCount;
+        outParam.BufferFlags = inParam.BufferFlags;
 
         EndProcess();
     } else { //無効

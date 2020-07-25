@@ -2,13 +2,15 @@
 
 #include <cmath>
 #include <limits>
+#include <cfloat>
 
 namespace Math {
     constexpr float PI = 3.1415926535f;
     constexpr float TwoPI = PI * 2.f;
-    constexpr float PiOver2 = PI / 2.f;
+    constexpr float PIOver2 = PI / 2.f;
     constexpr float infinity = std::numeric_limits<float>::infinity();
     constexpr float negInfinity = -std::numeric_limits<float>::infinity();
+    constexpr float epsilon = std::numeric_limits<float>::epsilon();
     constexpr float deg2Rad = PI / 180.f;
     constexpr float rad2Deg = 180.f / PI;
 
@@ -22,6 +24,10 @@ namespace Math {
 
     inline bool nearZero(float val, float epsilon = 0.001f) {
         return (fabs(val) <= epsilon);
+    }
+
+    inline bool equal(float a, float b, float e = epsilon) {
+        return (fabs(a - b) <= e);
     }
 
     template <typename T>

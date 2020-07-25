@@ -60,7 +60,7 @@ Vector3 Quaternion::euler() const {
     //ジンバルロックチェック
     if (Math::abs(sp) > 0.9999f) {
         //真上か真下を向いている
-        euler.x = Math::PiOver2 * sp;
+        euler.x = Math::PIOver2 * sp;
         euler.y = Math::atan2(-q.x * q.z + q.w * q.y, 0.5f - q.y * q.y - q.z * q.z);
         euler.z = 0.f;
     } else {
@@ -74,7 +74,7 @@ Vector3 Quaternion::euler() const {
     ////ジンバルロックチェック
     //if (Math::abs(sp) > 0.9999f) {
     //    //真上か真下を向いている
-    //    euler.x = Math::PiOver2 * sp;
+    //    euler.x = Math::PIOver2 * sp;
     //    euler.y = Math::atan2(-q.x * q.z - q.w * q.y, 0.5f - q.y * q.y - q.z * q.z);
     //    euler.z = 0.f;
     //} else {
