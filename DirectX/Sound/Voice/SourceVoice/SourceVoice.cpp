@@ -19,8 +19,8 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, masteringVoice, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
-    mDetails.inputChannels = data.format->nChannels;
-    mDetails.samplesPerSec = data.format->nSamplesPerSec;
+    mDetails.channels = data.format->nChannels;
+    mDetails.sampleRate = data.format->nSamplesPerSec;
     mSoundBuffer->buffer = data.buffer;
     mSoundBuffer->size = data.size;
 
@@ -86,7 +86,7 @@ SoundPlayer& SourceVoice::getSoundPlayer() const {
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {
-    const unsigned sampleRate = mDetails.samplesPerSec;
+    const unsigned sampleRate = mDetails.sampleRate;
 
     XAUDIO2_BUFFER buf;
     buf.Flags = buffer.flags;

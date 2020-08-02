@@ -74,7 +74,7 @@ HRESULT SoundFilter::setFilterParameters(XAUDIO2_FILTER_TYPE type, float frequen
 }
 
 float SoundFilter::frequencyToRadianFrequency(float frequency) const {
-    float f = frequency / mVoice.getVoiceDetails().samplesPerSec * 6.f;
+    float f = frequency / mVoice.getVoiceDetails().sampleRate * 6.f;
     return Math::clamp<float>(f, 0.f, XAUDIO2_MAX_FILTER_FREQUENCY);
 }
 

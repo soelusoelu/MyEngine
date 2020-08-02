@@ -259,7 +259,6 @@
     <ClInclude Include="Sound\Voice\SourceVoice\SourceVoiceInitParam.h" />
     <ClInclude Include="Sound\Voice\SourceVoice\SourceVoice.h" />
     <ClInclude Include="Sound\Voice\MasteringVoice\MasteringVoice.h" />
-    <ClInclude Include="Sound\Voice\MasteringVoice\OutputVoiceDetails.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoice.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoiceInitParam.h" />
     <ClInclude Include="Sound\Player\SoundPlayer.h" />

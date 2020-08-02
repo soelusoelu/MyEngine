@@ -48,8 +48,8 @@ void Title::start() {
 
     SubmixVoiceInitParam param;
     const auto& data = mSound->getVoiceDetails();
-    param.inputChannels = data.inputChannels;
-    param.inputSampleRate = data.samplesPerSec;
+    param.channels = data.channels;
+    param.inputSampleRate = data.sampleRate;
     auto& soundCreater = World::instance().assetsManager().getSoundCreater();
     mWetSubmix = soundCreater.createSubmixVoice(param);
     mDrySubmix = soundCreater.createSubmixVoice(param);

@@ -316,7 +316,6 @@
     <ClInclude Include="Sound\Player\Frequency.h" />
     <ClInclude Include="Sound\Loader\ISoundLoader.h" />
     <ClInclude Include="Sound\Voice\MasteringVoice\MasteringVoice.h" />
-    <ClInclude Include="Sound\Voice\MasteringVoice\OutputVoiceDetails.h" />
     <ClInclude Include="Sound\Effects\Filter\SoundFilter.h" />
     <ClInclude Include="Sound\Flag\SoundFlag.h" />
     <ClInclude Include="Sound\Voice\SourceVoice\SourceVoiceInitParam.h" />

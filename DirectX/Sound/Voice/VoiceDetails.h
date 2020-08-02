@@ -22,12 +22,12 @@ struct SoundData {
 //ボイス詳細保存クラス
 struct VoiceDetails {
     //入力チャンネル数
-    unsigned inputChannels;
+    unsigned channels;
     //サンプリングレート
-    unsigned samplesPerSec;
+    unsigned sampleRate;
 
     VoiceDetails() :
-        inputChannels(0),
-        samplesPerSec(0) {
+        channels(0),
+        sampleRate(0) {
     }
 };

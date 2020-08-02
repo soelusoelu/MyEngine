@@ -46,7 +46,7 @@ std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masterin
 
 std::shared_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const {
     IXAudio2SubmixVoice* submixVoice;
-    auto res = mXAudio2->CreateSubmixVoice(&submixVoice, param.inputChannels, param.inputSampleRate, param.flags.get(), param.processingStage, param.sendList, param.effectChain);
+    auto res = mXAudio2->CreateSubmixVoice(&submixVoice, param.channels, param.inputSampleRate, param.flags.get(), param.processingStage, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
         Debug::logError("Failed created submix voice.");

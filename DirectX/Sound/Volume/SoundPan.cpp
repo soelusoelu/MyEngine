@@ -2,7 +2,6 @@
 #include "../Output/OutputVoices.h"
 #include "../Voice/VoiceDetails.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
-#include "../Voice/MasteringVoice/OutputVoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 #include "../../System/Window.h"
@@ -11,8 +10,8 @@
 SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices) :
     mVoice(voice),
     mOutputVoices(outputVoices),
-    INPUT_CHANNELS(voice.getVoiceDetails().inputChannels),
-    OUTPUT_CHANNELS(masteringVoice.getDetails().outputChannels) {
+    INPUT_CHANNELS(voice.getVoiceDetails().channels),
+    OUTPUT_CHANNELS(masteringVoice.getDetails().channels) {
 }
 
 SoundPan::~SoundPan() = default;

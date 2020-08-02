@@ -6,7 +6,7 @@
 //サブミックスボイス作成時の初期化パラメータ
 struct SubmixVoiceInitParam {
     //ボイスのチャンネル数
-    unsigned inputChannels;
+    unsigned channels;
     //ボイスのサンプリング周波数
     unsigned inputSampleRate;
     //ボイスに属性を設定するフラグ
@@ -25,7 +25,7 @@ struct SubmixVoiceInitParam {
     const XAUDIO2_EFFECT_CHAIN* effectChain;
 
     SubmixVoiceInitParam() :
-        inputChannels(0),
+        channels(0),
         inputSampleRate(0),
         flags(),
         processingStage(0),

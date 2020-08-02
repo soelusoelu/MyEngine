@@ -12,8 +12,8 @@ SubmixVoice::SubmixVoice(IXAudio2SubmixVoice* XAudio2SubmixVoice, MasteringVoice
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, masteringVoice, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
-    mDetails.inputChannels = param.inputChannels;
-    mDetails.samplesPerSec = param.inputSampleRate;
+    mDetails.channels = param.channels;
+    mDetails.sampleRate = param.inputSampleRate;
 
     mSoundVolume = std::make_unique<SoundVolume>(*this, masteringVoice, *mOutputVoices);
 }

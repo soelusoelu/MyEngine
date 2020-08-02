@@ -5,8 +5,8 @@
 #include "Reverb/Reverb.h"
 #include "Reverb/SimpleReverb.h"
 #include "VolumeMeter/VolumeMeter.h"
+#include "../Voice/VoiceDetails.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
-#include "../Voice/MasteringVoice/OutputVoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 #include <cassert>
 
@@ -15,7 +15,7 @@ SoundEffect::SoundEffect(IVoice& voice, MasteringVoice& masteringVoice, bool use
     mSoundFilter(std::make_unique<SoundFilter>(*this, *this, voice, useFilters)),
     mDescs(),
     mIsApplied(false),
-    OUTPUT_CHANNELS(masteringVoice.getDetails().outputChannels) {
+    OUTPUT_CHANNELS(masteringVoice.getDetails().channels) {
 }
 
 SoundEffect::~SoundEffect() {

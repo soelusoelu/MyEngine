@@ -14,7 +14,7 @@ SubmixVoiceComponent::~SubmixVoiceComponent() = default;
 
 void SubmixVoiceComponent::awake() {
     SubmixVoiceInitParam param;
-    param.inputChannels = 2;
+    param.channels = 2;
     param.inputSampleRate = 44100;
     //mSubmixVoice = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
 }
