@@ -5,6 +5,7 @@
 
 class SoundVolume;
 class OutputVoices;
+class SoundEffect;
 
 //ボイスインターフェース
 class IVoice {
@@ -14,4 +15,5 @@ public:
     virtual const VoiceDetails& getVoiceDetails() const = 0;
     virtual SoundVolume& getSoundVolume() const = 0;
     virtual OutputVoices& getOutputVoices() const = 0;
+    virtual SoundEffect& getSoundEffect() const = 0;
 };

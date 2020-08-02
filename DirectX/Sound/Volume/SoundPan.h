@@ -9,7 +9,7 @@ class OutputVoices;
 //音の定位を扱うクラス
 class SoundPan {
 public:
-    SoundPan(IVoice& voice, MasteringVoice& masteringVoice, OutputVoices& outputVoices);
+    SoundPan(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices);
     ~SoundPan();
 
     /// <summary>

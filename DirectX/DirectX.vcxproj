@@ -168,6 +168,7 @@
     <ClCompile Include="Component\Text\Text.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\SimpleReverb.cpp" />
     <ClCompile Include="Sound\Effects\Equalizer\Equalizer.cpp" />
     <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
@@ -179,7 +180,7 @@
     <ClCompile Include="Device\SoundCreater.cpp" />
     <ClCompile Include="Sound\Player\Frequency.cpp" />
     <ClCompile Include="Sound\Voice\MasteringVoice\MasteringVoice.cpp" />
-    <ClCompile Include="Sound\Effects\SoundFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
     <ClCompile Include="Sound\Voice\SubmixVoice\SubmixVoice.cpp" />
     <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
     <ClCompile Include="Sound\Effects\TestEffect.cpp" />
@@ -292,6 +293,9 @@
     <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Device\Flag.h" />
+    <ClInclude Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.h" />
+    <ClInclude Include="Sound\Effects\IEffectCreater.h" />
+    <ClInclude Include="Sound\Effects\IEffectParameter.h" />
     <ClInclude Include="Sound\Effects\Reverb\SimpleReverb.h" />
     <ClInclude Include="Sound\Effects\Equalizer\Equalizer.h" />
     <ClInclude Include="Sound\Effects\Echo\Echo.h" />
@@ -311,7 +315,7 @@
     <ClInclude Include="Sound\Loader\ISoundLoader.h" />
     <ClInclude Include="Sound\Voice\MasteringVoice\MasteringVoice.h" />
     <ClInclude Include="Sound\Voice\MasteringVoice\OutputVoiceDetails.h" />
-    <ClInclude Include="Sound\Effects\SoundFilter.h" />
+    <ClInclude Include="Sound\Effects\Filter\SoundFilter.h" />
     <ClInclude Include="Sound\Flag\SoundFlag.h" />
     <ClInclude Include="Sound\Voice\SourceVoice\SourceVoiceInitParam.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoice.h" />

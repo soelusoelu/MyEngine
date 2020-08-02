@@ -10,7 +10,6 @@
 
 class MasteringVoice;
 class SoundPlayer;
-class SoundFilter;
 
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice : public IVoice {
@@ -41,6 +40,12 @@ public:
     /// </summary>
     /// <returns></returns>
     virtual OutputVoices& getOutputVoices() const override;
+
+    /// <summary>
+    /// サウンドエフェクト専門クラスを返す
+    /// </summary>
+    /// <returns></returns>
+    virtual SoundEffect& getSoundEffect() const override;
 
     /// <summary>
     /// 毎フレーム更新
@@ -86,12 +91,6 @@ public:
     /// <returns></returns>
     SoundPlayer& getSoundPlayer() const;
 
-    /// <summary>
-    /// サウンドエフェクト設定クラスを返す
-    /// </summary>
-    /// <returns></returns>
-    SoundFilter& getSoundFilter() const;
-
 private:
     SourceVoice(const SourceVoice&) = delete;
     SourceVoice& operator=(const SourceVoice&) = delete;
@@ -108,5 +107,5 @@ private:
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<SoundVolume> mSoundVolume;
     std::unique_ptr<OutputVoices> mOutputVoices;
-    std::unique_ptr<SoundFilter> mSoundFilter;
+    std::unique_ptr<SoundEffect> mSoundEffect;
 };

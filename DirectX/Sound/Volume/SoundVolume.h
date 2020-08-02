@@ -13,7 +13,7 @@ class SoundPan;
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(IVoice& voice, MasteringVoice& masteringVoice, OutputVoices& outputVoices);
+    SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices);
     ~SoundVolume();
 
     /// <summary>

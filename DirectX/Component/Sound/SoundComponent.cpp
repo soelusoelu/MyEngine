@@ -75,6 +75,6 @@ OutputVoices& SoundComponent::getOutputVoices() const {
     return mSound->getOutputVoices();
 }
 
-SoundFilter& SoundComponent::getSoundFilter() const {
-    return mSound->getSoundFilter();
+SoundEffect& SoundComponent::getSoundEffect() const {
+    return mSound->getSoundEffect();
 }

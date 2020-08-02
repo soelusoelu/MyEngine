@@ -7,11 +7,11 @@
 #include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Data/SoundBuffer.h"
+#include "../../Sound/Effects/SoundEffect.h"
+#include "../../Sound/Effects/Filter/SoundFilter.h"
 #include "../../Sound/Effects/Reverb/Reverb.h"
 #include "../../Sound/Effects/Reverb/SimpleReverb.h"
 #include "../../Sound/Effects/Reverb/SimpleReverbParam.h"
-#include "../../Sound/Effects/SoundEffect.h"
-#include "../../Sound/Effects/SoundFilter.h"
 #include "../../Sound/Output/OutputVoices.h"
 #include "../../Sound/Player/Frequency.h"
 #include "../../Sound/Player/SoundPlayer.h"
@@ -81,10 +81,9 @@ void Title::start() {
     //サウンドエフェクト
     //int reverbID = mWetSubmix->getSoundEffect().reverb();
     //int echoID = mWetSubmix->getSoundEffect().echo();
-    int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
-    mWetSubmix->getSoundEffect().apply();
+    //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
+    mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
     mVolumeMeter->getSoundEffect().volumeMeter();
-    mVolumeMeter->getSoundEffect().apply();
 
     //auto reverbParam = Reverb::getParameters();
     //reverbParam.WetDryMix = 20.f;
@@ -94,7 +93,8 @@ void Title::start() {
     //reverbParam.roomSize = 0.3f;
     //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
     mWetSubmix->getSoundVolume().setVolume(0.5f);
-    mDrySubmix->getSoundVolume().setVolume(0.5f);
+    mDrySubmix->getSoundVolume().setVolume(0.f);
+    mVolumeMeter->getSoundVolume().setVolume(0.f);
 
     mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
 }
@@ -113,7 +113,7 @@ void Title::update() {
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha2)) {
         mSound->getSoundPlayer().pauseFadeOut(1.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha3)) {
-        mSound->getSoundFilter().resetFilter();
+        mSound->getSoundEffect().getFilter().resetFilter();
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha0)) {
         mSound->getSoundVolume().getSoundPan().pan(0.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha9)) {
@@ -122,5 +122,5 @@ void Title::update() {
 
     float param = 0.f;
     mVolumeMeter->getSoundEffect().getEffectParameters(0, &param, sizeof(float));
-    Debug::log(StringUtil::floatToString(param, 6));
+    //Debug::log(StringUtil::floatToString(param, 6));
 }

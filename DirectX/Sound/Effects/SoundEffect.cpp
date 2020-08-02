@@ -1,6 +1,7 @@
 ﻿#include "SoundEffect.h"
 #include "Echo/Echo.h"
 #include "Equalizer/Equalizer.h"
+#include "Filter/SoundFilter.h"
 #include "Reverb/Reverb.h"
 #include "Reverb/SimpleReverb.h"
 #include "VolumeMeter/VolumeMeter.h"
@@ -9,11 +10,12 @@
 #include "../../DebugLayer/Debug.h"
 #include <cassert>
 
-SoundEffect::SoundEffect(IVoice& voice, MasteringVoice& masteringVoice) :
+SoundEffect::SoundEffect(IVoice& voice, MasteringVoice& masteringVoice, bool useFilters) :
     mVoice(voice),
-    mMasteringVoice(masteringVoice),
+    mSoundFilter(std::make_unique<SoundFilter>(*this, *this, voice, useFilters)),
     mDescs(),
-    mIsApplied(false) {
+    mIsApplied(false),
+    OUTPUT_CHANNELS(masteringVoice.getDetails().outputChannels) {
 }
 
 SoundEffect::~SoundEffect() {
@@ -21,56 +23,6 @@ SoundEffect::~SoundEffect() {
         desc.pEffect->Release();
         desc.pEffect = nullptr;
     }
-}
-
-int SoundEffect::reverb() {
-    Reverb reverb;
-    return createEffect(&reverb);
-}
-
-int SoundEffect::simpleReverb() {
-    SimpleReverb reverb;
-    return createEffect(&reverb);
-}
-
-int SoundEffect::echo() {
-    Echo echo;
-    return createEffect(&echo);
-}
-
-int SoundEffect::equalizer() {
-    Equalizer equalizer;
-    return createEffect(&equalizer);
-}
-
-int SoundEffect::volumeMeter() {
-    XAUDIO2_EFFECT_DESCRIPTOR desc;
-    desc.InitialState = true;
-    desc.OutputChannels = mMasteringVoice.getDetails().outputChannels;
-    desc.pEffect = reinterpret_cast<VolumeMeter::CXAPOParametersBase::CXAPOBase::IXAPO::IUnknown*>(new VolumeMeter());
-
-    mDescs.emplace_back(desc);
-    return mDescs.size() - 1;
-}
-
-void SoundEffect::apply() {
-    if (mDescs.empty()) {
-        Debug::logWarning("Effect descriptor is empty.");
-        return;
-    }
-
-    XAUDIO2_EFFECT_CHAIN chain;
-    chain.EffectCount = mDescs.size();
-    chain.pEffectDescriptors = mDescs.data();
-
-    auto res = mVoice.getXAudio2Voice()->SetEffectChain(&chain);
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::logError("Failed set effect chain.");
-    }
-#endif // _DEBUG
-
-    mIsApplied = true;
 }
 
 void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize, unsigned operationSet) {
@@ -99,17 +51,85 @@ void SoundEffect::getEffectParameters(int effectID, void* parameters, unsigned p
 #endif // _DEBUG
 }
 
-int SoundEffect::createEffect(ISoundEffect* target) {
+SoundFilter& SoundEffect::getFilter() const {
+    return *mSoundFilter;
+}
+
+int SoundEffect::reverb() {
+    Reverb reverb;
+    return createEffect(&reverb);
+}
+
+int SoundEffect::simpleReverb() {
+    SimpleReverb reverb;
+    return createEffect(&reverb);
+}
+
+int SoundEffect::echo() {
+    Echo echo;
+    return createEffect(&echo);
+}
+
+int SoundEffect::equalizer() {
+    Equalizer equalizer;
+    return createEffect(&equalizer);
+}
+
+int SoundEffect::volumeMeter() {
+    return createEffect(reinterpret_cast<IUnknown*>(new VolumeMeter()));
+}
+
+int SoundEffect::createEffect(ISoundEffect* target, bool isApply) {
     XAUDIO2_EFFECT_DESCRIPTOR desc;
     desc.InitialState = true;
-    desc.OutputChannels = mMasteringVoice.getDetails().outputChannels;
+    desc.OutputChannels = OUTPUT_CHANNELS;
     bool res = target->create(&desc);
     if (!res) { //エフェクトの作成に失敗していたら-1
         return -1;
     }
 
     mDescs.emplace_back(desc);
+
+    if (isApply) {
+        apply();
+    }
+
     return mDescs.size() - 1;
+}
+
+int SoundEffect::createEffect(IUnknown* target, bool isApply) {
+    XAUDIO2_EFFECT_DESCRIPTOR desc;
+    desc.InitialState = true;
+    desc.OutputChannels = OUTPUT_CHANNELS;
+    desc.pEffect = target;
+
+    mDescs.emplace_back(desc);
+
+    if (isApply) {
+        apply();
+    }
+
+    return mDescs.size() - 1;
+}
+
+void SoundEffect::apply() {
+    if (mDescs.empty()) {
+        Debug::logWarning("Effect descriptor is empty.");
+        return;
+    }
+
+    XAUDIO2_EFFECT_CHAIN chain;
+    chain.EffectCount = mDescs.size();
+    chain.pEffectDescriptors = mDescs.data();
+
+    auto res = mVoice.getXAudio2Voice()->SetEffectChain(&chain);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed set effect chain.");
+    }
+#endif // _DEBUG
+
+    mIsApplied = true;
 }
 
 bool SoundEffect::canAccessEffects(int effectID, const void* parameters) const {

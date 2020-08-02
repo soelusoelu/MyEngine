@@ -8,7 +8,7 @@
 #include "../../System/Window.h"
 #include <vector>
 
-SoundPan::SoundPan(IVoice& voice, MasteringVoice& masteringVoice, OutputVoices& outputVoices) :
+SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices) :
     mVoice(voice),
     mOutputVoices(outputVoices),
     INPUT_CHANNELS(voice.getVoiceDetails().inputChannels),

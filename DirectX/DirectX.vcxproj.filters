@@ -114,7 +114,6 @@
     <ClCompile Include="Sound\Voice\SourceVoice\SourceVoice.cpp" />
     <ClCompile Include="Sound\Voice\MasteringVoice\MasteringVoice.cpp" />
     <ClCompile Include="Sound\Voice\SubmixVoice\SubmixVoice.cpp" />
-    <ClCompile Include="Sound\Effects\SoundFilter.cpp" />
     <ClCompile Include="Sound\Player\SoundPlayer.cpp" />
     <ClCompile Include="Sound\Player\Frequency.cpp" />
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
@@ -130,6 +129,8 @@
     <ClCompile Include="Sound\Effects\TestEffect.cpp" />
     <ClCompile Include="Sound\Effects\TestEffectParameters.cpp" />
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -260,7 +261,6 @@
     <ClInclude Include="Sound\Voice\MasteringVoice\OutputVoiceDetails.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoice.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoiceInitParam.h" />
-    <ClInclude Include="Sound\Effects\SoundFilter.h" />
     <ClInclude Include="Sound\Player\SoundPlayer.h" />
     <ClInclude Include="Sound\Player\Frequency.h" />
     <ClInclude Include="Sound\XAudio2\XAudio2.h" />
@@ -285,5 +285,9 @@
     <ClInclude Include="Sound\Effects\TestEffectParameters.h" />
     <ClInclude Include="Sound\Effects\VolumeMeter\VolumeMeter.h" />
     <ClInclude Include="Sound\Effects\SoundEffectUtility.h" />
+    <ClInclude Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.h" />
+    <ClInclude Include="Sound\Effects\IEffectCreater.h" />
+    <ClInclude Include="Sound\Effects\Filter\SoundFilter.h" />
+    <ClInclude Include="Sound\Effects\IEffectParameter.h" />
   </ItemGroup>
 </Project>

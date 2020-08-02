@@ -6,7 +6,6 @@
 #include <memory>
 
 class MasteringVoice;
-class SoundEffect;
 
 //IXAudio2SubmixVoiceラッパークラス
 class SubmixVoice : public IVoice {
@@ -18,12 +17,7 @@ public:
     virtual const VoiceDetails& getVoiceDetails() const override;
     virtual SoundVolume& getSoundVolume() const override;
     virtual OutputVoices& getOutputVoices() const override;
-
-    /// <summary>
-    /// サウンドエフェクト設定クラスを返す
-    /// </summary>
-    /// <returns></returns>
-    SoundEffect& getSoundEffect() const;
+    virtual SoundEffect& getSoundEffect() const override;
 
 private:
     SubmixVoice(const SubmixVoice&) = delete;

@@ -1,6 +1,6 @@
 ﻿#include "SourceVoice.h"
 #include "../SubmixVoice/SubmixVoice.h"
-#include "../../Effects/SoundFilter.h"
+#include "../../Effects/SoundEffect.h"
 #include "../../Flag/SoundFlag.h"
 #include "../../Output/OutputVoices.h"
 #include "../../Player/SoundPlayer.h"
@@ -17,7 +17,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
     mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
-    mSoundFilter(std::make_unique<SoundFilter>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
+    mSoundEffect(std::make_unique<SoundEffect>(*this, masteringVoice, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mDetails.inputChannels = data.format->nChannels;
     mDetails.samplesPerSec = data.format->nSamplesPerSec;
@@ -46,6 +46,10 @@ SoundVolume& SourceVoice::getSoundVolume() const {
 
 OutputVoices& SourceVoice::getOutputVoices() const {
     return *mOutputVoices;
+}
+
+SoundEffect& SourceVoice::getSoundEffect() const {
+    return *mSoundEffect;
 }
 
 void SourceVoice::update() {
@@ -79,10 +83,6 @@ SoundData& SourceVoice::getSoundData() const {
 
 SoundPlayer& SourceVoice::getSoundPlayer() const {
     return *mSoundPlayer;
-}
-
-SoundFilter& SourceVoice::getSoundFilter() const {
-    return *mSoundFilter;
 }
 
 XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {
