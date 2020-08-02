@@ -26,7 +26,7 @@ SoundEffect::~SoundEffect() {
 }
 
 void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize, unsigned operationSet) {
-    if (!canAccessEffects(effectID, parameters)) {
+    if (!canAccessEffect(effectID, parameters)) {
         return;
     }
 
@@ -39,7 +39,7 @@ void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsi
 }
 
 void SoundEffect::getEffectParameters(int effectID, void* parameters, unsigned parametersByteSize) const {
-    if (!canAccessEffects(effectID, parameters)) {
+    if (!canAccessEffect(effectID, parameters)) {
         return;
     }
 
@@ -47,6 +47,32 @@ void SoundEffect::getEffectParameters(int effectID, void* parameters, unsigned p
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed set effect parameters.");
+    }
+#endif // _DEBUG
+}
+
+void SoundEffect::enable(int effectID, unsigned operationSet) {
+    if (!isValidID(effectID)) {
+        return;
+    }
+
+    auto res = mVoice.getXAudio2Voice()->EnableEffect(effectID, operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed enable effect.");
+    }
+#endif // _DEBUG
+}
+
+void SoundEffect::disable(int effectID, unsigned operationSet) {
+    if (!isValidID(effectID)) {
+        return;
+    }
+
+    auto res = mVoice.getXAudio2Voice()->DisableEffect(effectID, operationSet);
+#ifdef _DEBUG
+    if (FAILED(res)) {
+        Debug::logError("Failed disable effect.");
     }
 #endif // _DEBUG
 }
@@ -98,6 +124,10 @@ int SoundEffect::createEffect(ISoundEffect* target, bool isApply) {
 }
 
 int SoundEffect::createEffect(IUnknown* target, bool isApply) {
+    if (!target) {
+        return -1;
+    }
+
     XAUDIO2_EFFECT_DESCRIPTOR desc;
     desc.InitialState = true;
     desc.OutputChannels = OUTPUT_CHANNELS;
@@ -132,7 +162,7 @@ void SoundEffect::apply() {
     mIsApplied = true;
 }
 
-bool SoundEffect::canAccessEffects(int effectID, const void* parameters) const {
+bool SoundEffect::isValidID(int effectID) const {
     //エフェクトを適用してあるか
     if (!mIsApplied) {
         Debug::logWarning("Effect not applied.");
@@ -143,13 +173,28 @@ bool SoundEffect::canAccessEffects(int effectID, const void* parameters) const {
         Debug::logWarning("Invalid Effect ID.");
         return false;
     }
-    //パラメーターが有効か
+    //配列の範囲内か
+    assert(effectID >= 0 && effectID < mDescs.size());
+
+    return true;
+}
+
+bool SoundEffect::isValidParameters(const void* parameters) const {
     if (!parameters) {
         Debug::logWarning("Effect parameter is null");
         return false;
     }
-    //配列の範囲内か
-    assert(effectID >= 0 && effectID < mDescs.size());
+
+    return true;
+}
+
+bool SoundEffect::canAccessEffect(int effectID, const void* parameters) const {
+    if (!isValidID(effectID)) {
+        return false;
+    }
+    if (!isValidParameters(parameters)) {
+        return false;
+    }
 
     return true;
 }

@@ -35,6 +35,20 @@ public:
     virtual void getEffectParameters(int effectID, void* parameters, unsigned parametersByteSize) const override;
 
     /// <summary>
+    /// エフェクトを有効化する
+    /// </summary>
+    /// <param name="effectID">有効化したいエフェクトのID</param>
+    /// <param name="operationSet">0でいい</param>
+    void enable(int effectID, unsigned operationSet = XAUDIO2_COMMIT_NOW);
+
+    /// <summary>
+    /// エフェクトを無効化する
+    /// </summary>
+    /// <param name="effectID">無効化したいエフェクトのID</param>
+    /// <param name="operationSet">0でいい</param>
+    void disable(int effectID, unsigned operationSet = XAUDIO2_COMMIT_NOW);
+
+    /// <summary>
     /// フィルター管理クラスを返す
     /// </summary>
     /// <returns></returns>
@@ -79,8 +93,12 @@ private:
     virtual int createEffect(IUnknown* target, bool isApply = true) override;
     //作成した全エフェクトを適用する
     void apply();
-    //エフェクトにアクセスできる状態か
-    bool canAccessEffects(int effectID, const void* parameters) const;
+    //IDが有効か
+    bool isValidID(int effectID) const;
+    //パラメータが有効か
+    bool isValidParameters(const void* parameters) const;
+    //エフェクトにアクセスできるか
+    bool canAccessEffect(int effectID, const void* parameters) const;
 
 private:
     IVoice& mVoice;

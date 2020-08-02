@@ -1,30 +1,30 @@
-﻿#include "LowPassOnePoleFilter.h"
+﻿#include "HighPassOnePoleFilter.h"
 #include "../../../../DebugLayer/Debug.h"
 #include "../../../../Math/Math.h"
 
-MyFilter::LowPassOnePoleFilter::LowPassOnePoleFilter() :
+MyFilter::HighPassOnePoleFilter::HighPassOnePoleFilter() :
     CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mFrequency), sizeof(float), FALSE),
     mInputFmt(),
     mOutputFmt(),
-    mFrequency{ 1.f, 1.f, 1.f },
+    mFrequency{ 0.f, 0.f, 0.f },
     mLastVolume(0.f) {
 }
 
-MyFilter::LowPassOnePoleFilter::~LowPassOnePoleFilter() = default;
+MyFilter::HighPassOnePoleFilter::~HighPassOnePoleFilter() = default;
 
-STDMETHODIMP_(HRESULT __stdcall) MyFilter::LowPassOnePoleFilter::LockForProcess(UINT32 InputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pInputLockedParameters, UINT32 OutputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pOutputLockedParameters) {
+STDMETHODIMP_(HRESULT __stdcall) MyFilter::HighPassOnePoleFilter::LockForProcess(UINT32 InputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS * pInputLockedParameters, UINT32 OutputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS * pOutputLockedParameters) {
     mInputFmt = *pInputLockedParameters[0].pFormat;
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
 
     return CXAPOBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
 
-STDMETHODIMP_(void __stdcall) MyFilter::LowPassOnePoleFilter::Process(UINT32 InputProcessParameterCount, const XAPO_PROCESS_BUFFER_PARAMETERS* pInputProcessParameters, UINT32 OutputProcessParameterCount, XAPO_PROCESS_BUFFER_PARAMETERS* pOutputProcessParameters, BOOL IsEnabled) {
+STDMETHODIMP_(void __stdcall) MyFilter::HighPassOnePoleFilter::Process(UINT32 InputProcessParameterCount, const XAPO_PROCESS_BUFFER_PARAMETERS* pInputProcessParameters, UINT32 OutputProcessParameterCount, XAPO_PROCESS_BUFFER_PARAMETERS* pOutputProcessParameters, BOOL IsEnabled) {
     const auto& inParam = pInputProcessParameters[0];
     auto& outParam = pOutputProcessParameters[0];
 
     if (IsEnabled) { //有効
-        lowPassOnePoleFilter(inParam, outParam);
+        highPassOnePoleFilter(inParam, outParam);
     } else { //無効
         if (inParam.pBuffer != outParam.pBuffer) {
             memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
@@ -32,7 +32,7 @@ STDMETHODIMP_(void __stdcall) MyFilter::LowPassOnePoleFilter::Process(UINT32 Inp
     }
 }
 
-STDMETHODIMP_(void __stdcall) MyFilter::LowPassOnePoleFilter::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
+STDMETHODIMP_(void __stdcall) MyFilter::HighPassOnePoleFilter::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
     if (ParameterByteSize == sizeof(float)) {
         CXAPOParametersBase::SetParameters(pParameters, ParameterByteSize);
     } else {
@@ -40,7 +40,7 @@ STDMETHODIMP_(void __stdcall) MyFilter::LowPassOnePoleFilter::SetParameters(cons
     }
 }
 
-void MyFilter::LowPassOnePoleFilter::lowPassOnePoleFilter(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam) {
+void MyFilter::HighPassOnePoleFilter::highPassOnePoleFilter(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam) {
     //サイレントなら計算はしない
     if (inParam.BufferFlags == XAPO_BUFFER_FLAGS::XAPO_BUFFER_SILENT) {
         outParam.BufferFlags = inParam.BufferFlags;
@@ -60,7 +60,7 @@ void MyFilter::LowPassOnePoleFilter::lowPassOnePoleFilter(const XAPO_PROCESS_BUF
     float volume = mLastVolume;
     for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
         volume = volume * a1 + *inBuf * b0;
-        *outBuf = volume;
+        *outBuf = *inBuf - volume;
         ++inBuf;
         ++outBuf;
     }

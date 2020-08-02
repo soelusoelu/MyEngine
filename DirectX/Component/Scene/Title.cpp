@@ -82,7 +82,8 @@ void Title::start() {
     //int reverbID = mWetSubmix->getSoundEffect().reverb();
     //int echoID = mWetSubmix->getSoundEffect().echo();
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
-    mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
+    //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
+    mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.25f);
     mVolumeMeter->getSoundEffect().volumeMeter();
 
     //auto reverbParam = Reverb::getParameters();
@@ -118,6 +119,8 @@ void Title::update() {
         mSound->getSoundVolume().getSoundPan().pan(0.f);
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha9)) {
         mSound->getSoundVolume().getSoundPan().panCenter();
+    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha8)) {
+        mWetSubmix->getSoundEffect().disable(0);
     }
 
     float param = 0.f;

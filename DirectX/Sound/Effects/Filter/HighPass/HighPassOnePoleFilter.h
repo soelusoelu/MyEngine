@@ -3,14 +3,12 @@
 #include "../../SoundEffectUtility.h"
 #include <xapobase.h>
 
-#pragma comment(lib, "xapobase.lib")
-
 namespace MyFilter {
-class __declspec(uuid("{835656D0-10B9-4A70-B740-80486D4383A5}"))
-    LowPassOnePoleFilter : public CXAPOParametersBase {
+class __declspec(uuid("{BC07FB1C-5822-4013-A37B-7183C53570B4}"))
+    HighPassOnePoleFilter : public CXAPOParametersBase {
 public:
-    LowPassOnePoleFilter();
-    ~LowPassOnePoleFilter();
+    HighPassOnePoleFilter();
+    ~HighPassOnePoleFilter();
 
     //最初の一回だけ呼ばれる、値を保持するための関数
     STDMETHOD(LockForProcess)(
@@ -37,16 +35,16 @@ public:
         );
 
 private:
-    LowPassOnePoleFilter(const LowPassOnePoleFilter&) = delete;
-    LowPassOnePoleFilter& operator=(const LowPassOnePoleFilter&) = delete;
+    HighPassOnePoleFilter(const HighPassOnePoleFilter&) = delete;
+    HighPassOnePoleFilter& operator=(const HighPassOnePoleFilter&) = delete;
 
-    void lowPassOnePoleFilter(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
+    void highPassOnePoleFilter(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
 
 private:
     //プロパティ
     static inline XAPO_REGISTRATION_PROPERTIES xapoRegProp_ = {
-        __uuidof(LowPassOnePoleFilter),
-        L"LowPassOnePoleFilter",
+        __uuidof(HighPassOnePoleFilter),
+        L"HighPassOnePoleFilter",
         L"Copyright",
         1, 0,
         XAPOBASE_DEFAULT_FLAG,

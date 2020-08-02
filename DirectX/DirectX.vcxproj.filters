@@ -131,6 +131,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -289,5 +290,6 @@
     <ClInclude Include="Sound\Effects\IEffectCreater.h" />
     <ClInclude Include="Sound\Effects\Filter\SoundFilter.h" />
     <ClInclude Include="Sound\Effects\IEffectParameter.h" />
+    <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
   </ItemGroup>
 </Project>
