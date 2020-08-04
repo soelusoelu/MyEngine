@@ -60,19 +60,6 @@ IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
 }
 
-void SourceVoice::submitSourceBuffer(const SoundBuffer& buffer) const {
-    auto res = mXAudio2SourceVoice->SubmitSourceBuffer(&toBuffer(buffer), nullptr);
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::logError("Failed submit source buffer.");
-    }
-#endif // _DEBUG
-}
-
-void SourceVoice::submitSourceBuffer() const {
-    submitSourceBuffer(*mSoundBuffer);
-}
-
 SoundBuffer& SourceVoice::getSoundBuffer() const {
     return *mSoundBuffer;
 }
@@ -83,21 +70,4 @@ SoundData& SourceVoice::getSoundData() const {
 
 SoundPlayer& SourceVoice::getSoundPlayer() const {
     return *mSoundPlayer;
-}
-
-XAUDIO2_BUFFER SourceVoice::toBuffer(const SoundBuffer& buffer) const {
-    const unsigned sampleRate = mDetails.sampleRate;
-
-    XAUDIO2_BUFFER buf;
-    buf.Flags = buffer.flags;
-    buf.AudioBytes = buffer.size;
-    buf.pAudioData = buffer.buffer;
-    buf.PlayBegin = static_cast<unsigned>(buffer.playBegin * sampleRate);
-    buf.PlayLength = static_cast<unsigned>(buffer.playLength * sampleRate);
-    buf.LoopBegin = static_cast<unsigned>(buffer.loopBegin * sampleRate);
-    buf.LoopLength = static_cast<unsigned>(buffer.loopLength * sampleRate);
-    buf.LoopCount = buffer.loopCount;
-    buf.pContext = buffer.context;
-
-    return buf;
 }

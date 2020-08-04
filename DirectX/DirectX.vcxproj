@@ -360,7 +360,7 @@
     <ClInclude Include="Transform\Pivot.h" />
     <ClInclude Include="DebugLayer\Pause.h" />
     <ClInclude Include="Component\Collider\SphereCollider.h" />
-    <ClInclude Include="Sound\Data\SoundBuffer.h" />
+    <ClInclude Include="Sound\Buffer\SoundBuffer.h" />
     <ClInclude Include="Sound\Volume\SoundFade.h" />
     <ClInclude Include="Sound\XAudio2\SoundBase.h" />
     <ClInclude Include="Sound\Player\SoundPlayer.h" />
