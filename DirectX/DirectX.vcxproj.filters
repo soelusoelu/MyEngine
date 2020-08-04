@@ -120,7 +120,6 @@
     <ClCompile Include="Sound\XAudio2\SoundBase.cpp" />
     <ClCompile Include="Device\SoundCreater.cpp" />
     <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
-    <ClCompile Include="Sound\Output\OutputVoices.cpp" />
     <ClCompile Include="Sound\Volume\SoundPan.cpp" />
     <ClCompile Include="Sound\Effects\Equalizer\Equalizer.cpp" />
     <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
@@ -133,6 +132,7 @@
     <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
+    <ClCompile Include="Sound\Voice\Output\OutputVoices.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -273,7 +273,6 @@
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />
     <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
-    <ClInclude Include="Sound\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Volume\SoundPan.h" />
     <ClInclude Include="Sound\Effects\Equalizer\Equalizer.h" />
     <ClInclude Include="Sound\Effects\Equalizer\EqualizerParam.h" />
@@ -292,5 +291,6 @@
     <ClInclude Include="Sound\Effects\IEffectParameter.h" />
     <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
+    <ClInclude Include="Sound\Voice\Output\OutputVoices.h" />
   </ItemGroup>
 </Project>

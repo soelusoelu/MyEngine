@@ -19,5 +19,4 @@ private:
     std::shared_ptr<SoundComponent> mSound;
     std::shared_ptr<SubmixVoice> mWetSubmix;
     std::shared_ptr<SubmixVoice> mDrySubmix;
-    std::shared_ptr<SubmixVoice> mVolumeMeter;
 };

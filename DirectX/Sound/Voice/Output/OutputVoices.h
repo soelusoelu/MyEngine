@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Voice/IVoice.h"
+#include "../IVoice.h"
 #include <xaudio2.h>
 #include <memory>
 #include <vector>
@@ -24,7 +24,7 @@ public:
     /// <param name="voice">設定したいボイス</param>
     /// <param name="useFilter">フィルターを使用するか</param>
     /// <param name="isApply">設定を即適用するか</param>
-    void addOutputVoice(const std::shared_ptr<IVoice>& voice, bool useFilter = false, bool isApply = true);
+    void addOutputVoice(const IVoice& voice, bool useFilter = false, bool isApply = true);
 
     /// <summary>
     /// 添字に対応するディスクリプタを返す
@@ -48,6 +48,5 @@ private:
 
 private:
     IVoice& mVoice;
-    std::vector<std::shared_ptr<IVoice>> mOutputVoices;
     std::vector<XAUDIO2_SEND_DESCRIPTOR> mDescs;
 };

@@ -12,11 +12,11 @@
 #include "../../Sound/Effects/Reverb/Reverb.h"
 #include "../../Sound/Effects/Reverb/SimpleReverb.h"
 #include "../../Sound/Effects/Reverb/SimpleReverbParam.h"
-#include "../../Sound/Output/OutputVoices.h"
 #include "../../Sound/Player/Frequency.h"
 #include "../../Sound/Player/SoundPlayer.h"
 #include "../../Sound/Voice/IVoice.h"
 #include "../../Sound/Voice/VoiceDetails.h"
+#include "../../Sound/Voice/Output/OutputVoices.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoice.h"
 #include "../../Sound/Voice/SubmixVoice/SubmixVoice.h"
 #include "../../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
@@ -31,8 +31,7 @@ Title::Title() :
     mScene(nullptr),
     mSound(nullptr),
     mWetSubmix(nullptr),
-    mDrySubmix(nullptr),
-    mVolumeMeter(nullptr)
+    mDrySubmix(nullptr)
 {
 }
 
@@ -53,16 +52,14 @@ void Title::start() {
     auto& soundCreater = World::instance().assetsManager().getSoundCreater();
     mWetSubmix = soundCreater.createSubmixVoice(param);
     mDrySubmix = soundCreater.createSubmixVoice(param);
-    mVolumeMeter = soundCreater.createSubmixVoice(param);
 
     if (!mWetSubmix || !mDrySubmix) {
         return;
     }
 
     auto& outputVoice = mSound->getOutputVoices();
-    outputVoice.addOutputVoice(mWetSubmix, false, false);
-    outputVoice.addOutputVoice(mDrySubmix, false, false);
-    outputVoice.addOutputVoice(mVolumeMeter);
+    outputVoice.addOutputVoice(*mWetSubmix, false, false);
+    outputVoice.addOutputVoice(*mDrySubmix, false, false);
 
     //mSound->getSoundVolume().setVolume(0.f);
     //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
@@ -83,8 +80,7 @@ void Title::start() {
     //int echoID = mWetSubmix->getSoundEffect().echo();
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
-    mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.1f);
-    mVolumeMeter->getSoundEffect().volumeMeter();
+    //mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.1f);
 
     //auto reverbParam = Reverb::getParameters();
     //reverbParam.WetDryMix = 20.f;
@@ -95,7 +91,6 @@ void Title::start() {
     //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
     mWetSubmix->getSoundVolume().setVolume(0.5f);
     mDrySubmix->getSoundVolume().setVolume(0.f);
-    mVolumeMeter->getSoundVolume().setVolume(0.f);
 
     mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
 }
@@ -122,8 +117,4 @@ void Title::update() {
     } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha8)) {
         mWetSubmix->getSoundEffect().disable(0);
     }
-
-    float param = 0.f;
-    mVolumeMeter->getSoundEffect().getEffectParameters(0, &param, sizeof(float));
-    //Debug::log(StringUtil::floatToString(param, 6));
 }

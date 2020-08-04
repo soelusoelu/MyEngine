@@ -1,5 +1,5 @@
 ﻿#include "OutputVoices.h"
-#include "../../DebugLayer/Debug.h"
+#include "../../../DebugLayer/Debug.h"
 #include <cassert>
 
 OutputVoices::OutputVoices(IVoice& voice) :
@@ -21,18 +21,14 @@ void OutputVoices::setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& v
         mDescs[i].pOutputVoice = voices[i]->getXAudio2Voice();
     }
 
-    mOutputVoices = voices;
-
     apply();
 }
 
-void OutputVoices::addOutputVoice(const std::shared_ptr<IVoice>& voice, bool useFilter, bool isApply) {
+void OutputVoices::addOutputVoice(const IVoice& voice, bool useFilter, bool isApply) {
     XAUDIO2_SEND_DESCRIPTOR desc;
     desc.Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
-    desc.pOutputVoice = voice->getXAudio2Voice();
+    desc.pOutputVoice = voice.getXAudio2Voice();
     mDescs.emplace_back(desc);
-
-    mOutputVoices.emplace_back(voice);
 
     if (isApply) {
         apply();

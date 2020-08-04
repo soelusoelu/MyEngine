@@ -1,7 +1,7 @@
 ﻿#include "SoundPan.h"
-#include "../Output/OutputVoices.h"
 #include "../Voice/VoiceDetails.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
+#include "../Voice/Output/OutputVoices.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 #include "../../System/Window.h"
