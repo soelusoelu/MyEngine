@@ -6,6 +6,7 @@
 #pragma comment(lib, "xapobase.lib")
 
 namespace MyFilter {
+//単極ローパスフィルタ
 class __declspec(uuid("{835656D0-10B9-4A70-B740-80486D4383A5}"))
     LowPassOnePoleFilter : public CXAPOParametersBase {
 public:

@@ -83,7 +83,7 @@ void Title::start() {
     //int echoID = mWetSubmix->getSoundEffect().echo();
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
-    mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.25f);
+    mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.1f);
     mVolumeMeter->getSoundEffect().volumeMeter();
 
     //auto reverbParam = Reverb::getParameters();

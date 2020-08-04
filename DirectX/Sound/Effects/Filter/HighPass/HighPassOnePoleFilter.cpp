@@ -16,7 +16,7 @@ STDMETHODIMP_(HRESULT __stdcall) MyFilter::HighPassOnePoleFilter::LockForProcess
     mInputFmt = *pInputLockedParameters[0].pFormat;
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
 
-    return CXAPOBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
+    return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
 
 STDMETHODIMP_(void __stdcall) MyFilter::HighPassOnePoleFilter::Process(UINT32 InputProcessParameterCount, const XAPO_PROCESS_BUFFER_PARAMETERS* pInputProcessParameters, UINT32 OutputProcessParameterCount, XAPO_PROCESS_BUFFER_PARAMETERS* pOutputProcessParameters, BOOL IsEnabled) {
@@ -59,11 +59,26 @@ void MyFilter::HighPassOnePoleFilter::highPassOnePoleFilter(const XAPO_PROCESS_B
 
     float volume = mLastVolume;
     for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
-        volume = volume * a1 + *inBuf * b0;
-        *outBuf = *inBuf - volume;
-        ++inBuf;
-        ++outBuf;
+        for (size_t ch = 0; ch < mInputFmt.nChannels; ch++) {
+            volume = volume * a1 + *inBuf * b0;
+            *outBuf = *inBuf - volume;
+            ++inBuf;
+        }
+        outBuf += mInputFmt.nChannels;
     }
+
+    //出力先初期位置をセット
+    //float* left = outBuf;
+    //float* right = outBuf + 1;
+    //for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
+    //    for (size_t ch = 0; ch < mInputFmt.nChannels; ch++) {
+    //        volume = volume * a1 + *inBuf * b0;
+    //        *left = *right = *inBuf - volume;
+    //        ++inBuf;
+    //    }
+    //    left += mInputFmt.nChannels;
+    //    right += mInputFmt.nChannels;
+    //}
 
     mLastVolume = volume;
     outParam.ValidFrameCount = inParam.ValidFrameCount;

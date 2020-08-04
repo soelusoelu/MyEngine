@@ -130,7 +130,7 @@ int SoundEffect::createEffect(IUnknown* target, bool isApply) {
 
     XAUDIO2_EFFECT_DESCRIPTOR desc;
     desc.InitialState = true;
-    desc.OutputChannels = OUTPUT_CHANNELS;
+    desc.OutputChannels = mVoice.getVoiceDetails().channels;
     desc.pEffect = target;
 
     mDescs.emplace_back(desc);

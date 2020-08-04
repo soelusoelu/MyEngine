@@ -3,7 +3,10 @@
 #include "../../SoundEffectUtility.h"
 #include <xapobase.h>
 
+#pragma comment(lib, "xapobase.lib")
+
 namespace MyFilter {
+//単極ハイパスフィルタ
 class __declspec(uuid("{BC07FB1C-5822-4013-A37B-7183C53570B4}"))
     HighPassOnePoleFilter : public CXAPOParametersBase {
 public:

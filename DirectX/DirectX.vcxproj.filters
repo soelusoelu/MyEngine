@@ -132,6 +132,7 @@
     <ClCompile Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -290,5 +291,6 @@
     <ClInclude Include="Sound\Effects\Filter\SoundFilter.h" />
     <ClInclude Include="Sound\Effects\IEffectParameter.h" />
     <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
+    <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
   </ItemGroup>
 </Project>
