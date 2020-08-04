@@ -6,16 +6,14 @@
 #include "Reverb/SimpleReverb.h"
 #include "VolumeMeter/VolumeMeter.h"
 #include "../Voice/VoiceDetails.h"
-#include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../../DebugLayer/Debug.h"
 #include <cassert>
 
-SoundEffect::SoundEffect(IVoice& voice, MasteringVoice& masteringVoice, bool useFilters) :
+SoundEffect::SoundEffect(IVoice& voice, bool useFilters) :
     mVoice(voice),
     mSoundFilter(std::make_unique<SoundFilter>(*this, *this, voice, useFilters)),
     mDescs(),
-    mIsApplied(false),
-    OUTPUT_CHANNELS(masteringVoice.getDetails().channels) {
+    mIsApplied(false) {
 }
 
 SoundEffect::~SoundEffect() {
@@ -108,13 +106,14 @@ int SoundEffect::volumeMeter() {
 int SoundEffect::createEffect(ISoundEffect* target, bool isApply) {
     XAUDIO2_EFFECT_DESCRIPTOR desc;
     desc.InitialState = true;
-    desc.OutputChannels = OUTPUT_CHANNELS;
+    desc.OutputChannels = mVoice.getVoiceDetails().channels;
     bool res = target->create(&desc);
     if (!res) { //エフェクトの作成に失敗していたら-1
         return -1;
     }
 
     mDescs.emplace_back(desc);
+    mIsApplied = false;
 
     if (isApply) {
         apply();
@@ -134,6 +133,7 @@ int SoundEffect::createEffect(IUnknown* target, bool isApply) {
     desc.pEffect = target;
 
     mDescs.emplace_back(desc);
+    mIsApplied = false;
 
     if (isApply) {
         apply();

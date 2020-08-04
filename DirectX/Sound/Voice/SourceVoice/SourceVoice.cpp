@@ -17,7 +17,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
     mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
-    mSoundEffect(std::make_unique<SoundEffect>(*this, masteringVoice, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
+    mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mDetails.channels = data.format->nChannels;
     mDetails.sampleRate = data.format->nSamplesPerSec;

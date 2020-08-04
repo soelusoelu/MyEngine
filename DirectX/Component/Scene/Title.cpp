@@ -76,7 +76,7 @@ void Title::start() {
     //mSound->getSoundVolume().getSoundPan().panCenter();
 
     //サウンドエフェクト
-    //int reverbID = mWetSubmix->getSoundEffect().reverb();
+    int reverbID = mWetSubmix->getSoundEffect().reverb();
     //int echoID = mWetSubmix->getSoundEffect().echo();
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);

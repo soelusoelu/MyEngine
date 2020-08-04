@@ -8,13 +8,12 @@
 #include <memory>
 #include <vector>
 
-class MasteringVoice;
 class SoundFilter;
 
 //サウンドエフェクト専用クラス
 class SoundEffect : public IEffectCreater, public IEffectParameter {
 public:
-    SoundEffect(IVoice& voice, MasteringVoice& masteringVoice, bool useFilters);
+    SoundEffect(IVoice& voice, bool useFilters);
     ~SoundEffect();
 
     /// <summary>
@@ -105,5 +104,4 @@ private:
     std::unique_ptr<SoundFilter> mSoundFilter;
     std::vector<XAUDIO2_EFFECT_DESCRIPTOR> mDescs;
     bool mIsApplied;
-    const unsigned OUTPUT_CHANNELS;
 };

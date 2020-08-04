@@ -1,7 +1,7 @@
 ﻿#include "SubmixVoice.h"
 #include "../../Effects/SoundEffect.h"
 #include "../../Flag/SoundFlag.h"
-#include "../../Output/OutputVoices.h"
+#include "../../Voice/Output/OutputVoices.h"
 #include "../../Volume/SoundVolume.h"
 #include "../../../Device/Flag.h"
 
@@ -10,7 +10,7 @@ SubmixVoice::SubmixVoice(IXAudio2SubmixVoice* XAudio2SubmixVoice, MasteringVoice
     mDetails(),
     mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
-    mSoundEffect(std::make_unique<SoundEffect>(*this, masteringVoice, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
+    mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mDetails.channels = param.channels;
     mDetails.sampleRate = param.inputSampleRate;
@@ -35,10 +35,10 @@ SoundVolume& SubmixVoice::getSoundVolume() const {
     return *mSoundVolume;
 }
 
-SoundEffect& SubmixVoice::getSoundEffect() const {
-    return *mSoundEffect;
-}
-
 OutputVoices& SubmixVoice::getOutputVoices() const {
     return *mOutputVoices;
+}
+
+SoundEffect& SubmixVoice::getSoundEffect() const {
+    return *mSoundEffect;
 }

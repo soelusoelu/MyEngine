@@ -11,7 +11,7 @@ SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice, OutputVo
     mVoice(voice),
     mOutputVoices(outputVoices),
     INPUT_CHANNELS(voice.getVoiceDetails().channels),
-    OUTPUT_CHANNELS(masteringVoice.getDetails().channels) {
+    OUTPUT_CHANNELS(masteringVoice.getVoiceDetails().channels) {
 }
 
 SoundPan::~SoundPan() = default;
