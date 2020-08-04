@@ -1,5 +1,6 @@
 ﻿#include "SoundPlayer.h"
 #include "Frequency.h"
+#include "../Voice/VoiceDetails.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../Volume/SoundFade.h"
 #include "../Volume/SoundVolume.h"
@@ -13,7 +14,9 @@ SoundPlayer::SoundPlayer(SourceVoice& sourceVoice, float maxFrequencyRatio) :
 SoundPlayer::~SoundPlayer() = default;
 
 void SoundPlayer::play(unsigned operationSet) const {
-    const auto& buf = mSourceVoice.getSoundBuffer();
+    SoundBuffer buf;
+    buf.buffer = mSourceVoice.getSoundData().buffer;
+    buf.size = mSourceVoice.getSoundData().size;
     playFromSoundBuffer(buf, operationSet);
 }
 
@@ -24,7 +27,9 @@ void SoundPlayer::playFadeIn(float targetVolume, float targetTime, unsigned oper
 }
 
 void SoundPlayer::playInfinity(unsigned operationSet) const {
-    auto& buf = mSourceVoice.getSoundBuffer();
+    SoundBuffer buf;
+    buf.buffer = mSourceVoice.getSoundData().buffer;
+    buf.size = mSourceVoice.getSoundData().size;
     buf.loopCount = XAUDIO2_LOOP_INFINITE;
     playFromSoundBuffer(buf, operationSet);
 }
@@ -97,7 +102,7 @@ XAUDIO2_BUFFER SoundPlayer::toBuffer(const SoundBuffer& buffer) const {
     const unsigned sampleRate = mSourceVoice.getVoiceDetails().sampleRate;
 
     XAUDIO2_BUFFER buf;
-    buf.Flags = buffer.flags;
+    buf.Flags = static_cast<unsigned>(buffer.flag);
     buf.AudioBytes = buffer.size;
     buf.pAudioData = buffer.buffer;
     buf.PlayBegin = static_cast<unsigned>(buffer.playBegin * sampleRate);

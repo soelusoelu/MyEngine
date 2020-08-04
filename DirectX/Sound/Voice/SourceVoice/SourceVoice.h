@@ -2,7 +2,6 @@
 
 #include "SourceVoiceInitParam.h"
 #include "../IVoice.h"
-#include "../../Buffer/SoundBuffer.h"
 #include "../../Loader/WaveformData.h"
 #include <xaudio2.h>
 #include <memory>
@@ -59,12 +58,6 @@ public:
     IXAudio2SourceVoice* getXAudio2SourceVoice() const;
 
     /// <summary>
-    /// バッファを返す
-    /// </summary>
-    /// <returns></returns>
-    SoundBuffer& getSoundBuffer() const;
-
-    /// <summary>
     /// サウンドデータを返す
     /// </summary>
     /// <returns></returns>
@@ -82,8 +75,6 @@ private:
 
 private:
     IXAudio2SourceVoice* mXAudio2SourceVoice;
-    MasteringVoice& mMasteringVoice;
-    std::unique_ptr<SoundBuffer> mSoundBuffer;
     VoiceDetails mDetails;
     std::unique_ptr<SoundData> mSoundData;
     std::unique_ptr<SoundPlayer> mSoundPlayer;

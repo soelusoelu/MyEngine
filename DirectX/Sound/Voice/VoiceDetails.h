@@ -10,12 +10,18 @@ struct SoundData {
     //波形データのサイズ
     const unsigned size;
     //ビットレート
-    const unsigned bitsPerSample;
+    const unsigned bitRate;
+    //1サンプルのバイト数
+    const unsigned blockAlign;
+    //1秒間のバイト数
+    const unsigned averageBytesPerSec;
 
     SoundData(const WaveformData& data) :
         buffer(data.buffer),
         size(data.size),
-        bitsPerSample(data.format->wBitsPerSample) {
+        bitRate(data.format->wBitsPerSample),
+        blockAlign(data.format->nBlockAlign),
+        averageBytesPerSec(data.format->nAvgBytesPerSec) {
     }
 };
 

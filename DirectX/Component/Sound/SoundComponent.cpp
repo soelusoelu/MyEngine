@@ -51,10 +51,6 @@ bool SoundComponent::isNull() const {
     return (mSound) ? false : true;
 }
 
-SoundBuffer& SoundComponent::getSoundBuffer() const {
-    return mSound->getSoundBuffer();
-}
-
 const VoiceDetails& SoundComponent::getVoiceDetails() const {
     return mSound->getVoiceDetails();
 }

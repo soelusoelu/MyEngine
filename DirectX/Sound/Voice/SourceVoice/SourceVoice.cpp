@@ -10,8 +10,6 @@
 
 SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
-    mMasteringVoice(masteringVoice),
-    mSoundBuffer(std::make_unique<SoundBuffer>()),
     mDetails(),
     mSoundData(std::make_unique<SoundData>(data)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
@@ -21,8 +19,6 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
 
     mDetails.channels = data.format->nChannels;
     mDetails.sampleRate = data.format->nSamplesPerSec;
-    mSoundBuffer->buffer = data.buffer;
-    mSoundBuffer->size = data.size;
 
     mSoundVolume = std::make_unique<SoundVolume>(*this, masteringVoice, *mOutputVoices);
 }
@@ -58,10 +54,6 @@ void SourceVoice::update() {
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
     return mXAudio2SourceVoice;
-}
-
-SoundBuffer& SourceVoice::getSoundBuffer() const {
-    return *mSoundBuffer;
 }
 
 SoundData& SourceVoice::getSoundData() const {

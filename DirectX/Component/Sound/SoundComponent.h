@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../Component.h"
-#include "../../Sound/Buffer/SoundBuffer.h"
 #include "../../Sound/Voice/IVoice.h"
 #include "../../Sound/Voice/VoiceDetails.h"
 #include <memory>
@@ -27,7 +26,6 @@ public:
     //使用可能状態か
     bool isNull() const;
 
-    SoundBuffer& getSoundBuffer() const;
     const VoiceDetails& getVoiceDetails() const;
     SoundData& getSoundData() const;
     SoundPlayer& getSoundPlayer() const;

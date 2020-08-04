@@ -2,12 +2,17 @@
 
 #include <xaudio2.h>
 
+enum class SoundBufferFlag {
+    NONE = 0,
+    END_OF_STREAM = XAUDIO2_END_OF_STREAM
+};
+
 //波形データの構造体
 struct SoundBuffer {
-    //XAUDIO2_END_OF_STREAMを入れるとバッファの後続がないことを示す
+    //END_OF_STREAMを入れるとバッファの後続がないことを示す
     //再生後、ボイスは自動的に終了停止状態になる
     //それ以外では0
-    unsigned flags;
+    SoundBufferFlag flag;
     //波形データ全体のサイズ(単位: バイト)
     //XAUDIO2_MAX_BUFFER_BYTES(2GB)が上限
     unsigned size;
@@ -34,9 +39,9 @@ struct SoundBuffer {
     void* context;
 
     SoundBuffer() :
-        flags(XAUDIO2_END_OF_STREAM),
+        flag(SoundBufferFlag::END_OF_STREAM),
         size(0),
-        buffer(0),
+        buffer(nullptr),
         playBegin(0.f),
         playLength(0.f),
         loopBegin(0.f),
