@@ -38,8 +38,6 @@ private:
     SoundCreater(const SoundCreater&) = delete;
     SoundCreater& operator=(const SoundCreater&) = delete;
 
-    //まだ読み込んだことがなければ、音を読み込む
-    void loadSound(std::shared_ptr<WaveformData>* data, const std::string& filePath, const SourceVoiceInitParam& param);
     //拡張子を識別し、パーサーを生成する
     std::shared_ptr<ISoundLoader> createLoaderFromFilePath(const std::string& filePath);
 

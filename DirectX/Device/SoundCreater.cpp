@@ -31,7 +31,15 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
     if (itr != mSounds.end()) { //既に読み込まれている
         data = itr->second;
     } else { //初読み込み
-        loadSound(&data, filePath, param);
+        auto loader = createLoaderFromFilePath(filePath);
+        if (!loader) {
+            return nullptr;
+        }
+        mDirectory.setSoundDirectory(filePath);
+        data = std::make_shared<WaveformData>();
+        auto fileName = FileUtil::getFileNameFromDirectry(filePath);
+        //音を読み込む
+        loader->loadFromFile(&data, fileName);
         //データの読み込みに失敗していたら
         if (!data) {
             return nullptr;
@@ -49,18 +57,6 @@ std::shared_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceIn
     }
 
     return mSoundBase->getXAudio2().createSubmixVoice(mSoundBase->getMasteringVoice(), param);
-}
-
-void SoundCreater::loadSound(std::shared_ptr<WaveformData>* data, const std::string& filePath, const SourceVoiceInitParam& param) {
-    auto loader = createLoaderFromFilePath(filePath);
-    if (!loader) {
-        return;
-    }
-
-    mDirectory.setSoundDirectory(filePath);
-    *data = std::make_shared<WaveformData>();
-    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-    loader->loadFromFile(data, fileName);
 }
 
 std::shared_ptr<ISoundLoader> SoundCreater::createLoaderFromFilePath(const std::string& filePath) {

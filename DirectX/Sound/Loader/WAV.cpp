@@ -5,7 +5,7 @@
 WAV::WAV() = default;
 WAV::~WAV() = default;
 
-void WAV::loadFromFile(std::shared_ptr<WaveformData>* data, const std::string& fileName) {
+void WAV::loadFromFile(std::shared_ptr<WaveformData>* data, const std::string& fileName) const {
     HMMIO hMmio = NULL; //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
     MMCKINFO ckInfo; //チャンク情報
     MMCKINFO riffckInfo; //最上部チャンク(RIFFチャンク)保存用

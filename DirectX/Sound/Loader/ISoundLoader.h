@@ -8,5 +8,5 @@
 class ISoundLoader {
 public:
     virtual ~ISoundLoader() = default;
-    virtual void loadFromFile(std::shared_ptr<WaveformData>* data, const std::string& fileName) = 0;
+    virtual void loadFromFile(std::shared_ptr<WaveformData>* data, const std::string& fileName) const = 0;
 };

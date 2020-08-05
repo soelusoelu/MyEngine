@@ -48,7 +48,7 @@ void SoundPlayer::pause(unsigned flags, unsigned operationSet) const {
     auto res = mSourceVoice.getXAudio2SourceVoice()->Stop(flags, operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {
-        Debug::logError("Failed suond pause.");
+        Debug::logError("Failed sound pause.");
     }
 #endif // _DEBUG
 }
@@ -61,7 +61,7 @@ void SoundPlayer::stop(unsigned operationSet) const {
     auto res = mSourceVoice.getXAudio2SourceVoice()->Stop(0, operationSet);
 #ifdef _DEBUG
     if (FAILED(res)) {
-        Debug::logError("Failed suond stop.");
+        Debug::logError("Failed sound stop.");
     }
 #endif // _DEBUG
 }
