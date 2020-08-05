@@ -10,16 +10,15 @@ struct WaveformData {
     //波形データのサイズ
     unsigned size;
     //すべての非PCMフォーマットに使用される拡張波形フォーマット構造
-    WAVEFORMATEX* format;
+    WAVEFORMATEX format;
 
     WaveformData() :
         buffer(nullptr),
         size(0),
-        format(nullptr) {
+        format() {
     }
 
     ~WaveformData() {
         safeDelete(buffer);
-        safeDelete(format);
     }
 };

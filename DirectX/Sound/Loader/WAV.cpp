@@ -107,16 +107,12 @@ bool WAV::isWavFile(const MMCKINFO& riffChunk) const {
     return true;
 }
 
-void WAV::createWaveFormat(WAVEFORMATEX** dst, const PCMWAVEFORMAT& src) {
-    if (!*dst) {
-        *dst = new WAVEFORMATEX();
-    }
-
-    (*dst)->wFormatTag = src.wf.wFormatTag;
-    (*dst)->nChannels = src.wf.nChannels;
-    (*dst)->nSamplesPerSec = src.wf.nSamplesPerSec;
-    (*dst)->nAvgBytesPerSec = src.wf.nAvgBytesPerSec;
-    (*dst)->nBlockAlign = src.wf.nBlockAlign;
-    (*dst)->wBitsPerSample = src.wBitsPerSample;
-    (*dst)->cbSize = 0;
+void WAV::createWaveFormat(WAVEFORMATEX* dst, const PCMWAVEFORMAT& src) {
+    dst->wFormatTag = src.wf.wFormatTag;
+    dst->nChannels = src.wf.nChannels;
+    dst->nSamplesPerSec = src.wf.nSamplesPerSec;
+    dst->nAvgBytesPerSec = src.wf.nAvgBytesPerSec;
+    dst->nBlockAlign = src.wf.nBlockAlign;
+    dst->wBitsPerSample = src.wBitsPerSample;
+    dst->cbSize = 0;
 }

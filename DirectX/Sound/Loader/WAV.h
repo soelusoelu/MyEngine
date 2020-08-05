@@ -32,7 +32,7 @@ private:
     //WAVファイルか
     bool isWavFile(const MMCKINFO& riffChunk) const;
     //Waveフォーマットを作成する
-    void createWaveFormat(WAVEFORMATEX** dst, const PCMWAVEFORMAT& src);
+    void createWaveFormat(WAVEFORMATEX* dst, const PCMWAVEFORMAT& src);
 
 private:
     //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)

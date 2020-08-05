@@ -19,9 +19,9 @@ struct SoundData {
     SoundData(const WaveformData& data) :
         buffer(data.buffer),
         size(data.size),
-        bitRate(data.format->wBitsPerSample),
-        blockAlign(data.format->nBlockAlign),
-        averageBytesPerSec(data.format->nAvgBytesPerSec) {
+        bitRate(data.format.wBitsPerSample),
+        blockAlign(data.format.nBlockAlign),
+        averageBytesPerSec(data.format.nAvgBytesPerSec) {
     }
 };
 
