@@ -50,7 +50,7 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
     return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), *data, param);
 }
 
-std::shared_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
+std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
     //サウンドAPIが使用できない状態ならnullptrを返す
     if (mSoundBase->isNull()) {
         return nullptr;
@@ -59,11 +59,11 @@ std::shared_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceIn
     return mSoundBase->getXAudio2().createSubmixVoice(mSoundBase->getMasteringVoice(), param);
 }
 
-std::shared_ptr<ISoundLoader> SoundCreater::createLoaderFromFilePath(const std::string& filePath) {
-    std::shared_ptr<ISoundLoader> loader = nullptr;
+std::unique_ptr<ISoundLoader> SoundCreater::createLoaderFromFilePath(const std::string& filePath) {
+    std::unique_ptr<ISoundLoader> loader = nullptr;
     auto ext = FileUtil::getFileExtension(filePath);
     if (ext == ".wav") {
-        loader = std::make_shared<WAV>();
+        loader = std::make_unique<WAV>();
     } else {
         Debug::windowMessage(filePath + ": 対応していない拡張子です");
     }

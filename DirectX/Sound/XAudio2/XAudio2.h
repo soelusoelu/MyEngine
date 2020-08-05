@@ -38,7 +38,7 @@ public:
     /// <param name="masteringVoice">マスターボイス</param>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したサブミックスボイス</returns>
-    std::shared_ptr<SubmixVoice> createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const;
+    std::unique_ptr<SubmixVoice> createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const;
 
 private:
     XAudio2(const XAudio2&) = delete;

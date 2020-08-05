@@ -17,6 +17,6 @@ public:
 private:
     std::shared_ptr<Scene> mScene;
     std::shared_ptr<SoundComponent> mSound;
-    std::shared_ptr<SubmixVoice> mWetSubmix;
-    std::shared_ptr<SubmixVoice> mDrySubmix;
+    std::unique_ptr<SubmixVoice> mWetSubmix;
+    std::unique_ptr<SubmixVoice> mDrySubmix;
 };

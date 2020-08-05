@@ -32,14 +32,14 @@ public:
     /// </summary>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したサブミックスボイス</returns>
-    std::shared_ptr<SubmixVoice> createSubmixVoice(const SubmixVoiceInitParam& param) const;
+    std::unique_ptr<SubmixVoice> createSubmixVoice(const SubmixVoiceInitParam& param) const;
 
 private:
     SoundCreater(const SoundCreater&) = delete;
     SoundCreater& operator=(const SoundCreater&) = delete;
 
     //拡張子を識別し、パーサーを生成する
-    std::shared_ptr<ISoundLoader> createLoaderFromFilePath(const std::string& filePath);
+    std::unique_ptr<ISoundLoader> createLoaderFromFilePath(const std::string& filePath);
 
 private:
     Directory& mDirectory;
