@@ -36,10 +36,9 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
             return nullptr;
         }
         mDirectory.setSoundDirectory(filePath);
-        data = std::make_shared<WaveformData>();
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
         //音を読み込む
-        loader->loadFromFile(&data, fileName);
+        data = loader->loadFromFile(fileName);
         //データの読み込みに失敗していたら
         if (!data) {
             return nullptr;
