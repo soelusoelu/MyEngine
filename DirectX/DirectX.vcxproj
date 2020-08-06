@@ -168,6 +168,7 @@
     <ClCompile Include="Component\Text\Text.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
+    <ClCompile Include="Sound\Streaming\SoundStreaming.cpp" />
     <ClCompile Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\SimpleReverb.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Device\Flag.h" />
+    <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
     <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\IEffectCreater.h" />

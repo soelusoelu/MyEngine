@@ -22,15 +22,17 @@ private:
     void open(const std::string& fileName);
     //チャンク全体を読み込む
     long read(void* out, long size) const;
+    //シーク
+    void seek(long offset) const;
     //チャンクを読み込む
     bool descend(MMCKINFO* out, const MMCKINFO* parent, FindFlag flag) const;
     bool ascend(MMCKINFO* out);
     //チャンクを設定する
     void setChunkID(const char* ch);
     //FourCCを取得する
-    FOURCC getFourCC(const char* ch) const;
+    constexpr FOURCC getFourCC(const char* ch) const;
     //WAVファイルか
-    bool isWavFile(const MMCKINFO& riffChunk) const;
+    constexpr bool isWavFile(const MMCKINFO& riffChunk) const;
     //Waveフォーマットを作成する
     void createWaveFormat(WAVEFORMATEX* dst, const PCMWAVEFORMAT& src);
 

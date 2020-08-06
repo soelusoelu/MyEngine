@@ -133,6 +133,7 @@
     <ClCompile Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
     <ClCompile Include="Sound\Voice\Output\OutputVoices.cpp" />
+    <ClCompile Include="Sound\Streaming\SoundStreaming.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -292,5 +293,6 @@
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
     <ClInclude Include="Sound\Voice\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Buffer\SoundBuffer.h" />
+    <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
   </ItemGroup>
 </Project>

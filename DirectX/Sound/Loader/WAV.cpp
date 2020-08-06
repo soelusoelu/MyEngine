@@ -69,6 +69,10 @@ long WAV::read(void* out, long size) const {
     return mmioRead(mHMmio, reinterpret_cast<char*>(out), size);
 }
 
+void WAV::seek(long offset) const {
+    mmioSeek(mHMmio, offset, SEEK_CUR);
+}
+
 bool WAV::descend(MMCKINFO* out, const MMCKINFO* parent, FindFlag flag) const {
     auto res = mmioDescend(mHMmio, out, parent, static_cast<unsigned>(flag));
     if (res != MMSYSERR_NOERROR) {
@@ -91,17 +95,17 @@ void WAV::setChunkID(const char* ch) {
     mChunkInfo.ckid = getFourCC(ch);
 }
 
-FOURCC WAV::getFourCC(const char* ch) const {
+constexpr FOURCC WAV::getFourCC(const char* ch) const {
     return mmioFOURCC(ch[0], ch[1], ch[2], ch[3]);
 }
 
-bool WAV::isWavFile(const MMCKINFO& riffChunk) const {
+constexpr bool WAV::isWavFile(const MMCKINFO& riffChunk) const {
     if (riffChunk.ckid != getFourCC(CHUNK_RIFF)) {
-        Debug::logWarning("Chunk ID does not match \"riff\".");
+        Debug::logWarning("Chunk ID does not match 'riff'.");
         return false;
     }
     if (riffChunk.fccType != getFourCC(CHUNK_WAVE)) {
-        Debug::logWarning("FourCC Type does not match \"wave\".");
+        Debug::logWarning("FourCC Type does not match 'wave'.");
         return false;
     }
     return true;
