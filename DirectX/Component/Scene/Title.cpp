@@ -6,7 +6,6 @@
 #include "../../Device/AssetsManager.h"
 #include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
-#include "../../Sound/Buffer/SoundBuffer.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/Filter/SoundFilter.h"
 #include "../../Sound/Effects/Reverb/Reverb.h"

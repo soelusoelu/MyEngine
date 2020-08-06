@@ -9,55 +9,58 @@ WAV::WAV() :
 
 WAV::~WAV() = default;
 
-std::shared_ptr<WaveformData> WAV::loadFromFile(const std::string& fileName) {
+bool WAV::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     //WAVファイル内のヘッダー情報(音データ以外)の確認と読み込み
     open(fileName);
+    if (!mHMmio) {
+        Debug::logWarning("The file cannot be opened.");
+        return false;
+    }
 
     //ファイルポインタをRIFFチャンクの先頭にセットする
     if (!descend(&mRiffChunkInfo, nullptr, FindFlag::NONE)) {
-        return nullptr;
+        return false;
     }
 
     //一応Wavファイルか確認
     if (!isWavFile(mRiffChunkInfo)) {
-        return nullptr;
+        return false;
     }
 
     //ファイルポインタをfmtチャンクにセットする
     setChunkID(CHUNK_FORMAT);
     if (!descend(&mChunkInfo, &mRiffChunkInfo, FindFlag::CHUNK)) {
-        return nullptr;
+        return false;
     }
 
     //PCMフォーマットを読み込む
     PCMWAVEFORMAT pcmWaveFmt;
     if (read(&pcmWaveFmt, sizeof(pcmWaveFmt)) != sizeof(pcmWaveFmt)) {
         Debug::logWarning("Failed to read wav format.");
-        return nullptr;
+        return false;
     }
 
-    auto out = std::make_shared<WaveformData>();
     //フォーマット作成
-    createWaveFormat(&out->format, pcmWaveFmt);
+    createWaveFormat(&format, pcmWaveFmt);
     if (!ascend(&mChunkInfo)) {
-        return nullptr;
+        return false;
     }
 
     //WAVファイル内の音データの読み込み
     setChunkID(CHUNK_DATA);
     if (!descend(&mChunkInfo, &mRiffChunkInfo, FindFlag::CHUNK)) {
-        return nullptr;
+        return false;
     }
 
-    out->size = mChunkInfo.cksize;
-    out->buffer = new BYTE[out->size];
+    //out->size = mChunkInfo.cksize;
+    //out->buffer = new BYTE[out->size];
 
-    if (read(out->buffer, out->size) != out->size) {
-        Debug::logWarning("Failed to read wav format.");
-        return nullptr;
-    }
+    //if (read(out->buffer, out->size) != out->size) {
+    //    Debug::logWarning("Failed to read wav format.");
+    //    return nullptr;
+    //}
 
-    return out;
+    return true;
 }
 
 void WAV::open(const std::string& fileName) {
@@ -111,12 +114,13 @@ constexpr bool WAV::isWavFile(const MMCKINFO& riffChunk) const {
     return true;
 }
 
-void WAV::createWaveFormat(WAVEFORMATEX* dst, const PCMWAVEFORMAT& src) {
-    dst->wFormatTag = src.wf.wFormatTag;
-    dst->nChannels = src.wf.nChannels;
-    dst->nSamplesPerSec = src.wf.nSamplesPerSec;
-    dst->nAvgBytesPerSec = src.wf.nAvgBytesPerSec;
-    dst->nBlockAlign = src.wf.nBlockAlign;
-    dst->wBitsPerSample = src.wBitsPerSample;
-    dst->cbSize = 0;
+void WAV::createWaveFormat(WAVEFORMATEX** dst, const PCMWAVEFORMAT& src) {
+    auto& o = *dst;
+    o->wFormatTag = src.wf.wFormatTag;
+    o->nChannels = src.wf.nChannels;
+    o->nSamplesPerSec = src.wf.nSamplesPerSec;
+    o->nAvgBytesPerSec = src.wf.nAvgBytesPerSec;
+    o->nBlockAlign = src.wf.nBlockAlign;
+    o->wBitsPerSample = src.wBitsPerSample;
+    o->cbSize = 0;
 }

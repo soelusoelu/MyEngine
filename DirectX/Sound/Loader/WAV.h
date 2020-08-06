@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include "ISoundLoader.h"
+#include "../../System/SystemInclude.h"
+#include <mmsystem.h>
 
 #pragma comment(lib, "winmm.lib")
 
@@ -15,7 +17,7 @@ class WAV : public ISoundLoader {
 public:
     WAV();
     ~WAV();
-    virtual std::shared_ptr<WaveformData> loadFromFile(const std::string& fileName) override;
+    virtual bool loadFromFile(WAVEFORMATEX* format, const std::string& fileName) override;
 
 private:
     //WAVファイルを開く
@@ -34,7 +36,7 @@ private:
     //WAVファイルか
     constexpr bool isWavFile(const MMCKINFO& riffChunk) const;
     //Waveフォーマットを作成する
-    void createWaveFormat(WAVEFORMATEX* dst, const PCMWAVEFORMAT& src);
+    void createWaveFormat(WAVEFORMATEX** dst, const PCMWAVEFORMAT& src);
 
 private:
     //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)

@@ -1,4 +1,5 @@
 ﻿#include "XAudio2.h"
+#include "../Loader/WaveFormat.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../Voice/SubmixVoice/SubmixVoice.h"
@@ -32,16 +33,17 @@ MasteringVoice* XAudio2::createMasteringVoice() const {
     return new MasteringVoice(masteringVoice);
 }
 
-std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param) const {
+std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masteringVoice, const WAVEFORMATEX& format, const SourceVoiceInitParam& param) const {
     IXAudio2SourceVoice* sourceVoice;
-    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, &data.format, param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
+    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, &format, param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
         Debug::logError("Failed created source voice.");
         return nullptr;
     }
 
-    return std::make_unique<SourceVoice>(sourceVoice, masteringVoice, data, param);
+    WaveFormat fmt(format);
+    return std::make_unique<SourceVoice>(sourceVoice, masteringVoice, fmt, param);
 }
 
 std::unique_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const {

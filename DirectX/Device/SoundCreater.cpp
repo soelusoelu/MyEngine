@@ -26,27 +26,23 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
         return nullptr;
     }
 
-    std::shared_ptr<WaveformData> data = nullptr;
-    auto itr = mSounds.find(filePath);
-    if (itr != mSounds.end()) { //既に読み込まれている
-        data = itr->second;
-    } else { //初読み込み
-        auto loader = createLoaderFromFilePath(filePath);
-        if (!loader) {
-            return nullptr;
-        }
-        mDirectory.setSoundDirectory(filePath);
-        auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-        //音を読み込む
-        data = loader->loadFromFile(fileName);
-        //データの読み込みに失敗していたら
-        if (!data) {
-            return nullptr;
-        }
-        mSounds.emplace(filePath, data);
+    //ファイル拡張子からローダーを生成
+    auto loader = createLoaderFromFilePath(filePath);
+    if (!loader) {
+        return nullptr;
     }
 
-    return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), *data, param);
+    mDirectory.setSoundDirectory(filePath);
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
+    //音を読み込む
+    WAVEFORMATEX format;
+    auto res = loader->loadFromFile(&format, fileName);
+    if (!res) {
+        return nullptr;
+    }
+
+    //ソースボイス生成
+    return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), format, param);
 }
 
 std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {

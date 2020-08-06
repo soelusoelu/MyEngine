@@ -1,12 +1,11 @@
 ﻿#pragma once
 
-#include "WaveformData.h"
-#include <memory>
+#include <xaudio2.h>
 #include <string>
 
 //サウンド読み込み用インターフェース
 class ISoundLoader {
 public:
     virtual ~ISoundLoader() = default;
-    virtual std::shared_ptr<WaveformData> loadFromFile(const std::string& fileName) = 0;
+    virtual bool loadFromFile(WAVEFORMATEX* format, const std::string& fileName) = 0;
 };

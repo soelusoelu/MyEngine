@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Buffer/SoundBuffer.h"
+#include "SoundBuffer.h"
 #include <xaudio2.h>
 #include <memory>
 

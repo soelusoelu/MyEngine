@@ -268,7 +268,6 @@
     <ClInclude Include="Sound\XAudio2\XAudio2.h" />
     <ClInclude Include="Sound\XAudio2\SoundBase.h" />
     <ClInclude Include="Sound\Flag\SoundFlag.h" />
-    <ClInclude Include="Sound\Loader\WaveformData.h" />
     <ClInclude Include="Device\SoundCreater.h" />
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />
     <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
@@ -292,7 +291,8 @@
     <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
     <ClInclude Include="Sound\Voice\Output\OutputVoices.h" />
-    <ClInclude Include="Sound\Buffer\SoundBuffer.h" />
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
+    <ClInclude Include="Sound\Player\SoundBuffer.h" />
+    <ClInclude Include="Sound\Loader\WaveFormat.h" />
   </ItemGroup>
 </Project>

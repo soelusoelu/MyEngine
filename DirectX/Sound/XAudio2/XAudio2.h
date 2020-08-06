@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "../Loader/WaveformData.h"
 #include "../Voice/SourceVoice/SourceVoiceInitParam.h"
 #include "../Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include "../../System/SystemInclude.h"
@@ -30,7 +29,7 @@ public:
     /// <param name="data">事前に取得してあるサウンドデータ</param>
     /// <param name="param">初期化用パラメータ</param>
     /// <returns>作成したソースボイス</returns>
-    std::unique_ptr<SourceVoice> createSourceVoice(MasteringVoice& masteringVoice, const WaveformData& data, const SourceVoiceInitParam& param) const;
+    std::unique_ptr<SourceVoice> createSourceVoice(MasteringVoice& masteringVoice, const WAVEFORMATEX& format, const SourceVoiceInitParam& param) const;
 
     /// <summary>
     /// サブミックスボイスを作成する

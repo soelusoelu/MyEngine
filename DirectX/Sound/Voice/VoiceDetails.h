@@ -1,14 +1,10 @@
 ﻿#pragma once
 
-#include "../Loader/WaveformData.h"
+#include "../Loader/WaveFormat.h"
 #include "../../System/SystemInclude.h"
 
 //サウンドデータ保存クラス
 struct SoundData {
-    //ヘッダ等を含まない純粋な波形データ
-    const BYTE* buffer;
-    //波形データのサイズ
-    const unsigned size;
     //ビットレート
     const unsigned bitRate;
     //1サンプルのバイト数
@@ -16,12 +12,10 @@ struct SoundData {
     //1秒間のバイト数
     const unsigned averageBytesPerSec;
 
-    SoundData(const WaveformData& data) :
-        buffer(data.buffer),
-        size(data.size),
-        bitRate(data.format.wBitsPerSample),
-        blockAlign(data.format.nBlockAlign),
-        averageBytesPerSec(data.format.nAvgBytesPerSec) {
+    SoundData(const WaveFormat& format) :
+        bitRate(format.bitsPerSample),
+        blockAlign(format.blockAlign),
+        averageBytesPerSec(format.avgBytesPerSec) {
     }
 };
 

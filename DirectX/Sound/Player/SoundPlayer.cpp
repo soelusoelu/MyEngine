@@ -15,8 +15,8 @@ SoundPlayer::~SoundPlayer() = default;
 
 void SoundPlayer::play(unsigned operationSet) const {
     SoundBuffer buf;
-    buf.buffer = mSourceVoice.getSoundData().buffer;
-    buf.size = mSourceVoice.getSoundData().size;
+    //buf.buffer = mSourceVoice.getSoundData().buffer;
+    //buf.size = mSourceVoice.getSoundData().size;
     playFromSoundBuffer(buf, operationSet);
 }
 
@@ -28,8 +28,8 @@ void SoundPlayer::playFadeIn(float targetVolume, float targetTime, unsigned oper
 
 void SoundPlayer::playInfinity(unsigned operationSet) const {
     SoundBuffer buf;
-    buf.buffer = mSourceVoice.getSoundData().buffer;
-    buf.size = mSourceVoice.getSoundData().size;
+    //buf.buffer = mSourceVoice.getSoundData().buffer;
+    //buf.size = mSourceVoice.getSoundData().size;
     buf.loopCount = XAUDIO2_LOOP_INFINITE;
     playFromSoundBuffer(buf, operationSet);
 }

@@ -296,6 +296,7 @@
     <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Device\Flag.h" />
+    <ClInclude Include="Sound\Loader\WaveFormat.h" />
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
     <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.h" />
@@ -324,7 +325,6 @@
     <ClInclude Include="Sound\Voice\SourceVoice\SourceVoiceInitParam.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoice.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoiceInitParam.h" />
-    <ClInclude Include="Sound\Loader\WaveformData.h" />
     <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
     <ClInclude Include="Sound\Effects\TestEffect.h" />
@@ -362,7 +362,7 @@
     <ClInclude Include="Transform\Pivot.h" />
     <ClInclude Include="DebugLayer\Pause.h" />
     <ClInclude Include="Component\Collider\SphereCollider.h" />
-    <ClInclude Include="Sound\Buffer\SoundBuffer.h" />
+    <ClInclude Include="Sound\Player\SoundBuffer.h" />
     <ClInclude Include="Sound\Volume\SoundFade.h" />
     <ClInclude Include="Sound\XAudio2\SoundBase.h" />
     <ClInclude Include="Sound\Player\SoundPlayer.h" />

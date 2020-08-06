@@ -10,5 +10,6 @@ private:
     SoundStreaming& operator=(const SoundStreaming&) = delete;
 
 private:
-
+    //どこまで読み込んだか
+    unsigned mWrite;
 };

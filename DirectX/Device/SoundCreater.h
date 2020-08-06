@@ -1,12 +1,12 @@
 ﻿#pragma once
 
 #include "../Sound/Loader/ISoundLoader.h"
-#include "../Sound/Loader/WaveformData.h"
+#include "../Sound/Loader/WaveFormat.h"
 #include "../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
 #include "../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
+#include <xaudio2.h>
 #include <memory>
 #include <string>
-#include <unordered_map>
 
 class Directory;
 class SoundBase;
@@ -44,7 +44,6 @@ private:
 private:
     Directory& mDirectory;
     std::unique_ptr<SoundBase> mSoundBase;
-    std::unordered_map<std::string, std::shared_ptr<WaveformData>> mSounds;
 
     static inline bool mInstantiated = false;
 };
