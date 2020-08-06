@@ -8,9 +8,9 @@
 
 class Input {
 public:
-    static IKeyboard* keyboard();
-    static IMouse* mouse();
-    static JoyPad* joyPad();
+    static IKeyboard& keyboard();
+    static IMouse& mouse();
+    static JoyPad& joyPad();
 
 private:
     //生成、コピー禁止

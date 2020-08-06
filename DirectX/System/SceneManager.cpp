@@ -88,7 +88,7 @@ void SceneManager::update() {
     mShouldDraw = true;
 
     //Escでゲーム終了
-    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
+    if (Input::keyboard().getKeyDown(KeyCode::Escape)) {
         Game::quit();
     }
 

@@ -41,14 +41,14 @@ void InputUtility::update() {
     mJoyPad->update();
 }
 
-Keyboard* InputUtility::keyboard() {
-    return mKeyboard;
+Keyboard& InputUtility::keyboard() {
+    return *mKeyboard;
 }
 
-Mouse* InputUtility::mouse() {
-    return mMouse;
+Mouse& InputUtility::mouse() {
+    return *mMouse;
 }
 
-JoyPad* InputUtility::joyPad() {
-    return mJoyPad;
+JoyPad& InputUtility::joyPad() {
+    return *mJoyPad;
 }

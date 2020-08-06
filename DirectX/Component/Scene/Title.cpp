@@ -95,9 +95,9 @@ void Title::start() {
 }
 
 void Title::update() {
-    auto isEnd = Input::joyPad()->getEnter();
+    auto isEnd = Input::joyPad().getEnter();
     if (!isEnd) {
-        isEnd = Input::keyboard()->getEnter();
+        isEnd = Input::keyboard().getEnter();
     }
     if (isEnd) {
         mScene->next("GamePlay");

@@ -24,9 +24,9 @@ public:
     static void update();
 
     //各種入力クラスにアクセス
-    static Keyboard* keyboard();
-    static Mouse* mouse();
-    static JoyPad* joyPad();
+    static Keyboard& keyboard();
+    static Mouse& mouse();
+    static JoyPad& joyPad();
 
 private:
     //生成、コピー禁止

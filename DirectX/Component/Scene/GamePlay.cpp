@@ -19,7 +19,7 @@ void GamePlay::start() {
 void GamePlay::update() {
 #ifdef _DEBUG
     //リセット
-    if (Input::keyboard()->getKeyDown(KeyCode::R)) {
+    if (Input::keyboard().getKeyDown(KeyCode::R)) {
         mScene->next("GamePlay");
     }
 #endif // _DEBUG

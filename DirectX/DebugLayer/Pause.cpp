@@ -28,11 +28,11 @@ void Pause::initialize() {
 }
 
 void Pause::update() {
-    if (!Input::mouse()->getMouseButtonDown(MouseCode::LeftButton)) {
+    if (!Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
         return;
     }
 
-    auto mousePos = Input::mouse()->getMousePosition();
+    const auto& mousePos = Input::mouse().getMousePosition();
     if (!mButton->containsPoint(mousePos)) {
         return;
     }
