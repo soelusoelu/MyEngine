@@ -8,11 +8,11 @@
 #include "../../../DebugLayer/Debug.h"
 #include "../../../Device/Flag.h"
 
-SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveFormat& format, const SourceVoiceInitParam& param) :
+SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
     mDetails(),
     mSoundData(std::make_unique<SoundData>(format)),
-    mSoundPlayer(std::make_unique<SoundPlayer>(*this, param.maxFrequencyRatio)),
+    mSoundPlayer(std::make_unique<SoundPlayer>(*this, loader, format, param.maxFrequencyRatio)),
     mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
@@ -50,6 +50,7 @@ SoundEffect& SourceVoice::getSoundEffect() const {
 
 void SourceVoice::update() {
     mSoundVolume->update();
+    mSoundPlayer->update();
 }
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {

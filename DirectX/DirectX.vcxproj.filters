@@ -294,5 +294,6 @@
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
     <ClInclude Include="Sound\Player\SoundBuffer.h" />
     <ClInclude Include="Sound\Loader\WaveFormat.h" />
+    <ClInclude Include="Sound\Player\IBufferSubmitter.h" />
   </ItemGroup>
 </Project>

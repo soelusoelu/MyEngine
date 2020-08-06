@@ -18,14 +18,18 @@ public:
     WAV();
     ~WAV();
     virtual bool loadFromFile(WAVEFORMATEX* format, const std::string& fileName) override;
+    //指定したサイズ分データを読み取る
+    virtual unsigned read(BYTE** buffer, unsigned size) override;
+    //シーク
+    virtual void seek(int offset) override;
+    //波形部分の大きさ
+    virtual unsigned size() const override;
 
 private:
     //WAVファイルを開く
     void open(const std::string& fileName);
     //チャンク全体を読み込む
-    long read(void* out, long size) const;
-    //シーク
-    void seek(long offset) const;
+    long readChunk(void* out, unsigned size) const;
     //チャンクを読み込む
     bool descend(MMCKINFO* out, const MMCKINFO* parent, FindFlag flag) const;
     bool ascend(MMCKINFO* out);
@@ -35,16 +39,20 @@ private:
     constexpr FOURCC getFourCC(const char* ch) const;
     //WAVファイルか
     constexpr bool isWavFile(const MMCKINFO& riffChunk) const;
+    //チャンクからフォーマットを作成する
+    bool createFormatByChunk(WAVEFORMATEX* format);
     //Waveフォーマットを作成する
     void createWaveFormat(WAVEFORMATEX** dst, const PCMWAVEFORMAT& src);
 
 private:
     //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
     HMMIO mHMmio;
-    //チャンク情報
-    MMCKINFO mChunkInfo;
     //最上部チャンク(RIFFチャンク)保存用
-    MMCKINFO mRiffChunkInfo;
+    MMCKINFO mRiffChunk;
+    //フォーマットチャンク情報
+    MMCKINFO mFormatChunk;
+    //データチャンク情報
+    MMCKINFO mDataChunk;
 
     //チャンクIDのサイズ
     static constexpr unsigned char CHUNK_ID_SIZE = 4;

@@ -13,11 +13,11 @@ struct SoundBuffer {
     //再生後、ボイスは自動的に終了停止状態になる
     //それ以外では0
     SoundBufferFlag flag;
+    //ヘッダ等を含まない波形データ本体の先頭アドレス
+    const BYTE* buffer;
     //波形データ全体のサイズ(単位: バイト)
     //XAUDIO2_MAX_BUFFER_BYTES(2GB)が上限
     unsigned size;
-    //ヘッダ等を含まない波形データ本体の先頭アドレス
-    const BYTE* buffer;
     //再生の開始位置(単位: 秒)
     //これより前のデータは無視される
     //0だと頭から再生
@@ -40,8 +40,8 @@ struct SoundBuffer {
 
     SoundBuffer() :
         flag(SoundBufferFlag::END_OF_STREAM),
-        size(0),
         buffer(nullptr),
+        size(0),
         playBegin(0.f),
         playLength(0.f),
         loopBegin(0.f),

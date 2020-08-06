@@ -33,7 +33,7 @@ MasteringVoice* XAudio2::createMasteringVoice() const {
     return new MasteringVoice(masteringVoice);
 }
 
-std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masteringVoice, const WAVEFORMATEX& format, const SourceVoiceInitParam& param) const {
+std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masteringVoice, std::unique_ptr<ISoundLoader>& loader, const WAVEFORMATEX& format, const SourceVoiceInitParam& param) const {
     IXAudio2SourceVoice* sourceVoice;
     auto res = mXAudio2->CreateSourceVoice(&sourceVoice, &format, param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
@@ -43,7 +43,7 @@ std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masterin
     }
 
     WaveFormat fmt(format);
-    return std::make_unique<SourceVoice>(sourceVoice, masteringVoice, fmt, param);
+    return std::make_unique<SourceVoice>(sourceVoice, masteringVoice, loader, fmt, param);
 }
 
 std::unique_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const {

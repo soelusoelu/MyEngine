@@ -3,8 +3,9 @@
 
 WAV::WAV() :
     mHMmio(nullptr),
-    mChunkInfo(),
-    mRiffChunkInfo() {
+    mRiffChunk(),
+    mFormatChunk(),
+    mDataChunk() {
 }
 
 WAV::~WAV() = default;
@@ -18,49 +19,39 @@ bool WAV::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     }
 
     //ファイルポインタをRIFFチャンクの先頭にセットする
-    if (!descend(&mRiffChunkInfo, nullptr, FindFlag::NONE)) {
+    if (!descend(&mRiffChunk, nullptr, FindFlag::NONE)) {
         return false;
     }
 
-    //一応Wavファイルか確認
-    if (!isWavFile(mRiffChunkInfo)) {
-        return false;
-    }
-
-    //ファイルポインタをfmtチャンクにセットする
-    setChunkID(CHUNK_FORMAT);
-    if (!descend(&mChunkInfo, &mRiffChunkInfo, FindFlag::CHUNK)) {
-        return false;
-    }
-
-    //PCMフォーマットを読み込む
-    PCMWAVEFORMAT pcmWaveFmt;
-    if (read(&pcmWaveFmt, sizeof(pcmWaveFmt)) != sizeof(pcmWaveFmt)) {
-        Debug::logWarning("Failed to read wav format.");
+    //チャンクからWavファイルか確認
+    if (!isWavFile(mRiffChunk)) {
         return false;
     }
 
     //フォーマット作成
-    createWaveFormat(&format, pcmWaveFmt);
-    if (!ascend(&mChunkInfo)) {
+    if (!createFormatByChunk(format)) {
         return false;
     }
 
     //WAVファイル内の音データの読み込み
     setChunkID(CHUNK_DATA);
-    if (!descend(&mChunkInfo, &mRiffChunkInfo, FindFlag::CHUNK)) {
+    if (!descend(&mDataChunk, &mRiffChunk, FindFlag::CHUNK)) {
         return false;
     }
 
-    //out->size = mChunkInfo.cksize;
-    //out->buffer = new BYTE[out->size];
-
-    //if (read(out->buffer, out->size) != out->size) {
-    //    Debug::logWarning("Failed to read wav format.");
-    //    return nullptr;
-    //}
-
     return true;
+}
+
+unsigned WAV::read(BYTE** buffer, unsigned size) {
+    return readChunk(*buffer, size);
+}
+
+void WAV::seek(int offset) {
+    mmioSeek(mHMmio, static_cast<LONG>(offset), SEEK_CUR);
+}
+
+unsigned WAV::size() const {
+    return mDataChunk.cksize;
 }
 
 void WAV::open(const std::string& fileName) {
@@ -68,12 +59,8 @@ void WAV::open(const std::string& fileName) {
     mHMmio = mmioOpenA(fn, nullptr, MMIO_ALLOCBUF | MMIO_READ);
 }
 
-long WAV::read(void* out, long size) const {
-    return mmioRead(mHMmio, reinterpret_cast<char*>(out), size);
-}
-
-void WAV::seek(long offset) const {
-    mmioSeek(mHMmio, offset, SEEK_CUR);
+long WAV::readChunk(void* out, unsigned size) const {
+    return mmioRead(mHMmio, reinterpret_cast<HPSTR>(out), static_cast<LONG>(size));
 }
 
 bool WAV::descend(MMCKINFO* out, const MMCKINFO* parent, FindFlag flag) const {
@@ -95,7 +82,7 @@ bool WAV::ascend(MMCKINFO* out) {
 }
 
 void WAV::setChunkID(const char* ch) {
-    mChunkInfo.ckid = getFourCC(ch);
+    mFormatChunk.ckid = getFourCC(ch);
 }
 
 constexpr FOURCC WAV::getFourCC(const char* ch) const {
@@ -111,6 +98,29 @@ constexpr bool WAV::isWavFile(const MMCKINFO& riffChunk) const {
         Debug::logWarning("FourCC Type does not match 'wave'.");
         return false;
     }
+    return true;
+}
+
+bool WAV::createFormatByChunk(WAVEFORMATEX* format) {
+    //ファイルポインタをfmtチャンクにセットする
+    setChunkID(CHUNK_FORMAT);
+    if (!descend(&mFormatChunk, &mRiffChunk, FindFlag::CHUNK)) {
+        return false;
+    }
+
+    //PCMフォーマットを読み込む
+    PCMWAVEFORMAT pcmWaveFmt;
+    if (readChunk(&pcmWaveFmt, mFormatChunk.cksize) != sizeof(pcmWaveFmt)) {
+        Debug::logWarning("Failed to read wav format.");
+        return false;
+    }
+
+    //フォーマット作成
+    createWaveFormat(&format, pcmWaveFmt);
+    //if (!ascend(&mFormatChunk)) {
+    //    return false;
+    //}
+
     return true;
 }
 

@@ -42,7 +42,7 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
     }
 
     //ソースボイス生成
-    return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), format, param);
+    return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), loader, format, param);
 }
 
 std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {

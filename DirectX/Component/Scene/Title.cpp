@@ -61,7 +61,7 @@ void Title::start() {
     outputVoice.addOutputVoice(*mDrySubmix, false, false);
 
     //mSound->getSoundVolume().setVolume(0.f);
-    //mSound->getSoundVolume().fade().settings(0.5f, 5.f);
+    //mSound->getSoundVolume().fade().settings(0.5f, 2.f);
     //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
     //mSound->getSoundBuffer().loopCount = 1;
     //mSound->getSoundBuffer().playBegin = 60.f;
@@ -75,7 +75,7 @@ void Title::start() {
     //mSound->getSoundVolume().getSoundPan().panCenter();
 
     //サウンドエフェクト
-    int reverbID = mWetSubmix->getSoundEffect().reverb();
+    //int reverbID = mWetSubmix->getSoundEffect().reverb();
     //int echoID = mWetSubmix->getSoundEffect().echo();
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
@@ -91,7 +91,7 @@ void Title::start() {
     mWetSubmix->getSoundVolume().setVolume(0.5f);
     mDrySubmix->getSoundVolume().setVolume(0.f);
 
-    mSound->getSoundPlayer().playFadeIn(0.75f, 2.f);
+    mSound->getSoundPlayer().playStreamingFadeIn(0.75f, 2.f);
 }
 
 void Title::update() {
@@ -101,19 +101,5 @@ void Title::update() {
     }
     if (isEnd) {
         mScene->next("GamePlay");
-    }
-
-    if (Input::keyboard()->getKeyDown(KeyCode::Alpha1)) {
-        mSound->getSoundPlayer().playFadeIn(1.f, 1.f);
-    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha2)) {
-        mSound->getSoundPlayer().pauseFadeOut(1.f);
-    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha3)) {
-        mSound->getSoundEffect().getFilter().resetFilter();
-    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha0)) {
-        mSound->getSoundVolume().getSoundPan().pan(0.f);
-    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha9)) {
-        mSound->getSoundVolume().getSoundPan().panCenter();
-    } else if (Input::keyboard()->getKeyDown(KeyCode::Alpha8)) {
-        mWetSubmix->getSoundEffect().disable(0);
     }
 }

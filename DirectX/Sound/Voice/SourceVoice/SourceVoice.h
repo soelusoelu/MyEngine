@@ -2,6 +2,7 @@
 
 #include "SourceVoiceInitParam.h"
 #include "../IVoice.h"
+#include "../../Loader/ISoundLoader.h"
 #include "../../Loader/WaveFormat.h"
 #include <xaudio2.h>
 #include <memory>
@@ -13,7 +14,7 @@ class SoundPlayer;
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice : public IVoice {
 public:
-    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, const WaveFormat& format, const SourceVoiceInitParam& param);
+    SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format, const SourceVoiceInitParam& param);
     ~SourceVoice();
 
     /// <summary>
