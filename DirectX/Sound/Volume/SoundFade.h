@@ -19,9 +19,9 @@ public:
     void settings(float targetVolume, float targetTime, const std::function<void()>& f = nullptr);
 
     /// <summary>
-    /// フェードを進める
+    /// 毎フレーム更新
     /// </summary>
-    void updateFade();
+    void update();
 
     /// <summary>
     /// フェードしている途中か
@@ -32,6 +32,15 @@ public:
 private:
     SoundFade(const SoundFade&) = delete;
     SoundFade& operator=(const SoundFade&) = delete;
+
+    //フェードを進める
+    void updateFade();
+    //lerpの時間を進める
+    void updateLerpTimer();
+    //音量をフェードアップデートする
+    void nextVolumeFading();
+    //フェードの終わりに
+    void fadeEnd();
 
 private:
     SoundVolume& mSoundVolume;

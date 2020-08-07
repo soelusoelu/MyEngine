@@ -8,7 +8,9 @@ WAV::WAV() :
     mDataChunk() {
 }
 
-WAV::~WAV() = default;
+WAV::~WAV() {
+    mmioClose(mHMmio, 0);
+}
 
 bool WAV::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     //WAVファイル内のヘッダー情報(音データ以外)の確認と読み込み
@@ -34,7 +36,7 @@ bool WAV::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     }
 
     //WAVファイル内の音データの読み込み
-    setChunkID(CHUNK_DATA);
+    setChunkID(&mDataChunk, CHUNK_DATA);
     if (!descend(&mDataChunk, &mRiffChunk, FindFlag::CHUNK)) {
         return false;
     }
@@ -46,8 +48,15 @@ unsigned WAV::read(BYTE** buffer, unsigned size) {
     return readChunk(*buffer, size);
 }
 
-void WAV::seek(int offset) {
-    mmioSeek(mHMmio, static_cast<LONG>(offset), SEEK_CUR);
+unsigned WAV::seek(int offset, Seek seek) {
+    return mmioSeek(mHMmio, static_cast<LONG>(offset), static_cast<unsigned>(seek));
+}
+
+void WAV::seekBegin() {
+    auto res = seek(mDataChunk.dwDataOffset, Seek::BEGIN);
+    if (res != mDataChunk.dwDataOffset) {
+        Debug::logWarning("not");
+    }
 }
 
 unsigned WAV::size() const {
@@ -81,8 +90,8 @@ bool WAV::ascend(MMCKINFO* out) {
     return true;
 }
 
-void WAV::setChunkID(const char* ch) {
-    mFormatChunk.ckid = getFourCC(ch);
+void WAV::setChunkID(MMCKINFO* out, const char* ch) {
+    out->ckid = getFourCC(ch);
 }
 
 constexpr FOURCC WAV::getFourCC(const char* ch) const {
@@ -103,7 +112,7 @@ constexpr bool WAV::isWavFile(const MMCKINFO& riffChunk) const {
 
 bool WAV::createFormatByChunk(WAVEFORMATEX* format) {
     //ファイルポインタをfmtチャンクにセットする
-    setChunkID(CHUNK_FORMAT);
+    setChunkID(&mFormatChunk, CHUNK_FORMAT);
     if (!descend(&mFormatChunk, &mRiffChunk, FindFlag::CHUNK)) {
         return false;
     }

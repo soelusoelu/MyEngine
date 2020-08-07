@@ -20,8 +20,10 @@ public:
     virtual bool loadFromFile(WAVEFORMATEX* format, const std::string& fileName) override;
     //指定したサイズ分データを読み取る
     virtual unsigned read(BYTE** buffer, unsigned size) override;
-    //シーク
-    virtual void seek(int offset) override;
+    //オフセット分シーク
+    virtual unsigned seek(int offset, Seek seek) override;
+    //バッファ部分の先頭までシーク
+    virtual void seekBegin() override;
     //波形部分の大きさ
     virtual unsigned size() const override;
 
@@ -34,7 +36,7 @@ private:
     bool descend(MMCKINFO* out, const MMCKINFO* parent, FindFlag flag) const;
     bool ascend(MMCKINFO* out);
     //チャンクを設定する
-    void setChunkID(const char* ch);
+    void setChunkID(MMCKINFO* out, const char* ch);
     //FourCCを取得する
     constexpr FOURCC getFourCC(const char* ch) const;
     //WAVファイルか

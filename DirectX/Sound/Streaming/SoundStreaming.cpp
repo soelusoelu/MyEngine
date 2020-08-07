@@ -10,6 +10,7 @@ SoundStreaming::SoundStreaming(SourceVoice& sourceVoice, IBufferSubmitter& buffe
     mLoader(std::move(loader)),
     mBuffer{ new BYTE[format.avgBytesPerSec * SEC], new BYTE[format.avgBytesPerSec * SEC] },
     mIsPlayStreaming(false),
+    mWrite(0),
     READ_SIZE(static_cast<unsigned>(format.avgBytesPerSec * SEC)) {
 }
 
@@ -43,10 +44,13 @@ void SoundStreaming::addBuffer() {
     std::swap(mBuffer[PRIMARY], mBuffer[SECONDARY]);
     auto res = mLoader->read(&mBuffer[SECONDARY], READ_SIZE);
     if (res <= 0) {
-        mIsPlayStreaming = false;
+        //mIsPlayStreaming = false;
+        mLoader->seekBegin();
         Debug::logWarning("Streaming playback failed to read.");
         return;
     }
+
+    mWrite += res;
 
     //バッファ作成
     SoundBuffer buf;

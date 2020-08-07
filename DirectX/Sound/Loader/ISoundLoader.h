@@ -6,9 +6,17 @@
 //サウンド読み込み用インターフェース
 class ISoundLoader {
 public:
+    enum class Seek {
+        BEGIN = SEEK_SET, //ファイルの先頭から
+        CURRENT = SEEK_CUR, //現在のファイル位置から
+        END = SEEK_END //ファイルの終わりから
+    };
+
+public:
     virtual ~ISoundLoader() = default;
     virtual bool loadFromFile(WAVEFORMATEX* format, const std::string& fileName) = 0;
     virtual unsigned read(BYTE** buffer, unsigned size) = 0;
-    virtual void seek(int offset) = 0;
+    virtual unsigned seek(int offset, Seek seek) = 0;
+    virtual void seekBegin() = 0;
     virtual unsigned size() const = 0;
 };

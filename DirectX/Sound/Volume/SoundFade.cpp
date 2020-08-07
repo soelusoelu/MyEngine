@@ -16,6 +16,16 @@ SoundFade::SoundFade(SoundVolume& soundVolume) :
 SoundFade::~SoundFade() = default;
 
 void SoundFade::settings(float targetVolume, float targetTime, const std::function<void()>& f) {
+    //targetTimeがほぼ0(フェードする必要がない)の場合
+    if (Math::nearZero(targetTime)) {
+        mSoundVolume.setVolume(targetVolume);
+        mIsFading = false;
+        if (f) {
+            f();
+        }
+        return;
+    }
+
     mTargetVolume = targetVolume;
     mTargetTime = targetTime;
     mFadeEndFunc = f;
@@ -24,27 +34,39 @@ void SoundFade::settings(float targetVolume, float targetTime, const std::functi
     mIsFading = true;
 }
 
-void SoundFade::updateFade() {
-    if (!mIsFading) {
-        return;
-    }
-
-    mTimeRate += Time::deltaTime / mTargetTime;
-    if (mTimeRate >= 1.f) {
-        mTimeRate = 1.f;
-        mIsFading = false;
-    }
-    auto nextVolume = Math::lerp(mBeforeVolume, mTargetVolume, mTimeRate);
-    mSoundVolume.setVolume(nextVolume);
-
-    //フェードを終了するタイミングで
-    if (!mIsFading) {
-        if (mFadeEndFunc) {
-            mFadeEndFunc();
-        }
+void SoundFade::update() {
+    if (mIsFading) {
+        updateFade();
     }
 }
 
 bool SoundFade::isFading() const {
     return mIsFading;
+}
+
+void SoundFade::updateFade() {
+    updateLerpTimer();
+    nextVolumeFading();
+    fadeEnd();
+}
+
+void SoundFade::updateLerpTimer() {
+    mTimeRate += Time::deltaTime / mTargetTime;
+    if (mTimeRate >= 1.f) {
+        mTimeRate = 1.f;
+        mIsFading = false;
+    }
+}
+
+void SoundFade::nextVolumeFading() {
+    auto nextVolume = Math::lerp(mBeforeVolume, mTargetVolume, mTimeRate);
+    mSoundVolume.setVolume(nextVolume);
+}
+
+void SoundFade::fadeEnd() {
+    if (!mIsFading) {
+        if (mFadeEndFunc) {
+            mFadeEndFunc();
+        }
+    }
 }

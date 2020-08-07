@@ -14,7 +14,7 @@ SoundVolume::SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice, Ou
 SoundVolume::~SoundVolume() = default;
 
 void SoundVolume::update() {
-    mFader->updateFade();
+    mFader->update();
 }
 
 void SoundVolume::setVolume(float volume, unsigned operationSet) {

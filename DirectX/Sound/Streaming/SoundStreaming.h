@@ -35,6 +35,8 @@ private:
     BYTE* mBuffer[BUFFER_SIZE];
     //ストリーミング再生中か
     bool mIsPlayStreaming;
+    //読み込みカーソル
+    unsigned mWrite;
     //ファイルから読み込むサイズ
     const unsigned READ_SIZE;
 };
