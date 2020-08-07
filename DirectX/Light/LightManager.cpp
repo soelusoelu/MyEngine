@@ -15,9 +15,12 @@
 LightManager::LightManager() :
     mAmbientLight(Vector3::zero),
     mPointLight(std::make_unique<PointLight>()) {
+    PointLightComponent::setLightManager(this);
 }
 
-LightManager::~LightManager() = default;
+LightManager::~LightManager() {
+    PointLightComponent::setLightManager(nullptr);
+}
 
 void LightManager::initialize() {
     mPointLight->initialize();

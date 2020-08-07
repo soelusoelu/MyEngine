@@ -26,7 +26,7 @@ private:
     static constexpr unsigned BUFFER_SIZE = 2;
     static constexpr unsigned PRIMARY = 0;
     static constexpr unsigned SECONDARY = 1;
-    static constexpr float SEC = 0.5f;
+    static constexpr float SEC = 1.f / (1 << 2);
 
     SourceVoice& mSourceVoice;
     IBufferSubmitter& mBufferSubmitter;

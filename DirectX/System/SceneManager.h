@@ -36,11 +36,11 @@ private:
     std::unique_ptr<Renderer> mRenderer;
     std::shared_ptr<Scene> mCurrentScene;
     std::shared_ptr<Camera> mCamera;
-    GameObjectManager* mGameObjectManager;
-    MeshManager* mMeshManager;
-    SpriteManager* mSpriteManager;
-    Physics* mPhysics;
-    LightManager* mLightManager;
+    std::unique_ptr<GameObjectManager> mGameObjectManager;
+    std::unique_ptr<MeshManager> mMeshManager;
+    std::unique_ptr<SpriteManager> mSpriteManager;
+    std::unique_ptr<Physics> mPhysics;
+    std::unique_ptr<LightManager> mLightManager;
     DrawString* mTextDrawer;
     bool mShouldDraw;
 };

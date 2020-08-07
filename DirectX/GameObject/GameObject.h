@@ -61,5 +61,5 @@ private:
     std::string mTag;
     bool mIsActive;
 
-    static GameObjectManager* mGameObjectManager;
+    static inline GameObjectManager* mGameObjectManager = nullptr;
 };

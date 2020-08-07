@@ -32,4 +32,3 @@ private:
     MeshPtrList mMeshes;
     MeshPtrList mTransparentMeshes;
 };
-

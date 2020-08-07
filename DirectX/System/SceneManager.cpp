@@ -29,29 +29,18 @@ SceneManager::SceneManager() :
     mRenderer(std::make_unique<Renderer>()),
     mCurrentScene(nullptr),
     mCamera(nullptr),
-    mGameObjectManager(new GameObjectManager()),
-    mMeshManager(new MeshManager()),
-    mSpriteManager(new SpriteManager()),
-    mPhysics(new Physics()),
-    mLightManager(new LightManager()),
+    mGameObjectManager(std::make_unique<GameObjectManager>()),
+    mMeshManager(std::make_unique<MeshManager>()),
+    mSpriteManager(std::make_unique<SpriteManager>()),
+    mPhysics(std::make_unique<Physics>()),
+    mLightManager(std::make_unique<LightManager>()),
     mTextDrawer(new DrawString()),
-    mShouldDraw(true) {
+    mShouldDraw(false) {
 }
 
 SceneManager::~SceneManager() {
-    safeDelete(mGameObjectManager);
-    safeDelete(mMeshManager);
-    safeDelete(mSpriteManager);
-    safeDelete(mPhysics);
-    safeDelete(mLightManager);
     safeDelete(mTextDrawer);
 
-    GameObject::setGameObjectManager(nullptr);
-    MeshComponent::setMeshManager(nullptr);
-    SpriteComponent::setSpriteManager(nullptr);
-    Sprite3D::setSpriteManager(nullptr);
-    Collider::setPhysics(nullptr);
-    PointLightComponent::setLightManager(nullptr);
     TextBase::setDrawString(nullptr);
 }
 
@@ -65,12 +54,6 @@ void SceneManager::initialize() {
     mLightManager->initialize();
     mTextDrawer->initialize();
 
-    GameObject::setGameObjectManager(mGameObjectManager);
-    MeshComponent::setMeshManager(mMeshManager);
-    SpriteComponent::setSpriteManager(mSpriteManager);
-    Sprite3D::setSpriteManager(mSpriteManager);
-    Collider::setPhysics(mPhysics);
-    PointLightComponent::setLightManager(mLightManager);
     TextBase::setDrawString(mTextDrawer);
 
     auto cam = GameObjectCreater::create("Camera");

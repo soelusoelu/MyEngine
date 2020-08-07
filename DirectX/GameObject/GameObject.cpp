@@ -92,5 +92,3 @@ void GameObject::computeWorldTransform() {
         mComponentManager->onUpdateWorldTransform();
     }
 }
-
-GameObjectManager* GameObject::mGameObjectManager = nullptr;

@@ -2,8 +2,15 @@
 #include "../Component/Sprite/Sprite3D.h"
 #include "../Component/Sprite/SpriteComponent.h"
 
-SpriteManager::SpriteManager() = default;
-SpriteManager::~SpriteManager() = default;
+SpriteManager::SpriteManager() {
+    SpriteComponent::setSpriteManager(this);
+    Sprite3D::setSpriteManager(this);
+}
+
+SpriteManager::~SpriteManager() {
+    SpriteComponent::setSpriteManager(nullptr);
+    Sprite3D::setSpriteManager(nullptr);
+}
 
 void SpriteManager::update() {
     remove();

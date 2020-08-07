@@ -5,8 +5,13 @@
 #include "../Utility/Collision.h"
 #include <algorithm>
 
-Physics::Physics() = default;
-Physics::~Physics() = default;
+Physics::Physics() {
+    Collider::setPhysics(this);
+}
+
+Physics::~Physics() {
+    Collider::setPhysics(nullptr);
+}
 
 void Physics::add(const CollPtr& collider) {
     mColliders.emplace_back(collider);

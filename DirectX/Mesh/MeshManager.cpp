@@ -4,8 +4,13 @@
 #include "../DirectX/DirectXInclude.h"
 #include "../Transform/Transform3D.h"
 
-MeshManager::MeshManager() = default;
-MeshManager::~MeshManager() = default;
+MeshManager::MeshManager() {
+    MeshComponent::setMeshManager(this);
+}
+
+MeshManager::~MeshManager() {
+    MeshComponent::setMeshManager(nullptr);
+}
 
 void MeshManager::update() {
     remove();

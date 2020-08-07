@@ -58,4 +58,3 @@ private:
     std::string mFileName;
     bool mIsActive;
 };
-

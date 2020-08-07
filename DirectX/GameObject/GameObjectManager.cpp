@@ -8,9 +8,12 @@
 
 GameObjectManager::GameObjectManager() :
     mUpdatingGameObjects(false) {
+    GameObject::setGameObjectManager(this);
 }
 
-GameObjectManager::~GameObjectManager() = default;
+GameObjectManager::~GameObjectManager() {
+    GameObject::setGameObjectManager(nullptr);
+}
 
 void GameObjectManager::update() {
     mUpdatingGameObjects = true;
