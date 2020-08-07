@@ -23,20 +23,23 @@ private:
     void addBuffer();
 
 private:
-    static constexpr unsigned BUFFER_SIZE = 2;
+    static constexpr unsigned BUFFER_COUNT = 3;
     static constexpr unsigned PRIMARY = 0;
     static constexpr unsigned SECONDARY = 1;
-    static constexpr float SEC = 1.f / (1 << 2);
+    static constexpr unsigned REMAIN = 2;
+    static constexpr float SEC = 1.f;
 
     SourceVoice& mSourceVoice;
     IBufferSubmitter& mBufferSubmitter;
     std::unique_ptr<ISoundLoader> mLoader;
     //バッファ
-    BYTE* mBuffer[BUFFER_SIZE];
-    //ストリーミング再生中か
-    bool mIsPlayStreaming;
-    //読み込みカーソル
-    unsigned mWrite;
+    BYTE* mBuffer[BUFFER_COUNT];
     //ファイルから読み込むサイズ
     const unsigned READ_SIZE;
+    //読み込みカーソル
+    unsigned mWrite;
+    //バッファの余り
+    unsigned mRemainBufferSize;
+    //ストリーミング再生中か
+    bool mIsPlayStreaming;
 };

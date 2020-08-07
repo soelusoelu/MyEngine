@@ -55,7 +55,7 @@ unsigned WAV::seek(int offset, Seek seek) {
 void WAV::seekBegin() {
     auto res = seek(mDataChunk.dwDataOffset, Seek::BEGIN);
     if (res != mDataChunk.dwDataOffset) {
-        Debug::logWarning("not");
+        Debug::logWarning("Failed seekBegin.");
     }
 }
 
