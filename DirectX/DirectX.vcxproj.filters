@@ -134,6 +134,7 @@
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
     <ClCompile Include="Sound\Voice\Output\OutputVoices.cpp" />
     <ClCompile Include="Sound\Streaming\SoundStreaming.cpp" />
+    <ClCompile Include="Sound\Player\BufferSubmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -294,6 +295,6 @@
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
     <ClInclude Include="Sound\Player\SoundBuffer.h" />
     <ClInclude Include="Sound\Loader\WaveFormat.h" />
-    <ClInclude Include="Sound\Player\IBufferSubmitter.h" />
+    <ClInclude Include="Sound\Player\BufferSubmitter.h" />
   </ItemGroup>
 </Project>

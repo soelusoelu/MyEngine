@@ -2,17 +2,11 @@
 
 #include <xaudio2.h>
 
-enum class SoundBufferFlag {
-    NONE = 0,
-    END_OF_STREAM = XAUDIO2_END_OF_STREAM
-};
-
 //波形データの構造体
 struct SoundBuffer {
-    //END_OF_STREAMを入れるとバッファの後続がないことを示す
+    //trueだとバッファの後続がないことを示す
     //再生後、ボイスは自動的に終了停止状態になる
-    //それ以外では0
-    SoundBufferFlag flag;
+    bool isEndOfStream;
     //ヘッダ等を含まない波形データ本体の先頭アドレス
     const BYTE* buffer;
     //波形データ全体のサイズ(単位: バイト)
@@ -39,7 +33,7 @@ struct SoundBuffer {
     void* context;
 
     SoundBuffer() :
-        flag(SoundBufferFlag::END_OF_STREAM),
+        isEndOfStream(false),
         buffer(nullptr),
         size(0),
         playBegin(0.f),
@@ -48,5 +42,21 @@ struct SoundBuffer {
         loopLength(0.f),
         loopCount(0),
         context(nullptr) {
+    }
+};
+
+//簡易版波形データの構造体
+struct SimpleSoundBuffer {
+    //フラグ
+    bool isEndOfStream;
+    //ヘッダ等を含まない波形データ本体の先頭アドレス
+    const BYTE* buffer;
+    //登録する波形データのサイズ
+    unsigned size;
+
+    SimpleSoundBuffer() :
+        isEndOfStream(false),
+        buffer(nullptr),
+        size(0) {
     }
 };

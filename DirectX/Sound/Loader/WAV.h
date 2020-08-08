@@ -21,7 +21,7 @@ public:
     //指定したサイズ分データを読み取る
     virtual unsigned read(BYTE** buffer, unsigned size) override;
     //オフセット分シーク
-    virtual unsigned seek(int offset, Seek seek) override;
+    virtual unsigned seek(int offset, Seek seek = Seek::CURRENT) override;
     //バッファ部分の先頭までシーク
     virtual void seekBegin() override;
     //波形部分の大きさ

@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sound\Player\BufferSubmitter.cpp" />
     <ClCompile Include="Component\Collider\CircleCollider.cpp" />
     <ClCompile Include="Component\Scene\Scene.cpp" />
     <ClCompile Include="DebugLayer\Button.cpp" />
@@ -287,6 +288,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sound\Player\BufferSubmitter.h" />
     <ClInclude Include="Component\Collider\CircleCollider.h" />
     <ClInclude Include="Component\Scene\Scene.h" />
     <ClInclude Include="DebugLayer\Button.h" />
@@ -297,7 +299,6 @@
     <ClInclude Include="DirectX\DirectXInclude.h" />
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="Sound\Loader\WaveFormat.h" />
-    <ClInclude Include="Sound\Player\IBufferSubmitter.h" />
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
     <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.h" />

@@ -2,14 +2,14 @@
 
 #include "../Loader/ISoundLoader.h"
 #include "../Loader/WaveFormat.h"
-#include "../Player/IBufferSubmitter.h"
 #include <memory>
 
 class SourceVoice;
+class BufferSubmitter;
 
 class SoundStreaming {
 public:
-    SoundStreaming(SourceVoice& sourceVoice, IBufferSubmitter& bufferSubmitter, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format);
+    SoundStreaming(SourceVoice& sourceVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format);
     ~SoundStreaming();
     void play();
     void update();
@@ -30,7 +30,7 @@ private:
     static constexpr float SEC = 1.f;
 
     SourceVoice& mSourceVoice;
-    IBufferSubmitter& mBufferSubmitter;
+    std::unique_ptr<BufferSubmitter> mBufferSubmitter;
     std::unique_ptr<ISoundLoader> mLoader;
     //バッファ
     BYTE* mBuffer[BUFFER_COUNT];

@@ -1,12 +1,13 @@
 ﻿#include "SoundStreaming.h"
+#include "../Player/BufferSubmitter.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../System/GlobalFunction.h"
 #include <utility>
 
-SoundStreaming::SoundStreaming(SourceVoice& sourceVoice, IBufferSubmitter& bufferSubmitter, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format) :
+SoundStreaming::SoundStreaming(SourceVoice& sourceVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format) :
     mSourceVoice(sourceVoice),
-    mBufferSubmitter(bufferSubmitter),
+    mBufferSubmitter(std::make_unique<BufferSubmitter>(sourceVoice)),
     mLoader(std::move(loader)),
     mBuffer{ nullptr, nullptr },
     READ_SIZE(format.avgBytesPerSec* SEC),
@@ -50,7 +51,7 @@ void SoundStreaming::polling() {
 void SoundStreaming::addBuffer() {
     std::swap(mBuffer[PRIMARY], mBuffer[SECONDARY]);
 
-    SoundBuffer buf;
+    SimpleSoundBuffer buf;
     auto res = 0;
     if (mWrite + READ_SIZE > mLoader->size()) {
         res = mLoader->read(&mBuffer[REMAIN], mRemainBufferSize);
@@ -75,5 +76,5 @@ void SoundStreaming::addBuffer() {
     //buf.buffer = mBuffer[SECONDARY];
     buf.size = res;
 
-    mBufferSubmitter.submitSourceBuffer(buf);
+    mBufferSubmitter->submitSimpleBuffer(buf);
 }
