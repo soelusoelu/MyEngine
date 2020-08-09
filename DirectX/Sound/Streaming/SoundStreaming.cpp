@@ -1,5 +1,6 @@
 ﻿#include "SoundStreaming.h"
 #include "../Player/BufferSubmitter.h"
+#include "../Voice/VoiceDetails.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../System/GlobalFunction.h"
@@ -9,7 +10,7 @@ SoundStreaming::SoundStreaming(SourceVoice& sourceVoice, std::unique_ptr<ISoundL
     mSourceVoice(sourceVoice),
     mBufferSubmitter(std::make_unique<BufferSubmitter>(sourceVoice)),
     mLoader(std::move(loader)),
-    mBuffer{ nullptr, nullptr },
+    mBuffer{ nullptr, nullptr, nullptr },
     READ_SIZE(format.avgBytesPerSec* SEC),
     mWrite(0),
     mRemainBufferSize(0),
@@ -28,15 +29,31 @@ SoundStreaming::~SoundStreaming() {
     }
 }
 
+void SoundStreaming::update() {
+    if (mIsPlayStreaming) {
+        polling();
+    }
+}
+
 void SoundStreaming::play() {
     mIsPlayStreaming = true;
     polling();
 }
 
-void SoundStreaming::update() {
-    if (mIsPlayStreaming) {
-        polling();
+void SoundStreaming::seek(float point) {
+    mLoader->seekBegin();
+    auto seekPoint = mSourceVoice.getSoundData().averageBytesPerSec * point;
+    auto res = mLoader->seek(static_cast<int>(seekPoint));
+    //0より大きければ正しくシークできてる
+    if (res > 0) {
+        mWrite = res;
+    } else {
+        Debug::logWarning("Failed streaming seek.");
     }
+}
+
+unsigned SoundStreaming::getNextReadPointInByte() const {
+    return mWrite + READ_SIZE;
 }
 
 void SoundStreaming::polling() {
@@ -56,19 +73,12 @@ void SoundStreaming::addBuffer() {
     if (mWrite + READ_SIZE > mLoader->size()) {
         res = mLoader->read(&mBuffer[REMAIN], mRemainBufferSize);
         buf.buffer = mBuffer[REMAIN];
-        mWrite = 0;
-        mLoader->seekBegin();
+        seekBegin();
     } else {
         res = mLoader->read(&mBuffer[SECONDARY], READ_SIZE);
         buf.buffer = mBuffer[SECONDARY];
     }
 
-    //if (res <= 0) {
-    //    //mIsPlayStreaming = false;
-    //    mLoader->seekBegin();
-    //    Debug::logWarning("Streaming playback failed to read.");
-    //    return;
-    //}
     mWrite += res;
 
     //バッファ作成
@@ -77,4 +87,9 @@ void SoundStreaming::addBuffer() {
     buf.size = res;
 
     mBufferSubmitter->submitSimpleBuffer(buf);
+}
+
+void SoundStreaming::seekBegin() {
+    mLoader->seekBegin();
+    mWrite = 0;
 }

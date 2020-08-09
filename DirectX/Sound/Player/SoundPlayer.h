@@ -8,6 +8,7 @@
 
 class SourceVoice;
 class SoundStreaming;
+class SoundLoop;
 class Frequency;
 
 //音の再生を扱うクラス
@@ -29,11 +30,15 @@ public:
     void playStreamingFadeIn(float targetVolume, float targetTime);
 
     /// <summary>
-    /// 再生を即一時停止する
+    /// 再生開始地点を設定する
     /// </summary>
-    /// <param name="flags">XAUDIO2_PLAY_TAILSはエフェクトの効果は再生し続けるというもの</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void pause(unsigned flags = XAUDIO2_PLAY_TAILS, unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    /// <param name="point">再生開始地点(単位: 秒数)</param>
+    void setPlayPoint(float point);
+
+    /// <summary>
+    /// 再生を一時停止する
+    /// </summary>
+    void pause() const;
 
     /// <summary>
     /// フェードアウトしながら再生を一時停止する
@@ -42,10 +47,9 @@ public:
     void pauseFadeOut(float targetTime) const;
 
     /// <summary>
-    /// 再生を即停止する
+    /// 再生を停止する
     /// </summary>
-    /// <param name="operationSet">いつ実行するか</param>
-    void stop(unsigned operationSet = XAUDIO2_COMMIT_NOW) const;
+    void stop() const;
 
     /// <summary>
     /// フェードアウトしながら再生を停止する
@@ -60,6 +64,12 @@ public:
     bool isStop() const;
 
     /// <summary>
+    /// ループ専門クラスにアクセスする
+    /// </summary>
+    /// <returns></returns>
+    SoundLoop& loop() const;
+
+    /// <summary>
     /// 周波数専門クラスにアクセスする
     /// </summary>
     /// <returns></returns>
@@ -72,5 +82,6 @@ private:
 private:
     SourceVoice& mSourceVoice;
     std::unique_ptr<SoundStreaming> mStreaming;
+    std::unique_ptr<SoundLoop> mLoop;
     std::unique_ptr<Frequency> mFrequency;
 };

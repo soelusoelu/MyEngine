@@ -12,6 +12,7 @@
 #include "../../Sound/Effects/Reverb/SimpleReverb.h"
 #include "../../Sound/Effects/Reverb/SimpleReverbParam.h"
 #include "../../Sound/Player/Frequency.h"
+#include "../../Sound/Player/SoundLoop.h"
 #include "../../Sound/Player/SoundPlayer.h"
 #include "../../Sound/Voice/IVoice.h"
 #include "../../Sound/Voice/VoiceDetails.h"
@@ -91,7 +92,10 @@ void Title::start() {
     mWetSubmix->getSoundVolume().setVolume(0.5f);
     mDrySubmix->getSoundVolume().setVolume(0.f);
 
-    mSound->getSoundPlayer().playStreamingFadeIn(0.75f, 2.f);
+    auto& player = mSound->getSoundPlayer();
+    //player.setPlayPoint(30.f);
+    //player.loop().setLoopPoint(60.f, 90.f);
+    player.playStreamingFadeIn(1.f, 2.f);
 }
 
 void Title::update() {
@@ -101,5 +105,9 @@ void Title::update() {
     }
     if (isEnd) {
         mScene->next("GamePlay");
+    }
+
+    if (Input::keyboard().getKeyDown(KeyCode::Alpha1)) {
+        mSound->getSoundPlayer().setPlayPoint(60.f);
     }
 }

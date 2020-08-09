@@ -11,7 +11,7 @@
 SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice& masteringVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format, const SourceVoiceInitParam& param) :
     mXAudio2SourceVoice(XAudio2SourceVoice),
     mDetails(),
-    mSoundData(std::make_unique<SoundData>(format)),
+    mSoundData(std::make_unique<SoundData>(*loader, format)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, loader, format, param.maxFrequencyRatio)),
     mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
