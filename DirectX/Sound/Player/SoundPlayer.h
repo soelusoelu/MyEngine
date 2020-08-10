@@ -8,6 +8,7 @@
 
 class SourceVoice;
 class SoundStreaming;
+class SoundPlayTimer;
 class SoundLoop;
 class Frequency;
 
@@ -64,10 +65,10 @@ public:
     bool isStop() const;
 
     /// <summary>
-    /// 再生時間を返す(単位: 秒)
+    /// 再生時間専門クラスにアクセスする
     /// </summary>
     /// <returns></returns>
-    float getPlayTime() const;
+    SoundPlayTimer& playTimer() const;
 
     /// <summary>
     /// ループ専門クラスにアクセスする
@@ -88,6 +89,7 @@ private:
 private:
     SourceVoice& mSourceVoice;
     std::unique_ptr<SoundStreaming> mStreaming;
+    std::unique_ptr<SoundPlayTimer> mPlayTimer;
     std::unique_ptr<SoundLoop> mLoop;
     std::unique_ptr<Frequency> mFrequency;
 };

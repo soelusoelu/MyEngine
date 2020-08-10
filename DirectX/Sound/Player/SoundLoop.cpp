@@ -1,13 +1,12 @@
 ﻿#include "SoundLoop.h"
-#include "../Streaming/SoundStreaming.h"
-#include "../Voice/VoiceDetails.h"
-#include "../Voice/SourceVoice/SourceVoice.h"
+#include "SoundPlayer.h"
+#include "SoundPlayTimer.h"
 #include "../../DebugLayer/Debug.h"
-#include <cassert>
 
-SoundLoop::SoundLoop(SourceVoice& sourceVoice, SoundStreaming& streaming) :
-    mSourceVoice(sourceVoice),
-    mStreaming(streaming),
+SoundLoop::SoundLoop(SoundPlayer& player, SoundPlayTimer& playTimer, const SoundData& data) :
+    mPlayer(player),
+    mPlayTimer(playTimer),
+    mData(data),
     mLoopBegin(0.f),
     mLoopEnd(0.f),
     mIsLoop(false) {
@@ -20,11 +19,9 @@ void SoundLoop::update() {
         return;
     }
 
-    const auto next = mStreaming.getNextReadPointInByte();
-    const auto bytePerSec = mSourceVoice.getSoundData().averageBytesPerSec;
-    //次の読み込み位置がループの折り返し地点を超えていたら
-    if (next > mLoopEnd * bytePerSec) {
-        mStreaming.seek(mLoopBegin);
+    //現在の再生時間がループ折返し地点を超えていたらループの開始地点に戻す
+    if (mPlayTimer.getPlayTime() >= mLoopEnd) {
+        mPlayer.setPlayPoint(mLoopBegin);
         Debug::log("loop");
     }
 }
@@ -38,8 +35,7 @@ void SoundLoop::setLoopPoint(float begin, float end) {
     if (mLoopBegin < 0.f) {
         mLoopBegin = 0.f;
     }
-    const auto& data = mSourceVoice.getSoundData();
-    auto maxSize = data.size * data.averageBytesPerSec;
+    auto maxSize = static_cast<float>(mData.size) / static_cast<float>(mData.averageBytesPerSec);
     if (mLoopEnd > maxSize) {
         mLoopEnd = maxSize;
     }

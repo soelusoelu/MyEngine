@@ -1,7 +1,7 @@
 ﻿#include "SoundPlayer.h"
 #include "Frequency.h"
 #include "SoundLoop.h"
-#include "../Effects/SoundEffect.h"
+#include "SoundPlayTimer.h"
 #include "../Streaming/SoundStreaming.h"
 #include "../Voice/VoiceDetails.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
@@ -12,9 +12,10 @@
 SoundPlayer::SoundPlayer(SourceVoice& sourceVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format, float maxFrequencyRatio) :
     mSourceVoice(sourceVoice),
     mStreaming(std::make_unique<SoundStreaming>(sourceVoice, loader, format)),
+    mPlayTimer(std::make_unique<SoundPlayTimer>(sourceVoice)),
     mLoop(nullptr),
     mFrequency(std::make_unique<Frequency>(sourceVoice, maxFrequencyRatio)) {
-    mLoop = std::make_unique<SoundLoop>(sourceVoice, *mStreaming);
+    mLoop = std::make_unique<SoundLoop>(*this, *mPlayTimer, sourceVoice.getSoundData());
 }
 
 SoundPlayer::~SoundPlayer() = default;
@@ -25,6 +26,7 @@ void SoundPlayer::update() {
 }
 
 void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
+    mPlayTimer->startTimer();
     mSourceVoice.getSoundVolume().setVolume(0.f);
     mSourceVoice.getSoundVolume().fade().settings(targetVolume, targetTime);
     mStreaming->play();
@@ -37,11 +39,12 @@ void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
 }
 
 void SoundPlayer::setPlayPoint(float point) {
-    mSourceVoice.getSoundEffect().setEffectParameters(SoundEffect::PLAY_TIMER_ID, &point, sizeof(point));
+    mPlayTimer->setPlayTime(point);
     mStreaming->seek(point);
 }
 
 void SoundPlayer::pause() const {
+    mPlayTimer->stopTimer();
     auto res = mSourceVoice.getXAudio2SourceVoice()->Stop(XAUDIO2_PLAY_TAILS);
 #ifdef _DEBUG
     if (FAILED(res)) {
@@ -55,6 +58,7 @@ void SoundPlayer::pauseFadeOut(float targetTime) const {
 }
 
 void SoundPlayer::stop() const {
+    mPlayTimer->stopTimer();
     auto res = mSourceVoice.getXAudio2SourceVoice()->Stop(0);
 #ifdef _DEBUG
     if (FAILED(res)) {
@@ -73,10 +77,8 @@ bool SoundPlayer::isStop() const {
     return (state.BuffersQueued == 0);
 }
 
-float SoundPlayer::getPlayTime() const {
-    float out = 0.f;
-    mSourceVoice.getSoundEffect().getEffectParameters(SoundEffect::PLAY_TIMER_ID, &out, sizeof(out));
-    return out;
+SoundPlayTimer& SoundPlayer::playTimer() const {
+    return *mPlayTimer;
 }
 
 SoundLoop& SoundPlayer::loop() const {

@@ -52,10 +52,6 @@ void SoundStreaming::seek(float point) {
     }
 }
 
-unsigned SoundStreaming::getNextReadPointInByte() const {
-    return mWrite + READ_SIZE;
-}
-
 void SoundStreaming::polling() {
     XAUDIO2_VOICE_STATE state;
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);

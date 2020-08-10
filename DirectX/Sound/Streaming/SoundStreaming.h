@@ -29,12 +29,6 @@ public:
     /// <param name="point">ファイルの先頭からの位置(単位: 秒数)</param>
     void seek(float point);
 
-    /// <summary>
-    /// 次の読み込み後の位置をバイト単位で返す
-    /// </summary>
-    /// <returns></returns>
-    unsigned getNextReadPointInByte() const;
-
 private:
     SoundStreaming(const SoundStreaming&) = delete;
     SoundStreaming& operator=(const SoundStreaming&) = delete;

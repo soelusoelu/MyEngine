@@ -1,12 +1,14 @@
 ﻿#pragma once
 
-class SourceVoice;
-class SoundStreaming;
+#include "../Voice/VoiceDetails.h"
+
+class SoundPlayer;
+class SoundPlayTimer;
 
 //ループを扱うクラス
 class SoundLoop {
 public:
-    SoundLoop(SourceVoice& sourceVoice, SoundStreaming& streaming);
+    SoundLoop(SoundPlayer& player, SoundPlayTimer& playTimer, const SoundData& data);
     ~SoundLoop();
 
     /// <summary>
@@ -37,8 +39,9 @@ private:
     SoundLoop& operator=(const SoundLoop&) = delete;
 
 private:
-    SourceVoice& mSourceVoice;
-    SoundStreaming& mStreaming;
+    SoundPlayer& mPlayer;
+    SoundPlayTimer& mPlayTimer;
+    const SoundData& mData;
     //ループ開始地点 sec
     float mLoopBegin;
     //ループ折返し地点 sec

@@ -14,6 +14,7 @@
 #include "../../Sound/Player/Frequency.h"
 #include "../../Sound/Player/SoundLoop.h"
 #include "../../Sound/Player/SoundPlayer.h"
+#include "../../Sound/Player/SoundPlayTimer.h"
 #include "../../Sound/Voice/IVoice.h"
 #include "../../Sound/Voice/VoiceDetails.h"
 #include "../../Sound/Voice/Output/OutputVoices.h"
@@ -93,8 +94,8 @@ void Title::start() {
     mDrySubmix->getSoundVolume().setVolume(0.f);
 
     auto& player = mSound->getSoundPlayer();
-    //player.setPlayPoint(30.f);
-    //player.loop().setLoopPoint(60.f, 90.f);
+    player.setPlayPoint(30.f);
+    player.loop().setLoopPoint(60.f, 90.f);
     player.playStreamingFadeIn(1.f, 2.f);
 }
 
@@ -111,5 +112,5 @@ void Title::update() {
         mSound->getSoundPlayer().setPlayPoint(60.f);
     }
 
-    Debug::log(StringUtil::floatToString(mSound->getSoundPlayer().getPlayTime(), 6));
+    Debug::log(StringUtil::floatToString(mSound->getSoundPlayer().playTimer().getPlayTime(), 6));
 }
