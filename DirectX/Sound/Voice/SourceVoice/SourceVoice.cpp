@@ -21,6 +21,9 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mDetails.sampleRate = format.samplesPerSec;
 
     mSoundVolume = std::make_unique<SoundVolume>(*this, masteringVoice, *mOutputVoices);
+
+    //再生時間設定/取得のためにすべてのソースボイスでエフェクト付与
+    mSoundEffect->playTimer();
 }
 
 SourceVoice::~SourceVoice() {

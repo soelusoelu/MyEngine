@@ -83,6 +83,11 @@ public:
     /// <returns>作成したエフェクトのID 失敗したら-1</returns>
     int volumeMeter();
 
+    /// <summary>
+    /// 再生時間設定/取得
+    /// </summary>
+    void playTimer();
+
 private:
     SoundEffect(const SoundEffect&) = delete;
     SoundEffect& operator=(const SoundEffect&) = delete;
@@ -98,6 +103,9 @@ private:
     bool isValidParameters(const void* parameters) const;
     //エフェクトにアクセスできるか
     bool canAccessEffect(int effectID, const void* parameters) const;
+
+public:
+    static constexpr int PLAY_TIMER_ID = 0;
 
 private:
     IVoice& mVoice;

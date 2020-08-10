@@ -2,6 +2,7 @@
 #include "Echo/Echo.h"
 #include "Equalizer/Equalizer.h"
 #include "Filter/SoundFilter.h"
+#include "PlayTimer/PlayTimer.h"
 #include "Reverb/Reverb.h"
 #include "Reverb/SimpleReverb.h"
 #include "VolumeMeter/VolumeMeter.h"
@@ -101,6 +102,11 @@ int SoundEffect::equalizer() {
 
 int SoundEffect::volumeMeter() {
     return createEffect(reinterpret_cast<IUnknown*>(new VolumeMeter()));
+}
+
+void SoundEffect::playTimer() {
+    auto id = createEffect(reinterpret_cast<IUnknown*>(new PlayTimer()));
+    assert(id == PLAY_TIMER_ID);
 }
 
 int SoundEffect::createEffect(ISoundEffect* target, bool isApply) {

@@ -64,6 +64,12 @@ public:
     bool isStop() const;
 
     /// <summary>
+    /// 再生時間を返す(単位: 秒)
+    /// </summary>
+    /// <returns></returns>
+    float getPlayTime() const;
+
+    /// <summary>
     /// ループ専門クラスにアクセスする
     /// </summary>
     /// <returns></returns>

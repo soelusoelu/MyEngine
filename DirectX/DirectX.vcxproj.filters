@@ -136,6 +136,7 @@
     <ClCompile Include="Sound\Streaming\SoundStreaming.cpp" />
     <ClCompile Include="Sound\Player\BufferSubmitter.cpp" />
     <ClCompile Include="Sound\Player\SoundLoop.cpp" />
+    <ClCompile Include="Sound\Effects\PlayTimer\PlayTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -298,5 +299,6 @@
     <ClInclude Include="Sound\Loader\WaveFormat.h" />
     <ClInclude Include="Sound\Player\BufferSubmitter.h" />
     <ClInclude Include="Sound\Player\SoundLoop.h" />
+    <ClInclude Include="Sound\Effects\PlayTimer\PlayTimer.h" />
   </ItemGroup>
 </Project>

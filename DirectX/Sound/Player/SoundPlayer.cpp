@@ -1,6 +1,7 @@
 ﻿#include "SoundPlayer.h"
 #include "Frequency.h"
 #include "SoundLoop.h"
+#include "../Effects/SoundEffect.h"
 #include "../Streaming/SoundStreaming.h"
 #include "../Voice/VoiceDetails.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
@@ -36,6 +37,7 @@ void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
 }
 
 void SoundPlayer::setPlayPoint(float point) {
+    mSourceVoice.getSoundEffect().setEffectParameters(SoundEffect::PLAY_TIMER_ID, &point, sizeof(point));
     mStreaming->seek(point);
 }
 
@@ -69,6 +71,12 @@ bool SoundPlayer::isStop() const {
     XAUDIO2_VOICE_STATE state;
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     return (state.BuffersQueued == 0);
+}
+
+float SoundPlayer::getPlayTime() const {
+    float out = 0.f;
+    mSourceVoice.getSoundEffect().getEffectParameters(SoundEffect::PLAY_TIMER_ID, &out, sizeof(out));
+    return out;
 }
 
 SoundLoop& SoundPlayer::loop() const {

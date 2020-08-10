@@ -110,4 +110,6 @@ void Title::update() {
     if (Input::keyboard().getKeyDown(KeyCode::Alpha1)) {
         mSound->getSoundPlayer().setPlayPoint(60.f);
     }
+
+    Debug::log(StringUtil::floatToString(mSound->getSoundPlayer().getPlayTime(), 6));
 }
