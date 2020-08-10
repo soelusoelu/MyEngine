@@ -13,14 +13,12 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mDetails(),
     mSoundData(std::make_unique<SoundData>(*loader, format)),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, loader, format, param.maxFrequencyRatio)),
-    mSoundVolume(nullptr),
+    mSoundVolume(std::make_unique<SoundVolume>(*this, masteringVoice)),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(static_cast<unsigned>(SoundFlag::USE_FILTER)))) {
 
     mDetails.channels = format.channels;
     mDetails.sampleRate = format.samplesPerSec;
-
-    mSoundVolume = std::make_unique<SoundVolume>(*this, masteringVoice, *mOutputVoices);
 
     //再生時間設定/取得のためにすべてのソースボイスでエフェクト付与
     mSoundEffect->playTimer();

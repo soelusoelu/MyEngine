@@ -1,12 +1,12 @@
 ﻿#include "SoundLoop.h"
 #include "SoundPlayer.h"
 #include "SoundPlayTimer.h"
-#include "../../DebugLayer/Debug.h"
+#include "../Voice/VoiceDetails.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
 
-SoundLoop::SoundLoop(SoundPlayer& player, SoundPlayTimer& playTimer, const SoundData& data) :
+SoundLoop::SoundLoop(SourceVoice& sourceVoice, SoundPlayer& player) :
     mPlayer(player),
-    mPlayTimer(playTimer),
-    mData(data),
+    mSourceVoice(sourceVoice),
     mLoopBegin(0.f),
     mLoopEnd(0.f),
     mIsLoop(false) {
@@ -20,9 +20,8 @@ void SoundLoop::update() {
     }
 
     //現在の再生時間がループ折返し地点を超えていたらループの開始地点に戻す
-    if (mPlayTimer.getPlayTime() >= mLoopEnd) {
+    if (mPlayer.playTimer().getPlayTime() >= mLoopEnd) {
         mPlayer.setPlayPoint(mLoopBegin);
-        Debug::log("loop");
     }
 }
 
@@ -35,7 +34,8 @@ void SoundLoop::setLoopPoint(float begin, float end) {
     if (mLoopBegin < 0.f) {
         mLoopBegin = 0.f;
     }
-    auto maxSize = static_cast<float>(mData.size) / static_cast<float>(mData.averageBytesPerSec);
+    const auto& data = mSourceVoice.getSoundData();
+    auto maxSize = static_cast<float>(data.size) / static_cast<float>(data.averageBytesPerSec);
     if (mLoopEnd > maxSize) {
         mLoopEnd = maxSize;
     }

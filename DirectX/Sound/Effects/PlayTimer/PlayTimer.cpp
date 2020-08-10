@@ -2,12 +2,15 @@
 #include "../../../DebugLayer/Debug.h"
 
 PlayTimer::PlayTimer() :
-    CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mParams), sizeof(float), FALSE),
+    CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mParams), sizeof(PlayTimerParam), FALSE),
     mInputFmt(),
     mOutputFmt(),
     mCurrentTime(0),
     mFrameCount(0) {
-    ZeroMemory(mParams, sizeof(mParams));
+    for (size_t i = 0; i < EFFECT_PARAMETER_SIZE; i++) {
+        mParams[i].setTime = 0.f;
+        mParams[i].frequencyRatio = 1.f;
+    }
 }
 
 PlayTimer::~PlayTimer() = default;
@@ -32,7 +35,8 @@ STDMETHODIMP_(void __stdcall) PlayTimer::Process(UINT32 InputProcessParameterCou
             return;
         }
 
-        mCurrentTime += inParam.ValidFrameCount;
+        PlayTimerParam param = *reinterpret_cast<PlayTimerParam*>(BeginProcess());
+        mCurrentTime += static_cast<unsigned>(inParam.ValidFrameCount * param.frequencyRatio);
 
         //波形は何もせずにそのままコピーする
         if (inBuf != outBuf) {
@@ -41,6 +45,8 @@ STDMETHODIMP_(void __stdcall) PlayTimer::Process(UINT32 InputProcessParameterCou
 
         outParam.ValidFrameCount = inParam.ValidFrameCount;
         outParam.BufferFlags = inParam.BufferFlags;
+
+        EndProcess();
     } else { //無効
         if (inParam.pBuffer != outParam.pBuffer) {
             memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
@@ -49,10 +55,10 @@ STDMETHODIMP_(void __stdcall) PlayTimer::Process(UINT32 InputProcessParameterCou
 }
 
 STDMETHODIMP_(void __stdcall) PlayTimer::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
-    if (ParameterByteSize == sizeof(float)) {
-        const float* param = static_cast<const float*>(pParameters);
-        mCurrentTime = static_cast<unsigned>(*param * mFrameCount * EFFECT_PROCESS_COUNT);
-        CXAPOParametersBase::SetParameters(&pParameters, ParameterByteSize);
+    if (ParameterByteSize == sizeof(PlayTimerParam)) {
+        const PlayTimerParam param = *static_cast<const PlayTimerParam*>(pParameters);
+        mCurrentTime = static_cast<unsigned>(param.setTime * mFrameCount * EFFECT_PROCESS_COUNT);
+        CXAPOParametersBase::SetParameters(pParameters, ParameterByteSize);
     } else {
         Debug::logWarning("Wrong XAPO parameter size");
     }

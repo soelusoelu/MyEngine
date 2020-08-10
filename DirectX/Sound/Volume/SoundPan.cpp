@@ -7,9 +7,8 @@
 #include "../../System/Window.h"
 #include <vector>
 
-SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices) :
+SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice) :
     mVoice(voice),
-    mOutputVoices(outputVoices),
     INPUT_CHANNELS(voice.getVoiceDetails().channels),
     OUTPUT_CHANNELS(masteringVoice.getVoiceDetails().channels) {
 }
@@ -36,12 +35,13 @@ void SoundPan::panCenter(unsigned operationSet) {
 }
 
 void SoundPan::selectOutput(const float volumes[], unsigned operationSet) {
-    auto descSize = mOutputVoices.size();
+    const auto& outputVoices = mVoice.getOutputVoices();
+    const auto descSize = outputVoices.size();
     if (descSize == 0) {
         setOutputMatrix(nullptr, volumes, operationSet);
     } else {
         for (size_t i = 0; i < descSize; i++) {
-            const auto& desc = mOutputVoices.getDesc(i);
+            const auto& desc = outputVoices.getDesc(i);
             setOutputMatrix(desc.pOutputVoice, volumes, operationSet);
         }
     }

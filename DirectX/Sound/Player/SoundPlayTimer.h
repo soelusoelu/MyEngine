@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 class SourceVoice;
+class SoundPlayer;
 
 //再生時間を扱うクラス
 class SoundPlayTimer {
 public:
-    SoundPlayTimer(SourceVoice& sourceVoice);
+    SoundPlayTimer(SourceVoice& sourceVoice, SoundPlayer& player);
     ~SoundPlayTimer();
 
     /// <summary>
@@ -13,6 +14,12 @@ public:
     /// </summary>
     /// <param name="time">再生時間(単位: 秒)</param>
     void setPlayTime(float time);
+
+    /// <summary>
+    /// 再生速度を変更する
+    /// </summary>
+    /// <param name="frequency"></param>
+    void setFrequency(float frequency);
 
     /// <summary>
     /// 再生時間を返す(単位: 秒)
@@ -37,4 +44,5 @@ private:
 
 private:
     SourceVoice& mSourceVoice;
+    SoundPlayer& mPlayer;
 };

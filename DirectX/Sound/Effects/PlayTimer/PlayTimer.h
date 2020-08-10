@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "PlayTimerParam.h"
 #include "../SoundEffectUtility.h"
 #include <xapobase.h>
 
@@ -62,7 +63,7 @@ private:
     //出力フォーマットの記憶場所
     WAVEFORMATEX mOutputFmt;
     //パラメータの受信場所
-    float mParams[EFFECT_PARAMETER_SIZE];
+    PlayTimerParam mParams[EFFECT_PARAMETER_SIZE];
 
     //現在の再生時間(単位: バイト)
     unsigned mCurrentTime;

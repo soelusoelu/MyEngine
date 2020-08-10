@@ -53,7 +53,7 @@ void SoundStreaming::seek(float point) {
 }
 
 void SoundStreaming::polling() {
-    XAUDIO2_VOICE_STATE state;
+    XAUDIO2_VOICE_STATE state = { 0 };
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     //再生キューがBUFFER_SIZE未満なら新たにバッファを追加する
     if (state.BuffersQueued < 2) {

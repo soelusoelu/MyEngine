@@ -4,12 +4,11 @@
 #include <xaudio2.h>
 
 class MasteringVoice;
-class OutputVoices;
 
 //音の定位を扱うクラス
 class SoundPan {
 public:
-    SoundPan(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices);
+    SoundPan(IVoice& voice, const MasteringVoice& masteringVoice);
     ~SoundPan();
 
     /// <summary>
@@ -36,7 +35,6 @@ private:
 
 private:
     IVoice& mVoice;
-    OutputVoices& mOutputVoices;
     const unsigned INPUT_CHANNELS;
     const unsigned OUTPUT_CHANNELS;
 };

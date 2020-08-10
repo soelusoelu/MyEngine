@@ -291,6 +291,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sound\Effects\PlayTimer\PlayTimerParam.h" />
     <ClInclude Include="Sound\Player\SoundPlayTimer.h" />
     <ClInclude Include="Sound\Effects\PlayTimer\PlayTimer.h" />
     <ClInclude Include="Sound\Player\SoundLoop.h" />

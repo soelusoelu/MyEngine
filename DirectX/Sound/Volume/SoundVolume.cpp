@@ -4,10 +4,10 @@
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 
-SoundVolume::SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices) :
+SoundVolume::SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice) :
     mVoice(voice),
     mFader(std::make_unique<SoundFade>(*this)),
-    mSoundPan(std::make_unique<SoundPan>(voice, masteringVoice, outputVoices)),
+    mSoundPan(std::make_unique<SoundPan>(voice, masteringVoice)),
     mCurrentVolume(1.f) {
 }
 

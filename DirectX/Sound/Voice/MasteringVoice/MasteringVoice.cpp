@@ -8,7 +8,7 @@
 MasteringVoice::MasteringVoice(IXAudio2MasteringVoice* XAudio2MasteringVoice) :
     mXAudio2MasteringVoice(XAudio2MasteringVoice),
     mDetails(),
-    mSoundVolume(nullptr),
+    mSoundVolume(std::make_unique<SoundVolume>(*this, *this)),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, false)) {
 
@@ -17,8 +17,6 @@ MasteringVoice::MasteringVoice(IXAudio2MasteringVoice* XAudio2MasteringVoice) :
     mXAudio2MasteringVoice->GetVoiceDetails(&details);
     mDetails.channels = details.InputChannels;
     mDetails.sampleRate = details.InputSampleRate;
-
-    mSoundVolume = std::make_unique<SoundVolume>(*this, *this, *mOutputVoices);
 }
 
 MasteringVoice::~MasteringVoice() {

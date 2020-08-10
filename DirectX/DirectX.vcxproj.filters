@@ -302,5 +302,6 @@
     <ClInclude Include="Sound\Player\SoundLoop.h" />
     <ClInclude Include="Sound\Effects\PlayTimer\PlayTimer.h" />
     <ClInclude Include="Sound\Player\SoundPlayTimer.h" />
+    <ClInclude Include="Sound\Effects\PlayTimer\PlayTimerParam.h" />
   </ItemGroup>
 </Project>

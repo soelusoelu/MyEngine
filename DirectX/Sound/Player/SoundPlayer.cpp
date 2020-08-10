@@ -12,10 +12,9 @@
 SoundPlayer::SoundPlayer(SourceVoice& sourceVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format, float maxFrequencyRatio) :
     mSourceVoice(sourceVoice),
     mStreaming(std::make_unique<SoundStreaming>(sourceVoice, loader, format)),
-    mPlayTimer(std::make_unique<SoundPlayTimer>(sourceVoice)),
-    mLoop(nullptr),
-    mFrequency(std::make_unique<Frequency>(sourceVoice, maxFrequencyRatio)) {
-    mLoop = std::make_unique<SoundLoop>(*this, *mPlayTimer, sourceVoice.getSoundData());
+    mPlayTimer(std::make_unique<SoundPlayTimer>(sourceVoice, *this)),
+    mLoop(std::make_unique<SoundLoop>(sourceVoice, *this)),
+    mFrequency(std::make_unique<Frequency>(sourceVoice, *this, maxFrequencyRatio)) {
 }
 
 SoundPlayer::~SoundPlayer() = default;
@@ -39,6 +38,8 @@ void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
 }
 
 void SoundPlayer::setPlayPoint(float point) {
+    //再生待ちバッファをすべて削除する
+    mSourceVoice.getXAudio2SourceVoice()->FlushSourceBuffers();
     mPlayTimer->setPlayTime(point);
     mStreaming->seek(point);
 }

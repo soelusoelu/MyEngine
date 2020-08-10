@@ -6,14 +6,13 @@
 #include <memory>
 
 class MasteringVoice;
-class OutputVoices;
 class SoundFade;
 class SoundPan;
 
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice, OutputVoices& outputVoices);
+    SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice);
     ~SoundVolume();
 
     /// <summary>
