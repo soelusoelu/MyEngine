@@ -1,9 +1,7 @@
 ﻿#include "MasteringVoice.h"
 #include "../../Effects/SoundEffect.h"
-#include "../../Flag/SoundFlag.h"
 #include "../../Voice/Output/OutputVoices.h"
 #include "../../Volume/SoundVolume.h"
-#include "../../../Device/Flag.h"
 
 MasteringVoice::MasteringVoice(IXAudio2MasteringVoice* XAudio2MasteringVoice) :
     mXAudio2MasteringVoice(XAudio2MasteringVoice),

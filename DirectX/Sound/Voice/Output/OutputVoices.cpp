@@ -8,24 +8,8 @@ OutputVoices::OutputVoices(IVoice& voice) :
 
 OutputVoices::~OutputVoices() = default;
 
-void OutputVoices::setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter) {
-    if (voices.empty()) {
-        Debug::logWarning("Output voices is empty.");
-        return;
-    }
-
-    const size_t voiceSize = voices.size();
-    mDescs.resize(voiceSize);
-    for (size_t i = 0; i < voiceSize; i++) {
-        mDescs[i].Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
-        mDescs[i].pOutputVoice = voices[i]->getXAudio2Voice();
-    }
-
-    apply();
-}
-
 void OutputVoices::addOutputVoice(const IVoice& voice, bool useFilter, bool isApply) {
-    XAUDIO2_SEND_DESCRIPTOR desc;
+    XAUDIO2_SEND_DESCRIPTOR desc = { 0 };
     desc.Flags = (useFilter) ? XAUDIO2_SEND_USEFILTER : 0;
     desc.pOutputVoice = voice.getXAudio2Voice();
     mDescs.emplace_back(desc);
@@ -50,7 +34,7 @@ void OutputVoices::apply() {
         return;
     }
 
-    XAUDIO2_VOICE_SENDS sends;
+    XAUDIO2_VOICE_SENDS sends = { 0 };
     sends.SendCount = mDescs.size();
     sends.pSends = mDescs.data();
     auto res = mVoice.getXAudio2Voice()->SetOutputVoices(&sends);

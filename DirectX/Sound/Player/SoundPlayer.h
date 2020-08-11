@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "SoundBuffer.h"
 #include "../Loader/ISoundLoader.h"
 #include "../Loader/WaveFormat.h"
 #include <xaudio2.h>

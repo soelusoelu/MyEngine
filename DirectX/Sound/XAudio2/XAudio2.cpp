@@ -5,7 +5,6 @@
 #include "../Voice/SubmixVoice/SubmixVoice.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Device/Flag.h"
-#include "../../System/GlobalFunction.h"
 #include <cassert>
 
 XAudio2::XAudio2(bool* successFlag) :

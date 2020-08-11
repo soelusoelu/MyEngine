@@ -2,6 +2,7 @@
 
 #include "SourceVoiceInitParam.h"
 #include "../IVoice.h"
+#include "../../Data/SoundData.h"
 #include "../../Loader/ISoundLoader.h"
 #include "../../Loader/WaveFormat.h"
 #include <xaudio2.h>

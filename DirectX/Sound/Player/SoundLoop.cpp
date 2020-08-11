@@ -1,7 +1,7 @@
 ﻿#include "SoundLoop.h"
 #include "SoundPlayer.h"
 #include "SoundPlayTimer.h"
-#include "../Voice/VoiceDetails.h"
+#include "../Data/SoundData.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
@@ -50,14 +50,16 @@ void SoundLoop::setLoopPoint(float begin, float end) {
     }
 }
 
+void SoundLoop::loopAll() {
+    mLoopBegin = 0.f;
+    mLoopEnd = mSourceVoice.getSoundData().length();
+    mIsLoop = true;
+}
+
 void SoundLoop::exitLoop() {
     mIsLoop = false;
 }
 
 bool SoundLoop::isLoop() const {
     return mIsLoop;
-}
-
-bool SoundLoop::isLoopEndOfFile() const {
-    return (Math::equal(mLoopEnd, mSourceVoice.getSoundData().length()));
 }

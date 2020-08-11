@@ -12,13 +12,6 @@ public:
     ~OutputVoices();
 
     /// <summary>
-    /// 出力先ボイスを設定する
-    /// </summary>
-    /// <param name="voice">設定したいボイス</param>
-    /// <param name="useFilter">フィルターを使用するか</param>
-    void setOutputVoices(const std::vector<std::shared_ptr<IVoice>>& voices, bool useFilter = false);
-
-    /// <summary>
     /// ボイスの出力先を追加する
     /// </summary>
     /// <param name="voice">設定したいボイス</param>

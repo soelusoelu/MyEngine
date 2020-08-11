@@ -15,7 +15,7 @@ SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice) :
 
 SoundPan::~SoundPan() = default;
 
-void SoundPan::pan(float positionX, unsigned operationSet) {
+void SoundPan::pan(float positionX) {
     const float width = static_cast<float>(Window::standardWidth());
 
     auto posX = Math::clamp<float>(positionX, 0.f, width);
@@ -24,31 +24,31 @@ void SoundPan::pan(float positionX, unsigned operationSet) {
     volumes[0] = volumes[1] = Math::cos(rot);
     volumes[2] = volumes[3] = Math::sin(rot);
 
-    selectOutput(volumes.data(), operationSet);
+    selectOutput(volumes.data());
 }
 
-void SoundPan::panCenter(unsigned operationSet) {
-    static constexpr float centerVolume = 0.707f;
-    std::vector<float> volumes(INPUT_CHANNELS * OUTPUT_CHANNELS, centerVolume);
+void SoundPan::panCenter() {
+    std::vector<float> volumes(INPUT_CHANNELS * OUTPUT_CHANNELS, CENTER_VOLUME);
 
-    selectOutput(volumes.data(), operationSet);
+    selectOutput(volumes.data());
 }
 
-void SoundPan::selectOutput(const float volumes[], unsigned operationSet) {
+void SoundPan::selectOutput(const float volumes[]) {
     const auto& outputVoices = mVoice.getOutputVoices();
     const auto descSize = outputVoices.size();
+    //サイズが0ならマスターボイスへ
     if (descSize == 0) {
-        setOutputMatrix(nullptr, volumes, operationSet);
+        setOutputMatrix(nullptr, volumes);
     } else {
         for (size_t i = 0; i < descSize; i++) {
             const auto& desc = outputVoices.getDesc(i);
-            setOutputMatrix(desc.pOutputVoice, volumes, operationSet);
+            setOutputMatrix(desc.pOutputVoice, volumes);
         }
     }
 }
 
-void SoundPan::setOutputMatrix(IXAudio2Voice* outputVoice, const float volumes[], unsigned operationSet) {
-    auto res = mVoice.getXAudio2Voice()->SetOutputMatrix(outputVoice, INPUT_CHANNELS, OUTPUT_CHANNELS, volumes, operationSet);
+void SoundPan::setOutputMatrix(IXAudio2Voice* outputVoice, const float volumes[]) {
+    auto res = mVoice.getXAudio2Voice()->SetOutputMatrix(outputVoice, INPUT_CHANNELS, OUTPUT_CHANNELS, volumes);
 
 #ifdef _DEBUG
     if (FAILED(res)) {

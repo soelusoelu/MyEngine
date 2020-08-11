@@ -22,6 +22,11 @@ public:
     void setLoopPoint(float begin, float end = 0.f);
 
     /// <summary>
+    /// 曲の最初から最後までループ
+    /// </summary>
+    void loopAll();
+
+    /// <summary>
     /// ループから抜ける
     /// </summary>
     void exitLoop();
@@ -31,12 +36,6 @@ public:
     /// </summary>
     /// <returns></returns>
     bool isLoop() const;
-
-    /// <summary>
-    /// ループの折返し地点が曲の終わりか
-    /// </summary>
-    /// <returns></returns>
-    bool isLoopEndOfFile() const;
 
 private:
     SoundLoop(const SoundLoop&) = delete;

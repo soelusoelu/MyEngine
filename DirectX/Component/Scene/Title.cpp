@@ -47,9 +47,9 @@ void Title::start() {
     }
 
     SubmixVoiceInitParam param;
-    const auto& data = mSound->getVoiceDetails();
-    param.channels = data.channels;
-    param.inputSampleRate = data.sampleRate;
+    const auto& details = mSound->getVoiceDetails();
+    param.channels = details.channels;
+    param.inputSampleRate = details.sampleRate;
     auto& soundCreater = World::instance().assetsManager().getSoundCreater();
     mWetSubmix = soundCreater.createSubmixVoice(param);
     mDrySubmix = soundCreater.createSubmixVoice(param);
@@ -94,9 +94,9 @@ void Title::start() {
     mDrySubmix->getSoundVolume().setVolume(0.f);
 
     auto& player = mSound->getSoundPlayer();
-    //player.setPlayPoint(4.5f);
+    //player.setPlayPoint(30.f);
     //player.loop().setLoopPoint(60.f, 90.f);
-    player.loop().setLoopPoint(0.f);
+    //player.loop().loopAll();
     player.playStreamingFadeIn(1.f, 2.f);
 }
 

@@ -134,10 +134,10 @@
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
     <ClCompile Include="Sound\Voice\Output\OutputVoices.cpp" />
     <ClCompile Include="Sound\Streaming\SoundStreaming.cpp" />
-    <ClCompile Include="Sound\Player\BufferSubmitter.cpp" />
     <ClCompile Include="Sound\Player\SoundLoop.cpp" />
     <ClCompile Include="Sound\Effects\PlayTimer\PlayTimer.cpp" />
     <ClCompile Include="Sound\Player\SoundPlayTimer.cpp" />
+    <ClCompile Include="Sound\Player\Buffer\BufferSubmitter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -296,12 +296,13 @@
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
     <ClInclude Include="Sound\Voice\Output\OutputVoices.h" />
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
-    <ClInclude Include="Sound\Player\SoundBuffer.h" />
     <ClInclude Include="Sound\Loader\WaveFormat.h" />
-    <ClInclude Include="Sound\Player\BufferSubmitter.h" />
     <ClInclude Include="Sound\Player\SoundLoop.h" />
     <ClInclude Include="Sound\Effects\PlayTimer\PlayTimer.h" />
     <ClInclude Include="Sound\Player\SoundPlayTimer.h" />
     <ClInclude Include="Sound\Effects\PlayTimer\PlayTimerParam.h" />
+    <ClInclude Include="Sound\Player\Buffer\BufferSubmitter.h" />
+    <ClInclude Include="Sound\Player\Buffer\SoundBuffer.h" />
+    <ClInclude Include="Sound\Data\SoundData.h" />
   </ItemGroup>
 </Project>

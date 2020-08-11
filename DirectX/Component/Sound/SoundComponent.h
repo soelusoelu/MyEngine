@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Component.h"
+#include "../../Sound/Data/SoundData.h"
 #include "../../Sound/Voice/IVoice.h"
 #include "../../Sound/Voice/VoiceDetails.h"
 #include <memory>
