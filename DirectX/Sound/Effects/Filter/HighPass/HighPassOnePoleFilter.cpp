@@ -51,10 +51,10 @@ void MyFilter::HighPassOnePoleFilter::highPassOnePoleFilter(const XAPO_PROCESS_B
     float* inBuf = static_cast<float*>(inParam.pBuffer);
     float* outBuf = static_cast<float*>(outParam.pBuffer);
     //3配列のうち有効な値を取得
-    float frequency = *reinterpret_cast<float*>(BeginProcess());
+    float getFrequency = *reinterpret_cast<float*>(BeginProcess());
 
     //ローパス係数の計算
-    float a1 = expf(-Math::PI * frequency); //元の音を残すブレンド率(%)
+    float a1 = expf(-Math::PI * getFrequency); //元の音を残すブレンド率(%)
     float b0 = 1.f - a1; //新しい音のブレンド率(%)
 
     float volume = mLastVolume;

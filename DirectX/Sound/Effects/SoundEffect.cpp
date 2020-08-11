@@ -1,18 +1,12 @@
 ﻿#include "SoundEffect.h"
-#include "Echo/Echo.h"
-#include "Equalizer/Equalizer.h"
-#include "Filter/SoundFilter.h"
-#include "PlayTimer/PlayTimer.h"
-#include "Reverb/Reverb.h"
-#include "Reverb/SimpleReverb.h"
-#include "VolumeMeter/VolumeMeter.h"
+#include "SoundEffectCollection.h"
 #include "../Voice/VoiceDetails.h"
 #include "../../DebugLayer/Debug.h"
 #include <cassert>
 
 SoundEffect::SoundEffect(IVoice& voice, bool useFilters) :
     mVoice(voice),
-    mSoundFilter(std::make_unique<SoundFilter>(*this, *this, voice, useFilters)),
+    mEffectCollection(std::make_unique<SoundEffectCollection>(voice, *this, *this, useFilters)),
     mDescs(),
     mIsApplied(false) {
 }
@@ -24,12 +18,12 @@ SoundEffect::~SoundEffect() {
     }
 }
 
-void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize, unsigned operationSet) {
+void SoundEffect::setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize) {
     if (!canAccessEffect(effectID, parameters)) {
         return;
     }
 
-    auto res = mVoice.getXAudio2Voice()->SetEffectParameters(effectID, parameters, parametersByteSize, operationSet);
+    auto res = mVoice.getXAudio2Voice()->SetEffectParameters(effectID, parameters, parametersByteSize);
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed set effect parameters.");
@@ -50,12 +44,12 @@ void SoundEffect::getEffectParameters(int effectID, void* parameters, unsigned p
 #endif // _DEBUG
 }
 
-void SoundEffect::enable(int effectID, unsigned operationSet) {
+void SoundEffect::enable(int effectID) {
     if (!isValidID(effectID)) {
         return;
     }
 
-    auto res = mVoice.getXAudio2Voice()->EnableEffect(effectID, operationSet);
+    auto res = mVoice.getXAudio2Voice()->EnableEffect(effectID);
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed enable effect.");
@@ -63,12 +57,12 @@ void SoundEffect::enable(int effectID, unsigned operationSet) {
 #endif // _DEBUG
 }
 
-void SoundEffect::disable(int effectID, unsigned operationSet) {
+void SoundEffect::disable(int effectID) {
     if (!isValidID(effectID)) {
         return;
     }
 
-    auto res = mVoice.getXAudio2Voice()->DisableEffect(effectID, operationSet);
+    auto res = mVoice.getXAudio2Voice()->DisableEffect(effectID);
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed disable effect.");
@@ -76,37 +70,8 @@ void SoundEffect::disable(int effectID, unsigned operationSet) {
 #endif // _DEBUG
 }
 
-SoundFilter& SoundEffect::getFilter() const {
-    return *mSoundFilter;
-}
-
-int SoundEffect::reverb() {
-    Reverb reverb;
-    return createEffect(&reverb);
-}
-
-int SoundEffect::simpleReverb() {
-    SimpleReverb reverb;
-    return createEffect(&reverb);
-}
-
-int SoundEffect::echo() {
-    Echo echo;
-    return createEffect(&echo);
-}
-
-int SoundEffect::equalizer() {
-    Equalizer equalizer;
-    return createEffect(&equalizer);
-}
-
-int SoundEffect::volumeMeter() {
-    return createEffect(reinterpret_cast<IUnknown*>(new VolumeMeter()));
-}
-
-void SoundEffect::playTimer() {
-    auto id = createEffect(reinterpret_cast<IUnknown*>(new PlayTimer()));
-    assert(id == PLAY_TIMER_ID);
+SoundEffectCollection& SoundEffect::getEffectCollection() const {
+    return *mEffectCollection;
 }
 
 int SoundEffect::createEffect(ISoundEffect* target, bool isApply) {

@@ -67,19 +67,19 @@ public:
     /// 再生時間専門クラスにアクセスする
     /// </summary>
     /// <returns></returns>
-    SoundPlayTimer& playTimer() const;
+    SoundPlayTimer& getPlayTimer() const;
 
     /// <summary>
     /// ループ専門クラスにアクセスする
     /// </summary>
     /// <returns></returns>
-    SoundLoop& loop() const;
+    SoundLoop& getLoop() const;
 
     /// <summary>
     /// 周波数専門クラスにアクセスする
     /// </summary>
     /// <returns></returns>
-    Frequency& frequency() const;
+    Frequency& getFrequency() const;
 
 private:
     SoundPlayer(const SoundPlayer&) = delete;

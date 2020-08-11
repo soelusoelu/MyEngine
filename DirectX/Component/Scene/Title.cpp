@@ -63,8 +63,8 @@ void Title::start() {
     outputVoice.addOutputVoice(*mDrySubmix, false, false);
 
     //mSound->getSoundVolume().setVolume(0.f);
-    //mSound->getSoundVolume().fade().settings(0.5f, 2.f);
-    //mSound->getSoundPlayer().frequency().setFrequencyRatio(4.f);
+    //mSound->getSoundVolume().getFade().settings(0.5f, 2.f);
+    //mSound->getSoundPlayer().getFrequency().setFrequencyRatio(4.f);
     //mSound->getSoundBuffer().loopCount = 1;
     //mSound->getSoundBuffer().playBegin = 60.f;
     //mSound->getSoundBuffer().playLength = 30.f;
@@ -95,8 +95,8 @@ void Title::start() {
 
     auto& player = mSound->getSoundPlayer();
     //player.setPlayPoint(30.f);
-    //player.loop().setLoopPoint(60.f, 90.f);
-    //player.loop().loopAll();
+    //player.getLoop().setLoopPoint(60.f, 90.f);
+    //player.getLoop().loopAll();
     player.playStreamingFadeIn(1.f, 2.f);
 }
 
@@ -113,5 +113,5 @@ void Title::update() {
         mSound->getSoundPlayer().setPlayPoint(60.f);
     }
 
-    Debug::log(StringUtil::floatToString(mSound->getSoundPlayer().playTimer().getPlayTime()));
+    //Debug::log(StringUtil::floatToString(mSound->getSoundPlayer().getPlayTimer().getPlayTime()));
 }

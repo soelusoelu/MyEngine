@@ -138,6 +138,7 @@
     <ClCompile Include="Sound\Effects\PlayTimer\PlayTimer.cpp" />
     <ClCompile Include="Sound\Player\SoundPlayTimer.cpp" />
     <ClCompile Include="Sound\Player\Buffer\BufferSubmitter.cpp" />
+    <ClCompile Include="Sound\Effects\SoundEffectCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -304,5 +305,6 @@
     <ClInclude Include="Sound\Player\Buffer\BufferSubmitter.h" />
     <ClInclude Include="Sound\Player\Buffer\SoundBuffer.h" />
     <ClInclude Include="Sound\Data\SoundData.h" />
+    <ClInclude Include="Sound\Effects\SoundEffectCollection.h" />
   </ItemGroup>
 </Project>

@@ -23,7 +23,7 @@ void Frequency::setFrequencyRatio(float pitch) {
 
     auto res = mSourceVoice.getXAudio2SourceVoice()->SetFrequencyRatio(mCurrentFrequencyRatio);
     //再生時間にも影響するので
-    mPlayer.playTimer().setFrequency(mCurrentFrequencyRatio);
+    mPlayer.getPlayTimer().setFrequency(mCurrentFrequencyRatio);
 
 #ifdef _DEBUG
     if (FAILED(res)) {

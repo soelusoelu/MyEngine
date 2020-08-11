@@ -41,7 +41,7 @@ void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
     mStreaming->polling();
     mPlayTimer->startTimer();
     mSourceVoice.getSoundVolume().setVolume(0.f);
-    mSourceVoice.getSoundVolume().fade().settings(targetVolume, targetTime);
+    mSourceVoice.getSoundVolume().getFade().settings(targetVolume, targetTime);
     auto res = mSourceVoice.getXAudio2SourceVoice()->Start();
 #ifdef _DEBUG
     if (FAILED(res)) {
@@ -68,7 +68,7 @@ void SoundPlayer::pause() {
 }
 
 void SoundPlayer::pauseFadeOut(float targetTime) {
-    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime, [&]() { pause(); });
+    mSourceVoice.getSoundVolume().getFade().settings(0.f, targetTime, [&]() { pause(); });
 }
 
 void SoundPlayer::stop() {
@@ -81,22 +81,22 @@ void SoundPlayer::stop() {
 }
 
 void SoundPlayer::stopFadeOut(float targetTime) {
-    mSourceVoice.getSoundVolume().fade().settings(0.f, targetTime, [&]() { stop(); });
+    mSourceVoice.getSoundVolume().getFade().settings(0.f, targetTime, [&]() { stop(); });
 }
 
 bool SoundPlayer::isStop() const {
     return (!mIsPlay);
 }
 
-SoundPlayTimer& SoundPlayer::playTimer() const {
+SoundPlayTimer& SoundPlayer::getPlayTimer() const {
     return *mPlayTimer;
 }
 
-SoundLoop& SoundPlayer::loop() const {
+SoundLoop& SoundPlayer::getLoop() const {
     return *mLoop;
 }
 
-Frequency& SoundPlayer::frequency() const {
+Frequency& SoundPlayer::getFrequency() const {
     return *mFrequency;
 }
 

@@ -22,7 +22,7 @@ void SoundLoop::update() {
     }
 
     //現在の再生時間がループ折返し地点を超えていたらループの開始地点に戻す
-    if (mPlayer.playTimer().getPlayTime() >= mLoopEnd - 0.01f) {
+    if (mPlayer.getPlayTimer().getPlayTime() >= mLoopEnd - 0.01f) {
         mPlayer.setPlayPoint(mLoopBegin);
     }
 }

@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sound\Effects\SoundEffectCollection.cpp" />
     <ClCompile Include="Sound\Player\SoundPlayTimer.cpp" />
     <ClCompile Include="Sound\Effects\PlayTimer\PlayTimer.cpp" />
     <ClCompile Include="Sound\Player\SoundLoop.cpp" />
@@ -291,6 +292,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sound\Effects\SoundEffectCollection.h" />
     <ClInclude Include="Sound\Data\SoundData.h" />
     <ClInclude Include="Sound\Effects\PlayTimer\PlayTimerParam.h" />
     <ClInclude Include="Sound\Player\SoundPlayTimer.h" />

@@ -18,8 +18,8 @@ public:
     /// <summary>
     /// 再生速度を変更する
     /// </summary>
-    /// <param name="frequency"></param>
-    void setFrequency(float frequency);
+    /// <param name="getFrequency"></param>
+    void setFrequency(float getFrequency);
 
     /// <summary>
     /// 再生時間を返す(単位: 秒)

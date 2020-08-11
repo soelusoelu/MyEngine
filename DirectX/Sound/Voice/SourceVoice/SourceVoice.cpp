@@ -1,6 +1,7 @@
 ﻿#include "SourceVoice.h"
 #include "../SubmixVoice/SubmixVoice.h"
 #include "../../Effects/SoundEffect.h"
+#include "../../Effects/SoundEffectCollection.h"
 #include "../../Flag/SoundFlag.h"
 #include "../../Player/SoundPlayer.h"
 #include "../../Voice/Output/OutputVoices.h"
@@ -21,7 +22,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mDetails.sampleRate = format.samplesPerSec;
 
     //再生時間設定/取得のためにすべてのソースボイスでエフェクト付与
-    mSoundEffect->playTimer();
+    mSoundEffect->getEffectCollection().getPlayTimer();
 }
 
 SourceVoice::~SourceVoice() {

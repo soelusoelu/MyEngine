@@ -79,7 +79,7 @@ void SoundStreaming::addBuffer() {
     } else {
         //再生時間を揃えるために無理やり
         if (Math::nearZero(mWrite)) {
-            mPlayer.playTimer().setPlayTime(0.f);
+            mPlayer.getPlayTimer().setPlayTime(0.f);
         }
 
         res = read(READ_SIZE);

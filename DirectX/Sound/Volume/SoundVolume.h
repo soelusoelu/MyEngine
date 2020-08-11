@@ -58,7 +58,7 @@ public:
     /// フェード専門クラスを返す
     /// </summary>
     /// <returns></returns>
-    SoundFade& fade() const;
+    SoundFade& getFade() const;
 
     /// <summary>
     /// パンニング専門クラスを返す

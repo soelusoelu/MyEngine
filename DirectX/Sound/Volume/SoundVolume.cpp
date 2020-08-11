@@ -51,7 +51,7 @@ float SoundVolume::getVolume() const {
     return mCurrentVolume;
 }
 
-SoundFade& SoundVolume::fade() const {
+SoundFade& SoundVolume::getFade() const {
     return *mFader;
 }
 

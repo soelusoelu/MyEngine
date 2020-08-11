@@ -8,7 +8,7 @@
 #include <memory>
 #include <vector>
 
-class SoundFilter;
+class SoundEffectCollection;
 
 //サウンドエフェクト専用クラス
 class SoundEffect : public IEffectCreater, public IEffectParameter {
@@ -22,8 +22,7 @@ public:
     /// <param name="effectID">設定するエフェクトのID</param>
     /// <param name="parameters">設定するデータの先頭アドレス</param>
     /// <param name="parametersByteSize">データ(parameters)のサイズ</param>
-    /// <param name="operationSet">0でいい</param>
-    virtual void setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize, unsigned operationSet = XAUDIO2_COMMIT_NOW) override;
+    virtual void setEffectParameters(int effectID, const void* parameters, unsigned parametersByteSize) override;
 
     /// <summary>
     /// エフェクトのパラメータを取得する
@@ -37,63 +36,26 @@ public:
     /// エフェクトを有効化する
     /// </summary>
     /// <param name="effectID">有効化したいエフェクトのID</param>
-    /// <param name="operationSet">0でいい</param>
-    void enable(int effectID, unsigned operationSet = XAUDIO2_COMMIT_NOW);
+    void enable(int effectID);
 
     /// <summary>
     /// エフェクトを無効化する
     /// </summary>
     /// <param name="effectID">無効化したいエフェクトのID</param>
-    /// <param name="operationSet">0でいい</param>
-    void disable(int effectID, unsigned operationSet = XAUDIO2_COMMIT_NOW);
+    void disable(int effectID);
 
     /// <summary>
-    /// フィルター管理クラスを返す
+    /// エフェクト集にアクセスする
     /// </summary>
     /// <returns></returns>
-    SoundFilter& getFilter() const;
-
-    /// <summary>
-    /// リバーブ効果(残響)を掛ける
-    /// </summary>
-    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int reverb();
-
-    /// <summary>
-    /// 簡易版リバーブを掛ける
-    /// </summary>
-    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int simpleReverb();
-
-    /// <summary>
-    /// エコーを掛ける
-    /// </summary>
-    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int echo();
-
-    /// <summary>
-    /// イコライザー
-    /// </summary>
-    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int equalizer();
-
-    /// <summary>
-    /// ボリュームメーター
-    /// </summary>
-    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
-    int volumeMeter();
-
-    /// <summary>
-    /// 再生時間設定/取得
-    /// </summary>
-    void playTimer();
+    SoundEffectCollection& getEffectCollection() const;
 
 private:
     SoundEffect(const SoundEffect&) = delete;
     SoundEffect& operator=(const SoundEffect&) = delete;
 
     //エフェクトを生成する
-    int createEffect(ISoundEffect* target, bool isApply = true);
+    virtual int createEffect(ISoundEffect* target, bool isApply = true) override;
     virtual int createEffect(IUnknown* target, bool isApply = true) override;
     //作成した全エフェクトを適用する
     void apply();
@@ -104,12 +66,9 @@ private:
     //エフェクトにアクセスできるか
     bool canAccessEffect(int effectID, const void* parameters) const;
 
-public:
-    static constexpr int PLAY_TIMER_ID = 0;
-
 private:
     IVoice& mVoice;
-    std::unique_ptr<SoundFilter> mSoundFilter;
+    std::unique_ptr<SoundEffectCollection> mEffectCollection;
     std::vector<XAUDIO2_EFFECT_DESCRIPTOR> mDescs;
     bool mIsApplied;
 };
