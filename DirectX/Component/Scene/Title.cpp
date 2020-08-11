@@ -94,9 +94,10 @@ void Title::start() {
     mDrySubmix->getSoundVolume().setVolume(0.f);
 
     auto& player = mSound->getSoundPlayer();
-    //player.setPlayPoint(80.f);
-    player.loop().setLoopPoint(60.f, 90.f);
-    player.playStreamingFadeIn(0.75f, 2.f);
+    //player.setPlayPoint(4.5f);
+    //player.loop().setLoopPoint(60.f, 90.f);
+    player.loop().setLoopPoint(0.f);
+    player.playStreamingFadeIn(1.f, 2.f);
 }
 
 void Title::update() {

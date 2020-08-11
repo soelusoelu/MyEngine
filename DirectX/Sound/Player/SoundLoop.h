@@ -18,8 +18,8 @@ public:
     /// ループ区間を指定する
     /// </summary>
     /// <param name="begin">ループ開始地点(単位: 秒数)</param>
-    /// <param name="end">ループ折返し地点(単位: 秒数)</param>
-    void setLoopPoint(float begin, float end);
+    /// <param name="end">ループ折返し地点(単位: 秒数) 0なら曲の終わりまで</param>
+    void setLoopPoint(float begin, float end = 0.f);
 
     /// <summary>
     /// ループから抜ける
@@ -30,7 +30,13 @@ public:
     /// ループしている最中か
     /// </summary>
     /// <returns></returns>
-    constexpr bool isLoop() const;
+    bool isLoop() const;
+
+    /// <summary>
+    /// ループの折返し地点が曲の終わりか
+    /// </summary>
+    /// <returns></returns>
+    bool isLoopEndOfFile() const;
 
 private:
     SoundLoop(const SoundLoop&) = delete;

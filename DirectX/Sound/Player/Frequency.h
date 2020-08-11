@@ -30,6 +30,6 @@ private:
 private:
     SourceVoice& mSourceVoice;
     SoundPlayer& mPlayer;
-    float mMaxFrequencyRatio;
     float mCurrentFrequencyRatio;
+    float mMaxFrequencyRatio;
 };

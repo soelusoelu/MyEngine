@@ -5,23 +5,17 @@
 #include <memory>
 
 class SourceVoice;
+class SoundPlayer;
 class BufferSubmitter;
 
 //ストリーミングを扱うクラス
 class SoundStreaming {
 public:
-    SoundStreaming(SourceVoice& sourceVoice, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format);
+    SoundStreaming(SourceVoice& sourceVoice, SoundPlayer& player, std::unique_ptr<ISoundLoader>& loader, const WaveFormat& format);
     ~SoundStreaming();
 
-    /// <summary>
-    /// 毎フレーム更新
-    /// </summary>
-    void update();
-
-    /// <summary>
-    /// 再生を開始する
-    /// </summary>
-    void play();
+    //バッファの状態を監視する
+    void polling();
 
     /// <summary>
     /// 指定したファイル位置までシークする
@@ -33,31 +27,33 @@ private:
     SoundStreaming(const SoundStreaming&) = delete;
     SoundStreaming& operator=(const SoundStreaming&) = delete;
 
-    //バッファの状態を監視する
-    void polling();
     //バッファを追加する
     void addBuffer();
-    //ファイルの先頭までシークする
-    void seekBegin();
+    //セカンダリバッファに指定サイズ分バッファを読み込む
+    long read(unsigned readSize);
+    //初期状態に戻す
+    void initialize();
+    //remainBufferSizeを再計算する
+    void recomputeRemainBufferSize(unsigned point);
 
 private:
-    static constexpr unsigned BUFFER_COUNT = 3;
+    static constexpr unsigned BUFFER_COUNT = 2;
     static constexpr unsigned PRIMARY = 0;
     static constexpr unsigned SECONDARY = 1;
-    static constexpr unsigned REMAIN = 2;
     static constexpr float SEC = 1.f;
 
     SourceVoice& mSourceVoice;
+    SoundPlayer& mPlayer;
     std::unique_ptr<BufferSubmitter> mBufferSubmitter;
     std::unique_ptr<ISoundLoader> mLoader;
     //バッファ
     BYTE* mBuffer[BUFFER_COUNT];
     //ファイルから読み込むサイズ
     const unsigned READ_SIZE;
-    //読み込みカーソル
-    unsigned mWrite;
     //バッファの余り
     unsigned mRemainBufferSize;
-    //ストリーミング再生中か
-    bool mIsPlayStreaming;
+    //読み込みカーソル
+    unsigned mWrite;
+    //ファイルの終端まで読み込んだか
+    bool mEndOfFile;
 };

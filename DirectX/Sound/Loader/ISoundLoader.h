@@ -15,8 +15,8 @@ public:
 public:
     virtual ~ISoundLoader() = default;
     virtual bool loadFromFile(WAVEFORMATEX* format, const std::string& fileName) = 0;
-    virtual unsigned read(BYTE** buffer, unsigned size) = 0;
-    virtual unsigned seek(int offset, Seek seek = Seek::CURRENT) = 0;
+    virtual long read(BYTE** buffer, unsigned size) = 0;
+    virtual long seek(int offset, Seek seek = Seek::CURRENT) = 0;
     virtual void seekBegin() = 0;
     virtual unsigned size() const = 0;
 };

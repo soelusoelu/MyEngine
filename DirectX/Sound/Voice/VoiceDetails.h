@@ -2,6 +2,7 @@
 
 #include "../Loader/ISoundLoader.h"
 #include "../Loader/WaveFormat.h"
+#include "../../Math/Math.h"
 #include "../../System/SystemInclude.h"
 
 //サウンドデータ保存クラス
@@ -20,6 +21,17 @@ struct SoundData {
         bitRate(format.bitsPerSample),
         blockAlign(format.blockAlign),
         averageBytesPerSec(format.avgBytesPerSec) {
+    }
+
+    //秒単位の曲の長さ
+    float length() const {
+        return (static_cast<float>(size) / static_cast<float>(averageBytesPerSec));
+    }
+
+    //曲の範囲内にクランプ
+    float clamp(float sec) const {
+        //再生時間内にクランプ
+        return Math::clamp<float>(sec, 0.f, length());
     }
 };
 

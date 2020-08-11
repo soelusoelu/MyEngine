@@ -44,11 +44,11 @@ bool WAV::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     return true;
 }
 
-unsigned WAV::read(BYTE** buffer, unsigned size) {
+long WAV::read(BYTE** buffer, unsigned size) {
     return readChunk(*buffer, size);
 }
 
-unsigned WAV::seek(int offset, Seek seek) {
+long WAV::seek(int offset, Seek seek) {
     return mmioSeek(mHMmio, static_cast<LONG>(offset), static_cast<unsigned>(seek));
 }
 

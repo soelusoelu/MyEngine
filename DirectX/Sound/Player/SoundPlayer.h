@@ -39,24 +39,24 @@ public:
     /// <summary>
     /// 再生を一時停止する
     /// </summary>
-    void pause() const;
+    void pause();
 
     /// <summary>
     /// フェードアウトしながら再生を一時停止する
     /// </summary>
     /// <param name="targetTime">何秒かけてフェードするか</param>
-    void pauseFadeOut(float targetTime) const;
+    void pauseFadeOut(float targetTime);
 
     /// <summary>
     /// 再生を停止する
     /// </summary>
-    void stop() const;
+    void stop();
 
     /// <summary>
     /// フェードアウトしながら再生を停止する
     /// </summary>
     /// <param name="targetTime">何秒かけてフェードするか</param>
-    void stopFadeOut(float targetTime) const;
+    void stopFadeOut(float targetTime);
 
     /// <summary>
     /// 再生が停止しているか
@@ -86,10 +86,14 @@ private:
     SoundPlayer(const SoundPlayer&) = delete;
     SoundPlayer& operator=(const SoundPlayer&) = delete;
 
+    //ポーズ・ストップ共通処理
+    bool pauseAndStop(unsigned flag);
+
 private:
     SourceVoice& mSourceVoice;
     std::unique_ptr<SoundStreaming> mStreaming;
     std::unique_ptr<SoundPlayTimer> mPlayTimer;
     std::unique_ptr<SoundLoop> mLoop;
     std::unique_ptr<Frequency> mFrequency;
+    bool mIsPlay;
 };
