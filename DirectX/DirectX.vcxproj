@@ -162,6 +162,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component\EmitterComponent.cpp" />
+    <ClCompile Include="Sound\3D\DspSetter.cpp" />
+    <ClCompile Include="Sound\3D\Emitter\Sound3DEmitter.cpp" />
+    <ClCompile Include="Sound\3D\Listener\Sound3DListener.cpp" />
     <ClCompile Include="Sound\3D\Sound3D.cpp" />
     <ClCompile Include="Sound\Effects\SoundEffectCollection.cpp" />
     <ClCompile Include="Sound\Player\SoundPlayTimer.cpp" />
@@ -191,7 +194,6 @@
     <ClCompile Include="Sound\Voice\MasteringVoice\MasteringVoice.cpp" />
     <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
     <ClCompile Include="Sound\Voice\SubmixVoice\SubmixVoice.cpp" />
-    <ClCompile Include="Component\Sound\SubmixVoiceComponent.cpp" />
     <ClCompile Include="Sound\Effects\TestEffect.cpp" />
     <ClCompile Include="Sound\Effects\TestEffectParameters.cpp" />
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
@@ -295,11 +297,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\EmitterComponent.h" />
+    <ClInclude Include="Sound\3D\DspSetter.h" />
+    <ClInclude Include="Sound\3D\Emitter\Sound3DEmitter.h" />
+    <ClInclude Include="Sound\3D\Emitter\Sound3DEmitterParam.h" />
+    <ClInclude Include="Sound\3D\Listener\Sound3DListener.h" />
     <ClInclude Include="Sound\3D\DistanceCurve.h" />
     <ClInclude Include="Sound\3D\Sound3D.h" />
     <ClInclude Include="Sound\3D\Sound3DCone.h" />
-    <ClInclude Include="Sound\3D\Sound3DEmitter.h" />
-    <ClInclude Include="Sound\3D\Sound3DListener.h" />
+    <ClInclude Include="Sound\3D\Listener\Sound3DListenerParam.h" />
     <ClInclude Include="Sound\Effects\SoundEffectCollection.h" />
     <ClInclude Include="Sound\Data\SoundData.h" />
     <ClInclude Include="Sound\Effects\PlayTimer\PlayTimerParam.h" />
@@ -345,7 +350,6 @@
     <ClInclude Include="Sound\Voice\SourceVoice\SourceVoiceInitParam.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoice.h" />
     <ClInclude Include="Sound\Voice\SubmixVoice\SubmixVoiceInitParam.h" />
-    <ClInclude Include="Component\Sound\SubmixVoiceComponent.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
     <ClInclude Include="Sound\Effects\TestEffect.h" />
     <ClInclude Include="Sound\Effects\TestEffectParameters.h" />

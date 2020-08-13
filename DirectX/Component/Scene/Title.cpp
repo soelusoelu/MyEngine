@@ -1,7 +1,6 @@
 ﻿#include "Title.h"
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
-#include "../Sound/SubmixVoiceComponent.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/SoundCreater.h"

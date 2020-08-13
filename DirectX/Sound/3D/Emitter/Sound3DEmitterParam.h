@@ -1,11 +1,10 @@
 ﻿#pragma once
 
-#include "Sound3DCone.h"
-#include "DistanceCurve.h"
-#include "../../Math/Math.h"
+#include "../DistanceCurve.h"
+#include "../Sound3DCone.h"
+#include "../../../Math/Math.h"
 
-//3Dサウンドで扱うエミッター構造体
-struct Sound3DEmitter {
+struct Sound3DEmitterParam {
     //指向性の指定
     //NULLだと無指向(コーン処理が適用されない)
     Sound3DCone* cone;
@@ -53,7 +52,7 @@ struct Sound3DEmitter {
     //ドップラーシフト効果を誇張するために使用されるドップラーシフトスケーラー [0.f, Math::infinity]
     float dopplerScaler;
 
-    Sound3DEmitter() :
+    Sound3DEmitterParam() :
         cone(nullptr),
         orientFront(Vector3::forward),
         orientTop(Vector3::up),

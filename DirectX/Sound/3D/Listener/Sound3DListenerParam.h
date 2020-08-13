@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Sound3DCone.h"
-#include "../../Math/Math.h"
+#include "../Sound3DCone.h"
+#include "../../../Math/Math.h"
 
 //3Dサウンドで扱うリスナー構造体
-struct Sound3DListener {
+struct Sound3DListenerParam {
     //前方ベクトル
     Vector3 orientFront;
     //上ベクトル
@@ -18,7 +18,7 @@ struct Sound3DListener {
     //NULLだと無指向(コーン処理が適用されない)
     Sound3DCone* cone;
 
-    Sound3DListener() :
+    Sound3DListenerParam() :
         orientFront(Vector3::forward),
         orientTop(Vector3::up),
         position(Vector3::zero),

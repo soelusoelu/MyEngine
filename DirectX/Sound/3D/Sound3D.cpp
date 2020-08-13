@@ -1,60 +1,24 @@
 ﻿#include "Sound3D.h"
-#include "../Flag/SoundFlag.h"
-#include "../Player/Frequency.h"
-#include "../Player/SoundPlayer.h"
-#include "../Voice/VoiceDetails.h"
+#include "DspSetter.h"
+#include "Emitter/Sound3DEmitter.h"
+#include "Listener/Sound3DListener.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
-#include "../Voice/SourceVoice/SourceVoice.h"
-#include "../Volume/SoundPan.h"
-#include "../Volume/SoundVolume.h"
-#include "../../Component/Camera/Camera.h"
+#include "../Flag/SoundFlag.h"
 #include "../../DebugLayer/Debug.h"
-#include "../../Device/Time.h"
-#include "../../Math/Math.h"
-#include "../../Transform/Transform3D.h"
 
 Sound3D::Sound3D(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
-    mSourceVoice(sourceVoice),
     m3DInstance(),
-    mListener(),
-    mEmitter(),
-    mDspSettings(),
+    mListener(std::make_unique<Sound3DListener>()),
+    mEmitter(std::make_unique<Sound3DEmitter>(format)),
+    mDspSetter(std::make_unique<DspSetter>(sourceVoice, masteringVoice, format)),
     mInitialized(false),
-    mEmitterPreviousPos(Vector3::zero)
+    mFlags(0)
 {
     auto res = X3DAudioInitialize(masteringVoice.getChannelMask(), X3DAUDIO_SPEED_OF_SOUND, m3DInstance);
     if (FAILED(res)) {
         Debug::logError("Failed 3d sound initialize.");
         return;
     }
-
-    //入力・出力チャンネル数の取得
-    const auto inCh = format.channels;
-    const auto outCh = masteringVoice.getVoiceDetails().channels;
-
-    //リスナー
-    mListener.cone = &LISTENER_DIRECTIONAL_CONE;
-    //エミッター
-    mEmitter.cone = &EMITTER_CONE;
-    mEmitter.channelCount = inCh;
-    mEmitter.channelRadius = 1.f;
-    mEmitterAzimuths.resize(inCh);
-    mEmitter.channelAzimuths = mEmitterAzimuths.data();
-    mEmitter.innerRadius = 2.f;
-    mEmitter.innerRadiusAngle = Math::PI / 4.f;
-    mEmitter.volumeCurve = &DEFAULT_LINEAR_CURVE;
-    mEmitter.lfeCurve = &EMITTER_LFE_CURVE;
-    mEmitter.lpfDirectCurve = nullptr; //デフォルトカーブを使用
-    mEmitter.lpfReverbCurve = nullptr; //デフォルトカーブを使用
-    mEmitter.reverbCurve = &EMITTER_REVERB_CURVE;
-    mEmitter.curveDistanceScaler = 14.f;
-    mEmitter.dopplerScaler = 0.f;
-    //dsp
-    mDspSettings.SrcChannelCount = inCh;
-    mDspSettings.DstChannelCount = outCh;
-    mMatrixCoefficients.resize(inCh * outCh);
-    mDspSettings.pMatrixCoefficients = mMatrixCoefficients.data();
-    mDspSettings.pDelayTimes = nullptr;
 
     mInitialized = true;
 }
@@ -66,35 +30,35 @@ void Sound3D::update() {
         return;
     }
 
-    mEmitter.velocity = (mEmitter.position - mEmitterPreviousPos) / Time::deltaTime;
-    mEmitterPreviousPos = mEmitter.position;
+    mListener->update();
+    mEmitter->update();
 
     calculate();
 }
 
-void Sound3D::setListenerByCamera(const Camera& camera) {
-    mListener.orientFront = camera.transform().forward();
-    mListener.orientTop = camera.transform().up();
-    mListener.position = camera.getPosition();
+Sound3DListener& Sound3D::getListener() const {
+    return *mListener;
 }
 
-void Sound3D::setEmitterPosition(const Vector3& pos) {
-    mEmitter.position = pos;
+Sound3DEmitter& Sound3D::getEmitter() const {
+    return *mEmitter;
 }
 
 void Sound3D::calculate() {
+    static_assert(sizeof(Vector3) == sizeof(X3DAUDIO_VECTOR), "Vector3 size does not match.");
+    static_assert(sizeof(Sound3DListenerParam) == sizeof(X3DAUDIO_LISTENER), "Listener sizes do not match.");
+    static_assert(sizeof(Sound3DEmitterParam) == sizeof(X3DAUDIO_EMITTER), "Emitter sizes do not match.");
+
     X3DAUDIO_LISTENER listener;
-    memcpy(&listener, &mListener, sizeof(mListener));
+    memcpy(&listener, &mListener, sizeof(mListener->getListener()));
     X3DAUDIO_EMITTER emitter;
-    memcpy(&emitter, &mEmitter, sizeof(mEmitter));
-    constexpr unsigned flags = Sound3DFlags::CALCULATE_MATRIX | Sound3DFlags::CALCULATE_DOPPLER | Sound3DFlags::CALCULATE_LPF_DIRECT | Sound3DFlags::CALCULATE_LPF_REVERB | Sound3DFlags::CALCULATE_REVERB;
-    X3DAudioCalculate(m3DInstance, &listener, &emitter, flags, &mDspSettings);
+    memcpy(&emitter, &mEmitter, sizeof(mEmitter->getEmitter()));
+    auto& dsp = mDspSetter->getDspSetting();
+    //計算に使用するフラグを設定
+    mFlags = Sound3DFlags::CALCULATE_MATRIX | Sound3DFlags::CALCULATE_DOPPLER | Sound3DFlags::CALCULATE_LPF_DIRECT | Sound3DFlags::CALCULATE_LPF_REVERB | Sound3DFlags::CALCULATE_REVERB;
+    //本計算
+    X3DAudioCalculate(m3DInstance, &listener, &emitter, mFlags, &dsp);
 
-    //ソースボイスに計算を適用する
-    applyToSourceVoice();
-}
-
-void Sound3D::applyToSourceVoice() {
-    mSourceVoice.getSoundPlayer().getFrequency().setFrequencyRatio(mDspSettings.DopplerFactor);
-    mSourceVoice.getSoundVolume().getPan().pan(mMatrixCoefficients.data());
+    //計算結果をソースボイスに適用する
+    mDspSetter->applyToSourceVoice();
 }

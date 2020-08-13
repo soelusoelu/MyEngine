@@ -1,9 +1,9 @@
 ﻿#include "SoundComponent.h"
-#include "SubmixVoiceComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
 #include "../../Device/SoundCreater.h"
 #include "../../Sound/3D/Sound3D.h"
+#include "../../Sound/3D/Emitter/Sound3DEmitter.h"
 #include "../../Sound/Flag/SoundFlag.h"
 #include "../../Sound/Player/SoundPlayer.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoice.h"
@@ -37,7 +37,7 @@ void SoundComponent::update() {
 
 void SoundComponent::lateUpdate() {
     if (mSound) {
-        mSound->get3DSound().setEmitterPosition(transform().getPosition());
+        mSound->get3DSound().getEmitter().setPosition(transform().getPosition());
         mSound->get3DSound().update();
     }
 }
