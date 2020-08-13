@@ -17,6 +17,12 @@ public:
     virtual OutputVoices& getOutputVoices() const override;
     virtual SoundEffect& getSoundEffect() const override;
 
+    /// <summary>
+    /// チャンネルマスクを返す
+    /// </summary>
+    /// <returns></returns>
+    unsigned getChannelMask() const;
+
 private:
     MasteringVoice(const MasteringVoice&) = delete;
     MasteringVoice& operator=(const MasteringVoice&) = delete;

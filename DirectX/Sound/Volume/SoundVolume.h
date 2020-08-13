@@ -5,14 +5,13 @@
 #include <xaudio2.h>
 #include <memory>
 
-class MasteringVoice;
 class SoundFade;
 class SoundPan;
 
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(IVoice& voice, const MasteringVoice& masteringVoice);
+    SoundVolume(IVoice& voice, const unsigned inChannels, const unsigned outChannels);
     ~SoundVolume();
 
     /// <summary>

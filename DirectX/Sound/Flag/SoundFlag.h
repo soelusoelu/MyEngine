@@ -3,8 +3,8 @@
 #include <xaudio2.h>
 
 //サウンド関連フラグ
-enum class SoundFlag {
-    NOPITCH = XAUDIO2_VOICE_NOPITCH,
-    NOSRC = XAUDIO2_VOICE_NOSRC,
-    USE_FILTER = XAUDIO2_VOICE_USEFILTER
-};
+namespace SoundFlags {
+constexpr unsigned NOPITCH = XAUDIO2_VOICE_NOPITCH;
+constexpr unsigned NOSRC = XAUDIO2_VOICE_NOSRC;
+constexpr unsigned USE_FILTER = XAUDIO2_VOICE_USEFILTER;
+}

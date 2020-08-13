@@ -21,8 +21,8 @@ SoundComponent::~SoundComponent() = default;
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
         SourceVoiceInitParam param;
-        param.flags.set(static_cast<unsigned>(SoundFlag::USE_FILTER));
-        //param.maxFrequencyRatio = 16.f;
+        param.flags.set(SoundFlags::USE_FILTER);
+        param.maxFrequencyRatio = 4.f;
         mSound = World::instance().assetsManager().getSoundCreater().createSourceVoice(mFileName, param);
     }
 }

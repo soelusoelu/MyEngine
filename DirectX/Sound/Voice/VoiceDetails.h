@@ -6,9 +6,4 @@ struct VoiceDetails {
     unsigned channels;
     //サンプリングレート
     unsigned sampleRate;
-
-    VoiceDetails() :
-        channels(0),
-        sampleRate(0) {
-    }
 };

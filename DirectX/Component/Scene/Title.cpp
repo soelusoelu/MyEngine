@@ -59,8 +59,8 @@ void Title::start() {
     }
 
     auto& outputVoice = mSound->getOutputVoices();
-    outputVoice.addOutputVoice(*mWetSubmix, false, false);
-    outputVoice.addOutputVoice(*mDrySubmix, false, false);
+    //outputVoice.addOutputVoice(*mWetSubmix, false, false);
+    //outputVoice.addOutputVoice(*mDrySubmix, false, false);
 
     //mSound->getSoundVolume().setVolume(0.f);
     //mSound->getSoundVolume().getFade().settings(0.5f, 2.f);

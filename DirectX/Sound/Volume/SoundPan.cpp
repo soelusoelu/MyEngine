@@ -1,16 +1,15 @@
 ﻿#include "SoundPan.h"
 #include "../Voice/VoiceDetails.h"
-#include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../Voice/Output/OutputVoices.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 #include "../../System/Window.h"
 #include <vector>
 
-SoundPan::SoundPan(IVoice& voice, const MasteringVoice& masteringVoice) :
+SoundPan::SoundPan(IVoice& voice, const unsigned inChannels, const unsigned outChannels) :
     mVoice(voice),
-    INPUT_CHANNELS(voice.getVoiceDetails().channels),
-    OUTPUT_CHANNELS(masteringVoice.getVoiceDetails().channels) {
+    INPUT_CHANNELS(inChannels),
+    OUTPUT_CHANNELS(outChannels) {
 }
 
 SoundPan::~SoundPan() = default;

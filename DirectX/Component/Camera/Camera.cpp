@@ -7,7 +7,6 @@
 Camera::Camera() :
     Component(),
     mLookAt(Vector3::zero),
-    mUp(Vector3::up),
     mFOV(45.f),
     mNearClip(0.1f),
     mFarClip(100.f),
@@ -161,7 +160,7 @@ bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {
 void Camera::calcLookAt() {
     auto pos = getPosition();
     Vector3 zaxis = Vector3::normalize(mLookAt - pos);
-    Vector3 xaxis = Vector3::normalize(Vector3::cross(mUp, zaxis));
+    Vector3 xaxis = Vector3::normalize(Vector3::cross(transform().up(), zaxis));
     Vector3 yaxis = Vector3::normalize(Vector3::cross(zaxis, xaxis));
     Vector3 trans;
     trans.x = -Vector3::dot(xaxis, pos);

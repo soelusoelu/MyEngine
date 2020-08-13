@@ -171,6 +171,10 @@ Vector3 Transform3D::forward() const {
     return Vector3::transform(Vector3::forward, mRotation);
 }
 
+Vector3 Transform3D::up() const {
+    return Vector3::transform(Vector3::up, mRotation);
+}
+
 Vector3 Transform3D::right() const {
     return Vector3::transform(Vector3::right, mRotation);
 }

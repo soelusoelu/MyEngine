@@ -64,6 +64,8 @@ public:
 
     //回転量に応じた前方ベクトルの取得
     Vector3 forward() const;
+    //回転量に応じた上ベクトルの取得
+    Vector3 up() const;
     //回転量に応じた右ベクトルの取得
     Vector3 right() const;
 

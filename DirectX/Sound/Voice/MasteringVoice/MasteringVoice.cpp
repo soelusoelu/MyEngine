@@ -6,15 +6,17 @@
 MasteringVoice::MasteringVoice(IXAudio2MasteringVoice* XAudio2MasteringVoice) :
     mXAudio2MasteringVoice(XAudio2MasteringVoice),
     mDetails(),
-    mSoundVolume(std::make_unique<SoundVolume>(*this, *this)),
+    mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, false)) {
 
     //XAudio2の標準機能からボイス情報を取得
-    XAUDIO2_VOICE_DETAILS details;
+    XAUDIO2_VOICE_DETAILS details = { 0 };
     mXAudio2MasteringVoice->GetVoiceDetails(&details);
     mDetails.channels = details.InputChannels;
     mDetails.sampleRate = details.InputSampleRate;
+
+    mSoundVolume = std::make_unique<SoundVolume>(*this, mDetails.channels, mDetails.channels);
 }
 
 MasteringVoice::~MasteringVoice() {
@@ -40,4 +42,10 @@ OutputVoices& MasteringVoice::getOutputVoices() const {
 
 SoundEffect& MasteringVoice::getSoundEffect() const {
     return *mSoundEffect;
+}
+
+unsigned MasteringVoice::getChannelMask() const {
+    DWORD channelMask = 0;
+    mXAudio2MasteringVoice->GetChannelMask(&channelMask);
+    return static_cast<unsigned>(channelMask);
 }

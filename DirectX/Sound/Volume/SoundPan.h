@@ -3,12 +3,10 @@
 #include "../Voice/IVoice.h"
 #include <xaudio2.h>
 
-class MasteringVoice;
-
 //音の定位を扱うクラス
 class SoundPan {
 public:
-    SoundPan(IVoice& voice, const MasteringVoice& masteringVoice);
+    SoundPan(IVoice& voice, const unsigned inChannels, const unsigned outChannels);
     ~SoundPan();
 
     /// <summary>

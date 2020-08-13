@@ -34,7 +34,6 @@ private:
 
 private:
     Vector3 mLookAt;
-    Vector3 mUp;
 
     float mFOV;
     float mNearClip;
