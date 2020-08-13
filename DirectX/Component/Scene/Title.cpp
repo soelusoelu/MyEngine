@@ -73,8 +73,8 @@ void Title::start() {
     //mSound->getSoundFilter().lowPassFilter(2500.f);
     //mSound->getSoundFilter().highPassFilter(250.f);
     //mSound->getSoundFilter().bandPassFilter(1000.f);
-    //mSound->getSoundVolume().getSoundPan().pan(0.f);
-    //mSound->getSoundVolume().getSoundPan().panCenter();
+    //mSound->getSoundVolume().getPan().pan(0.f);
+    //mSound->getSoundVolume().getPan().panCenter();
 
     //サウンドエフェクト
     //int reverbID = mWetSubmix->getSoundEffect().reverb();

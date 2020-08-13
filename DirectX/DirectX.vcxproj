@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\EmitterComponent.cpp" />
     <ClCompile Include="Sound\3D\Sound3D.cpp" />
     <ClCompile Include="Sound\Effects\SoundEffectCollection.cpp" />
     <ClCompile Include="Sound\Player\SoundPlayTimer.cpp" />
@@ -293,6 +294,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\EmitterComponent.h" />
     <ClInclude Include="Sound\3D\DistanceCurve.h" />
     <ClInclude Include="Sound\3D\Sound3D.h" />
     <ClInclude Include="Sound\3D\Sound3DCone.h" />

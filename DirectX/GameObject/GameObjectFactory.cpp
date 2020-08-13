@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/EmitterComponent.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Collider/CircleCollider.h"
 #include "../Component/Collider/SphereCollider.h"
@@ -60,6 +61,8 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(Text);
     ADD_COMPONENT(TextFloat);
     ADD_COMPONENT(TextNumber);
+
+    ADD_COMPONENT(EmitterComponent);
 
     const std::string& fileName = "ActorsList.json";
     if (!LevelLoader::loadJSON(fileName, &mDocument)) {

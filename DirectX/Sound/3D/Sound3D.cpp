@@ -1,12 +1,20 @@
 ﻿#include "Sound3D.h"
+#include "../Flag/SoundFlag.h"
+#include "../Player/Frequency.h"
+#include "../Player/SoundPlayer.h"
 #include "../Voice/VoiceDetails.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
+#include "../Voice/SourceVoice/SourceVoice.h"
+#include "../Volume/SoundPan.h"
+#include "../Volume/SoundVolume.h"
 #include "../../Component/Camera/Camera.h"
 #include "../../DebugLayer/Debug.h"
+#include "../../Device/Time.h"
 #include "../../Math/Math.h"
 #include "../../Transform/Transform3D.h"
 
-Sound3D::Sound3D(const MasteringVoice& masteringVoice, const WaveFormat& format) :
+Sound3D::Sound3D(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
+    mSourceVoice(sourceVoice),
     m3DInstance(),
     mListener(),
     mEmitter(),
@@ -30,7 +38,8 @@ Sound3D::Sound3D(const MasteringVoice& masteringVoice, const WaveFormat& format)
     mEmitter.cone = &EMITTER_CONE;
     mEmitter.channelCount = inCh;
     mEmitter.channelRadius = 1.f;
-    //mEmitter.channelAzimuths = 
+    mEmitterAzimuths.resize(inCh);
+    mEmitter.channelAzimuths = mEmitterAzimuths.data();
     mEmitter.innerRadius = 2.f;
     mEmitter.innerRadiusAngle = Math::PI / 4.f;
     mEmitter.volumeCurve = &DEFAULT_LINEAR_CURVE;
@@ -39,12 +48,13 @@ Sound3D::Sound3D(const MasteringVoice& masteringVoice, const WaveFormat& format)
     mEmitter.lpfReverbCurve = nullptr; //デフォルトカーブを使用
     mEmitter.reverbCurve = &EMITTER_REVERB_CURVE;
     mEmitter.curveDistanceScaler = 14.f;
-    mEmitter.dopplerScaler = 1.f;
+    mEmitter.dopplerScaler = 0.f;
     //dsp
     mDspSettings.SrcChannelCount = inCh;
     mDspSettings.DstChannelCount = outCh;
     mMatrixCoefficients.resize(inCh * outCh);
     mDspSettings.pMatrixCoefficients = mMatrixCoefficients.data();
+    mDspSettings.pDelayTimes = nullptr;
 
     mInitialized = true;
 }
@@ -52,7 +62,13 @@ Sound3D::Sound3D(const MasteringVoice& masteringVoice, const WaveFormat& format)
 Sound3D::~Sound3D() = default;
 
 void Sound3D::update() {
+    if (!mInitialized) {
+        return;
+    }
+
+    mEmitter.velocity = (mEmitter.position - mEmitterPreviousPos) / Time::deltaTime;
     mEmitterPreviousPos = mEmitter.position;
+
     calculate();
 }
 
@@ -67,14 +83,18 @@ void Sound3D::setEmitterPosition(const Vector3& pos) {
 }
 
 void Sound3D::calculate() {
-    if (!mInitialized) {
-        return;
-    }
-
     X3DAUDIO_LISTENER listener;
     memcpy(&listener, &mListener, sizeof(mListener));
     X3DAUDIO_EMITTER emitter;
     memcpy(&emitter, &mEmitter, sizeof(mEmitter));
     constexpr unsigned flags = Sound3DFlags::CALCULATE_MATRIX | Sound3DFlags::CALCULATE_DOPPLER | Sound3DFlags::CALCULATE_LPF_DIRECT | Sound3DFlags::CALCULATE_LPF_REVERB | Sound3DFlags::CALCULATE_REVERB;
     X3DAudioCalculate(m3DInstance, &listener, &emitter, flags, &mDspSettings);
+
+    //ソースボイスに計算を適用する
+    applyToSourceVoice();
+}
+
+void Sound3D::applyToSourceVoice() {
+    mSourceVoice.getSoundPlayer().getFrequency().setFrequencyRatio(mDspSettings.DopplerFactor);
+    mSourceVoice.getSoundVolume().getPan().pan(mMatrixCoefficients.data());
 }

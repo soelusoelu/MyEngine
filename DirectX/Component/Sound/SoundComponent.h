@@ -20,6 +20,7 @@ public:
     ~SoundComponent();
     virtual void awake() override;
     virtual void update() override;
+    virtual void lateUpdate() override;
     virtual void finalize() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;

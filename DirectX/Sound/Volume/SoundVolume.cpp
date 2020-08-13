@@ -17,7 +17,7 @@ void SoundVolume::update() {
     mFader->update();
 }
 
-void SoundVolume::setVolume(float volume, unsigned operationSet) {
+void SoundVolume::setVolume(float volume) {
     //前回とほぼ同じ値だったら変更しない
     if (Math::nearZero(mCurrentVolume - volume)) {
         return;
@@ -25,7 +25,7 @@ void SoundVolume::setVolume(float volume, unsigned operationSet) {
 
     mCurrentVolume = volume;
     float targetVolume = mCurrentVolume * mCurrentVolume;
-    auto res = mVoice.getXAudio2Voice()->SetVolume(targetVolume, operationSet);
+    auto res = mVoice.getXAudio2Voice()->SetVolume(targetVolume);
 
 #ifdef _DEBUG
     if (FAILED(res)) {
@@ -34,9 +34,9 @@ void SoundVolume::setVolume(float volume, unsigned operationSet) {
 #endif // _DEBUG
 }
 
-void SoundVolume::setVolumeByDecibels(float decibels, unsigned operationSet) {
+void SoundVolume::setVolumeByDecibels(float decibels) {
     float volume = decibelsToAmplitudeRatio(decibels);
-    setVolume(volume, operationSet);
+    setVolume(volume);
 }
 
 float SoundVolume::amplitudeRatioToDecibels(float volume) {
@@ -55,6 +55,6 @@ SoundFade& SoundVolume::getFade() const {
     return *mFader;
 }
 
-SoundPan& SoundVolume::getSoundPan() const {
+SoundPan& SoundVolume::getPan() const {
     return *mSoundPan;
 }

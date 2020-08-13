@@ -23,15 +23,13 @@ public:
     /// ボイスの音量を変更する
     /// </summary>
     /// <param name="volume">設定したい音量</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void setVolume(float volume, unsigned operationSet = XAUDIO2_COMMIT_NOW);
+    void setVolume(float volume);
 
     /// <summary>
     /// デシベルで音量を変更する
     /// </summary>
     /// <param name="decibels">設定したいデシベル値</param>
-    /// <param name="operationSet">いつ実行するか</param>
-    void setVolumeByDecibels(float decibels, unsigned operationSet = XAUDIO2_COMMIT_NOW);
+    void setVolumeByDecibels(float decibels);
 
     /// <summary>
     /// ボリューム値からデシベル値に変換する
@@ -63,7 +61,7 @@ public:
     /// パンニング専門クラスを返す
     /// </summary>
     /// <returns></returns>
-    SoundPan& getSoundPan() const;
+    SoundPan& getPan() const;
 
 private:
     SoundVolume(const SoundVolume&) = delete;

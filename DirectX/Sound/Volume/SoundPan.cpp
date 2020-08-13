@@ -26,8 +26,12 @@ void SoundPan::pan(float positionX) {
     selectOutput(volumes.data());
 }
 
+void SoundPan::pan(const float volumes[]) {
+    setOutputMatrix(nullptr, volumes);
+}
+
 void SoundPan::panCenter() {
-    std::vector<float> volumes(INPUT_CHANNELS * OUTPUT_CHANNELS, CENTER_VOLUME);
+    const std::vector<float> volumes(INPUT_CHANNELS * OUTPUT_CHANNELS, CENTER_VOLUME);
 
     selectOutput(volumes.data());
 }

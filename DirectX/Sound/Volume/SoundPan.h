@@ -16,6 +16,12 @@ public:
     void pan(float positionX);
 
     /// <summary>
+    /// 音量配列から音をパンする
+    /// </summary>
+    /// <param name="volumes"></param>
+    void pan(const float volumes[]);
+
+    /// <summary>
     /// 音の定位を中心に戻す
     /// </summary>
     void panCenter();

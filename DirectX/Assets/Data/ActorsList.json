@@ -92,6 +92,17 @@
           "properties": {
             "fileName": "Test/Chips.fbx"
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "çgò@âÿ.wav"
+          }
+        },
+        {
+          "type": "EmitterComponent",
+          "properties": {
+          }
         }
       ]
     }
