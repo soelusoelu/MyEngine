@@ -60,7 +60,8 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "çgò@âÿ.wav"
+            "fileName": "çgò@âÿ.wav",
+            "use3D": false
           }
         }
       ]
@@ -96,7 +97,8 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "çgò@âÿ.wav"
+            "fileName": "çgò@âÿ.wav",
+            "use3D": true
           }
         },
         {

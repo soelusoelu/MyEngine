@@ -38,4 +38,5 @@ public:
 private:
     std::unique_ptr<SourceVoice> mSound;
     std::string mFileName;
+    bool mUse3DSound;
 };

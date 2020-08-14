@@ -15,7 +15,8 @@
 SoundComponent::SoundComponent() :
     Component(),
     mSound(nullptr),
-    mFileName("") {
+    mFileName(""),
+    mUse3DSound(false) {
 }
 
 SoundComponent::~SoundComponent() = default;
@@ -36,6 +37,9 @@ void SoundComponent::update() {
 }
 
 void SoundComponent::lateUpdate() {
+    if (!mUse3DSound) {
+        return;
+    }
     if (mSound) {
         mSound->get3DSound().getEmitter().setPosition(transform().getPosition());
         mSound->get3DSound().update();
@@ -50,10 +54,12 @@ void SoundComponent::finalize() {
 
 void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getString(inObj, "fileName", &mFileName);
+    JsonHelper::getBool(inObj, "use3D", &mUse3DSound);
 }
 
 void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
+    inspect->emplace_back("Use3D", mUse3DSound);
 }
 
 bool SoundComponent::isNull() const {
