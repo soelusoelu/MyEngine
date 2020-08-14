@@ -50,15 +50,16 @@ void Title::start() {
     param.channels = details.channels;
     param.inputSampleRate = details.sampleRate;
     auto& soundCreater = World::instance().assetsManager().getSoundCreater();
-    mWetSubmix = soundCreater.createSubmixVoice(param);
-    mDrySubmix = soundCreater.createSubmixVoice(param);
+    //mWetSubmix = soundCreater.createSubmixVoice(param);
+    //mDrySubmix = soundCreater.createSubmixVoice(param);
 
-    if (!mWetSubmix || !mDrySubmix) {
-        return;
-    }
+    //if (!mWetSubmix || !mDrySubmix) {
+    //    return;
+    //}
 
-    auto& outputVoice = mSound->getOutputVoices();
-    //outputVoice.addOutputVoice(*mWetSubmix, false, false);
+    //auto& outputVoice = mSound->getOutputVoices();
+    //outputVoice.addOutputVoice(*mWetSubmix);
+    //mWetSubmix->getSoundVolume().getPan().pan(1920.f);
     //outputVoice.addOutputVoice(*mDrySubmix, false, false);
 
     //mSound->getSoundVolume().setVolume(0.f);
@@ -72,7 +73,7 @@ void Title::start() {
     //mSound->getSoundFilter().lowPassFilter(2500.f);
     //mSound->getSoundFilter().highPassFilter(250.f);
     //mSound->getSoundFilter().bandPassFilter(1000.f);
-    //mSound->getSoundVolume().getPan().pan(0.f);
+    //mSound->getSoundVolume().getPan().panFromPositionX(0.f);
     //mSound->getSoundVolume().getPan().panCenter();
 
     //サウンドエフェクト
@@ -89,8 +90,8 @@ void Title::start() {
     //reverbParam.diffusion = 0.2f;
     //reverbParam.roomSize = 0.3f;
     //mWetSubmix->getSoundEffect().setEffectParameters(reverbID, &reverbParam, sizeof(reverbParam));
-    mWetSubmix->getSoundVolume().setVolume(0.5f);
-    mDrySubmix->getSoundVolume().setVolume(0.f);
+    //mWetSubmix->getSoundVolume().setVolume(1.f);
+    //mDrySubmix->getSoundVolume().setVolume(0.f);
 
     auto& player = mSound->getSoundPlayer();
     //player.setPlayPoint(30.f);

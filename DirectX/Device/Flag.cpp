@@ -21,3 +21,7 @@ bool Flag::check(unsigned value) const {
 unsigned Flag::get() const {
     return mFlags;
 }
+
+void Flag::clear() {
+    mFlags = 0;
+}

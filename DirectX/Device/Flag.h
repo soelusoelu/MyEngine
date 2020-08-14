@@ -12,6 +12,8 @@ public:
     bool check(unsigned value) const;
     //全フラグを返す
     unsigned get() const;
+    //全フラグを折る
+    void clear();
 
 private:
     unsigned mFlags;

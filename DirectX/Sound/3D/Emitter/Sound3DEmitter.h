@@ -25,6 +25,27 @@ public:
     void setPosition(const Vector3& pos);
 
     /// <summary>
+    /// ドップラー効果の掛かり具合を設定する
+    /// </summary>
+    /// <param name="scale">ドップラーレベル</param>
+    void setDopplerScale(float scale);
+
+    /// <summary>
+    /// ドップラー効果を計算するか
+    /// </summary>
+    /// <returns></returns>
+    bool isCalculateDoppler() const;
+
+    void setCalculateLPFDirect(bool value);
+    bool isCalculateLPFDirect() const;
+
+    void setCalculateLPFReverb(bool value);
+    bool isCalculateLPFReverb() const;
+
+    void setCalculateReverb(bool value);
+    bool isCalculateReverb() const;
+
+    /// <summary>
     /// エミッターを返す
     /// </summary>
     /// <returns></returns>
@@ -41,6 +62,12 @@ private:
     std::vector<float> mAzimuths;
     //前フレームでの位置
     Vector3 mPreviousPos;
+    //ローパスフィルタ直接パス計算フラグ
+    bool mIsCalculateLPFDirect;
+    //ローパスフィルタリバーブパス計算フラグ
+    bool mIsCalculateLPFReverb;
+    //リバーブパス計算フラグ
+    bool mIsCalculateReverb;
 
     //エミッターコーン
     static inline Sound3DCone EMITTER_CONE = { 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 1.f };

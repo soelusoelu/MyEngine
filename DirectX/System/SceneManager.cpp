@@ -24,6 +24,7 @@
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
+#include "../Utility/LevelLoader.h"
 
 SceneManager::SceneManager() :
     mRenderer(std::make_unique<Renderer>()),
@@ -35,6 +36,7 @@ SceneManager::SceneManager() :
     mPhysics(std::make_unique<Physics>()),
     mLightManager(std::make_unique<LightManager>()),
     mTextDrawer(new DrawString()),
+    mBeginScene(),
     mShouldDraw(false) {
 }
 
@@ -45,6 +47,7 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getString(inObj, "beginScene", &mBeginScene);
     mLightManager->loadProperties(inObj);
     mTextDrawer->loadProperties(inObj);
 }
@@ -62,7 +65,7 @@ void SceneManager::initialize() {
     mLightManager->createDirectionalLight();
 
     //初期シーンの設定
-    createScene("Title");
+    createScene(mBeginScene);
 }
 
 void SceneManager::update() {

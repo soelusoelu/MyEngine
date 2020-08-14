@@ -5,6 +5,7 @@
 #include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../Flag/SoundFlag.h"
 #include "../../DebugLayer/Debug.h"
+#include "../../Math/Math.h"
 
 Sound3D::Sound3D(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
     m3DInstance(),
@@ -12,7 +13,7 @@ Sound3D::Sound3D(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice,
     mEmitter(std::make_unique<Sound3DEmitter>(format)),
     mDspSetter(std::make_unique<DspSetter>(sourceVoice, masteringVoice, format)),
     mInitialized(false),
-    mFlags(0)
+    mFlags()
 {
     auto res = X3DAudioInitialize(masteringVoice.getChannelMask(), X3DAUDIO_SPEED_OF_SOUND, m3DInstance);
     if (FAILED(res)) {
@@ -50,15 +51,38 @@ void Sound3D::calculate() {
     static_assert(sizeof(Sound3DEmitterParam) == sizeof(X3DAUDIO_EMITTER), "Emitter sizes do not match.");
 
     X3DAUDIO_LISTENER listener;
-    memcpy(&listener, &mListener, sizeof(mListener->getListener()));
+    memcpy(&listener, &mListener->getListener(), sizeof(Sound3DListenerParam));
     X3DAUDIO_EMITTER emitter;
-    memcpy(&emitter, &mEmitter, sizeof(mEmitter->getEmitter()));
-    auto& dsp = mDspSetter->getDspSetting();
-    //計算に使用するフラグを設定
-    mFlags = Sound3DFlags::CALCULATE_MATRIX | Sound3DFlags::CALCULATE_DOPPLER | Sound3DFlags::CALCULATE_LPF_DIRECT | Sound3DFlags::CALCULATE_LPF_REVERB | Sound3DFlags::CALCULATE_REVERB;
+    memcpy(&emitter, &mEmitter->getEmitter(), sizeof(Sound3DEmitterParam));
+    //必要に応じたフラグを設定する
+    setFlags();
     //本計算
-    X3DAudioCalculate(m3DInstance, &listener, &emitter, mFlags, &dsp);
+    X3DAudioCalculate(m3DInstance, &listener, &emitter, mFlags.get(), &mDspSetter->getDspSetting());
 
     //計算結果をソースボイスに適用する
-    mDspSetter->applyToSourceVoice();
+    mDspSetter->applyToSourceVoice(mFlags);
+}
+
+void Sound3D::setFlags() {
+    //フラグを初期化する
+    mFlags.clear();
+
+    //行列計算は絶対
+    mFlags.set(X3DAUDIO_CALCULATE_MATRIX);
+    //ドップラー効果
+    if (mEmitter->isCalculateDoppler()) {
+        mFlags.set(X3DAUDIO_CALCULATE_DOPPLER);
+    }
+    //ローパスフィルタ直接パス
+    if (mEmitter->isCalculateLPFDirect()) {
+        mFlags.set(X3DAUDIO_CALCULATE_LPF_DIRECT);
+    }
+    //ローパスフィルタリバーブパス
+    if (mEmitter->isCalculateLPFReverb()) {
+        mFlags.set(X3DAUDIO_CALCULATE_LPF_REVERB);
+    }
+    //リバーブ
+    if (mEmitter->isCalculateReverb()) {
+        mFlags.set(X3DAUDIO_CALCULATE_REVERB);
+    }
 }

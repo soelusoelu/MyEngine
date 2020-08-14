@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Loader/WaveFormat.h"
+#include "../../Device/Flag.h"
 #include <xaudio2.h>
 #include <x3daudio.h>
 #include <memory>
@@ -41,6 +42,8 @@ private:
 
     //3Dサウンドを計算する
     void calculate();
+    //フラグを設定する
+    void setFlags();
 
 private:
     //3Dサウンドのハンドル
@@ -53,6 +56,6 @@ private:
     std::unique_ptr<DspSetter> mDspSetter;
     //初期化に成功しているか
     bool mInitialized;
-    //フラグ
-    unsigned mFlags;
+    //計算フラグ
+    Flag mFlags;
 };

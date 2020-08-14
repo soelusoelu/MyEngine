@@ -14,7 +14,11 @@ SoundPan::SoundPan(IVoice& voice, const unsigned inChannels, const unsigned outC
 
 SoundPan::~SoundPan() = default;
 
-void SoundPan::pan(float positionX) {
+void SoundPan::pan(const float volumes[]) {
+    selectOutput(volumes);
+}
+
+void SoundPan::panFromPositionX(float positionX) {
     const float width = static_cast<float>(Window::standardWidth());
 
     auto posX = Math::clamp<float>(positionX, 0.f, width);
@@ -24,10 +28,6 @@ void SoundPan::pan(float positionX) {
     volumes[2] = volumes[3] = Math::sin(rot);
 
     selectOutput(volumes.data());
-}
-
-void SoundPan::pan(const float volumes[]) {
-    setOutputMatrix(nullptr, volumes);
 }
 
 void SoundPan::panCenter() {

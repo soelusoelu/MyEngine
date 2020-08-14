@@ -23,7 +23,7 @@ struct SourceVoiceInitParam {
 
     SourceVoiceInitParam() :
         flags(),
-        maxFrequencyRatio(2.f),
+        maxFrequencyRatio(XAUDIO2_DEFAULT_FREQ_RATIO),
         callback(nullptr),
         sendList(nullptr),
         effectChain(nullptr) {

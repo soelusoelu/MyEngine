@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Loader/WaveFormat.h"
+#include "../../Device/Flag.h"
 #include <x3daudio.h>
 #include <memory>
 #include <vector>
@@ -17,7 +18,7 @@ public:
     /// <summary>
     /// ソースボイスに3D計算した結果を適用する
     /// </summary>
-    void applyToSourceVoice();
+    void applyToSourceVoice(const Flag& flag);
 
     /// <summary>
     /// dspを返す
@@ -31,6 +32,7 @@ private:
 
 private:
     SourceVoice& mSourceVoice;
+    const MasteringVoice& mMasteringVoice;
     //計算結果
     std::unique_ptr<X3DAUDIO_DSP_SETTINGS> mDspSettings;
     //行列係数

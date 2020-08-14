@@ -10,16 +10,16 @@ public:
     ~SoundPan();
 
     /// <summary>
+    /// 音量配列から音をパンする
+    /// </summary>
+    /// <param name="volumes">音量配列</param>
+    void pan(const float volumes[]);
+
+    /// <summary>
     /// 位置によって音をパンする
     /// </summary>
     /// <param name="positionX">音を鳴らす位置(0～1920)</param>
-    void pan(float positionX);
-
-    /// <summary>
-    /// 音量配列から音をパンする
-    /// </summary>
-    /// <param name="volumes"></param>
-    void pan(const float volumes[]);
+    void panFromPositionX(float positionX);
 
     /// <summary>
     /// 音の定位を中心に戻す

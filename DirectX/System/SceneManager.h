@@ -8,11 +8,9 @@
 class Scene;
 class Renderer;
 class Camera;
-class DirectionalLight;
 class GameObjectManager;
 class MeshManager;
 class Physics;
-class Renderer;
 class SpriteManager;
 class LightManager;
 class DrawString;
@@ -42,5 +40,6 @@ private:
     std::unique_ptr<Physics> mPhysics;
     std::unique_ptr<LightManager> mLightManager;
     DrawString* mTextDrawer;
+    std::string mBeginScene;
     bool mShouldDraw;
 };
