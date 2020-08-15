@@ -117,6 +117,34 @@
           }
         }
       ]
+    },
+    {
+      "type": "Test2",
+      "properties": {
+        "position": [ 5.0, 1.0, 0.0],
+        "rotation": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 0.1, 0.1, 0.1 ]
+      },
+      "components": [
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "Chicken/karaage2.fbx"
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "hawk1.wav",
+            "use3D": true
+          }
+        },
+        {
+          "type": "EmitterComponent2",
+          "properties": {
+          }
+        }
+      ]
     }
   ]
 }

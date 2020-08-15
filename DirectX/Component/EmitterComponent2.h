@@ -5,16 +5,16 @@
 
 class SoundComponent;
 
-class EmitterComponent : public Component {
+class EmitterComponent2 : public Component {
 public:
-    EmitterComponent();
-    ~EmitterComponent();
+    EmitterComponent2();
+    ~EmitterComponent2();
     virtual void start() override;
     virtual void update() override;
 
 private:
-    EmitterComponent(const EmitterComponent&) = delete;
-    EmitterComponent& operator=(const EmitterComponent&) = delete;
+    EmitterComponent2(const EmitterComponent2&) = delete;
+    EmitterComponent2& operator=(const EmitterComponent2&) = delete;
 
 private:
     std::shared_ptr<SoundComponent> mSound;

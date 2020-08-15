@@ -144,6 +144,7 @@
     <ClCompile Include="Sound\3D\Emitter\Sound3DEmitter.cpp" />
     <ClCompile Include="Sound\3D\DspSetter.cpp" />
     <ClCompile Include="Component\Sound\ListenerComponent.cpp" />
+    <ClCompile Include="Component\EmitterComponent2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -320,5 +321,6 @@
     <ClInclude Include="Sound\3D\Emitter\Sound3DEmitter.h" />
     <ClInclude Include="Sound\3D\DspSetter.h" />
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
+    <ClInclude Include="Component\EmitterComponent2.h" />
   </ItemGroup>
 </Project>

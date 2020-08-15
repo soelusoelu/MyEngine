@@ -20,6 +20,8 @@ void GamePlay::start() {
     //エミッターを生成
     auto emitterObj = GameObjectCreater::create("Test");
     auto emitter = emitterObj->componentManager().getComponent<SoundComponent>();
+    auto emitterObj2 = GameObjectCreater::create("Test2");
+    auto emitter2 = emitterObj2->componentManager().getComponent<SoundComponent>();
     //リスナーに設定するために
     auto camera = gameObject()->getGameObjectManager().find("Camera");
     //リスナーオブジェクトを生成
@@ -30,6 +32,7 @@ void GamePlay::start() {
     listener->setTarget(camera);
     //エミッターにリスナーを設定
     emitter->setListener(listener);
+    emitter2->setListener(listener);
 }
 
 void GamePlay::update() {

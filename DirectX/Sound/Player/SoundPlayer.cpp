@@ -32,7 +32,8 @@ void SoundPlayer::update() {
     XAUDIO2_VOICE_STATE state = { 0 };
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     if (state.BuffersQueued == 0) {
-        pauseFadeOut(0.25f);
+        pause();
+        mStreaming->seek(0.f);
     }
 }
 
