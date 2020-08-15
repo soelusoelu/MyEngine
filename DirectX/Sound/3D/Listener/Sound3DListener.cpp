@@ -1,7 +1,5 @@
 ﻿#include "Sound3DListener.h"
-#include "../../../Component/Camera/Camera.h"
 #include "../../../Device/Time.h"
-#include "../../../Transform/Transform3D.h"
 
 Sound3DListener::Sound3DListener() :
     mListener(),
@@ -16,10 +14,13 @@ void Sound3DListener::update() {
     mPreviousPos = mListener.position;
 }
 
-void Sound3DListener::setListenerByCamera(const Camera& camera) {
-    mListener.orientFront = camera.transform().forward();
-    mListener.orientTop = camera.transform().up();
-    mListener.position = camera.getPosition();
+void Sound3DListener::setPosition(const Vector3& pos) {
+    mListener.position = pos;
+}
+
+void Sound3DListener::setFrontAndTop(const Vector3& front, const Vector3& top) {
+    mListener.orientFront = front;
+    mListener.orientTop = top;
 }
 
 void Sound3DListener::setCone(Sound3DCone* cone) {

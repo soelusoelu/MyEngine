@@ -107,6 +107,16 @@
           }
         }
       ]
+    },
+    {
+      "type": "Listener",
+      "components": [
+        {
+          "type": "ListenerComponent",
+          "properties": {
+          }
+        }
+      ]
     }
   ]
 }

@@ -13,6 +13,7 @@ class SoundPlayer;
 class SoundVolume;
 class SoundEffect;
 class OutputVoices;
+class ListenerComponent;
 
 class SoundComponent : public Component {
 public:
@@ -27,6 +28,8 @@ public:
 
     //使用可能状態か
     bool isNull() const;
+    //リスナーを登録する
+    void setListener(const std::shared_ptr<ListenerComponent>& listener);
 
     const VoiceDetails& getVoiceDetails() const;
     SoundData& getSoundData() const;
@@ -37,6 +40,8 @@ public:
 
 private:
     std::unique_ptr<SourceVoice> mSound;
+    //3D計算するならリスナーを登録する
+    std::shared_ptr<ListenerComponent> mListener;
     std::string mFileName;
     bool mUse3DSound;
 };

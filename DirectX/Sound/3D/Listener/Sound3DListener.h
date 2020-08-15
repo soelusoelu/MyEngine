@@ -4,8 +4,6 @@
 #include "../Sound3DCone.h"
 #include "../../../Math/Math.h"
 
-class Camera;
-
 //3Dサウンドで扱うリスナー(聞き手)
 class Sound3DListener {
 public:
@@ -18,10 +16,17 @@ public:
     void update();
 
     /// <summary>
-    /// カメラをもとにリスナーを設定する
+    /// リスナーの位置を設定する
     /// </summary>
-    /// <param name="camera">カメラコンポーネント</param>
-    void setListenerByCamera(const Camera& camera);
+    /// <param name="pos">位置</param>
+    void setPosition(const Vector3& pos);
+
+    /// <summary>
+    /// リスナーの前方ベクトルと上ベクトルを設定する
+    /// </summary>
+    /// <param name="front">前方ベクトル</param>
+    /// <param name="top">上ベクトル</param>
+    void setFrontAndTop(const Vector3& front, const Vector3& top);
 
     /// <summary>
     /// コーンを設定する

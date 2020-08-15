@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Listener/Sound3DListenerParam.h"
 #include "../Loader/WaveFormat.h"
 #include "../../Device/Flag.h"
 #include <xaudio2.h>
@@ -9,7 +10,6 @@
 
 class SourceVoice;
 class MasteringVoice;
-class Sound3DListener;
 class Sound3DEmitter;
 class DspSetter;
 
@@ -20,15 +20,10 @@ public:
     ~Sound3D();
 
     /// <summary>
-    /// 毎フレーム更新
+    /// 3Dサウンドを計算する
     /// </summary>
-    void update();
-
-    /// <summary>
-    /// リスナーを返す
-    /// </summary>
-    /// <returns></returns>
-    Sound3DListener& getListener() const;
+    /// <param name="listenerParam">リスナー構造体</param>
+    void calculate(const Sound3DListenerParam& listenerParam);
 
     /// <summary>
     /// エミッターを返す
@@ -40,22 +35,16 @@ private:
     Sound3D(const Sound3D&) = delete;
     Sound3D& operator=(const Sound3D&) = delete;
 
-    //3Dサウンドを計算する
-    void calculate();
-    //フラグを設定する
-    void setFlags();
+    //フラグを設定し返す
+    Flag setFlags();
 
 private:
     //3Dサウンドのハンドル
     X3DAUDIO_HANDLE m3DInstance;
-    //リスナー(聞き手)
-    std::unique_ptr<Sound3DListener> mListener;
     //エミッター(音源)
     std::unique_ptr<Sound3DEmitter> mEmitter;
     //3D計算結果
     std::unique_ptr<DspSetter> mDspSetter;
     //初期化に成功しているか
     bool mInitialized;
-    //計算フラグ
-    Flag mFlags;
 };
