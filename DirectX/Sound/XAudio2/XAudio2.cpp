@@ -21,7 +21,7 @@ XAudio2::~XAudio2() {
 }
 
 MasteringVoice* XAudio2::createMasteringVoice() const {
-    IXAudio2MasteringVoice* masteringVoice;
+    IXAudio2MasteringVoice* masteringVoice = nullptr;
     auto res = mXAudio2->CreateMasteringVoice(&masteringVoice);
 
     if (FAILED(res)) {
@@ -33,7 +33,7 @@ MasteringVoice* XAudio2::createMasteringVoice() const {
 }
 
 std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masteringVoice, std::unique_ptr<ISoundLoader>& loader, const WAVEFORMATEX& format, const SourceVoiceInitParam& param) const {
-    IXAudio2SourceVoice* sourceVoice;
+    IXAudio2SourceVoice* sourceVoice = nullptr;
     auto res = mXAudio2->CreateSourceVoice(&sourceVoice, &format, param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
@@ -46,7 +46,7 @@ std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masterin
 }
 
 std::unique_ptr<SubmixVoice> XAudio2::createSubmixVoice(MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) const {
-    IXAudio2SubmixVoice* submixVoice;
+    IXAudio2SubmixVoice* submixVoice = nullptr;
     auto res = mXAudio2->CreateSubmixVoice(&submixVoice, param.channels, param.inputSampleRate, param.flags.get(), param.processingStage, param.sendList, param.effectChain);
 
     if (FAILED(res)) {

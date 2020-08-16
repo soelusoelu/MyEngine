@@ -176,9 +176,9 @@ void Camera::calcLookAt() {
     mView = Matrix4(temp);
 }
 
-void Camera::calcPerspectiveFOV(float width, float height) {
+void Camera::calcPerspectiveFOV(int width, int height) {
     float yScale = Math::cot(mFOV / 2.f);
-    float xScale = yScale * height / width;
+    float xScale = yScale * static_cast<float>(height) / static_cast<float>(width);
     float temp[4][4] = {
         { xScale, 0.f, 0.f, 0.f },
         { 0.f, yScale, 0.f, 0.f },

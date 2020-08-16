@@ -22,12 +22,12 @@ namespace Math {
         return radians * 180.0f / PI;
     }
 
-    inline bool nearZero(float val, float epsilon = 0.001f) {
+    inline bool nearZero(float val) {
         return (fabs(val) <= epsilon);
     }
 
-    inline bool equal(float a, float b, float e = epsilon) {
-        return (fabs(a - b) <= e);
+    inline bool equal(float a, float b) {
+        return (fabs(a - b) <= epsilon);
     }
 
     template <typename T>

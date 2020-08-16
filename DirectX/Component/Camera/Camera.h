@@ -30,7 +30,7 @@ public:
 
 private:
     void calcLookAt();
-    void calcPerspectiveFOV(float width, float height);
+    void calcPerspectiveFOV(int width, int height);
 
 private:
     Vector3 mLookAt;
