@@ -15,7 +15,7 @@ SoundStreaming::SoundStreaming(SourceVoice& sourceVoice, SoundPlayer& player, st
     mBufferSubmitter(std::make_unique<BufferSubmitter>(sourceVoice)),
     mLoader(std::move(loader)),
     mBuffer{ nullptr, nullptr },
-    READ_SIZE(format.avgBytesPerSec * SEC),
+    READ_SIZE(format.avgBytesPerSec),
     mRemainBufferSize(0),
     mWrite(0),
     mEndOfFile(false) {
@@ -59,13 +59,8 @@ void SoundStreaming::seek(float point) {
 
     recomputeRemainBufferSize(seekPoint);
 
-    auto res = mLoader->seek(static_cast<int>(seekPoint));
-    //0より大きければ正しくシークできてる
-    if (res > 0) {
-        mWrite = res;
-    } else {
-        Debug::logWarning("Failed streaming seek.");
-    }
+    mLoader->seek(static_cast<long>(seekPoint));
+    mWrite = seekPoint;
 }
 
 void SoundStreaming::addBuffer() {

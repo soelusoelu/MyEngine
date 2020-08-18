@@ -40,7 +40,6 @@ private:
     static constexpr unsigned BUFFER_COUNT = 2;
     static constexpr unsigned PRIMARY = 0;
     static constexpr unsigned SECONDARY = 1;
-    static constexpr float SEC = 1.f;
 
     SourceVoice& mSourceVoice;
     SoundPlayer& mPlayer;

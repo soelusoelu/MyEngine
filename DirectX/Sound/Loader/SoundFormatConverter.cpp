@@ -1,5 +1,6 @@
 ﻿#include "SoundFormatConverter.h"
 #include "../../DebugLayer/Debug.h"
+#include "../../System/GlobalFunction.h"
 
 SoundFormatConverter::SoundFormatConverter() :
     mAcmStream(nullptr),
@@ -9,6 +10,8 @@ SoundFormatConverter::SoundFormatConverter() :
 SoundFormatConverter::~SoundFormatConverter() {
     acmStreamUnprepareHeader(mAcmStream, &mAcmStreamHeader, 0);
     acmStreamClose(mAcmStream, 0);
+    safeDeleteArray(mAcmStreamHeader.pbSrc);
+    safeDeleteArray(mAcmStreamHeader.pbDst);
 }
 
 bool SoundFormatConverter::mp3ToPCM(WAVEFORMATEX** pcmFormat, MPEGLAYER3WAVEFORMAT& mp3Format) {
@@ -23,7 +26,7 @@ bool SoundFormatConverter::mp3ToPCM(WAVEFORMATEX** pcmFormat, MPEGLAYER3WAVEFORM
         return false;
     }
     //ACMストリームヘッダーを作成
-    if (!createAcmStreamHeader(mp3Format)) {
+    if (!createAcmStreamHeader(pcmFormat, mp3Format)) {
         Debug::logError("Failed created acm stream header.");
         return false;
     }
@@ -53,9 +56,9 @@ bool SoundFormatConverter::openAcmStream(WAVEFORMATEX** pcmFormat, MPEGLAYER3WAV
     return (res == MMSYSERR_NOERROR);
 }
 
-bool SoundFormatConverter::createAcmStreamHeader(const MPEGLAYER3WAVEFORMAT& mp3Format) {
+bool SoundFormatConverter::createAcmStreamHeader(WAVEFORMATEX** pcmFormat, const MPEGLAYER3WAVEFORMAT& mp3Format) {
     unsigned out = 0;
-    constexpr unsigned size = 44100;
+    unsigned size = (*pcmFormat)->nAvgBytesPerSec;
     decodeSize(size, &out, false);
 
     mAcmStreamHeader.cbStruct = sizeof(ACMSTREAMHEADER);

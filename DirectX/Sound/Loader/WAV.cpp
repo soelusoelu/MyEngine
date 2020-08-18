@@ -48,15 +48,12 @@ long WAV::read(BYTE** buffer, unsigned size) {
     return readChunk(*buffer, size);
 }
 
-long WAV::seek(long offset, Seek seek) {
-    return mmioSeek(mHMmio, offset, static_cast<int>(seek));
+void WAV::seek(long offset, Seek seek) {
+    mmioSeek(mHMmio, offset, static_cast<int>(seek));
 }
 
 void WAV::seekBegin() {
-    auto res = seek(mDataChunk.dwDataOffset, Seek::BEGIN);
-    if (res != mDataChunk.dwDataOffset) {
-        Debug::logWarning("Failed seekBegin.");
-    }
+    seek(mDataChunk.dwDataOffset, Seek::BEGIN);
 }
 
 unsigned WAV::size() const {

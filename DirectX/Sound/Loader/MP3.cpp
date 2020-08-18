@@ -10,6 +10,7 @@ MP3::MP3() :
     mIfs(),
     mFrameHeader(std::make_unique<FrameHeader>()),
     mFormatConverter(std::make_unique<SoundFormatConverter>()),
+    mFileSize(0),
     mDataSize(0),
     mDataOffset(0) {
 }
@@ -23,40 +24,19 @@ bool MP3::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     }
 
     //ファイル全体のサイズ
-    auto fileSize = std::filesystem::file_size(fileName);
+    mFileSize = std::filesystem::file_size(fileName);
 
-    BYTE header[HEADER_SIZE];
-    mIfs.read(reinterpret_cast<char*>(header), HEADER_SIZE);
-    //ID3v2である
-    if (memcmp(header, "ID3", 3) == 0) {
-        unsigned tagSize = ((header[6] << 21) | (header[7] << 14) | (header[8] << 7) | (header[9]));
-        //データ部分へのオフセット値決定
-        mDataOffset = tagSize + 10;
-        //データ部分のサイズ決定
-        mDataSize = fileSize - mDataOffset;
-    } else {
-        //ここに入り次第処理書く
-        assert(false);
-    }
-
-    //フレームヘッダ
-    BYTE frameHeader[FrameHeader::FRAME_HEADER_SIZE];
+    //データ部分の解析をする
+    parseData();
+    //フレームヘッダの解析をする
+    parseFrameHeader();
+    //解析したデータをMPEGLAYER3WAVEFORMATに詰め込む
     MPEGLAYER3WAVEFORMAT mp3wf = { 0 };
-    while (!mIfs.eof()) {
-        mIfs.read(reinterpret_cast<char*>(frameHeader), FrameHeader::FRAME_HEADER_SIZE);
-        if (mFrameHeader->isFrameHeader(frameHeader)) {
-            if (mFrameHeader->parseFrameHeader(header)) {
-                break;
-            }
-        }
-    }
-
-    //フレームヘッダで解析したデータをMPEGLAYER3WAVEFORMATに詰め込む
     mFrameHeader->setDataToMpegLayer3WaveFormat(&mp3wf);
-    format->wFormatTag = WAVE_FORMAT_PCM;
-    format->cbSize = sizeof(WAVEFORMATEX);
 
     //mp3からpcmへデータ変換する
+    format->wFormatTag = WAVE_FORMAT_PCM;
+    format->cbSize = sizeof(WAVEFORMATEX);
     mFormatConverter->mp3ToPCM(&format, mp3wf);
 
     //データサイズをデコード
@@ -69,22 +49,26 @@ bool MP3::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
 }
 
 long MP3::read(BYTE** buffer, unsigned size) {
+    //pcm用のサイズからmp3用のサイズに変更する
     unsigned decodeSize = 0;
     mFormatConverter->decodeSize(size, &decodeSize, false);
+    //mp3用のサイズからデータを読み取る
     mIfs.read(reinterpret_cast<char*>(*buffer), decodeSize);
+    //mp3のバッファからpcmのバッファに変更する
     auto count = mIfs.gcount();
     auto readSize = mFormatConverter->convert(buffer, count);
+
     return readSize;
 }
 
-long MP3::seek(long offset, Seek seek) {
+void MP3::seek(long offset, Seek seek) {
+    //pcm用のサイズからmp3用のサイズに変更する
+    unsigned decodeOffset = 0;
+    mFormatConverter->decodeSize(offset, &decodeOffset, false);
+
+    //フラグをクリアしてシーク
     mIfs.clear();
-    auto s = static_cast<std::ios_base::_Seekdir>(seek);
-    if (mIfs.seekg(offset, s)) {
-        return offset;
-    } else {
-        return -1;
-    }
+    mIfs.seekg(decodeOffset, static_cast<std::ios_base::_Seekdir>(seek));
 }
 
 void MP3::seekBegin() {
@@ -93,4 +77,41 @@ void MP3::seekBegin() {
 
 unsigned MP3::size() const {
     return mDataSize;
+}
+
+void MP3::parseData() {
+    BYTE header[ID3V2_HEADER_SIZE];
+    mIfs.read(reinterpret_cast<char*>(header), ID3V2_HEADER_SIZE);
+    //ID3v2である
+    if (memcmp(header, "ID3", 3) == 0) {
+        unsigned tagSize = ((header[6] << 21) | (header[7] << 14) | (header[8] << 7) | (header[9])) + ID3V2_HEADER_SIZE;
+        //データ部分へのオフセット値決定
+        mDataOffset = tagSize;
+        //データ部分のサイズ決定
+        mDataSize = mFileSize - mDataOffset;
+    }
+    //ID3v1である
+    else {
+        //ここに入り次第処理書く
+        assert(false);
+    }
+}
+
+void MP3::parseFrameHeader() {
+    //ファイルの先頭から
+    seek(0L, Seek::BEGIN);
+
+    BYTE frameHeader[FrameHeader::FRAME_HEADER_SIZE];
+    while (!mIfs.eof()) {
+        //フレームヘッダのサイズ分読み取る
+        mIfs.read(reinterpret_cast<char*>(frameHeader), FrameHeader::FRAME_HEADER_SIZE);
+        //フレームヘッダじゃなかったら次へ
+        if (!mFrameHeader->isFrameHeader(frameHeader)) {
+            continue;
+        }
+        //フレームヘッダなら解析
+        if (mFrameHeader->parseFrameHeader(frameHeader)) {
+            break;
+        }
+    }
 }

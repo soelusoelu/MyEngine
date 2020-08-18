@@ -62,7 +62,7 @@ bool FrameHeader::parseFrameHeader(const BYTE* header) {
     mChannels = ((header[3] >> 6) == 3) ? 1 : 2;
     //フレームサイズの取得
     mFrameSize = ((SAMPLE_PER_FRAME[mLayer - 1][mVersion - 1] / 8 * mBitRate * 1000) / mSampleRate) + mPadding;
-    //int frameSize = ((144 * mBitRate * 1000) / mSampleRate) + mPadding;
+    //mFrameSize = ((144 * mBitRate * 1000) / mSampleRate) + mPadding;
 
     //強調モードが予約コードの場合は終了
     if ((header[3] & 0x03) == 2) {

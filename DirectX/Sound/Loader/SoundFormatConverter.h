@@ -28,7 +28,7 @@ private:
     //ACMストリームを開く
     bool openAcmStream(WAVEFORMATEX** pcmFormat, MPEGLAYER3WAVEFORMAT& mp3Format);
     //ACMストリームヘッダーを作成する
-    bool createAcmStreamHeader(const MPEGLAYER3WAVEFORMAT& mp3Format);
+    bool createAcmStreamHeader(WAVEFORMATEX** pcmFormat, const MPEGLAYER3WAVEFORMAT& mp3Format);
 
 private:
     HACMSTREAM mAcmStream;
