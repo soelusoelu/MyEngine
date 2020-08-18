@@ -13,7 +13,7 @@
       "windowDebugHeight": 1080
     },
     "fps": 60.0,
-    "beginScene": "GamePlay",
+    "beginScene": "Title",
     "light": {
       "ambientLight": [ 0.1, 0.1, 0.1 ],
       "pointLightMeshFileName": "Shape/Sphere.obj"

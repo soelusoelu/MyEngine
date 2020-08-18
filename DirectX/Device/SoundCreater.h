@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../Sound/Loader/ISoundLoader.h"
-#include "../Sound/Loader/WaveFormat.h"
 #include "../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
 #include "../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include <xaudio2.h>

@@ -78,12 +78,12 @@ void SoundStreaming::addBuffer() {
         mEndOfFile = true;
     } else {
         //再生時間を揃えるために無理やり
-        if (Math::nearZero(mWrite)) {
+        if (mWrite == 0) {
             mPlayer.getPlayTimer().setPlayTime(0.f);
         }
 
         res = read(READ_SIZE);
-        mWrite += READ_SIZE;
+        mWrite += res;
     }
 
     //バッファ作成

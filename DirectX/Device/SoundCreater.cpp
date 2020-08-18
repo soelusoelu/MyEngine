@@ -1,5 +1,6 @@
 ﻿#include "SoundCreater.h"
 #include "../DebugLayer/Debug.h"
+#include "../Sound/Loader/MP3.h"
 #include "../Sound/Loader/WAV.h"
 #include "../Sound/Voice/SourceVoice/SourceVoice.h"
 #include "../Sound/Voice/SubmixVoice/SubmixVoice.h"
@@ -35,7 +36,7 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
     mDirectory.setSoundDirectory(filePath);
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     //音を読み込む
-    WAVEFORMATEX format;
+    WAVEFORMATEX format = { 0 };
     auto res = loader->loadFromFile(&format, fileName);
     if (!res) {
         return nullptr;
@@ -59,6 +60,8 @@ std::unique_ptr<ISoundLoader> SoundCreater::createLoaderFromFilePath(const std::
     auto ext = FileUtil::getFileExtension(filePath);
     if (ext == ".wav") {
         loader = std::make_unique<WAV>();
+    } else if (ext == ".mp3") {
+        loader = std::make_unique<MP3>();
     } else {
         Debug::windowMessage(filePath + ": 対応していない拡張子です");
     }

@@ -21,13 +21,16 @@ public:
     //指定したサイズ分データを読み取る
     virtual long read(BYTE** buffer, unsigned size) override;
     //オフセット分シーク
-    virtual long seek(int offset, Seek seek = Seek::CURRENT) override;
+    virtual long seek(long offset, Seek seek = Seek::CURRENT) override;
     //バッファ部分の先頭までシーク
     virtual void seekBegin() override;
     //波形部分の大きさ
     virtual unsigned size() const override;
 
 private:
+    WAV(const WAV&) = delete;
+    WAV& operator=(const WAV&) = delete;
+
     //WAVファイルを開く
     void open(const std::string& fileName);
     //チャンク全体を読み込む

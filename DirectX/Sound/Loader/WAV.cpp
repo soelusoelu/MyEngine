@@ -48,8 +48,8 @@ long WAV::read(BYTE** buffer, unsigned size) {
     return readChunk(*buffer, size);
 }
 
-long WAV::seek(int offset, Seek seek) {
-    return mmioSeek(mHMmio, static_cast<LONG>(offset), static_cast<unsigned>(seek));
+long WAV::seek(long offset, Seek seek) {
+    return mmioSeek(mHMmio, offset, static_cast<int>(seek));
 }
 
 void WAV::seekBegin() {

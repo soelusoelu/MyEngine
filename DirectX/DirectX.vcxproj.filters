@@ -145,6 +145,9 @@
     <ClCompile Include="Sound\3D\DspSetter.cpp" />
     <ClCompile Include="Component\Sound\ListenerComponent.cpp" />
     <ClCompile Include="Component\EmitterComponent2.cpp" />
+    <ClCompile Include="Sound\Loader\MP3.cpp" />
+    <ClCompile Include="Sound\Loader\FrameHeader.cpp" />
+    <ClCompile Include="Sound\Loader\SoundFormatConverter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -322,5 +325,8 @@
     <ClInclude Include="Sound\3D\DspSetter.h" />
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
     <ClInclude Include="Component\EmitterComponent2.h" />
+    <ClInclude Include="Sound\Loader\MP3.h" />
+    <ClInclude Include="Sound\Loader\FrameHeader.h" />
+    <ClInclude Include="Sound\Loader\SoundFormatConverter.h" />
   </ItemGroup>
 </Project>
