@@ -96,7 +96,7 @@ void Title::start() {
     auto& player = mSound->getSoundPlayer();
     //player.setPlayPoint(30.f);
     //player.getLoop().setLoopPoint(60.f, 90.f);
-    //player.getLoop().loopAll();
+    player.getLoop().loopAll();
     player.playStreamingFadeIn(1.f, 2.f);
 }
 
@@ -110,7 +110,7 @@ void Title::update() {
     }
 
     if (Input::keyboard().getKeyDown(KeyCode::Alpha1)) {
-        mSound->getSoundPlayer().setPlayPoint(60.f);
+        mSound->getSoundPlayer().setPlayPoint(55.f);
     }
 
     //Debug::log(StringUtil::floatToString(mSound->getSoundPlayer().getPlayTimer().getPlayTime()));

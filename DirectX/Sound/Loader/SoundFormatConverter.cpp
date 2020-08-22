@@ -35,8 +35,9 @@ bool SoundFormatConverter::mp3ToPCM(WAVEFORMATEX** pcmFormat, MPEGLAYER3WAVEFORM
 }
 
 unsigned SoundFormatConverter::convert(BYTE** out, unsigned readSize) {
+    ZeroMemory(mAcmStreamHeader.pbSrc, mAcmStreamHeader.cbSrcLength);
     memcpy(mAcmStreamHeader.pbSrc, *out, readSize);
-    acmStreamConvert(mAcmStream, &mAcmStreamHeader, ACM_STREAMCONVERTF_BLOCKALIGN);
+    acmStreamConvert(mAcmStream, &mAcmStreamHeader, 0);
     memcpy(*out, mAcmStreamHeader.pbDst, mAcmStreamHeader.cbDstLengthUsed);
     return mAcmStreamHeader.cbDstLengthUsed;
 }
@@ -57,8 +58,8 @@ bool SoundFormatConverter::openAcmStream(WAVEFORMATEX** pcmFormat, MPEGLAYER3WAV
 }
 
 bool SoundFormatConverter::createAcmStreamHeader(WAVEFORMATEX** pcmFormat, const MPEGLAYER3WAVEFORMAT& mp3Format) {
+    const unsigned size = (*pcmFormat)->nAvgBytesPerSec;
     unsigned out = 0;
-    unsigned size = (*pcmFormat)->nAvgBytesPerSec;
     decodeSize(size, &out, false);
 
     mAcmStreamHeader.cbStruct = sizeof(ACMSTREAMHEADER);

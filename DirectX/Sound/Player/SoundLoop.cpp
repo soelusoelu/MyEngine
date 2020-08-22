@@ -24,6 +24,18 @@ void SoundLoop::update() {
     //現在の再生時間がループ折返し地点を超えていたらループの開始地点に戻す
     if (mPlayer.getPlayTimer().getPlayTime() >= mLoopEnd - 0.01f) {
         mPlayer.setPlayPoint(mLoopBegin);
+        return;
+    }
+
+    //上記の関数だと誤差で終端ループできないときがある
+    //キューが空っぽなら
+    XAUDIO2_VOICE_STATE state = { 0 };
+    mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
+    if (state.BuffersQueued == 0) {
+        //曲の最後でループするか
+        if (Math::equal(mLoopEnd, mSourceVoice.getSoundData().length())) {
+            mPlayer.setPlayPoint(mLoopBegin);
+        }
     }
 }
 
@@ -36,24 +48,17 @@ void SoundLoop::setLoopPoint(float begin, float end) {
         return;
     }
 
-    mLoopBegin = begin;
-    mLoopEnd = end;
-    mIsLoop = true;
-
-    //再生時間内にクランプ
-    data.clamp(mLoopBegin);
     //折返しの値が0なら曲の終わりまで
     if (Math::nearZero(end)) {
-        mLoopEnd = data.length();
-    } else {
-        data.clamp(mLoopEnd);
+        end = data.length();
     }
+
+    setValue(begin, end);
+    clamp();
 }
 
 void SoundLoop::loopAll() {
-    mLoopBegin = 0.f;
-    mLoopEnd = mSourceVoice.getSoundData().length();
-    mIsLoop = true;
+    setValue(0.f, mSourceVoice.getSoundData().length());
 }
 
 void SoundLoop::exitLoop() {
@@ -62,4 +67,16 @@ void SoundLoop::exitLoop() {
 
 bool SoundLoop::isLoop() const {
     return mIsLoop;
+}
+
+void SoundLoop::setValue(float begin, float end) {
+    mLoopBegin = begin;
+    mLoopEnd = end;
+    mIsLoop = true;
+}
+
+void SoundLoop::clamp() {
+    const auto& data = mSourceVoice.getSoundData();
+    mLoopBegin = data.clamp(mLoopBegin);
+    mLoopEnd = data.clamp(mLoopEnd);
 }

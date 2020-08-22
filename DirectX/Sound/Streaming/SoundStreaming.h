@@ -38,6 +38,7 @@ private:
 
 private:
     static constexpr unsigned BUFFER_COUNT = 2;
+    static constexpr unsigned BUFFER_QUEUE_MAX = 2;
     static constexpr unsigned PRIMARY = 0;
     static constexpr unsigned SECONDARY = 1;
 

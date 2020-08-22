@@ -32,23 +32,28 @@ void SoundPlayer::update() {
     XAUDIO2_VOICE_STATE state = { 0 };
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     if (state.BuffersQueued == 0) {
-        pause();
+        //曲の最初に戻る
         mStreaming->seek(0.f);
+        pause();
     }
 }
 
-void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
+void SoundPlayer::playStreaming() {
     mIsPlay = true;
     mStreaming->polling();
     mPlayTimer->startTimer();
-    mSourceVoice.getSoundVolume().setVolume(0.f);
-    mSourceVoice.getSoundVolume().getFade().settings(targetVolume, targetTime);
     auto res = mSourceVoice.getXAudio2SourceVoice()->Start();
 #ifdef _DEBUG
     if (FAILED(res)) {
         Debug::logError("Failed play streaming.");
     }
 #endif // _DEBUG
+}
+
+void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
+    mSourceVoice.getSoundVolume().setVolume(0.f);
+    mSourceVoice.getSoundVolume().getFade().settings(targetVolume, targetTime);
+    playStreaming();
 }
 
 void SoundPlayer::setPlayPoint(float point) {

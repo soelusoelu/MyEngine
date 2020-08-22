@@ -22,8 +22,10 @@ private:
     MP3(const MP3&) = delete;
     MP3& operator=(const MP3&) = delete;
 
-    void parseData();
-    void parseFrameHeader();
+    //ファイルをループして解析する
+    bool parse();
+    //データ部分の解析をする
+    bool parseData(const BYTE* header);
 
 private:
     std::ifstream mIfs;

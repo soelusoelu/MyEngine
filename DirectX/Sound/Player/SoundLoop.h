@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <xaudio2.h>
+
 class SourceVoice;
 class SoundPlayer;
 
@@ -40,6 +42,11 @@ public:
 private:
     SoundLoop(const SoundLoop&) = delete;
     SoundLoop& operator=(const SoundLoop&) = delete;
+
+    //ループ設定共通関数
+    void setValue(float begin, float end);
+    //再生時間内にクランプ
+    void clamp();
 
 private:
     SourceVoice& mSourceVoice;

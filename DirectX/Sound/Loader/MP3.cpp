@@ -26,10 +26,11 @@ bool MP3::loadFromFile(WAVEFORMATEX* format, const std::string& fileName) {
     //ファイル全体のサイズ
     mFileSize = std::filesystem::file_size(fileName);
 
-    //データ部分の解析をする
-    parseData();
-    //フレームヘッダの解析をする
-    parseFrameHeader();
+    //ファイルを解析する
+    if (!parse()) {
+        return false;
+    }
+
     //解析したデータをMPEGLAYER3WAVEFORMATに詰め込む
     MPEGLAYER3WAVEFORMAT mp3wf = { 0 };
     mFrameHeader->setDataToMpegLayer3WaveFormat(&mp3wf);
@@ -79,9 +80,40 @@ unsigned MP3::size() const {
     return mDataSize;
 }
 
-void MP3::parseData() {
+bool MP3::parse() {
+    bool initFrameHeader = false;
+    bool initData = false;
     BYTE header[ID3V2_HEADER_SIZE];
-    mIfs.read(reinterpret_cast<char*>(header), ID3V2_HEADER_SIZE);
+    while (!mIfs.eof()) {
+        mIfs.read(reinterpret_cast<char*>(header), ID3V2_HEADER_SIZE);
+
+        if (mFrameHeader->isFrameHeader(header)) {
+            //すでに解析済みなら次へ
+            if (initFrameHeader) {
+                continue;
+            }
+            //フレームヘッダの解析をする
+            initFrameHeader = mFrameHeader->parseFrameHeader(header);
+        } else {
+            //すでに解析済みなら次へ
+            if (initData) {
+                continue;
+            }
+            //データ部分の解析をする
+            initData = parseData(header);
+        }
+
+        //必要な解析が完了していたら終了
+        if (initFrameHeader && initData) {
+            return true;
+        }
+    }
+
+    //解析失敗
+    return false;
+}
+
+bool MP3::parseData(const BYTE* header) {
     //ID3v2である
     if (memcmp(header, "ID3", 3) == 0) {
         unsigned tagSize = ((header[6] << 21) | (header[7] << 14) | (header[8] << 7) | (header[9])) + ID3V2_HEADER_SIZE;
@@ -89,29 +121,14 @@ void MP3::parseData() {
         mDataOffset = tagSize;
         //データ部分のサイズ決定
         mDataSize = mFileSize - mDataOffset;
+
+        return true;
     }
     //ID3v1である
     else {
         //ここに入り次第処理書く
         assert(false);
     }
-}
 
-void MP3::parseFrameHeader() {
-    //ファイルの先頭から
-    seek(0L, Seek::BEGIN);
-
-    BYTE frameHeader[FrameHeader::FRAME_HEADER_SIZE];
-    while (!mIfs.eof()) {
-        //フレームヘッダのサイズ分読み取る
-        mIfs.read(reinterpret_cast<char*>(frameHeader), FrameHeader::FRAME_HEADER_SIZE);
-        //フレームヘッダじゃなかったら次へ
-        if (!mFrameHeader->isFrameHeader(frameHeader)) {
-            continue;
-        }
-        //フレームヘッダなら解析
-        if (mFrameHeader->parseFrameHeader(frameHeader)) {
-            break;
-        }
-    }
+    return false;
 }

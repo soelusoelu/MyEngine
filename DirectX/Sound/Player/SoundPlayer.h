@@ -23,6 +23,11 @@ public:
     void update();
 
     /// <summary>
+    /// ストリーミング再生をする
+    /// </summary>
+    void playStreaming();
+
+    /// <summary>
     /// フェードインしながら、ストリーミング再生をする
     /// </summary>
     /// <param name="targetVolume">目標の音量</param>

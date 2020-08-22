@@ -39,8 +39,8 @@ void SoundStreaming::polling() {
 
     XAUDIO2_VOICE_STATE state = { 0 };
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
-    //再生キューがBUFFER_SIZE未満なら新たにバッファを追加する
-    if (state.BuffersQueued < BUFFER_COUNT) {
+    //再生キューがBUFFER_QUEUE_MAX未満なら新たにバッファを追加する
+    if (state.BuffersQueued < BUFFER_QUEUE_MAX) {
         addBuffer();
     }
 }
@@ -54,8 +54,8 @@ void SoundStreaming::seek(float point) {
     }
 
     const auto& data = mSourceVoice.getSoundData();
-    data.clamp(point);
-    auto seekPoint = static_cast<unsigned>(data.averageBytesPerSec * point);
+    auto sec = data.clamp(point);
+    auto seekPoint = static_cast<unsigned>(data.averageBytesPerSec * sec);
 
     recomputeRemainBufferSize(seekPoint);
 
@@ -85,6 +85,7 @@ void SoundStreaming::addBuffer() {
     SimpleSoundBuffer buf;
     buf.buffer = mBuffer[SECONDARY];
     buf.size = res;
+    buf.isEndOfStream = mEndOfFile;
 
     mBufferSubmitter->submitSimpleBuffer(buf);
 }
