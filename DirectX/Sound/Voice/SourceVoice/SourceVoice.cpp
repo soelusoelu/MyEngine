@@ -21,8 +21,6 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     m3DSound(std::make_unique<Sound3D>(*this, masteringVoice, format)) {
     //再生時間設定/取得のためにすべてのソースボイスでエフェクト付与
     mSoundEffect->getEffectCollection().getPlayTimer();
-    //マスターボイスをアウトプット先に追加
-    mOutputVoices->addOutputVoice(masteringVoice, true);
 }
 
 SourceVoice::~SourceVoice() {
