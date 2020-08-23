@@ -16,6 +16,13 @@ public:
     void pan(const float volumes[]);
 
     /// <summary>
+    /// 指定したボイスをパンする
+    /// </summary>
+    /// <param name="voice">パンするボイス</param>
+    /// <param name="volumes">音量配列</param>
+    void panOutputVoice(const IVoice& voice, const float volumes[]);
+
+    /// <summary>
     /// 位置によって音をパンする
     /// </summary>
     /// <param name="positionX">音を鳴らす位置(0～1920)</param>
@@ -33,11 +40,11 @@ private:
     //出力先を決定する
     void selectOutput(const float volumes[]);
     //パンを実行する
-    void setOutputMatrix(IXAudio2Voice* outputVoice, const float volumes[]);
+    void setOutputMatrix(IXAudio2Voice* outputVoice, unsigned outChannels, const float volumes[]);
 
 private:
     IVoice& mVoice;
     static constexpr float CENTER_VOLUME = 0.707f;
     const unsigned INPUT_CHANNELS;
-    const unsigned OUTPUT_CHANNELS;
+    const unsigned MASTER_VOICE_CHANNELS;
 };

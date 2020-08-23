@@ -5,8 +5,8 @@ Sound3DEmitter::Sound3DEmitter(const WaveFormat& format) :
     mEmitter(),
     mPreviousPos(Vector3::zero),
     mIsCalculateLPFDirect(true),
-    mIsCalculateLPFReverb(false),
-    mIsCalculateReverb(false)
+    mIsCalculateLPFReverb(true),
+    mIsCalculateReverb(true)
 {
     const auto inCh = format.channels;
 

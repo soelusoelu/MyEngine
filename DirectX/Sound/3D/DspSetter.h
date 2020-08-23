@@ -8,6 +8,7 @@
 
 class SourceVoice;
 class MasteringVoice;
+class SubmixVoice;
 
 //3Dサウンドを反映するクラス
 class DspSetter {
@@ -33,8 +34,11 @@ private:
 private:
     SourceVoice& mSourceVoice;
     const MasteringVoice& mMasteringVoice;
+    //リバーブ用サブミックスボイス
+    std::unique_ptr<SubmixVoice> mReverb;
     //計算結果
     std::unique_ptr<X3DAUDIO_DSP_SETTINGS> mDspSettings;
     //行列係数
-    std::vector<float> mMatrixCoefficients;
+    std::vector<float> mMainVolumes;
+    std::vector<float> mReverbVolumes;
 };

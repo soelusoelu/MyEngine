@@ -55,21 +55,21 @@ Flag Sound3D::setFlags() {
 
     //行列計算は絶対
     flags.set(X3DAUDIO_CALCULATE_MATRIX);
-    //ドップラー効果
-    if (mEmitter->isCalculateDoppler()) {
-        flags.set(X3DAUDIO_CALCULATE_DOPPLER);
-    }
     //ローパスフィルタ直接パス
     if (mEmitter->isCalculateLPFDirect()) {
         flags.set(X3DAUDIO_CALCULATE_LPF_DIRECT);
+    }
+    //リバーブ
+    if (mEmitter->isCalculateReverb()) {
+        flags.set(X3DAUDIO_CALCULATE_REVERB);
     }
     //ローパスフィルタリバーブパス
     if (mEmitter->isCalculateLPFReverb()) {
         flags.set(X3DAUDIO_CALCULATE_LPF_REVERB);
     }
-    //リバーブ
-    if (mEmitter->isCalculateReverb()) {
-        flags.set(X3DAUDIO_CALCULATE_REVERB);
+    //ドップラー効果
+    if (mEmitter->isCalculateDoppler()) {
+        flags.set(X3DAUDIO_CALCULATE_DOPPLER);
     }
 
     return flags;

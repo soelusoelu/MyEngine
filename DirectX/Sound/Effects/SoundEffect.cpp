@@ -75,7 +75,7 @@ SoundEffectCollection& SoundEffect::getEffectCollection() const {
 }
 
 int SoundEffect::createEffect(ISoundEffect* target, bool isApply) {
-    XAUDIO2_EFFECT_DESCRIPTOR desc;
+    XAUDIO2_EFFECT_DESCRIPTOR desc = { 0 };
     desc.InitialState = true;
     desc.OutputChannels = mVoice.getVoiceDetails().channels;
     bool res = target->create(&desc);
@@ -98,7 +98,7 @@ int SoundEffect::createEffect(IUnknown* target, bool isApply) {
         return -1;
     }
 
-    XAUDIO2_EFFECT_DESCRIPTOR desc;
+    XAUDIO2_EFFECT_DESCRIPTOR desc = { 0 };
     desc.InitialState = true;
     desc.OutputChannels = mVoice.getVoiceDetails().channels;
     desc.pEffect = target;
@@ -119,7 +119,7 @@ void SoundEffect::apply() {
         return;
     }
 
-    XAUDIO2_EFFECT_CHAIN chain;
+    XAUDIO2_EFFECT_CHAIN chain = { 0 };
     chain.EffectCount = mDescs.size();
     chain.pEffectDescriptors = mDescs.data();
 

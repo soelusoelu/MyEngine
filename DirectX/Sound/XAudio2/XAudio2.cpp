@@ -34,10 +34,7 @@ MasteringVoice* XAudio2::createMasteringVoice() const {
 
 std::unique_ptr<SourceVoice> XAudio2::createSourceVoice(MasteringVoice& masteringVoice, std::unique_ptr<ISoundLoader>& loader, const WAVEFORMATEX& format, const SourceVoiceInitParam& param) const {
     IXAudio2SourceVoice* sourceVoice = nullptr;
-    //マスターボイスを出力先に指定
-    XAUDIO2_SEND_DESCRIPTOR sendDesc = { XAUDIO2_SEND_USEFILTER, masteringVoice.getXAudio2Voice() };
-    XAUDIO2_VOICE_SENDS sends = { 1, &sendDesc };
-    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, &format, param.flags.get(), param.maxFrequencyRatio, param.callback, &sends, param.effectChain);
+    auto res = mXAudio2->CreateSourceVoice(&sourceVoice, &format, param.flags.get(), param.maxFrequencyRatio, param.callback, param.sendList, param.effectChain);
 
     if (FAILED(res)) {
         Debug::logError("Failed created source voice.");
