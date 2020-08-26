@@ -5,8 +5,8 @@
 #include "../Sound/Player/SoundPlayer.h"
 #include "../Transform/Transform3D.h"
 
-EmitterComponent::EmitterComponent() :
-    Component(),
+EmitterComponent::EmitterComponent(GameObject& gameObject) :
+    Component(gameObject),
     mSound(nullptr)
 {
 }

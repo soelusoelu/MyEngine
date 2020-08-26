@@ -6,8 +6,8 @@
 #include "../../GameObject/GameObjectManager.h"
 #include "../../Input/Input.h"
 
-GamePlay::GamePlay() :
-    Component(),
+GamePlay::GamePlay(GameObject& gameObject) :
+    Component(gameObject),
     mScene(nullptr) {
 }
 

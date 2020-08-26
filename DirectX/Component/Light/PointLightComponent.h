@@ -10,7 +10,7 @@ struct PointLight;
 
 class PointLightComponent : public Component, public std::enable_shared_from_this<PointLightComponent> {
 public:
-    PointLightComponent();
+    PointLightComponent(GameObject& gameObject);
     ~PointLightComponent();
     virtual void start() override;
     virtual void finalize() override;

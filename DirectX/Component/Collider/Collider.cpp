@@ -2,8 +2,8 @@
 #include "../../Device/Physics.h"
 #include <algorithm>
 
-Collider::Collider() :
-    Component(),
+Collider::Collider(GameObject& gameObject) :
+    Component(gameObject),
     mIsAutoUpdate(true),
     mEnable(false) {
 }

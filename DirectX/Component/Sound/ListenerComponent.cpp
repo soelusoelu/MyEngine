@@ -2,8 +2,8 @@
 #include "../../Sound/3D/Listener/Sound3DListener.h"
 #include "../../Transform/Transform3D.h"
 
-ListenerComponent::ListenerComponent() :
-    Component(),
+ListenerComponent::ListenerComponent(GameObject& gameObject) :
+    Component(gameObject),
     mListener(std::make_unique<Sound3DListener>()) {
 }
 

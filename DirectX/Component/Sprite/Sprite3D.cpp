@@ -13,8 +13,8 @@
 #include <cassert>
 #include <vector>
 
-Sprite3D::Sprite3D() :
-    Component(),
+Sprite3D::Sprite3D(GameObject& gameObject) :
+    Component(gameObject),
     mTransform(std::make_unique<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
@@ -54,7 +54,7 @@ void Sprite3D::awake() {
 
     addToManager();
 
-    setActive(gameObject()->getActive());
+    setActive(gameObject().getActive());
 }
 
 void Sprite3D::lateUpdate() {

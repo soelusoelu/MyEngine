@@ -2,8 +2,8 @@
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
-DirectionalLight::DirectionalLight() :
-    Component(),
+DirectionalLight::DirectionalLight(GameObject& gameObject) :
+    Component(gameObject),
     mDirection(Vector3::zero),
     mLightColor(Vector3::one) {
 }

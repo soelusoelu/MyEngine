@@ -116,7 +116,7 @@ std::shared_ptr<GameObject> GameObjectFactory::loadGameObjectProperties(const ra
         }
         const auto& components = obj["components"];
         if (components.IsArray()) {
-            loadComponents(gameObj, components);
+            loadComponents(*gameObj, components);
             break;
         }
     }
@@ -124,7 +124,7 @@ std::shared_ptr<GameObject> GameObjectFactory::loadGameObjectProperties(const ra
     return gameObj;
 }
 
-void GameObjectFactory::loadComponents(const GameObjectPtr& gameObject, const rapidjson::Value& inArray) const {
+void GameObjectFactory::loadComponents(GameObject& gameObject, const rapidjson::Value& inArray) const {
     //コンポーネントの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
         //有効なオブジェクトか

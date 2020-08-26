@@ -20,10 +20,9 @@ namespace ComponentDebug {
 }
 
 class Component : public Object {
-    using GameObjectPtr = std::shared_ptr<GameObject>;
-
 public:
-    Component();
+    Component() = delete;
+    Component(GameObject& gameObject);
     virtual ~Component();
     //loadPropertiesの直後に呼び出される
     virtual void awake() {};
@@ -48,7 +47,7 @@ public:
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {};
 
     //コンポーネントがアタッチされているゲームオブジェクトを返す
-    GameObjectPtr gameObject() const;
+    GameObject& gameObject() const;
     //トランスフォームの取得
     Transform3D& transform() const;
     //コンポーネントの名前を返す
@@ -67,11 +66,10 @@ public:
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
-    static void create(const GameObjectPtr& gameObject, const std::string& componentName, const rapidjson::Value& inObj) {
-        auto t = std::make_shared<T>();
-        t->mGameObject = gameObject;
+    static void create(GameObject& gameObject, const std::string& componentName, const rapidjson::Value& inObj) {
+        auto t = std::make_shared<T>(gameObject);
         t->mComponentName = componentName;
-        t->gameObject()->componentManager().addComponent(t);
+        t->componentManager().addComponent(t);
         t->loadProperties(inObj);
         t->awake();
     }
@@ -81,6 +79,6 @@ private:
     ComponentManager& componentManager() const;
 
 private:
-    std::weak_ptr<GameObject> mGameObject;
+    GameObject& mGameObject;
     std::string mComponentName;
 };

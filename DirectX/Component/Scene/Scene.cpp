@@ -1,7 +1,7 @@
 ﻿#include "Scene.h"
 
-Scene::Scene() :
-    Component(),
+Scene::Scene(GameObject& gameObject) :
+    Component(gameObject),
     mNext("") {
 }
 

@@ -2,8 +2,8 @@
 #include "../../Device/DrawString.h"
 #include "../../Utility/LevelLoader.h"
 
-TextNumber::TextNumber() :
-    TextBase(),
+TextNumber::TextNumber(GameObject& gameObject) :
+    TextBase(gameObject),
     mNumber(0) {
 }
 

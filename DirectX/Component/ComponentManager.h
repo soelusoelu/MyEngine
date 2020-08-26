@@ -80,4 +80,3 @@ private:
     ComponentPtrList mStartComponents;
     ComponentPtrList mComponents;
 };
-

@@ -13,7 +13,7 @@ class Fade : public Component {
     };
 
 public:
-    Fade();
+    Fade(GameObject& gameObject);
     ~Fade();
     virtual void start() override;
     virtual void update() override;

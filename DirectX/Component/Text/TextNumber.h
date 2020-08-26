@@ -4,7 +4,7 @@
 
 class TextNumber : public TextBase {
 public:
-    TextNumber();
+    TextNumber(GameObject& gameObject);
     ~TextNumber();
     virtual void lateUpdate() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

@@ -3,8 +3,8 @@
 #include "../../Utility/LevelLoader.h"
 #include "../../Utility/StringUtil.h"
 
-Text::Text() :
-    TextBase(),
+Text::Text(GameObject& gameObject) :
+    TextBase(gameObject),
     mText("") {
 }
 

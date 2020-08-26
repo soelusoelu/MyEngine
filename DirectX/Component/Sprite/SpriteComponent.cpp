@@ -14,8 +14,8 @@
 #include "../../Transform/Transform2D.h"
 #include "../../Utility/LevelLoader.h"
 
-SpriteComponent::SpriteComponent() :
-    Component(),
+SpriteComponent::SpriteComponent(GameObject& gameObject) :
+    Component(gameObject),
     mDrawOrder(0),
     mSprite(nullptr) {
 }
@@ -24,7 +24,7 @@ SpriteComponent::~SpriteComponent() = default;
 
 void SpriteComponent::awake() {
     if (mSprite) {
-        setActive(gameObject()->getActive());
+        setActive(gameObject().getActive());
     }
 }
 

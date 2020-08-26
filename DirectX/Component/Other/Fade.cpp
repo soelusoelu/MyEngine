@@ -4,8 +4,8 @@
 #include "../../Device/Time.h"
 #include "../../Utility/LevelLoader.h"
 
-Fade::Fade() :
-    Component(),
+Fade::Fade(GameObject& gameObject) :
+    Component(gameObject),
     mSprite(nullptr),
     mState(State::STOP),
     mFadeSpeed(1.f),

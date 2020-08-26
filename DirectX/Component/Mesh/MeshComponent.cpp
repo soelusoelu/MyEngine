@@ -13,8 +13,8 @@
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
-MeshComponent::MeshComponent() :
-    Component(),
+MeshComponent::MeshComponent(GameObject& gameObject) :
+    Component(gameObject),
     mMesh(nullptr),
     mShader(nullptr),
     mState(State::ACTIVE),
@@ -32,7 +32,7 @@ void MeshComponent::awake() {
 
     setShader();
 
-    setActive(gameObject()->getActive());
+    setActive(gameObject().getActive());
 }
 
 void MeshComponent::onEnable(bool value) {

@@ -4,7 +4,7 @@
 
 class HitPointComponent : public Component {
 public:
-    HitPointComponent();
+    HitPointComponent(GameObject& gameObject);
     ~HitPointComponent();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;

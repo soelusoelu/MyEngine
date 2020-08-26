@@ -1,8 +1,8 @@
 ﻿#include "HitPointComponent.h"
 #include "../../Utility/LevelLoader.h"
 
-HitPointComponent::HitPointComponent() :
-    Component(),
+HitPointComponent::HitPointComponent(GameObject& gameObject) :
+    Component(gameObject),
     mHP(0),
     mMaxHP(0) {
 }

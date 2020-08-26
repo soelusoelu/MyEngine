@@ -12,7 +12,7 @@ class Collider : public Component, public std::enable_shared_from_this<Collider>
     using CollPtrList = std::list<CollPtr>;
 
 protected:
-    Collider();
+    Collider(GameObject& gameObject);
     virtual ~Collider();
 
 public:

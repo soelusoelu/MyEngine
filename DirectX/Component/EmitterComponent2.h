@@ -7,7 +7,7 @@ class SoundComponent;
 
 class EmitterComponent2 : public Component {
 public:
-    EmitterComponent2();
+    EmitterComponent2(GameObject& gameObject);
     ~EmitterComponent2();
     virtual void start() override;
     virtual void update() override;

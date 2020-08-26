@@ -9,7 +9,7 @@ class SubmixVoice;
 
 class Title : public Component {
 public:
-    Title();
+    Title(GameObject& gameObject);
     ~Title();
     virtual void start() override;
     virtual void update() override;

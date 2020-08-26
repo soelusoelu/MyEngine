@@ -4,7 +4,7 @@
 
 class TextFloat : public TextBase {
 public:
-    TextFloat();
+    TextFloat(GameObject& gameObject);
     ~TextFloat();
     virtual void lateUpdate() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

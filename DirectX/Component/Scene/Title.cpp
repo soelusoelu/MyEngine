@@ -26,8 +26,8 @@
 #include "../../System/World.h"
 #include "../../Utility/StringUtil.h"
 
-Title::Title() :
-    Component(),
+Title::Title(GameObject& gameObject) :
+    Component(gameObject),
     mScene(nullptr),
     mSound(nullptr),
     mWetSubmix(nullptr),

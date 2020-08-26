@@ -11,8 +11,8 @@
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
-PointLightComponent::PointLightComponent() :
-    Component(),
+PointLightComponent::PointLightComponent(GameObject& gameObject) :
+    Component(gameObject),
     mLightColor(ColorPalette::white),
     mInnerRadius(0.5f),
     mOuterRadius(1.f),

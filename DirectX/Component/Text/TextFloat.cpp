@@ -2,8 +2,8 @@
 #include "../../Device/DrawString.h"
 #include "../../Utility/LevelLoader.h"
 
-TextFloat::TextFloat() :
-    TextBase(),
+TextFloat::TextFloat(GameObject& gameObject) :
+    TextBase(gameObject),
     mNumber(0.f),
     mDecimalDigits(1) {
 }

@@ -1,19 +1,19 @@
 ﻿#include "Component.h"
 #include "../GameObject/GameObject.h"
 
-Component::Component() :
-    mGameObject(),
+Component::Component(GameObject& gameObject) :
+    mGameObject(gameObject),
     mComponentName("") {
 }
 
 Component::~Component() = default;
 
-std::shared_ptr<GameObject> Component::gameObject() const {
-    return mGameObject.lock();
+GameObject& Component::gameObject() const {
+    return mGameObject;
 }
 
 Transform3D& Component::transform() const {
-    return gameObject()->transform();
+    return mGameObject.transform();
 }
 
 const std::string& Component::getComponentName() const {
@@ -21,5 +21,5 @@ const std::string& Component::getComponentName() const {
 }
 
 ComponentManager& Component::componentManager() const {
-    return gameObject()->componentManager();
+    return mGameObject.componentManager();
 }

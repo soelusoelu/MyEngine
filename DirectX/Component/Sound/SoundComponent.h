@@ -16,7 +16,7 @@ class OutputVoices;
 
 class SoundComponent : public Component {
 public:
-    SoundComponent();
+    SoundComponent(GameObject& gameObject);
     ~SoundComponent();
     virtual void awake() override;
     virtual void update() override;

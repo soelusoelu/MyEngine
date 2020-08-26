@@ -9,7 +9,7 @@ class Sound3DListener;
 
 class ListenerComponent : public Component {
 public:
-    ListenerComponent();
+    ListenerComponent(GameObject& gameObject);
     ~ListenerComponent();
     virtual void lateUpdate() override;
     //コーンを設定する

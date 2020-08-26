@@ -16,8 +16,8 @@
 #include "../../Utility/LevelLoader.h"
 #include <vector>
 
-TransparentMeshComponent::TransparentMeshComponent() :
-    MeshComponent(),
+TransparentMeshComponent::TransparentMeshComponent(GameObject& gameObject) :
+    MeshComponent(gameObject),
     mDirLight(nullptr),
     mAlpha(1.f) {
 }
@@ -27,7 +27,7 @@ TransparentMeshComponent::~TransparentMeshComponent() = default;
 void TransparentMeshComponent::awake() {
     MeshComponent::awake();
 
-    const auto& dirLight = gameObject()->getGameObjectManager().find("DirectionalLight");
+    const auto& dirLight = gameObject().getGameObjectManager().find("DirectionalLight");
     mDirLight = dirLight->componentManager().getComponent<DirectionalLight>();
 }
 

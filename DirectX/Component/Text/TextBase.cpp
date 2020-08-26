@@ -1,8 +1,8 @@
 ﻿#include "TextBase.h"
 #include "../../Utility/LevelLoader.h"
 
-TextBase::TextBase() :
-    Component(),
+TextBase::TextBase(GameObject& gameObject) :
+    Component(gameObject),
     mPosition(Vector2::zero),
     mScale(Vector2::one),
     mColor(ColorPalette::white),

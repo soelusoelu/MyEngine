@@ -3,8 +3,8 @@
 #include "../Input/Input.h"
 #include "../Sound/Player/SoundPlayer.h"
 
-EmitterComponent2::EmitterComponent2() :
-    Component(),
+EmitterComponent2::EmitterComponent2(GameObject& gameObject) :
+    Component(gameObject),
     mSound(nullptr) {
 }
 

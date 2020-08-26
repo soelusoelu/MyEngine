@@ -7,7 +7,7 @@
 
 class SphereCollider : public Collider {
 public:
-    SphereCollider();
+    SphereCollider(GameObject& gameObject);
     ~SphereCollider();
     virtual void start() override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;

@@ -11,8 +11,8 @@
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
-SoundComponent::SoundComponent() :
-    Component(),
+SoundComponent::SoundComponent(GameObject& gameObject) :
+    Component(gameObject),
     mSound(nullptr),
     mFileName(""),
     mUse3DSound(false) {

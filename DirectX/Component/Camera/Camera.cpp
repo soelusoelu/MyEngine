@@ -1,11 +1,10 @@
 ﻿#include "Camera.h"
-#include "../../Math/Plane.h"
 #include "../../System/Window.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
-Camera::Camera() :
-    Component(),
+Camera::Camera(GameObject& gameObject) :
+    Component(gameObject),
     mLookAt(Vector3::zero),
     mFOV(45.f),
     mNearClip(0.1f),

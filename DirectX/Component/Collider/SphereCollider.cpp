@@ -3,8 +3,8 @@
 #include "../../GameObject/GameObject.h"
 #include "../../Transform/Transform3D.h"
 
-SphereCollider::SphereCollider() :
-    Collider(),
+SphereCollider::SphereCollider(GameObject& gameObject) :
+    Collider(gameObject),
     mSphere(std::make_unique<Sphere>()),
     mDefaultCenter(Vector3::zero),
     mDefaultRadius(0.f) {

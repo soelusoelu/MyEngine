@@ -35,7 +35,7 @@ class MeshComponent : public Component, public std::enable_shared_from_this<Mesh
     };
 
 public:
-    MeshComponent();
+    MeshComponent(GameObject& gameObject);
     virtual ~MeshComponent();
     virtual void awake() override;
     virtual void onEnable(bool value) override;

@@ -3,8 +3,8 @@
 #include "../../GameObject/GameObject.h"
 #include "../../Transform/Transform2D.h"
 
-CircleCollider::CircleCollider() :
-    Collider(),
+CircleCollider::CircleCollider(GameObject& gameObject) :
+    Collider(gameObject),
     mSprite(nullptr),
     mCircle(std::make_unique<Circle>()) {
 }
