@@ -35,16 +35,14 @@ void SoundComponent::update() {
     }
 }
 
-void SoundComponent::lateUpdate() {
+void SoundComponent::onUpdateWorldTransform() {
     if (!mSound) {
         return;
     }
     if (!mUse3DSound) {
         return;
     }
-    auto& emitter = mSound->getEmitter();
-    emitter.setPosition(transform().getPosition());
-    emitter.update();
+    mSound->getEmitter().setPosition(transform().getPosition());
 }
 
 void SoundComponent::finalize() {

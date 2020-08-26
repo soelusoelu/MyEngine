@@ -13,6 +13,11 @@
             "nearClip": 0.1,
             "farClip": 1000.0
           }
+        },
+        {
+          "type": "ListenerComponent",
+          "properties": {
+          }
         }
       ]
     },
@@ -103,16 +108,6 @@
         },
         {
           "type": "EmitterComponent",
-          "properties": {
-          }
-        }
-      ]
-    },
-    {
-      "type": "Listener",
-      "components": [
-        {
-          "type": "ListenerComponent",
           "properties": {
           }
         }

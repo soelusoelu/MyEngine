@@ -51,6 +51,7 @@ SoundEffect& SourceVoice::getSoundEffect() const {
 void SourceVoice::update() {
     mSoundVolume->update();
     mSoundPlayer->update();
+    mEmitter->update();
 }
 
 IXAudio2SourceVoice* SourceVoice::getXAudio2SourceVoice() const {
