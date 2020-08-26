@@ -1,9 +1,7 @@
 ﻿#include "SoundComponent.h"
-#include "ListenerComponent.h"
 #include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
 #include "../../Device/SoundCreater.h"
-#include "../../Sound/3D/Sound3D.h"
 #include "../../Sound/3D/Emitter/Sound3DEmitter.h"
 #include "../../Sound/Flag/SoundFlag.h"
 #include "../../Sound/Player/SoundPlayer.h"
@@ -16,7 +14,6 @@
 SoundComponent::SoundComponent() :
     Component(),
     mSound(nullptr),
-    mListener(nullptr),
     mFileName(""),
     mUse3DSound(false) {
 }
@@ -45,14 +42,9 @@ void SoundComponent::lateUpdate() {
     if (!mUse3DSound) {
         return;
     }
-    if (!mListener || mListener->isNull()) {
-        return;
-    }
-    auto& sound3d = mSound->get3DSound();
-    auto& emitter = sound3d.getEmitter();
+    auto& emitter = mSound->getEmitter();
     emitter.setPosition(transform().getPosition());
     emitter.update();
-    sound3d.calculate(mListener->getListener());
 }
 
 void SoundComponent::finalize() {
@@ -73,10 +65,6 @@ void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const
 
 bool SoundComponent::isNull() const {
     return (mSound) ? false : true;
-}
-
-void SoundComponent::setListener(const std::shared_ptr<ListenerComponent>& listener) {
-    mListener = listener;
 }
 
 const VoiceDetails& SoundComponent::getVoiceDetails() const {

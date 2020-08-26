@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-#include "../Loader/WaveFormat.h"
-#include "../../Device/Flag.h"
+#include "../../Loader/WaveFormat.h"
+#include "../../../Device/Flag.h"
+#include <xaudio2.h>
 #include <x3daudio.h>
 #include <memory>
 #include <vector>

@@ -1,5 +1,5 @@
 ﻿#include "SourceVoice.h"
-#include "../../3D/Sound3D.h"
+#include "../../3D/Emitter/Sound3DEmitter.h"
 #include "../../Effects/SoundEffect.h"
 #include "../../Effects/SoundEffectCollection.h"
 #include "../../Flag/SoundFlag.h"
@@ -18,7 +18,7 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(SoundFlags::USE_FILTER))),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, loader, format, param.maxFrequencyRatio)),
-    m3DSound(std::make_unique<Sound3D>(*this, masteringVoice, format)) {
+    mEmitter(std::make_unique<Sound3DEmitter>(*this, masteringVoice, format)) {
     //再生時間設定/取得のためにすべてのソースボイスでエフェクト付与
     mSoundEffect->getEffectCollection().getPlayTimer();
 }
@@ -65,6 +65,6 @@ SoundPlayer& SourceVoice::getSoundPlayer() const {
     return *mSoundPlayer;
 }
 
-Sound3D& SourceVoice::get3DSound() const {
-    return *m3DSound;
+Sound3DEmitter& SourceVoice::getEmitter() const {
+    return *mEmitter;
 }

@@ -1,12 +1,14 @@
 ﻿#include "Sound3DEmitter.h"
+#include "DspSetter.h"
 #include "../../../Device/Time.h"
 
-Sound3DEmitter::Sound3DEmitter(const WaveFormat& format) :
+Sound3DEmitter::Sound3DEmitter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
     mEmitter(),
     mPreviousPos(Vector3::zero),
     mIsCalculateLPFDirect(true),
     mIsCalculateLPFReverb(true),
-    mIsCalculateReverb(true)
+    mIsCalculateReverb(true),
+    mDspSetter(std::make_unique<DspSetter>(sourceVoice, masteringVoice, format))
 {
     const auto inCh = format.channels;
 
@@ -72,4 +74,8 @@ bool Sound3DEmitter::isCalculateReverb() const {
 
 const Sound3DEmitterParam& Sound3DEmitter::getEmitter() const {
     return mEmitter;
+}
+
+DspSetter& Sound3DEmitter::getDspSetter() const {
+    return *mDspSetter;
 }

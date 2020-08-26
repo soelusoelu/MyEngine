@@ -11,7 +11,7 @@
 
 class MasteringVoice;
 class SoundPlayer;
-class Sound3D;
+class Sound3DEmitter;
 
 //IXAudio2SourceVoiceラッパークラス
 class SourceVoice : public IVoice {
@@ -73,10 +73,10 @@ public:
     SoundPlayer& getSoundPlayer() const;
 
     /// <summary>
-    /// 3Dサウンド専門クラスを返す
+    /// エミッターを返す
     /// </summary>
     /// <returns></returns>
-    Sound3D& get3DSound() const;
+    Sound3DEmitter& getEmitter() const;
 
 private:
     SourceVoice(const SourceVoice&) = delete;
@@ -90,5 +90,5 @@ private:
     std::unique_ptr<OutputVoices> mOutputVoices;
     std::unique_ptr<SoundEffect> mSoundEffect;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
-    std::unique_ptr<Sound3D> m3DSound;
+    std::unique_ptr<Sound3DEmitter> mEmitter;
 };

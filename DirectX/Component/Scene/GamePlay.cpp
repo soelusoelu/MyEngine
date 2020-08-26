@@ -31,8 +31,8 @@ void GamePlay::start() {
     //カメラをリスナーとして設定
     listener->setTarget(camera);
     //エミッターにリスナーを設定
-    emitter->setListener(listener);
-    emitter2->setListener(listener);
+    //emitter->setListener(listener);
+    //emitter2->setListener(listener);
 }
 
 void GamePlay::update() {

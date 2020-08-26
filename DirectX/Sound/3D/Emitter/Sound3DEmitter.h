@@ -5,12 +5,17 @@
 #include "../Sound3DCone.h"
 #include "../../Loader/WaveFormat.h"
 #include "../../../Math/Math.h"
+#include <memory>
 #include <vector>
+
+class SourceVoice;
+class MasteringVoice;
+class DspSetter;
 
 //3Dサウンドで扱うエミッター(音源)
 class Sound3DEmitter {
 public:
-    Sound3DEmitter(const WaveFormat& format);
+    Sound3DEmitter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format);
     ~Sound3DEmitter();
 
     /// <summary>
@@ -51,6 +56,8 @@ public:
     /// <returns></returns>
     const Sound3DEmitterParam& getEmitter() const;
 
+    DspSetter& getDspSetter() const;
+
 private:
     Sound3DEmitter(const Sound3DEmitter&) = delete;
     Sound3DEmitter& operator=(const Sound3DEmitter&) = delete;
@@ -68,6 +75,8 @@ private:
     bool mIsCalculateLPFReverb;
     //リバーブパス計算フラグ
     bool mIsCalculateReverb;
+    //3D計算結果
+    std::unique_ptr<DspSetter> mDspSetter;
 
     //エミッターコーン
     static inline Sound3DCone EMITTER_CONE = { 0.f, 0.f, 0.f, 1.f, 0.f, 1.f, 0.f, 1.f };
