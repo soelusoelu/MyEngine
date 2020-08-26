@@ -10,6 +10,7 @@
 
 class SourceVoice;
 class MasteringVoice;
+class SubmixVoice;
 class DspSetter;
 
 //3Dサウンドで扱うエミッター(音源)
@@ -44,9 +45,6 @@ public:
     void setCalculateLPFDirect(bool value);
     bool isCalculateLPFDirect() const;
 
-    void setCalculateLPFReverb(bool value);
-    bool isCalculateLPFReverb() const;
-
     void setCalculateReverb(bool value);
     bool isCalculateReverb() const;
 
@@ -62,18 +60,21 @@ private:
     Sound3DEmitter(const Sound3DEmitter&) = delete;
     Sound3DEmitter& operator=(const Sound3DEmitter&) = delete;
 
+    void createReverbSubmixVoice(const MasteringVoice& masteringVoice);
+    void initializeEmitter(const WaveFormat& format);
+
 private:
     //エミッター
     Sound3DEmitterParam mEmitter;
+    //リバーブ用サブミックスボイス
+    std::unique_ptr<SubmixVoice> mReverb;
     //方位角
     std::vector<float> mAzimuths;
     //前フレームでの位置
     Vector3 mPreviousPos;
-    //ローパスフィルタ直接パス計算フラグ
+    //ローパスフィルタ計算フラグ
     bool mIsCalculateLPFDirect;
-    //ローパスフィルタリバーブパス計算フラグ
-    bool mIsCalculateLPFReverb;
-    //リバーブパス計算フラグ
+    //リバーブ計算フラグ
     bool mIsCalculateReverb;
     //3D計算結果
     std::unique_ptr<DspSetter> mDspSetter;

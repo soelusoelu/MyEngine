@@ -1,8 +1,4 @@
 ﻿#include "DspSetter.h"
-#include "../../Effects/SoundEffect.h"
-#include "../../Effects/SoundEffectCollection.h"
-#include "../../Effects/Filter/SoundFilter.h"
-#include "../../Flag/SoundFlag.h"
 #include "../../Player/Frequency.h"
 #include "../../Player/SoundPlayer.h"
 #include "../../Voice/VoiceDetails.h"
@@ -13,33 +9,16 @@
 #include "../../Volume/SoundPan.h"
 #include "../../Volume/SoundVolume.h"
 #include "../../../DebugLayer/Debug.h"
-#include "../../../Device/AssetsManager.h"
-#include "../../../Device/SoundCreater.h"
 #include "../../../Math/Math.h"
-#include "../../../System/World.h"
 #include <algorithm>
 
-DspSetter::DspSetter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
+DspSetter::DspSetter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const SubmixVoice& reverb, const WaveFormat& format) :
     mSourceVoice(sourceVoice),
     mMasteringVoice(masteringVoice),
-    mReverb(nullptr),
+    mReverb(reverb),
     mDspSettings(std::make_unique<X3DAUDIO_DSP_SETTINGS>()) {
-
     //マスターボイスを出力先に指定
-    mSourceVoice.getOutputVoices().addOutputVoice(masteringVoice, true, false);
-
-    SubmixVoiceInitParam param;
-    //リバーブのチャンネル数は1
-    param.channels = 1;
-    //マスターボイスにサンプル数を合わせる
-    param.inputSampleRate = masteringVoice.getVoiceDetails().sampleRate;
-    //ローパスフィルタを掛けるからフラグを立てる
-    //param.flags.set(SoundFlags::USE_FILTER);
-    //リバーブ作成
-    mReverb = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
-    mReverb->getSoundEffect().getEffectCollection().reverb();
-    //リバーブサブミックスボイスを出力先に指定
-    mSourceVoice.getOutputVoices().addOutputVoice(*mReverb, true);
+    mSourceVoice.getOutputVoices().addOutputVoice(masteringVoice, true);
 
     const auto inCh = format.channels;
     const auto outCh = masteringVoice.getVoiceDetails().channels;
@@ -52,7 +31,7 @@ DspSetter::DspSetter(SourceVoice& sourceVoice, const MasteringVoice& masteringVo
     mDspSettings->pDelayTimes = nullptr;
 
     //リバーブボリューム
-    mReverbVolumes.resize(param.channels * outCh);
+    mReverbVolumes.resize(outCh);
 }
 
 DspSetter::~DspSetter() = default;
@@ -73,12 +52,12 @@ void DspSetter::applyToSourceVoice(const Flag& flag) {
     //リバーブ
     if (flag.check(X3DAUDIO_CALCULATE_REVERB)) {
         std::fill(mReverbVolumes.begin(), mReverbVolumes.end(), mDspSettings->ReverbLevel);
-        mSourceVoice.getSoundVolume().getPan().panOutputVoice(*mReverb, mReverbVolumes.data());
+        mSourceVoice.getSoundVolume().getPan().panOutputVoice(mReverb, mReverbVolumes.data());
     }
     //ローパスフィルタリバーブパス
     if (flag.check(X3DAUDIO_CALCULATE_LPF_REVERB)) {
         XAUDIO2_FILTER_PARAMETERS param = { XAUDIO2_FILTER_TYPE::LowPassFilter, 2.f * sinf(Math::PI / 6.f * mDspSettings->LPFReverbCoefficient), 1.414f };
-        mSourceVoice.getXAudio2Voice()->SetOutputFilterParameters(mReverb->getXAudio2Voice(), &param);
+        mSourceVoice.getXAudio2Voice()->SetOutputFilterParameters(mReverb.getXAudio2Voice(), &param);
         //mReverb->getSoundEffect().getEffectCollection().getFilter().lowPassFilter(mDspSettings->LPFReverbCoefficient * mReverb->getVoiceDetails().sampleRate / 6.f);
     }
     //ドップラー

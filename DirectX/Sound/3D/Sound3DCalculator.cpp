@@ -1,11 +1,11 @@
-#include "Sound3DCalculator.h"
+ï»¿#include "Sound3DCalculator.h"
 #include "Emitter/Sound3DEmitter.h"
 #include "Emitter/DspSetter.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 
-//–‘Oƒ`ƒFƒbƒN
+//äº‹å‰ãƒã‚§ãƒƒã‚¯
 static_assert(sizeof(Vector3) == sizeof(X3DAUDIO_VECTOR), "Vector3 size does not match.");
 static_assert(sizeof(Sound3DListenerParam) == sizeof(X3DAUDIO_LISTENER), "Listener sizes do not match.");
 static_assert(sizeof(Sound3DEmitterParam) == sizeof(X3DAUDIO_EMITTER), "Emitter sizes do not match.");
@@ -33,34 +33,31 @@ void Sound3DCalculator::calculate(const Sound3DListenerParam& listener, const So
     memcpy(&l, &listener, sizeof(Sound3DListenerParam));
     X3DAUDIO_EMITTER e;
     memcpy(&e, &emitter.getEmitter(), sizeof(Sound3DEmitterParam));
-    //•K—v‚É‰‚¶‚½ƒtƒ‰ƒO‚ğİ’è‚·‚é
+    //å¿…è¦ã«å¿œã˜ãŸãƒ•ãƒ©ã‚°ã‚’è¨­å®šã™ã‚‹
     auto flags = getFlagsFromEmitter(emitter);
-    //–{ŒvZ
+    //æœ¬è¨ˆç®—
     X3DAudioCalculate(mInstance, &l, &e, flags.get(), &emitter.getDspSetter().getDspSetting());
 
-    //ŒvZŒ‹‰Ê‚ğƒ\[ƒXƒ{ƒCƒX‚É“K—p‚·‚é
+    //è¨ˆç®—çµæœã‚’ã‚½ãƒ¼ã‚¹ãƒœã‚¤ã‚¹ã«é©ç”¨ã™ã‚‹
     emitter.getDspSetter().applyToSourceVoice(flags);
 }
 
 Flag Sound3DCalculator::getFlagsFromEmitter(const Sound3DEmitter& emitter) const {
-    //ƒtƒ‰ƒO‚ğ‰Šú‰»‚·‚é
+    //ãƒ•ãƒ©ã‚°ã‚’åˆæœŸåŒ–ã™ã‚‹
     Flag flags;
 
-    //s—ñŒvZ‚Íâ‘Î
+    //è¡Œåˆ—è¨ˆç®—ã¯çµ¶å¯¾
     flags.set(X3DAUDIO_CALCULATE_MATRIX);
-    //ƒ[ƒpƒXƒtƒBƒ‹ƒ^’¼ÚƒpƒX
+    //ãƒ­ãƒ¼ãƒ‘ã‚¹ãƒ•ã‚£ãƒ«ã‚¿
     if (emitter.isCalculateLPFDirect()) {
         flags.set(X3DAUDIO_CALCULATE_LPF_DIRECT);
     }
-    //ƒŠƒo[ƒu
+    //ãƒªãƒãƒ¼ãƒ–
     if (emitter.isCalculateReverb()) {
         flags.set(X3DAUDIO_CALCULATE_REVERB);
-    }
-    //ƒ[ƒpƒXƒtƒBƒ‹ƒ^ƒŠƒo[ƒuƒpƒX
-    if (emitter.isCalculateLPFReverb()) {
         flags.set(X3DAUDIO_CALCULATE_LPF_REVERB);
     }
-    //ƒhƒbƒvƒ‰[Œø‰Ê
+    //ãƒ‰ãƒƒãƒ—ãƒ©ãƒ¼åŠ¹æœ
     if (emitter.isCalculateDoppler()) {
         flags.set(X3DAUDIO_CALCULATE_DOPPLER);
     }

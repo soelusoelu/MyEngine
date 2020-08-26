@@ -14,7 +14,7 @@ class SubmixVoice;
 //3Dサウンドを反映するクラス
 class DspSetter {
 public:
-    DspSetter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format);
+    DspSetter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const SubmixVoice& reverb, const WaveFormat& format);
     ~DspSetter();
 
     /// <summary>
@@ -36,7 +36,7 @@ private:
     SourceVoice& mSourceVoice;
     const MasteringVoice& mMasteringVoice;
     //リバーブ用サブミックスボイス
-    std::unique_ptr<SubmixVoice> mReverb;
+    const SubmixVoice& mReverb;
     //計算結果
     std::unique_ptr<X3DAUDIO_DSP_SETTINGS> mDspSettings;
     //行列係数

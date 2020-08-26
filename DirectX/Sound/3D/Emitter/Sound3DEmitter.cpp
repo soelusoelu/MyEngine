@@ -1,31 +1,33 @@
 ﻿#include "Sound3DEmitter.h"
 #include "DspSetter.h"
+#include "../../Effects/SoundEffect.h"
+#include "../../Effects/SoundEffectCollection.h"
+#include "../../Voice/VoiceDetails.h"
+#include "../../Voice/MasteringVoice/MasteringVoice.h"
+#include "../../Voice/Output/OutputVoices.h"
+#include "../../Voice/SourceVoice/SourceVoice.h"
+#include "../../Voice/SubmixVoice/SubmixVoice.h"
+#include "../../Voice/SubmixVoice/SubmixVoiceInitParam.h"
+#include "../../../Device/AssetsManager.h"
+#include "../../../Device/SoundCreater.h"
 #include "../../../Device/Time.h"
+#include "../../../System/World.h"
 
 Sound3DEmitter::Sound3DEmitter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
     mEmitter(),
+    mReverb(nullptr),
     mPreviousPos(Vector3::zero),
     mIsCalculateLPFDirect(true),
-    mIsCalculateLPFReverb(true),
     mIsCalculateReverb(true),
-    mDspSetter(std::make_unique<DspSetter>(sourceVoice, masteringVoice, format))
-{
-    const auto inCh = format.channels;
-
-    mEmitter.cone = &EMITTER_CONE;
-    mEmitter.channelCount = inCh;
-    mEmitter.channelRadius = 1.f;
-    mAzimuths.resize(inCh);
-    mEmitter.channelAzimuths = mAzimuths.data();
-    mEmitter.innerRadius = 2.f;
-    mEmitter.innerRadiusAngle = Math::PI / 4.f;
-    mEmitter.volumeCurve = &DEFAULT_LINEAR_CURVE;
-    mEmitter.lfeCurve = &EMITTER_LFE_CURVE;
-    mEmitter.lpfDirectCurve = nullptr; //デフォルトカーブを使用
-    mEmitter.lpfReverbCurve = nullptr; //デフォルトカーブを使用
-    mEmitter.reverbCurve = &EMITTER_REVERB_CURVE;
-    mEmitter.curveDistanceScaler = 14.f;
-    mEmitter.dopplerScaler = 1.f;
+    mDspSetter(nullptr) {
+    //リバーブサブミックスボイス作成
+    createReverbSubmixVoice(masteringVoice);
+    //リバーブサブミックスボイスを出力先に指定
+    sourceVoice.getOutputVoices().addOutputVoice(*mReverb, true);
+    //DSP作成
+    mDspSetter = std::make_unique<DspSetter>(sourceVoice, masteringVoice, *mReverb, format);
+    //エミッター初期化
+    initializeEmitter(format);
 }
 
 Sound3DEmitter::~Sound3DEmitter() = default;
@@ -56,14 +58,6 @@ bool Sound3DEmitter::isCalculateLPFDirect() const {
     return mIsCalculateLPFDirect;
 }
 
-void Sound3DEmitter::setCalculateLPFReverb(bool value) {
-    mIsCalculateLPFReverb = value;
-}
-
-bool Sound3DEmitter::isCalculateLPFReverb() const {
-    return mIsCalculateLPFReverb;
-}
-
 void Sound3DEmitter::setCalculateReverb(bool value) {
     mIsCalculateReverb = value;
 }
@@ -78,4 +72,34 @@ const Sound3DEmitterParam& Sound3DEmitter::getEmitter() const {
 
 DspSetter& Sound3DEmitter::getDspSetter() const {
     return *mDspSetter;
+}
+
+void Sound3DEmitter::createReverbSubmixVoice(const MasteringVoice& masteringVoice) {
+    SubmixVoiceInitParam param;
+    //リバーブのチャンネル数は1
+    param.channels = 1;
+    //マスターボイスにサンプル数を合わせる
+    param.inputSampleRate = masteringVoice.getVoiceDetails().sampleRate;
+    //リバーブ作成
+    mReverb = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+    mReverb->getSoundEffect().getEffectCollection().reverb();
+}
+
+void Sound3DEmitter::initializeEmitter(const WaveFormat& format) {
+    const auto inCh = format.channels;
+
+    mEmitter.cone = &EMITTER_CONE;
+    mEmitter.channelCount = inCh;
+    mEmitter.channelRadius = 1.f;
+    mAzimuths.resize(inCh);
+    mEmitter.channelAzimuths = mAzimuths.data();
+    mEmitter.innerRadius = 2.f;
+    mEmitter.innerRadiusAngle = Math::PI / 4.f;
+    mEmitter.volumeCurve = &DEFAULT_LINEAR_CURVE;
+    mEmitter.lfeCurve = &EMITTER_LFE_CURVE;
+    mEmitter.lpfDirectCurve = nullptr; //デフォルトカーブを使用
+    mEmitter.lpfReverbCurve = nullptr; //デフォルトカーブを使用
+    mEmitter.reverbCurve = &EMITTER_REVERB_CURVE;
+    mEmitter.curveDistanceScaler = 14.f;
+    mEmitter.dopplerScaler = 1.f;
 }

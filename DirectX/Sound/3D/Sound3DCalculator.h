@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Listener/Sound3DListenerParam.h"
 #include "../../Device/Flag.h"
@@ -8,29 +8,29 @@
 class MasteringVoice;
 class Sound3DEmitter;
 
-//3DƒTƒEƒ“ƒhŒvZƒNƒ‰ƒX
+//3Dã‚µã‚¦ãƒ³ãƒ‰è¨ˆç®—ã‚¯ãƒ©ã‚¹
 class Sound3DCalculator {
 public:
     Sound3DCalculator(const MasteringVoice& masteringVoice);
     ~Sound3DCalculator();
 
     /// <summary>
-    /// 3DƒTƒEƒ“ƒh‚ğŒvZ‚·‚é
+    /// 3Dã‚µã‚¦ãƒ³ãƒ‰ã‚’è¨ˆç®—ã™ã‚‹
     /// </summary>
-    /// <param name="listenerParam">ƒŠƒXƒi[\‘¢‘Ì</param>
-    /// <param name="emitter">ƒGƒ~ƒbƒ^[</param>
+    /// <param name="listenerParam">ãƒªã‚¹ãƒŠãƒ¼æ§‹é€ ä½“</param>
+    /// <param name="emitter">ã‚¨ãƒŸãƒƒã‚¿ãƒ¼</param>
     void calculate(const Sound3DListenerParam& listener, const Sound3DEmitter& emitter) const;
 
 private:
     Sound3DCalculator(const Sound3DCalculator&) = delete;
     Sound3DCalculator& operator=(const Sound3DCalculator&) = delete;
 
-    //ƒtƒ‰ƒO‚ğİ’è‚µ•Ô‚·
+    //ãƒ•ãƒ©ã‚°ã‚’è¨­å®šã—è¿”ã™
     Flag getFlagsFromEmitter(const Sound3DEmitter& emitter) const;
 
 private:
-    //3DƒTƒEƒ“ƒh‚Ìƒnƒ“ƒhƒ‹
+    //3Dã‚µã‚¦ãƒ³ãƒ‰ã®ãƒãƒ³ãƒ‰ãƒ«
     X3DAUDIO_HANDLE mInstance;
-    //‰Šú‰»‚É¬Œ÷‚µ‚Ä‚¢‚é‚©
+    //åˆæœŸåŒ–ã«æˆåŠŸã—ã¦ã„ã‚‹ã‹
     bool mInitialized;
 };
