@@ -16,9 +16,9 @@
 Sound3DEmitter::Sound3DEmitter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
     mEmitter(),
     mReverb(nullptr),
+    mReverbID(0),
     mPreviousPos(Vector3::zero),
     mIsCalculateLPFDirect(true),
-    mIsCalculateReverb(true),
     mDspSetter(nullptr) {
     //リバーブサブミックスボイス作成
     createReverbSubmixVoice(masteringVoice);
@@ -59,11 +59,12 @@ bool Sound3DEmitter::isCalculateLPFDirect() const {
 }
 
 void Sound3DEmitter::setCalculateReverb(bool value) {
-    mIsCalculateReverb = value;
+    auto& effect = mReverb->getSoundEffect();
+    (value) ? effect.enable(mReverbID) : effect.disable(mReverbID);
 }
 
 bool Sound3DEmitter::isCalculateReverb() const {
-    return mIsCalculateReverb;
+    return mReverb->getSoundEffect().getEnabled(mReverbID);
 }
 
 const Sound3DEmitterParam& Sound3DEmitter::getEmitter() const {
@@ -82,7 +83,7 @@ void Sound3DEmitter::createReverbSubmixVoice(const MasteringVoice& masteringVoic
     param.inputSampleRate = masteringVoice.getVoiceDetails().sampleRate;
     //リバーブ作成
     mReverb = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
-    mReverb->getSoundEffect().getEffectCollection().reverb();
+    mReverbID = mReverb->getSoundEffect().getEffectCollection().reverb();
 }
 
 void Sound3DEmitter::initializeEmitter(const WaveFormat& format) {

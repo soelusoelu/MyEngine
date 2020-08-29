@@ -68,14 +68,14 @@ private:
     Sound3DEmitterParam mEmitter;
     //リバーブ用サブミックスボイス
     std::unique_ptr<SubmixVoice> mReverb;
+    //リバーブID
+    int mReverbID;
     //方位角
     std::vector<float> mAzimuths;
     //前フレームでの位置
     Vector3 mPreviousPos;
     //ローパスフィルタ計算フラグ
     bool mIsCalculateLPFDirect;
-    //リバーブ計算フラグ
-    bool mIsCalculateReverb;
     //3D計算結果
     std::unique_ptr<DspSetter> mDspSetter;
 

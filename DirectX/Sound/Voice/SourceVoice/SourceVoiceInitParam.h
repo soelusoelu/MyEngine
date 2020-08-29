@@ -21,11 +21,15 @@ struct SourceVoiceInitParam {
     //後からsetEffectChainsで設定可能
     const XAUDIO2_EFFECT_CHAIN* effectChain;
 
+    //3D演算をするか
+    bool isCalculate3D;
+
     SourceVoiceInitParam() :
         flags(),
         maxFrequencyRatio(XAUDIO2_DEFAULT_FREQ_RATIO),
         callback(nullptr),
         sendList(nullptr),
-        effectChain(nullptr) {
+        effectChain(nullptr),
+        isCalculate3D(false) {
     }
 };

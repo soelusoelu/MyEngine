@@ -70,6 +70,18 @@ void SoundEffect::disable(int effectID) {
 #endif // _DEBUG
 }
 
+bool SoundEffect::getEnabled(int effectID) {
+    if (!isValidID(effectID)) {
+        return false;
+    }
+
+    BOOL enabled = false;
+    mVoice.getXAudio2Voice()->GetEffectState(effectID, &enabled);
+
+    //enabledが1ならtrue
+    return (enabled == 1);
+}
+
 SoundEffectCollection& SoundEffect::getEffectCollection() const {
     return *mEffectCollection;
 }

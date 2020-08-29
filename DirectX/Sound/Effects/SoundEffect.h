@@ -45,6 +45,13 @@ public:
     void disable(int effectID);
 
     /// <summary>
+    /// エフェクトの有効化状態を返す
+    /// </summary>
+    /// <param name="effectID">状態を取得したいエフェクトのID</param>
+    /// <returns>有効化状態</returns>
+    bool getEnabled(int effectID);
+
+    /// <summary>
     /// エフェクト集にアクセスする
     /// </summary>
     /// <returns></returns>

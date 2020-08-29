@@ -25,6 +25,7 @@ void SoundComponent::awake() {
         SourceVoiceInitParam param;
         param.flags.set(SoundFlags::USE_FILTER);
         param.maxFrequencyRatio = 4.f;
+        param.isCalculate3D = mUse3DSound;
         mSound = World::instance().assetsManager().getSoundCreater().createSourceVoice(mFileName, param);
     }
 }
