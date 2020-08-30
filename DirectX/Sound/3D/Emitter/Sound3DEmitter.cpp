@@ -8,10 +8,8 @@
 #include "../../Voice/SourceVoice/SourceVoice.h"
 #include "../../Voice/SubmixVoice/SubmixVoice.h"
 #include "../../Voice/SubmixVoice/SubmixVoiceInitParam.h"
-#include "../../../Device/AssetsManager.h"
-#include "../../../Device/SoundCreater.h"
+#include "../../XAudio2/SoundEngine.h"
 #include "../../../Device/Time.h"
-#include "../../../System/World.h"
 
 Sound3DEmitter::Sound3DEmitter(SourceVoice& sourceVoice, const MasteringVoice& masteringVoice, const WaveFormat& format) :
     mEmitter(),
@@ -82,7 +80,7 @@ void Sound3DEmitter::createReverbSubmixVoice(const MasteringVoice& masteringVoic
     //マスターボイスにサンプル数を合わせる
     param.inputSampleRate = masteringVoice.getVoiceDetails().sampleRate;
     //リバーブ作成
-    mReverb = World::instance().assetsManager().getSoundCreater().createSubmixVoice(param);
+    mReverb = SoundEngine::instance().createSubmixVoice(param);
     mReverbID = mReverb->getSoundEffect().getEffectCollection().reverb();
 }
 

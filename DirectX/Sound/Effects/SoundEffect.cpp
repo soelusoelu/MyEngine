@@ -75,7 +75,7 @@ bool SoundEffect::getEnabled(int effectID) {
         return false;
     }
 
-    BOOL enabled = false;
+    BOOL enabled = 0;
     mVoice.getXAudio2Voice()->GetEffectState(effectID, &enabled);
 
     //enabledが1ならtrue

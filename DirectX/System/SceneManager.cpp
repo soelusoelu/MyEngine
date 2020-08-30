@@ -3,12 +3,8 @@
 #include "GlobalFunction.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/Camera/Camera.h"
-#include "../Component/Collider/Collider.h"
-#include "../Component/Light/PointLightComponent.h"
-#include "../Component/Mesh/MeshComponent.h"
 #include "../Component/Scene/Scene.h"
-#include "../Component/Sprite/Sprite3D.h"
-#include "../Component/Sprite/SpriteComponent.h"
+#include "../Component/Sound/ListenerComponent.h"
 #include "../Component/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Pause.h"
@@ -19,9 +15,10 @@
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../Input/Input.h"
-#include "../Input/Keyboard.h"
 #include "../Light/LightManager.h"
 #include "../Mesh/MeshManager.h"
+#include "../Sound/Manager/SoundManager.h"
+#include "../Sound/XAudio2/SoundEngine.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../Utility/LevelLoader.h"
@@ -61,6 +58,9 @@ void SceneManager::initialize() {
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager().getComponent<Camera>();
+    auto listener = cam->componentManager().getComponent<ListenerComponent>();
+
+    SoundEngine::instance().getManager().setListener(listener->getListener());
 
     mLightManager->createDirectionalLight();
 

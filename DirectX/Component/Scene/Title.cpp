@@ -2,10 +2,10 @@
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
 #include "../../DebugLayer/Debug.h"
-#include "../../Device/AssetsManager.h"
 #include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Effects/SoundEffect.h"
+#include "../../Sound/Effects/SoundEffectCollection.h"
 #include "../../Sound/Effects/Filter/SoundFilter.h"
 #include "../../Sound/Effects/Reverb/Reverb.h"
 #include "../../Sound/Effects/Reverb/SimpleReverb.h"
@@ -23,7 +23,7 @@
 #include "../../Sound/Volume/SoundFade.h"
 #include "../../Sound/Volume/SoundPan.h"
 #include "../../Sound/Volume/SoundVolume.h"
-#include "../../System/World.h"
+#include "../../Sound/XAudio2/SoundEngine.h"
 #include "../../Utility/StringUtil.h"
 
 Title::Title(GameObject& gameObject) :
@@ -49,9 +49,8 @@ void Title::start() {
     const auto& details = mSound->getVoiceDetails();
     param.channels = details.channels;
     param.inputSampleRate = details.sampleRate;
-    auto& soundCreater = World::instance().assetsManager().getSoundCreater();
-    //mWetSubmix = soundCreater.createSubmixVoice(param);
-    //mDrySubmix = soundCreater.createSubmixVoice(param);
+    //mWetSubmix = SoundEngine::instance().createSubmixVoice(param);
+    //mDrySubmix = SoundEngine::instance().createSubmixVoice(param);
 
     //if (!mWetSubmix || !mDrySubmix) {
     //    return;

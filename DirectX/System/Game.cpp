@@ -1,4 +1,5 @@
 ﻿#include "Game.h"
+#include "GlobalFunction.h"
 #include "SceneManager.h"
 #include "Texture.h"
 #include "Window.h"
@@ -7,6 +8,7 @@
 #include "../DirectX/DirectX.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Input/InputUtility.h"
+#include "../Sound/XAudio2/SoundEngine.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/Random.h"
 
@@ -19,10 +21,13 @@ Game::Game() :
 }
 
 Game::~Game() {
+    safeDelete(mSceneManager);
+
     Texture::finalize();
     GameObjectCreater::finalize();
     InputUtility::finalize();
     DebugUtility::finalize();
+    SoundEngine::instance().finalize();
     DirectX::instance().finalize();
 }
 
@@ -60,7 +65,7 @@ void Game::initialize() {
     mFPSCounter = std::make_unique<FPSCounter>();
     DebugUtility::create();
     InputUtility::create();
-    mSceneManager = std::make_unique<SceneManager>();
+    mSceneManager = new SceneManager();
 
     //ファイルから値を読み込む
     LevelLoader::loadGlobal(this, "Global.json");
@@ -90,4 +95,6 @@ void Game::mainLoop() {
 
     mFPSCounter->fixedFrame();
     dx.present();
+
+    SoundEngine::instance().update();
 }

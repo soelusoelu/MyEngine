@@ -1,13 +1,11 @@
 ﻿#include "SoundComponent.h"
-#include "../../Device/AssetsManager.h"
 #include "../../Device/Flag.h"
-#include "../../Device/SoundCreater.h"
 #include "../../Sound/3D/Emitter/Sound3DEmitter.h"
 #include "../../Sound/Flag/SoundFlag.h"
 #include "../../Sound/Player/SoundPlayer.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoice.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
-#include "../../System/World.h"
+#include "../../Sound/XAudio2/SoundEngine.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
@@ -26,13 +24,7 @@ void SoundComponent::awake() {
         param.flags.set(SoundFlags::USE_FILTER);
         param.maxFrequencyRatio = 4.f;
         param.isCalculate3D = mUse3DSound;
-        mSound = World::instance().assetsManager().getSoundCreater().createSourceVoice(mFileName, param);
-    }
-}
-
-void SoundComponent::update() {
-    if (mSound) {
-        mSound->update();
+        mSound = SoundEngine::instance().createSourceVoice(mFileName, param);
     }
 }
 

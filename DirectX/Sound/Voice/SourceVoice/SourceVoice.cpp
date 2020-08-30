@@ -18,9 +18,10 @@ SourceVoice::SourceVoice(IXAudio2SourceVoice* XAudio2SourceVoice, MasteringVoice
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
     mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(SoundFlags::USE_FILTER))),
     mSoundPlayer(std::make_unique<SoundPlayer>(*this, loader, format, param.maxFrequencyRatio)),
-    mEmitter(nullptr) {
+    mEmitter(nullptr),
+    mIsCalculate3D(param.isCalculate3D) {
     //3D演算をするなら
-    if (param.isCalculate3D) {
+    if (mIsCalculate3D) {
         mEmitter = std::make_unique<Sound3DEmitter>(*this, masteringVoice, format);
     }
     //再生時間設定/取得のためにすべてのソースボイスでエフェクト付与
@@ -74,4 +75,8 @@ SoundPlayer& SourceVoice::getSoundPlayer() const {
 
 Sound3DEmitter& SourceVoice::getEmitter() const {
     return *mEmitter;
+}
+
+bool SourceVoice::isCalculate3D() const {
+    return mIsCalculate3D;
 }

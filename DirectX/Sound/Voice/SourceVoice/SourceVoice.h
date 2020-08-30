@@ -78,6 +78,12 @@ public:
     /// <returns></returns>
     Sound3DEmitter& getEmitter() const;
 
+    /// <summary>
+    /// 3D演算をするか
+    /// </summary>
+    /// <returns></returns>
+    bool isCalculate3D() const;
+
 private:
     SourceVoice(const SourceVoice&) = delete;
     SourceVoice& operator=(const SourceVoice&) = delete;
@@ -91,4 +97,5 @@ private:
     std::unique_ptr<SoundEffect> mSoundEffect;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<Sound3DEmitter> mEmitter;
+    bool mIsCalculate3D;
 };

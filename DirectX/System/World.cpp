@@ -1,9 +1,11 @@
 ﻿#include "World.h"
 #include "../Device/AssetsManager.h"
 #include "../System/GlobalFunction.h"
+#include "../Utility/Directory.h"
 
 World::World() :
-    mAssetsManager(std::make_unique<AssetsManager>()) {
+    mAssetsManager(std::make_unique<AssetsManager>()),
+    mDirectory(std::make_unique<Directory>()) {
 }
 
 World::~World() = default;
@@ -21,4 +23,8 @@ void World::finalize() {
 
 AssetsManager& World::assetsManager() const {
     return *mAssetsManager;
+}
+
+const Directory& World::directory() const {
+    return *mDirectory;
 }

@@ -29,7 +29,7 @@ private:
 private:
     std::unique_ptr<Window> mWindow;
     std::unique_ptr<FPSCounter> mFPSCounter;
-    std::unique_ptr<SceneManager> mSceneManager;
+    SceneManager* mSceneManager;
     HINSTANCE mInstance;
     HWND mhWnd;
 };

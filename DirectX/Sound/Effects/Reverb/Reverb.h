@@ -4,7 +4,7 @@
 #include <xaudio2.h>
 #include <xaudio2fx.h>
 
-#pragma comment(lib, "XAudio2.lib")
+#pragma comment(lib, "xaudio2.lib")
 
 //リバーブ
 class Reverb : public ISoundEffect {

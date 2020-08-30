@@ -17,10 +17,8 @@ void GamePlay::start() {
     mScene = getComponent<Scene>();
 
     //エミッターを生成
-    auto emitterObj = GameObjectCreater::create("Test");
-    auto emitter = emitterObj->componentManager().getComponent<SoundComponent>();
-    auto emitterObj2 = GameObjectCreater::create("Test2");
-    auto emitter2 = emitterObj2->componentManager().getComponent<SoundComponent>();
+    GameObjectCreater::create("Test");
+    GameObjectCreater::create("Test2");
 }
 
 void GamePlay::update() {

@@ -17,48 +17,48 @@ Directory::~Directory() {
     mInstantiated = false;
 }
 
-void Directory::setRootDirectory() {
+void Directory::setRootDirectory() const {
     setCurrentDirectory(mRootPath);
 }
 
-void Directory::setAssetsDirectory() {
+void Directory::setAssetsDirectory() const {
     auto temp = mRootPath + "\\Assets/";
     setCurrentDirectory(temp);
 }
 
-void Directory::setShaderDirectory() {
+void Directory::setShaderDirectory() const {
     auto temp = mRootPath + "\\Shader/";
     setCurrentDirectory(temp);
 }
 
-void Directory::setTextureDirectory(const std::string& filePath) {
+void Directory::setTextureDirectory(const std::string& filePath) const {
     auto temp = mRootPath + "\\Assets/Texture/";
     temp += FileUtil::getDirectryFromFilePath(filePath);
 
     setCurrentDirectory(temp);
 }
 
-void Directory::setSoundDirectory(const std::string& filePath) {
+void Directory::setSoundDirectory(const std::string& filePath) const {
     auto temp = mRootPath + "\\Assets/Sound/";
     temp += FileUtil::getDirectryFromFilePath(filePath);
 
     setCurrentDirectory(temp);
 }
 
-void Directory::setDataDirectory(const std::string& filePath) {
+void Directory::setDataDirectory(const std::string& filePath) const {
     auto temp = mRootPath + "\\Assets/Data/";
     temp += FileUtil::getDirectryFromFilePath(filePath);
 
     setCurrentDirectory(temp);
 }
 
-void Directory::setModelDirectory(const std::string& filePath) {
+void Directory::setModelDirectory(const std::string& filePath) const {
     auto temp = mRootPath + "\\Assets/Model/";
     temp += FileUtil::getDirectryFromFilePath(filePath);
 
     setCurrentDirectory(temp);
 }
 
-void Directory::setCurrentDirectory(const std::string& path) {
+void Directory::setCurrentDirectory(const std::string& path) const {
     SetCurrentDirectoryA(path.c_str());
 }

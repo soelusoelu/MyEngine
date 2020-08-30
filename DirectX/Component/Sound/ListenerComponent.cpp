@@ -4,21 +4,24 @@
 
 ListenerComponent::ListenerComponent(GameObject& gameObject) :
     Component(gameObject),
-    mListener(std::make_unique<Sound3DListener>()) {
+    mListener(std::make_shared<Sound3DListener>()) {
 }
 
 ListenerComponent::~ListenerComponent() = default;
 
-void ListenerComponent::lateUpdate() {
+void ListenerComponent::onUpdateWorldTransform() {
     mListener->setFrontAndTop(transform().forward(), transform().up());
     mListener->setPosition(transform().getPosition());
-    mListener->update();
 }
 
 void ListenerComponent::setCone(Sound3DCone* cone) {
     mListener->setCone(cone);
 }
 
-const Sound3DListenerParam& ListenerComponent::getListener() const {
+std::shared_ptr<Sound3DListener> ListenerComponent::getListener() const {
+    return mListener;
+}
+
+const Sound3DListenerParam& ListenerComponent::getListenerParam() const {
     return mListener->getListener();
 }

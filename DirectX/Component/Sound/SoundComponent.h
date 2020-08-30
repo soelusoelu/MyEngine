@@ -19,7 +19,6 @@ public:
     SoundComponent(GameObject& gameObject);
     ~SoundComponent();
     virtual void awake() override;
-    virtual void update() override;
     virtual void onUpdateWorldTransform() override;
     virtual void finalize() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
@@ -36,7 +35,7 @@ public:
     SoundEffect& getSoundEffect() const;
 
 private:
-    std::unique_ptr<SourceVoice> mSound;
+    std::shared_ptr<SourceVoice> mSound;
     std::string mFileName;
     bool mUse3DSound;
 };

@@ -6,24 +6,19 @@
 #include "../Sound/Voice/SubmixVoice/SubmixVoice.h"
 #include "../Sound/XAudio2/SoundBase.h"
 #include "../Sound/XAudio2/XAudio2.h"
+#include "../System/World.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
-#include <cassert>
 
-SoundCreater::SoundCreater(Directory& directory) :
-    mDirectory(directory),
-    mSoundBase(std::make_unique<SoundBase>()) {
-    assert(!mInstantiated);
-    mInstantiated = true;
+SoundCreater::SoundCreater(const SoundBase& base) :
+    mSoundBase(base) {
 }
 
-SoundCreater::~SoundCreater() {
-    mInstantiated = false;
-}
+SoundCreater::~SoundCreater() = default;
 
-std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& filePath, const SourceVoiceInitParam& param) {
+std::shared_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& filePath, const SourceVoiceInitParam& param) const {
     //サウンドAPIが使用できない状態ならnullptrを返す
-    if (mSoundBase->isNull()) {
+    if (mSoundBase.isNull()) {
         return nullptr;
     }
 
@@ -33,7 +28,7 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
         return nullptr;
     }
 
-    mDirectory.setSoundDirectory(filePath);
+    World::instance().directory().setSoundDirectory(filePath);
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     //音を読み込む
     WAVEFORMATEX format = { 0 };
@@ -43,19 +38,19 @@ std::unique_ptr<SourceVoice> SoundCreater::createSourceVoice(const std::string& 
     }
 
     //ソースボイス生成
-    return mSoundBase->getXAudio2().createSourceVoice(mSoundBase->getMasteringVoice(), loader, format, param);
+    return mSoundBase.getXAudio2().createSourceVoice(mSoundBase.getMasteringVoice(), loader, format, param);
 }
 
-std::unique_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
+std::shared_ptr<SubmixVoice> SoundCreater::createSubmixVoice(const SubmixVoiceInitParam& param) const {
     //サウンドAPIが使用できない状態ならnullptrを返す
-    if (mSoundBase->isNull()) {
+    if (mSoundBase.isNull()) {
         return nullptr;
     }
 
-    return mSoundBase->getXAudio2().createSubmixVoice(mSoundBase->getMasteringVoice(), param);
+    return mSoundBase.getXAudio2().createSubmixVoice(mSoundBase.getMasteringVoice(), param);
 }
 
-std::unique_ptr<ISoundLoader> SoundCreater::createLoaderFromFilePath(const std::string& filePath) {
+std::unique_ptr<ISoundLoader> SoundCreater::createLoaderFromFilePath(const std::string& filePath) const {
     std::unique_ptr<ISoundLoader> loader = nullptr;
     auto ext = FileUtil::getFileExtension(filePath);
     if (ext == ".wav") {

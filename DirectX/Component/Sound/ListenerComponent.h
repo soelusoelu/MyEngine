@@ -11,12 +11,14 @@ class ListenerComponent : public Component {
 public:
     ListenerComponent(GameObject& gameObject);
     ~ListenerComponent();
-    virtual void lateUpdate() override;
+    virtual void onUpdateWorldTransform() override;
     //コーンを設定する
     void setCone(Sound3DCone* cone);
+    //リスナーオブジェクトを返す
+    std::shared_ptr<Sound3DListener> getListener() const;
     //リスナー構造体を返す
-    const Sound3DListenerParam& getListener() const;
+    const Sound3DListenerParam& getListenerParam() const;
 
 private:
-    std::unique_ptr<Sound3DListener> mListener;
+    std::shared_ptr<Sound3DListener> mListener;
 };

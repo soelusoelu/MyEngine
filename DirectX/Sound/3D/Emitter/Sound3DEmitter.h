@@ -67,7 +67,7 @@ private:
     //エミッター
     Sound3DEmitterParam mEmitter;
     //リバーブ用サブミックスボイス
-    std::unique_ptr<SubmixVoice> mReverb;
+    std::shared_ptr<SubmixVoice> mReverb;
     //リバーブID
     int mReverbID;
     //方位角
