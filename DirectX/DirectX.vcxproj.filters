@@ -149,7 +149,7 @@
     <ClCompile Include="Sound\3D\Sound3DCalculator.cpp" />
     <ClCompile Include="Sound\3D\Emitter\DspSetter.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundEngine.cpp" />
-    <ClCompile Include="Sound\Manager\SoundManager.cpp" />
+    <ClCompile Include="Sound\XAudio2\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -331,6 +331,6 @@
     <ClInclude Include="Sound\3D\Sound3DCalculator.h" />
     <ClInclude Include="Sound\3D\Emitter\DspSetter.h" />
     <ClInclude Include="Sound\XAudio2\SoundEngine.h" />
-    <ClInclude Include="Sound\Manager\SoundManager.h" />
+    <ClInclude Include="Sound\XAudio2\SoundManager.h" />
   </ItemGroup>
 </Project>

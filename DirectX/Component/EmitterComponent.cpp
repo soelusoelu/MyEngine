@@ -15,7 +15,7 @@ EmitterComponent::~EmitterComponent() = default;
 
 void EmitterComponent::start() {
     mSound = getComponent<SoundComponent>();
-    mSound->getSoundPlayer().playStreamingFadeIn(1.f, 2.f);
+    mSound->getSoundPlayer().playStreamingFadeIn(0.75f, 2.f);
 }
 
 void EmitterComponent::update() {

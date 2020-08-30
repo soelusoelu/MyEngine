@@ -4,7 +4,6 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Scene/Scene.h"
-#include "../Component/Sound/ListenerComponent.h"
 #include "../Component/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Pause.h"
@@ -17,8 +16,6 @@
 #include "../Input/Input.h"
 #include "../Light/LightManager.h"
 #include "../Mesh/MeshManager.h"
-#include "../Sound/Manager/SoundManager.h"
-#include "../Sound/XAudio2/SoundEngine.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../Utility/LevelLoader.h"
@@ -58,9 +55,6 @@ void SceneManager::initialize() {
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager().getComponent<Camera>();
-    auto listener = cam->componentManager().getComponent<ListenerComponent>();
-
-    SoundEngine::instance().getManager().setListener(listener->getListener());
 
     mLightManager->createDirectionalLight();
 

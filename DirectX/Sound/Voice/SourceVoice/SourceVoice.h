@@ -97,5 +97,4 @@ private:
     std::unique_ptr<SoundEffect> mSoundEffect;
     std::unique_ptr<SoundPlayer> mSoundPlayer;
     std::unique_ptr<Sound3DEmitter> mEmitter;
-    bool mIsCalculate3D;
 };

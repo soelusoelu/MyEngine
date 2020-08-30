@@ -10,6 +10,7 @@ class SourceVoice;
 class SubmixVoice;
 class SoundCreater;
 class SoundManager;
+class Sound3DListener;
 
 class SoundEngine {
 private:
@@ -33,11 +34,16 @@ public:
     /// </summary>
     void update();
 
+    /// <summary>
+    /// 3D演算で扱うリスナーを登録する
+    /// </summary>
+    /// <param name="listener">登録したいリスナー</param>
+    void setListener(const std::shared_ptr<Sound3DListener>& listener);
+
     std::shared_ptr<SourceVoice> createSourceVoice(const std::string& filePath, const SourceVoiceInitParam& param) const;
     std::shared_ptr<SubmixVoice> createSubmixVoice(const SubmixVoiceInitParam& param) const;
 
     const SoundBase& getBase() const;
-    SoundManager& getManager() const;
 
 private:
     SoundEngine(const SoundEngine&) = delete;

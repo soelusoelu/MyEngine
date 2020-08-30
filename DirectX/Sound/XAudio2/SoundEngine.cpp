@@ -1,7 +1,7 @@
 ﻿#include "SoundEngine.h"
 #include "SoundBase.h"
+#include "SoundManager.h"
 #include "../3D/Sound3DCalculator.h"
-#include "../Manager/SoundManager.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../Voice/SubmixVoice/SubmixVoice.h"
 #include "../../Device/SoundCreater.h"
@@ -30,6 +30,10 @@ void SoundEngine::update() {
     mManager->update();
 }
 
+void SoundEngine::setListener(const std::shared_ptr<Sound3DListener>& listener) {
+    mManager->setListener(listener);
+}
+
 std::shared_ptr<SourceVoice> SoundEngine::createSourceVoice(const std::string& filePath, const SourceVoiceInitParam& param) const {
     auto sourceVoice = mCreater->createSourceVoice(filePath, param);
     mManager->add(sourceVoice);
@@ -42,8 +46,4 @@ std::shared_ptr<SubmixVoice> SoundEngine::createSubmixVoice(const SubmixVoiceIni
 
 const SoundBase& SoundEngine::getBase() const {
     return *mBase;
-}
-
-SoundManager& SoundEngine::getManager() const {
-    return *mManager;
 }

@@ -1,24 +1,38 @@
-#include "SoundManager.h"
+﻿#include "SoundManager.h"
 #include "../3D/Sound3DCalculator.h"
 #include "../3D/Listener/Sound3DListener.h"
+#include "../Player/SoundPlayer.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 
 SoundManager::SoundManager(const MasteringVoice& masteringVoice) :
     mCalculator(std::make_unique<Sound3DCalculator>(masteringVoice)),
-    mListener(nullptr)
-{
+    mListener(nullptr) {
 }
 
 SoundManager::~SoundManager() = default;
 
 void SoundManager::update() {
+    //不要なソースボイスを削除する
+    //ちゃんと動くかわからない
+    auto itr = mSounds.begin();
+    while (itr != mSounds.end()) {
+        if (itr->use_count() == 1) {
+            itr = mSounds.erase(itr);
+        } else {
+            ++itr;
+        }
+    }
+
+    //設定されてるリスナーの更新
     if (mListener) {
         mListener->update();
     }
 
+    //全ソースボイスの更新
     for (const auto& sound : mSounds) {
         sound->update();
 
+        //3D演算
         if (sound->isCalculate3D() && mListener) {
             mCalculator->calculate(mListener->getListener(), sound->getEmitter());
         }

@@ -15,10 +15,7 @@ void EmitterComponent2::start() {
 }
 
 void EmitterComponent2::update() {
-    if (!mSound->getSoundPlayer().isStop()) {
-        return;
-    }
     if (Input::keyboard().getKeyDown(KeyCode::Space)) {
-        mSound->getSoundPlayer().playStreamingFadeIn(1.f, 0.25f);
+        mSound->getSoundPlayer().playStreamingFadeIn(0.5f, 0.25f);
     }
 }

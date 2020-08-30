@@ -81,7 +81,8 @@ void Sound3DEmitter::createReverbSubmixVoice(const MasteringVoice& masteringVoic
     param.inputSampleRate = masteringVoice.getVoiceDetails().sampleRate;
     //リバーブ作成
     mReverb = SoundEngine::instance().createSubmixVoice(param);
-    mReverbID = mReverb->getSoundEffect().getEffectCollection().reverb();
+    //mReverbID = mReverb->getSoundEffect().getEffectCollection().reverb();
+    mReverbID = mReverb->getSoundEffect().getEffectCollection().simpleReverb();
 }
 
 void Sound3DEmitter::initializeEmitter(const WaveFormat& format) {

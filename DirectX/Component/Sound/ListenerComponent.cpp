@@ -1,5 +1,6 @@
 ﻿#include "ListenerComponent.h"
 #include "../../Sound/3D/Listener/Sound3DListener.h"
+#include "../../Sound/XAudio2/SoundEngine.h"
 #include "../../Transform/Transform3D.h"
 
 ListenerComponent::ListenerComponent(GameObject& gameObject) :
@@ -8,6 +9,11 @@ ListenerComponent::ListenerComponent(GameObject& gameObject) :
 }
 
 ListenerComponent::~ListenerComponent() = default;
+
+void ListenerComponent::awake() {
+    //サウンドエンジンにリスナーを登録
+    SoundEngine::instance().setListener(mListener);
+}
 
 void ListenerComponent::onUpdateWorldTransform() {
     mListener->setFrontAndTop(transform().forward(), transform().up());
@@ -18,10 +24,6 @@ void ListenerComponent::setCone(Sound3DCone* cone) {
     mListener->setCone(cone);
 }
 
-std::shared_ptr<Sound3DListener> ListenerComponent::getListener() const {
-    return mListener;
-}
-
-const Sound3DListenerParam& ListenerComponent::getListenerParam() const {
+const Sound3DListenerParam& ListenerComponent::getListener() const {
     return mListener->getListener();
 }
