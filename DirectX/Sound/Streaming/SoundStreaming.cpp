@@ -15,6 +15,8 @@ SoundStreaming::SoundStreaming(SourceVoice& sourceVoice, SoundPlayer& player, st
     mBufferSubmitter(std::make_unique<BufferSubmitter>(sourceVoice)),
     mLoader(std::move(loader)),
     mBuffer{ nullptr, nullptr },
+    mPrimary(0),
+    mSecondary(1),
     READ_SIZE(format.avgBytesPerSec),
     mRemainBufferSize(0),
     mWrite(0),
@@ -41,6 +43,7 @@ void SoundStreaming::polling() {
     mSourceVoice.getXAudio2SourceVoice()->GetState(&state);
     //再生キューがBUFFER_QUEUE_MAX未満なら新たにバッファを追加する
     if (state.BuffersQueued < BUFFER_QUEUE_MAX) {
+        std::swap(mPrimary, mSecondary);
         addBuffer();
     }
 }
@@ -64,8 +67,6 @@ void SoundStreaming::seek(float point) {
 }
 
 void SoundStreaming::addBuffer() {
-    std::swap(mBuffer[PRIMARY], mBuffer[SECONDARY]);
-
     long res = 0;
     //次の読み込みがデータサイズを超えるなら
     if (mWrite + READ_SIZE > mLoader->size()) {
@@ -83,7 +84,7 @@ void SoundStreaming::addBuffer() {
 
     //バッファ作成
     SimpleSoundBuffer buf;
-    buf.buffer = mBuffer[SECONDARY];
+    buf.buffer = mBuffer[mSecondary];
     buf.size = res;
     buf.isEndOfStream = mEndOfFile;
 
@@ -91,7 +92,7 @@ void SoundStreaming::addBuffer() {
 }
 
 long SoundStreaming::read(unsigned readSize) {
-    return mLoader->read(&mBuffer[SECONDARY], readSize);
+    return mLoader->read(&mBuffer[mSecondary], readSize);
 }
 
 void SoundStreaming::initialize() {

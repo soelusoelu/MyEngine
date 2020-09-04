@@ -15,7 +15,7 @@ void ListenerComponent::awake() {
     SoundEngine::instance().setListener(mListener);
 }
 
-void ListenerComponent::onUpdateWorldTransform() {
+void ListenerComponent::update() {
     mListener->setFrontAndTop(transform().forward(), transform().up());
     mListener->setPosition(transform().getPosition());
 }

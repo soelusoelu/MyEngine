@@ -69,6 +69,10 @@ bool SoundLoop::isLoop() const {
     return mIsLoop;
 }
 
+float SoundLoop::getLoopEnd() const {
+    return mLoopEnd;
+}
+
 void SoundLoop::setValue(float begin, float end) {
     mLoopBegin = begin;
     mLoopEnd = end;

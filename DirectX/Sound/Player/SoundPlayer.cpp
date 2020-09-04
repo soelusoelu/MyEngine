@@ -58,10 +58,10 @@ void SoundPlayer::playStreamingFadeIn(float targetVolume, float targetTime) {
 
 void SoundPlayer::setPlayPoint(float point) {
     //適正範囲にクランプ
-    mSourceVoice.getSoundData().clamp(point);
+    float sec = mSourceVoice.getSoundData().clamp(point);
 
-    mPlayTimer->setPlayTime(point);
-    mStreaming->seek(point);
+    mPlayTimer->setPlayTime(sec);
+    mStreaming->seek(sec);
 }
 
 void SoundPlayer::pause() {

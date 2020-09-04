@@ -138,11 +138,9 @@
     <ClCompile Include="Sound\Player\SoundPlayTimer.cpp" />
     <ClCompile Include="Sound\Player\Buffer\BufferSubmitter.cpp" />
     <ClCompile Include="Sound\Effects\SoundEffectCollection.cpp" />
-    <ClCompile Include="Component\EmitterComponent.cpp" />
     <ClCompile Include="Sound\3D\Listener\Sound3DListener.cpp" />
     <ClCompile Include="Sound\3D\Emitter\Sound3DEmitter.cpp" />
     <ClCompile Include="Component\Sound\ListenerComponent.cpp" />
-    <ClCompile Include="Component\EmitterComponent2.cpp" />
     <ClCompile Include="Sound\Loader\MP3.cpp" />
     <ClCompile Include="Sound\Loader\FrameHeader.cpp" />
     <ClCompile Include="Sound\Loader\SoundFormatConverter.cpp" />
@@ -318,13 +316,11 @@
     <ClInclude Include="Sound\Effects\SoundEffectCollection.h" />
     <ClInclude Include="Sound\3D\Sound3DCone.h" />
     <ClInclude Include="Sound\3D\DistanceCurve.h" />
-    <ClInclude Include="Component\EmitterComponent.h" />
     <ClInclude Include="Sound\3D\Listener\Sound3DListener.h" />
     <ClInclude Include="Sound\3D\Listener\Sound3DListenerParam.h" />
     <ClInclude Include="Sound\3D\Emitter\Sound3DEmitterParam.h" />
     <ClInclude Include="Sound\3D\Emitter\Sound3DEmitter.h" />
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
-    <ClInclude Include="Component\EmitterComponent2.h" />
     <ClInclude Include="Sound\Loader\MP3.h" />
     <ClInclude Include="Sound\Loader\FrameHeader.h" />
     <ClInclude Include="Sound\Loader\SoundFormatConverter.h" />

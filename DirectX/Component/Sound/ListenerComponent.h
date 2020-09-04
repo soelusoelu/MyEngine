@@ -12,7 +12,7 @@ public:
     ListenerComponent(GameObject& gameObject);
     ~ListenerComponent();
     virtual void awake() override;
-    virtual void onUpdateWorldTransform() override;
+    virtual void update() override;
     //コーンを設定する
     void setCone(Sound3DCone* cone);
     //リスナー構造体を返す

@@ -161,9 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Component\EmitterComponent.cpp" />
     <ClCompile Include="Component\Sound\ListenerComponent.cpp" />
-    <ClCompile Include="Component\EmitterComponent2.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundManager.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundEngine.cpp" />
     <ClCompile Include="Sound\3D\Sound3DCalculator.cpp" />
@@ -303,9 +301,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Component\EmitterComponent.h" />
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
-    <ClInclude Include="Component\EmitterComponent2.h" />
     <ClInclude Include="Sound\XAudio2\SoundManager.h" />
     <ClInclude Include="Sound\XAudio2\SoundEngine.h" />
     <ClInclude Include="Sound\3D\Sound3DCalculator.h" />

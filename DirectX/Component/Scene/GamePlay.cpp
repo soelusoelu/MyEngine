@@ -1,9 +1,6 @@
 ﻿#include "GamePlay.h"
 #include "Scene.h"
-#include "../Sound/SoundComponent.h"
-#include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectFactory.h"
-#include "../../GameObject/GameObjectManager.h"
 #include "../../Input/Input.h"
 
 GamePlay::GamePlay(GameObject& gameObject) :

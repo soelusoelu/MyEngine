@@ -39,8 +39,6 @@ private:
 private:
     static constexpr unsigned BUFFER_COUNT = 2;
     static constexpr unsigned BUFFER_QUEUE_MAX = 2;
-    static constexpr unsigned PRIMARY = 0;
-    static constexpr unsigned SECONDARY = 1;
 
     SourceVoice& mSourceVoice;
     SoundPlayer& mPlayer;
@@ -48,6 +46,9 @@ private:
     std::unique_ptr<ISoundLoader> mLoader;
     //バッファ
     BYTE* mBuffer[BUFFER_COUNT];
+    //バッファ番号
+    unsigned mPrimary;
+    unsigned mSecondary;
     //ファイルから読み込むサイズ
     const unsigned READ_SIZE;
     //バッファの余り

@@ -9,7 +9,10 @@ SoundManager::SoundManager(const MasteringVoice& masteringVoice) :
     mListener(nullptr) {
 }
 
-SoundManager::~SoundManager() = default;
+SoundManager::~SoundManager() {
+    mSounds.clear();
+    mSubmixVoices.clear();
+}
 
 void SoundManager::update() {
     //不要なソースボイスを削除する
@@ -20,6 +23,15 @@ void SoundManager::update() {
             itr = mSounds.erase(itr);
         } else {
             ++itr;
+        }
+    }
+    //不要なサブミックスボイスを削除する
+    auto itr2 = mSubmixVoices.begin();
+    while (itr2 != mSubmixVoices.end()) {
+        if (itr2->use_count() == 1) {
+            itr2 = mSubmixVoices.erase(itr2);
+        } else {
+            ++itr2;
         }
     }
 
@@ -41,6 +53,10 @@ void SoundManager::update() {
 
 void SoundManager::add(const SoundPtr& sound) {
     mSounds.emplace_back(sound);
+}
+
+void SoundManager::add(const SubmixVoicePtr& submixVoice) {
+    mSubmixVoices.emplace_back(submixVoice);
 }
 
 void SoundManager::setListener(const std::shared_ptr<Sound3DListener>& listener) {

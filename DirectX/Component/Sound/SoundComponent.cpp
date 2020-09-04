@@ -28,7 +28,7 @@ void SoundComponent::awake() {
     }
 }
 
-void SoundComponent::onUpdateWorldTransform() {
+void SoundComponent::update() {
     if (!mSound) {
         return;
     }

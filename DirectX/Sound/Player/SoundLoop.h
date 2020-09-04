@@ -39,6 +39,12 @@ public:
     /// <returns></returns>
     bool isLoop() const;
 
+    /// <summary>
+    /// ループの終わりを返す
+    /// </summary>
+    /// <returns></returns>
+    float getLoopEnd() const;
+
 private:
     SoundLoop(const SoundLoop&) = delete;
     SoundLoop& operator=(const SoundLoop&) = delete;

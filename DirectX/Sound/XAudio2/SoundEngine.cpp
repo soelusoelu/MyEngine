@@ -41,7 +41,9 @@ std::shared_ptr<SourceVoice> SoundEngine::createSourceVoice(const std::string& f
 }
 
 std::shared_ptr<SubmixVoice> SoundEngine::createSubmixVoice(const SubmixVoiceInitParam& param) const {
-    return mCreater->createSubmixVoice(param);
+    auto submixVoice = mCreater->createSubmixVoice(param);
+    mManager->add(submixVoice);
+    return submixVoice;
 }
 
 const SoundBase& SoundEngine::getBase() const {

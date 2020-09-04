@@ -105,18 +105,13 @@
             "fileName": "çgò@âÿ.wav",
             "use3D": true
           }
-        },
-        {
-          "type": "EmitterComponent",
-          "properties": {
-          }
         }
       ]
     },
     {
       "type": "Test2",
       "properties": {
-        "position": [ 8.0, 1.0, 0.0],
+        "position": [ 6.0, 2.0, -1.0 ],
         "rotation": [ 0.0, 0.0, 0.0 ],
         "scale": [ 0.1, 0.1, 0.1 ]
       },
@@ -132,11 +127,6 @@
           "properties": {
             "fileName": "hawk1.wav",
             "use3D": true
-          }
-        },
-        {
-          "type": "EmitterComponent2",
-          "properties": {
           }
         }
       ]
