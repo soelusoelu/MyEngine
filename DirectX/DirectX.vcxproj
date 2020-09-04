@@ -194,7 +194,7 @@
     <ClCompile Include="Sound\Voice\Output\OutputVoices.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\Reverb.cpp" />
     <ClCompile Include="Sound\Effects\SoundEffect.cpp" />
-    <ClCompile Include="Device\SoundCreater.cpp" />
+    <ClCompile Include="Sound\Factory\SoundCreater.cpp" />
     <ClCompile Include="Sound\Player\Frequency.cpp" />
     <ClCompile Include="Sound\Voice\MasteringVoice\MasteringVoice.cpp" />
     <ClCompile Include="Sound\Effects\Filter\SoundFilter.cpp" />
@@ -351,7 +351,7 @@
     <ClInclude Include="Sound\Effects\Reverb\Reverb.h" />
     <ClInclude Include="Sound\Voice\IVoice.h" />
     <ClInclude Include="Sound\Effects\SoundEffect.h" />
-    <ClInclude Include="Device\SoundCreater.h" />
+    <ClInclude Include="Sound\Factory\SoundCreater.h" />
     <ClInclude Include="Sound\Player\Frequency.h" />
     <ClInclude Include="Sound\Loader\ISoundLoader.h" />
     <ClInclude Include="Sound\Voice\MasteringVoice\MasteringVoice.h" />

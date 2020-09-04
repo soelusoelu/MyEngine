@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "../Sound/Loader/ISoundLoader.h"
-#include "../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
-#include "../Sound/Voice/SubmixVoice/SubmixVoiceInitParam.h"
+#include "../Loader/ISoundLoader.h"
+#include "../Voice/SourceVoice/SourceVoiceInitParam.h"
+#include "../Voice/SubmixVoice/SubmixVoiceInitParam.h"
 #include <xaudio2.h>
 #include <memory>
 #include <string>

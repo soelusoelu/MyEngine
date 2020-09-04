@@ -2,9 +2,9 @@
 #include "SoundBase.h"
 #include "SoundManager.h"
 #include "../3D/Sound3DCalculator.h"
+#include "../Factory/SoundCreater.h"
 #include "../Voice/SourceVoice/SourceVoice.h"
 #include "../Voice/SubmixVoice/SubmixVoice.h"
-#include "../../Device/SoundCreater.h"
 #include "../../System/GlobalFunction.h"
 
 SoundEngine::SoundEngine() :

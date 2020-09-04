@@ -2,7 +2,6 @@
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
 #include "../../DebugLayer/Debug.h"
-#include "../../Device/SoundCreater.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundEffectCollection.h"

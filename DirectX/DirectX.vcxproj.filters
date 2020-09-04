@@ -118,7 +118,6 @@
     <ClCompile Include="Sound\Player\Frequency.cpp" />
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundBase.cpp" />
-    <ClCompile Include="Device\SoundCreater.cpp" />
     <ClCompile Include="Sound\Volume\SoundPan.cpp" />
     <ClCompile Include="Sound\Effects\Equalizer\Equalizer.cpp" />
     <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
@@ -148,6 +147,7 @@
     <ClCompile Include="Sound\3D\Emitter\DspSetter.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundEngine.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundManager.cpp" />
+    <ClCompile Include="Sound\Factory\SoundCreater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -282,7 +282,6 @@
     <ClInclude Include="Sound\XAudio2\XAudio2.h" />
     <ClInclude Include="Sound\XAudio2\SoundBase.h" />
     <ClInclude Include="Sound\Flag\SoundFlag.h" />
-    <ClInclude Include="Device\SoundCreater.h" />
     <ClInclude Include="Sound\Effects\ISoundEffect.h" />
     <ClInclude Include="Sound\Voice\VoiceDetails.h" />
     <ClInclude Include="Sound\Volume\SoundPan.h" />
@@ -328,5 +327,6 @@
     <ClInclude Include="Sound\3D\Emitter\DspSetter.h" />
     <ClInclude Include="Sound\XAudio2\SoundEngine.h" />
     <ClInclude Include="Sound\XAudio2\SoundManager.h" />
+    <ClInclude Include="Sound\Factory\SoundCreater.h" />
   </ItemGroup>
 </Project>
