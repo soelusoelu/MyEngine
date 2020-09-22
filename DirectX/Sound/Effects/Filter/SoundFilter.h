@@ -48,9 +48,10 @@ public:
     /// バンドパスフィルタ
     /// 指定した値を中心に周りの周波数をカットする
     /// </summary>
-    /// <param name="frequency">中心周波数</param>
-    /// <param name="oneOverQ">音のカットの仕方</param>
-    void bandPassFilter(float frequency, float oneOverQ = 1.f) const;
+    /// <param name="cutoffFrequency">中心周波数</param>
+    /// <param name="qualityFactor">帯域幅</param>
+    /// <returns>作成したフィルターのID</returns>
+    int bandPassFilter(float cutoffFrequency, float qualityFactor = 1.f);
 
     /// <summary>
     /// ノッチフィルタ

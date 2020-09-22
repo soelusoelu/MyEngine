@@ -43,8 +43,11 @@ int SoundFilter::highPassOnePoleFilter(float frequency) {
     return id;
 }
 
-void SoundFilter::bandPassFilter(float frequency, float oneOverQ) const {
-    setDefaultFilter(XAUDIO2_FILTER_TYPE::BandPassFilter, frequency, oneOverQ, "Failed band pass filter.");
+int SoundFilter::bandPassFilter(float cutoffFrequency, float qualityFactor) {
+    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(FilterType::BAND_PASS_FILTER)));
+    FilterParam param = { cutoffFrequency, qualityFactor };
+    mEffectParameter.setEffectParameters(id, &param, sizeof(param));
+    return id;
 }
 
 void SoundFilter::notchFilter(float frequency, float oneOverQ) const {

@@ -10,7 +10,9 @@
 //バイクアッドフィルタで扱うフィルタの種類
 enum class FilterType {
     LOW_PASS_FILTER,
-    HIGH_PASS_FILTER
+    HIGH_PASS_FILTER,
+    BAND_PASS_FILTER,
+    NOTCH_FILTER
 };
 
 //バイクアッドフィルタ
@@ -63,7 +65,7 @@ private:
     /// <param name="type">適用したいフィルタの種類</param>
     /// <param name="cutoffFrequency">カットオフ周波数</param>
     /// <param name="qualityFactor">クオリティファクタ</param>
-    /// <param name="sampleRate">サンプルレート</param>
+    /// <param name="sampleRate">サンプリング周波数</param>
     void computeCoefficient(float cutoffFrequency, float qualityFactor, unsigned sampleRate);
 
 private:

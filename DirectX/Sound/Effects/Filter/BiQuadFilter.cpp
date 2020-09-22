@@ -126,5 +126,16 @@ void BiQuadFilter::computeCoefficient(float cutoffFrequency, float qualityFactor
         mB[0] = (1.f + cosOmega) * 0.5f / mA[0];
         mB[1] = -(1.f + cosOmega) / mA[0];
         mB[2] = mB[0]; //b0と同じ
+    } else if (mType == FilterType::BAND_PASS_FILTER) {
+        float omega = 2.f * Math::PI * cutoffFrequency / sampleRate;
+        float sinOmega = sinf(omega);
+        float alpha = sinOmega * sinhf(logf(2.f) / 2.f * qualityFactor * omega / sinOmega);
+
+        mA[0] = 1.f + alpha;
+        mA[1] = -2.f * cosf(omega) / mA[0];
+        mA[2] = (1.f - alpha) / mA[0];
+        mB[0] = alpha / mA[0];
+        mB[1] = 0.f;
+        mB[2] = -alpha / mA[0];
     }
 }
