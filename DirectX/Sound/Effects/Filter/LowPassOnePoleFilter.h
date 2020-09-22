@@ -65,6 +65,11 @@ private:
 
     //出力チャンネル配列
     std::vector<float*> mOutCh;
+    //フィルタ係数
+    //a: 元の音を残すブレンド率(%)
+    //b: 新しい音のブレンド率(%)
+    float mA1;
+    float mB0;
     //最後の演算ボリューム値
     float mLastVolume;
 };

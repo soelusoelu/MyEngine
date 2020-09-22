@@ -68,11 +68,11 @@ void Title::start() {
     //mSound->getSoundBuffer().playLength = 30.f;
     //mSound->getSoundBuffer().loopBegin = 60.f;
     //mSound->getSoundBuffer().loopLength = 30.f;
-    //mSound->getSoundFilter().lowPassFilter(2500.f);
+    mSound->getSoundEffect().getEffectCollection().getFilter().lowPassFilter(2500.f);
     //mSound->getSoundFilter().highPassFilter(250.f);
     //mSound->getSoundFilter().bandPassFilter(1000.f);
     //mSound->getSoundEffect().getEffectCollection().getFilter().lowPassOnePoleFilter(0.05f);
-    mSound->getSoundEffect().getEffectCollection().getFilter().highPassOnePoleFilter(0.15f);
+    //mSound->getSoundEffect().getEffectCollection().getFilter().highPassOnePoleFilter(0.15f);
     //mSound->getSoundVolume().getPan().panFromPositionX(0.f);
     //mSound->getSoundVolume().getPan().panCenter();
 
@@ -97,7 +97,7 @@ void Title::start() {
     //player.setPlayPoint(30.f);
     //player.getLoop().setLoopPoint(60.f, 90.f);
     player.getLoop().loopAll();
-    player.playStreamingFadeIn(0.5f, 2.f);
+    player.playStreamingFadeIn(1.f, 2.f);
 }
 
 void Title::update() {

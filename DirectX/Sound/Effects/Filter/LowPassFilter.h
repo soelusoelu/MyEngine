@@ -3,6 +3,7 @@
 #include "FilterParam.h"
 #include "../SoundEffectUtility.h"
 #include <xapobase.h>
+#include <vector>
 
 #pragma comment(lib, "xapobase.lib")
 
@@ -61,5 +62,17 @@ private:
     WAVEFORMATEX mOutputFmt;
     //パラメータの受信場所
     FilterParam mParam[EFFECT_PARAMETER_SIZE];
+
+    //出力チャンネル配列
+    std::vector<float*> mOutCh;
+    //2つ前までの入力信号
+    float mOldIn[2];
+    //2つ前までの演算結果
+    float mOldOut[2];
+    //フィルタ係数
+    //a: 元の音を残すブレンド率(%)
+    //b: 新しい音のブレンド率(%)
+    float mA[3];
+    float mB[3];
 };
 }

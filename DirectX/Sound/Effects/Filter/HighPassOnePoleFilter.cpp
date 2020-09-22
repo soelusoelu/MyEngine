@@ -7,6 +7,8 @@ MyFilter::HighPassOnePoleFilter::HighPassOnePoleFilter() :
     mInputFmt(),
     mOutputFmt(),
     mFrequency{ 0.f, 0.f, 0.f },
+    mA1(0.f),
+    mB0(0.f),
     mLastVolume(0.f) {
 }
 
@@ -37,6 +39,12 @@ STDMETHODIMP_(void __stdcall) MyFilter::HighPassOnePoleFilter::Process(UINT32 In
 
 STDMETHODIMP_(void __stdcall) MyFilter::HighPassOnePoleFilter::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
     if (ParameterByteSize == sizeof(float)) {
+        const auto freq = *static_cast<const float*>(pParameters);
+        //ハイパス係数の計算
+        mA1 = expf(-Math::PI * freq);
+        mB0 = 1.f - mA1;
+
+        //基底クラスに渡す
         CXAPOParametersBase::SetParameters(pParameters, ParameterByteSize);
     } else {
         Debug::logWarning("Wrong size of parameter");
@@ -53,22 +61,16 @@ void MyFilter::HighPassOnePoleFilter::highPassOnePoleFilter(const XAPO_PROCESS_B
     //バッファの取得
     float* inBuf = static_cast<float*>(inParam.pBuffer);
     float* outBuf = static_cast<float*>(outParam.pBuffer);
-    //3配列のうち有効な値を取得
-    float frequency = *reinterpret_cast<float*>(BeginProcess());
-
-    //ローパス係数の計算
-    float a1 = expf(-Math::PI * frequency); //元の音を残すブレンド率(%)
-    float b0 = 1.f - a1; //新しい音のブレンド率(%)
-
-    float volume = mLastVolume;
+    //チャンネル配列を更新
     for (size_t i = 0; i < mOutCh.size(); i++) {
         mOutCh[i] = outBuf + i;
     }
 
+    float volume = mLastVolume;
     //サンプル数分まわす
     for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
         //新しい音量を決定
-        volume = volume * a1 + *inBuf * b0;
+        volume = volume * mA1 + *inBuf * mB0;
 
         //全出力チャンネルに新しい音量を設定する
         auto chVolume = *inBuf - volume;
@@ -88,6 +90,4 @@ void MyFilter::HighPassOnePoleFilter::highPassOnePoleFilter(const XAPO_PROCESS_B
     mLastVolume = volume;
     outParam.ValidFrameCount = inParam.ValidFrameCount;
     outParam.BufferFlags = inParam.BufferFlags;
-
-    EndProcess();
 }
