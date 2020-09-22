@@ -1,6 +1,6 @@
 ﻿#include "HighPassOnePoleFilter.h"
-#include "../../../../DebugLayer/Debug.h"
-#include "../../../../Math/Math.h"
+#include "../../../DebugLayer/Debug.h"
+#include "../../../Math/Math.h"
 
 MyFilter::HighPassOnePoleFilter::HighPassOnePoleFilter() :
     CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mFrequency), sizeof(float), FALSE),

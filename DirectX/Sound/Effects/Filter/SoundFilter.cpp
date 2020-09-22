@@ -1,6 +1,7 @@
 ﻿#include "SoundFilter.h"
-#include "LowPass/LowPassOnePoleFilter.h"
-#include "HighPass/HighPassOnePoleFilter.h"
+#include "HighPassOnePoleFilter.h"
+#include "LowPassFilter.h"
+#include "LowPassOnePoleFilter.h"
 #include "../../Voice/VoiceDetails.h"
 #include "../../../DebugLayer/Debug.h"
 #include "../../../Math/Math.h"
@@ -14,8 +15,11 @@ SoundFilter::SoundFilter(IVoice& voice, IEffectCreater& effectCreater, IEffectPa
 
 SoundFilter::~SoundFilter() = default;
 
-void SoundFilter::lowPassFilter(float frequency, float oneOverQ) const {
-    setDefaultFilter(XAUDIO2_FILTER_TYPE::LowPassFilter, frequency, oneOverQ, "Failed low pass filter.");
+int SoundFilter::lowPassFilter(float cutoffFrequency, float qualityFactor) {
+    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new MyFilter::LowPassFilter()));
+    FilterParam param = { cutoffFrequency, qualityFactor };
+    mEffectParameter.setEffectParameters(id, &param, sizeof(param));
+    return id;
 }
 
 int SoundFilter::lowPassOnePoleFilter(float frequency) {

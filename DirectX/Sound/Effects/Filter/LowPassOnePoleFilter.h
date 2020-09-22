@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-#include "../../SoundEffectUtility.h"
+#include "../SoundEffectUtility.h"
 #include <xapobase.h>
+#include <vector>
 
 #pragma comment(lib, "xapobase.lib")
 
@@ -62,6 +63,8 @@ private:
     //カットオフ周波数
     float mFrequency[EFFECT_PARAMETER_SIZE];
 
+    //出力チャンネル配列
+    std::vector<float*> mOutCh;
     //最後の演算ボリューム値
     float mLastVolume;
 };

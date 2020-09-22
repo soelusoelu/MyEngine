@@ -1,6 +1,6 @@
 ﻿#include "LowPassOnePoleFilter.h"
-#include "../../../../DebugLayer/Debug.h"
-#include "../../../../Math/Math.h"
+#include "../../../DebugLayer/Debug.h"
+#include "../../../Math/Math.h"
 
 MyFilter::LowPassOnePoleFilter::LowPassOnePoleFilter() :
     CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mFrequency), sizeof(float), FALSE),
@@ -15,6 +15,9 @@ MyFilter::LowPassOnePoleFilter::~LowPassOnePoleFilter() = default;
 STDMETHODIMP_(HRESULT __stdcall) MyFilter::LowPassOnePoleFilter::LockForProcess(UINT32 InputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pInputLockedParameters, UINT32 OutputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pOutputLockedParameters) {
     mInputFmt = *pInputLockedParameters[0].pFormat;
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
+
+    //出力チャンネル数を設定
+    mOutCh.resize(mOutputFmt.nChannels);
 
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
@@ -58,13 +61,29 @@ void MyFilter::LowPassOnePoleFilter::lowPassOnePoleFilter(const XAPO_PROCESS_BUF
     float b0 = 1.f - a1; //新しい音のブレンド率(%)
 
     float volume = mLastVolume;
-    for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
-        volume = volume * a1 + *inBuf * b0;
-        *outBuf = volume;
-        ++inBuf;
-        ++outBuf;
+    for (size_t i = 0; i < mOutCh.size(); i++) {
+        mOutCh[i] = outBuf + i;
     }
 
+    //サンプル数分まわす
+    for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
+        //新しい音量を決定
+        volume = volume * a1 + *inBuf * b0;
+
+        //全出力チャンネルに新しい音量を設定する
+        for (const auto& ch : mOutCh) {
+            *ch = volume;
+        }
+
+        //入力バッファを音源のチャンネル数分進める
+        inBuf += mInputFmt.nChannels;
+        //出力バッファを次の位置まで進める
+        for (auto&& ch : mOutCh) {
+            ch += mOutCh.size();
+        }
+    }
+
+    //最後の音量を保存
     mLastVolume = volume;
     outParam.ValidFrameCount = inParam.ValidFrameCount;
     outParam.BufferFlags = inParam.BufferFlags;

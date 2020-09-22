@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component\Sound\ListenerComponent.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\LowPassFilter.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundManager.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundEngine.cpp" />
     <ClCompile Include="Sound\3D\Sound3DCalculator.cpp" />
@@ -184,8 +185,8 @@
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
     <ClCompile Include="Sound\Streaming\SoundStreaming.cpp" />
-    <ClCompile Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.cpp" />
-    <ClCompile Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\HighPassOnePoleFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\LowPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Reverb\SimpleReverb.cpp" />
     <ClCompile Include="Sound\Effects\Equalizer\Equalizer.cpp" />
     <ClCompile Include="Sound\Effects\Echo\Echo.cpp" />
@@ -302,6 +303,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
+    <ClInclude Include="Sound\Effects\Filter\FilterParam.h" />
+    <ClInclude Include="Sound\Effects\Filter\LowPassFilter.h" />
     <ClInclude Include="Sound\XAudio2\SoundManager.h" />
     <ClInclude Include="Sound\XAudio2\SoundEngine.h" />
     <ClInclude Include="Sound\3D\Sound3DCalculator.h" />
@@ -333,8 +336,8 @@
     <ClInclude Include="Device\Flag.h" />
     <ClInclude Include="Sound\Loader\WaveFormat.h" />
     <ClInclude Include="Sound\Streaming\SoundStreaming.h" />
-    <ClInclude Include="Sound\Effects\Filter\HighPass\HighPassOnePoleFilter.h" />
-    <ClInclude Include="Sound\Effects\Filter\LowPass\LowPassOnePoleFilter.h" />
+    <ClInclude Include="Sound\Effects\Filter\HighPassOnePoleFilter.h" />
+    <ClInclude Include="Sound\Effects\Filter\LowPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\IEffectCreater.h" />
     <ClInclude Include="Sound\Effects\IEffectParameter.h" />
     <ClInclude Include="Sound\Effects\Reverb\SimpleReverb.h" />
