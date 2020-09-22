@@ -16,6 +16,9 @@ STDMETHODIMP_(HRESULT __stdcall) MyFilter::HighPassOnePoleFilter::LockForProcess
     mInputFmt = *pInputLockedParameters[0].pFormat;
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
 
+    //出力チャンネル数を設定
+    mOutCh.resize(mOutputFmt.nChannels);
+
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
 
@@ -51,35 +54,37 @@ void MyFilter::HighPassOnePoleFilter::highPassOnePoleFilter(const XAPO_PROCESS_B
     float* inBuf = static_cast<float*>(inParam.pBuffer);
     float* outBuf = static_cast<float*>(outParam.pBuffer);
     //3配列のうち有効な値を取得
-    float getFrequency = *reinterpret_cast<float*>(BeginProcess());
+    float frequency = *reinterpret_cast<float*>(BeginProcess());
 
     //ローパス係数の計算
-    float a1 = expf(-Math::PI * getFrequency); //元の音を残すブレンド率(%)
+    float a1 = expf(-Math::PI * frequency); //元の音を残すブレンド率(%)
     float b0 = 1.f - a1; //新しい音のブレンド率(%)
 
     float volume = mLastVolume;
-    for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
-        for (size_t ch = 0; ch < mInputFmt.nChannels; ch++) {
-            volume = volume * a1 + *inBuf * b0;
-            *outBuf = *inBuf - volume;
-            ++inBuf;
-        }
-        outBuf += mInputFmt.nChannels;
+    for (size_t i = 0; i < mOutCh.size(); i++) {
+        mOutCh[i] = outBuf + i;
     }
 
-    //出力先初期位置をセット
-    //float* left = outBuf;
-    //float* right = outBuf + 1;
-    //for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
-    //    for (size_t ch = 0; ch < mInputFmt.nChannels; ch++) {
-    //        volume = volume * a1 + *inBuf * b0;
-    //        *left = *right = *inBuf - volume;
-    //        ++inBuf;
-    //    }
-    //    left += mInputFmt.nChannels;
-    //    right += mInputFmt.nChannels;
-    //}
+    //サンプル数分まわす
+    for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
+        //新しい音量を決定
+        volume = volume * a1 + *inBuf * b0;
 
+        //全出力チャンネルに新しい音量を設定する
+        auto chVolume = *inBuf - volume;
+        for (const auto& ch : mOutCh) {
+            *ch = chVolume;
+        }
+
+        //入力バッファを音源のチャンネル数分進める
+        inBuf += mInputFmt.nChannels;
+        //出力バッファを次の位置まで進める
+        for (auto&& ch : mOutCh) {
+            ch += mOutCh.size();
+        }
+    }
+
+    //最後の音量を保存
     mLastVolume = volume;
     outParam.ValidFrameCount = inParam.ValidFrameCount;
     outParam.BufferFlags = inParam.BufferFlags;
