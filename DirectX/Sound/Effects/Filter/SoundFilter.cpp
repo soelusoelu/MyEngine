@@ -1,6 +1,6 @@
 ﻿#include "SoundFilter.h"
+#include "BiQuadFilter.h"
 #include "HighPassOnePoleFilter.h"
-#include "LowPassFilter.h"
 #include "LowPassOnePoleFilter.h"
 #include "../../Voice/VoiceDetails.h"
 #include "../../../DebugLayer/Debug.h"
@@ -16,7 +16,7 @@ SoundFilter::SoundFilter(IVoice& voice, IEffectCreater& effectCreater, IEffectPa
 SoundFilter::~SoundFilter() = default;
 
 int SoundFilter::lowPassFilter(float cutoffFrequency, float qualityFactor) {
-    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new MyFilter::LowPassFilter()));
+    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(FilterType::LOW_PASS_FILTER)));
     FilterParam param = { cutoffFrequency, qualityFactor };
     mEffectParameter.setEffectParameters(id, &param, sizeof(param));
     return id;
@@ -29,8 +29,11 @@ int SoundFilter::lowPassOnePoleFilter(float frequency) {
     return id;
 }
 
-void SoundFilter::highPassFilter(float frequency, float oneOverQ) const {
-    setDefaultFilter(XAUDIO2_FILTER_TYPE::HighPassFilter, frequency, oneOverQ, "Failed high pass filter.");
+int SoundFilter::highPassFilter(float cutoffFrequency, float qualityFactor) {
+    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(FilterType::HIGH_PASS_FILTER)));
+    FilterParam param = { cutoffFrequency, qualityFactor };
+    mEffectParameter.setEffectParameters(id, &param, sizeof(param));
+    return id;
 }
 
 int SoundFilter::highPassOnePoleFilter(float frequency) {

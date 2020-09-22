@@ -161,8 +161,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sound\Effects\Filter\BiQuadFilter.cpp" />
     <ClCompile Include="Component\Sound\ListenerComponent.cpp" />
-    <ClCompile Include="Sound\Effects\Filter\LowPassFilter.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundManager.cpp" />
     <ClCompile Include="Sound\XAudio2\SoundEngine.cpp" />
     <ClCompile Include="Sound\3D\Sound3DCalculator.cpp" />
@@ -302,9 +302,9 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sound\Effects\Filter\BiQuadFilter.h" />
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
     <ClInclude Include="Sound\Effects\Filter\FilterParam.h" />
-    <ClInclude Include="Sound\Effects\Filter\LowPassFilter.h" />
     <ClInclude Include="Sound\XAudio2\SoundManager.h" />
     <ClInclude Include="Sound\XAudio2\SoundEngine.h" />
     <ClInclude Include="Sound\3D\Sound3DCalculator.h" />

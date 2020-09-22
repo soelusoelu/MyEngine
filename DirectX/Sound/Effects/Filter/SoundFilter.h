@@ -24,7 +24,7 @@ public:
     /// <summary>
     /// 単極ローパスフィルター
     /// </summary>
-    /// <param name="frequency">カットオフ周波数(0 ～ 1)</param>
+    /// <param name="frequency">カットオフ周波数[0, 1]</param>
     /// <returns>作成したフィルターのID</returns>
     int lowPassOnePoleFilter(float frequency);
 
@@ -32,14 +32,15 @@ public:
     /// ハイパスフィルター
     /// 指定した値より低い周波数をカットする
     /// </summary>
-    /// <param name="frequency">カットオフ周波数</param>
-    /// <param name="oneOverQ">音のカットの仕方</param>
-    void highPassFilter(float frequency, float oneOverQ = 1.4142135f) const;
+    /// <param name="cutoffFrequency">カットオフ周波数</param>
+    /// <param name="qualityFactor">クオリティファクタ</param>
+    /// <returns>作成したフィルターのID</returns>
+    int highPassFilter(float cutoffFrequency, float qualityFactor = 0.707f);
 
     /// <summary>
     /// 単極ハイパスフィルター
     /// </summary>
-    /// <param name="frequency">カットオフ周波数(0 ～ 1)</param>
+    /// <param name="frequency">カットオフ周波数[0, 1]</param>
     /// <returns>作成したフィルターのID</returns>
     int highPassOnePoleFilter(float frequency);
 

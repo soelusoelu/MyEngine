@@ -68,8 +68,8 @@ void Title::start() {
     //mSound->getSoundBuffer().playLength = 30.f;
     //mSound->getSoundBuffer().loopBegin = 60.f;
     //mSound->getSoundBuffer().loopLength = 30.f;
-    mSound->getSoundEffect().getEffectCollection().getFilter().lowPassFilter(2500.f);
-    //mSound->getSoundFilter().highPassFilter(250.f);
+    //mSound->getSoundEffect().getEffectCollection().getFilter().lowPassFilter(2500.f);
+    //mSound->getSoundEffect().getEffectCollection().getFilter().highPassFilter(500.f);
     //mSound->getSoundFilter().bandPassFilter(1000.f);
     //mSound->getSoundEffect().getEffectCollection().getFilter().lowPassOnePoleFilter(0.05f);
     //mSound->getSoundEffect().getEffectCollection().getFilter().highPassOnePoleFilter(0.15f);

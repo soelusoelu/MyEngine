@@ -148,7 +148,7 @@
     <ClCompile Include="Sound\Factory\SoundCreater.cpp" />
     <ClCompile Include="Sound\Effects\Filter\HighPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\LowPassOnePoleFilter.cpp" />
-    <ClCompile Include="Sound\Effects\Filter\LowPassFilter.cpp" />
+    <ClCompile Include="Sound\Effects\Filter\BiQuadFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -329,7 +329,7 @@
     <ClInclude Include="Sound\Factory\SoundCreater.h" />
     <ClInclude Include="Sound\Effects\Filter\HighPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\LowPassOnePoleFilter.h" />
-    <ClInclude Include="Sound\Effects\Filter\LowPassFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\FilterParam.h" />
+    <ClInclude Include="Sound\Effects\Filter\BiQuadFilter.h" />
   </ItemGroup>
 </Project>
