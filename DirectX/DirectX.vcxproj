@@ -305,6 +305,7 @@
     <ClInclude Include="Sound\Effects\Filter\BiQuadFilter.h" />
     <ClInclude Include="Component\Sound\ListenerComponent.h" />
     <ClInclude Include="Sound\Effects\Filter\FilterParam.h" />
+    <ClInclude Include="Sound\Effects\Filter\FilterType.h" />
     <ClInclude Include="Sound\XAudio2\SoundManager.h" />
     <ClInclude Include="Sound\XAudio2\SoundEngine.h" />
     <ClInclude Include="Sound\3D\Sound3DCalculator.h" />

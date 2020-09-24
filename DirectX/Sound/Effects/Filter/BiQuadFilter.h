@@ -1,19 +1,12 @@
 ﻿#pragma once
 
 #include "FilterParam.h"
+#include "FilterType.h"
 #include "../SoundEffectUtility.h"
 #include <xapobase.h>
 #include <vector>
 
 #pragma comment(lib, "xapobase.lib")
-
-//バイクアッドフィルタで扱うフィルタの種類
-enum class FilterType {
-    LOW_PASS_FILTER,
-    HIGH_PASS_FILTER,
-    BAND_PASS_FILTER,
-    NOTCH_FILTER
-};
 
 //バイクアッドフィルタ
 class __declspec(uuid("{5EA86338-E8D7-4666-A086-A195A0F61886}"))
@@ -52,20 +45,9 @@ private:
 
     void computeFilter(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
 
-    /// <summary>
-    /// 入力信号から出力信号を計算する
-    /// </summary>
-    /// <param name="inVolume">入力信号</param>
-    /// <returns>出力信号</returns>
+    //入力信号から出力信号を計算する
     float computeVolume(float inVolume);
-
-    /// <summary>
-    /// フィルタ係数を計算する
-    /// </summary>
-    /// <param name="type">適用したいフィルタの種類</param>
-    /// <param name="cutoffFrequency">カットオフ周波数</param>
-    /// <param name="qualityFactor">クオリティファクタ</param>
-    /// <param name="sampleRate">サンプリング周波数</param>
+    //フィルタ係数を計算する
     void computeCoefficient(float cutoffFrequency, float qualityFactor, unsigned sampleRate);
 
 private:

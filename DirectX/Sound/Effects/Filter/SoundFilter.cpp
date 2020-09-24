@@ -3,97 +3,93 @@
 #include "HighPassOnePoleFilter.h"
 #include "LowPassOnePoleFilter.h"
 #include "../../Voice/VoiceDetails.h"
-#include "../../../DebugLayer/Debug.h"
 #include "../../../Math/Math.h"
 
-SoundFilter::SoundFilter(IVoice& voice, IEffectCreater& effectCreater, IEffectParameter& effectParameter, bool useFilters) :
+SoundFilter::SoundFilter(IVoice& voice, IEffectCreater& effectCreater, IEffectParameter& effectParameter) :
     mEffectCreater(effectCreater),
     mEffectParameter(effectParameter),
     mVoice(voice),
-    mUseFilters(useFilters) {
+    mFilterID(-1) {
 }
 
 SoundFilter::~SoundFilter() = default;
 
-int SoundFilter::lowPassFilter(float cutoffFrequency, float qualityFactor) {
-    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(FilterType::LOW_PASS_FILTER)));
-    FilterParam param = { cutoffFrequency, qualityFactor };
-    mEffectParameter.setEffectParameters(id, &param, sizeof(param));
-    return id;
+void SoundFilter::lowPassFilter(float cutoffFrequency, float qualityFactor) {
+    updateFilter(FilterType::LOW_PASS_FILTER, cutoffFrequency, qualityFactor);
 }
 
-int SoundFilter::lowPassOnePoleFilter(float frequency) {
-    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new MyFilter::LowPassOnePoleFilter()));
-    frequency = Math::clamp<float>(frequency, 0.f, 1.f);
-    mEffectParameter.setEffectParameters(id, &frequency, sizeof(float));
-    return id;
+void SoundFilter::lowPassFilterFromRadianFrequency(float radianFrequency, float qualityFactor) {
+    float f = radianFrequencyToCutoffFrequency(radianFrequency);
+    updateFilter(FilterType::LOW_PASS_FILTER, f, qualityFactor);
 }
 
-int SoundFilter::highPassFilter(float cutoffFrequency, float qualityFactor) {
-    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(FilterType::HIGH_PASS_FILTER)));
-    FilterParam param = { cutoffFrequency, qualityFactor };
-    mEffectParameter.setEffectParameters(id, &param, sizeof(param));
-    return id;
+void SoundFilter::lowPassOnePoleFilter(float frequency) {
+    createOnePoleFilter(FilterType::LOW_PASS_ONE_POLE_FILTER, frequency);
 }
 
-int SoundFilter::highPassOnePoleFilter(float frequency) {
-    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new MyFilter::HighPassOnePoleFilter()));
-    frequency = Math::clamp<float>(frequency, 0.f, 1.f);
-    mEffectParameter.setEffectParameters(id, &frequency, sizeof(float));
-    return id;
+void SoundFilter::highPassFilter(float cutoffFrequency, float qualityFactor) {
+    updateFilter(FilterType::HIGH_PASS_FILTER, cutoffFrequency, qualityFactor);
 }
 
-int SoundFilter::bandPassFilter(float cutoffFrequency, float qualityFactor) {
-    int id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(FilterType::BAND_PASS_FILTER)));
-    FilterParam param = { cutoffFrequency, qualityFactor };
-    mEffectParameter.setEffectParameters(id, &param, sizeof(param));
-    return id;
+void SoundFilter::highPassOnePoleFilter(float frequency) {
+    createOnePoleFilter(FilterType::HIGH_PASS_ONE_POLE_FILTER, frequency);
 }
 
-void SoundFilter::notchFilter(float frequency, float oneOverQ) const {
-    setDefaultFilter(XAUDIO2_FILTER_TYPE::NotchFilter, frequency, oneOverQ, "Failed notch filter.");
+void SoundFilter::bandPassFilter(float cutoffFrequency, float qualityFactor) {
+    updateFilter(FilterType::BAND_PASS_FILTER, cutoffFrequency, qualityFactor);
 }
 
-void SoundFilter::resetFilter() {
-    highPassFilter(0.f, 1.f);
+void SoundFilter::notchFilter(float cutoffFrequency, float qualityFactor) {
+    updateFilter(FilterType::NOTCH_FILTER, cutoffFrequency, qualityFactor);
 }
 
-void SoundFilter::setDefaultFilter(XAUDIO2_FILTER_TYPE type, float frequency, float oneOverQ, const std::string& errorMessage) const {
-    if (!mUseFilters) {
-        Debug::logWarning("Filter use flag is not set.");
-        return;
+void SoundFilter::updateFilter(FilterType type, float cutoffFrequency, float qualityFactor) {
+    //フィルター未作成なら作成
+    if (mFilterID == -1) {
+        createFilter(type);
     }
 
-    auto res = setFilterParameters(type, frequency, oneOverQ);
+    setFilterParameters(type, cutoffFrequency, qualityFactor);
+}
 
-#ifdef _DEBUG
-    if (FAILED(res)) {
-        Debug::logError(errorMessage);
+void SoundFilter::createFilter(FilterType type) {
+    mFilterID = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new BiQuadFilter(type)));
+}
+
+void SoundFilter::createOnePoleFilter(FilterType type, float cutoffFrequency) {
+    if (type == FilterType::LOW_PASS_ONE_POLE_FILTER) {
+        mFilterID = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new MyFilter::LowPassOnePoleFilter()));
+    } else if (type == FilterType::HIGH_PASS_ONE_POLE_FILTER) {
+        mFilterID = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new MyFilter::HighPassOnePoleFilter()));
     }
-#endif // _DEBUG
+    float f = Math::clamp<float>(cutoffFrequency, 0.f, 1.f);
+    mEffectParameter.setEffectParameters(mFilterID, &f, sizeof(float));
 }
 
-HRESULT SoundFilter::setFilterParameters(XAUDIO2_FILTER_TYPE type, float frequency, float oneOverQ) const {
-    XAUDIO2_FILTER_PARAMETERS filterParams;
-    filterParams.Type = type;
-    filterParams.Frequency = frequencyToRadianFrequency(frequency);
-    filterParams.OneOverQ = clampOneOverQ(oneOverQ);
-
-    auto res = mVoice.getXAudio2Voice()->SetFilterParameters(&filterParams);
-    return res;
+void SoundFilter::setFilterParameters(FilterType type, float cutoffFrequency, float qualityFactor) {
+    float f = clampCutoffFrequency(cutoffFrequency);
+    float q = clampQ(qualityFactor);
+    FilterParam param = { type, f, q };
+    mEffectParameter.setEffectParameters(mFilterID, &param, sizeof(param));
 }
 
-float SoundFilter::frequencyToRadianFrequency(float frequency) const {
-    float f = frequency / mVoice.getVoiceDetails().sampleRate * 6.f;
-    return Math::clamp<float>(f, 0.f, XAUDIO2_MAX_FILTER_FREQUENCY);
+float SoundFilter::clampCutoffFrequency(float cutoffFrequency) const {
+    const unsigned s = mVoice.getVoiceDetails().sampleRate;
+    //カットオフ周波数はサンプリング周波数の半分まで
+    return Math::clamp<float>(cutoffFrequency, 0.f, s / 2.f);
 }
 
-float SoundFilter::clampOneOverQ(float oneOverQ) const {
-    float f = oneOverQ;
-    if (oneOverQ <= 0.f) { //0ちょうどでもだめ
-        f = 0.001f;
-    } else if (oneOverQ > XAUDIO2_MAX_FILTER_ONEOVERQ) {
-        f = XAUDIO2_MAX_FILTER_ONEOVERQ;
+float SoundFilter::clampQ(float qualityFactor) const {
+    if (qualityFactor <= 0.f) { //0ちょうどでもだめ
+        qualityFactor = 0.001f;
     }
-    return f;
+    return qualityFactor;
+}
+
+float SoundFilter::cutoffFrequencyToRadianFrequency(float cutoffFrequency) const {
+    return cutoffFrequency / mVoice.getVoiceDetails().sampleRate * 2.f;
+}
+
+float SoundFilter::radianFrequencyToCutoffFrequency(float radianFrequency) const {
+    return radianFrequency * mVoice.getVoiceDetails().sampleRate / 2.f;
 }

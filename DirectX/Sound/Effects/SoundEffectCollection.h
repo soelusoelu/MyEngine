@@ -10,7 +10,7 @@ class SoundFilter;
 //すべてのエフェクトにアクセスできるクラス
 class SoundEffectCollection {
 public:
-    SoundEffectCollection(IVoice& voice, IEffectCreater& effectCreater, IEffectParameter& effectParameter, bool useFilters);
+    SoundEffectCollection(IVoice& voice, IEffectCreater& effectCreater, IEffectParameter& effectParameter);
     ~SoundEffectCollection();
 
     /// <summary>

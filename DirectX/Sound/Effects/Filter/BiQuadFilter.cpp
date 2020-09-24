@@ -41,6 +41,7 @@ STDMETHODIMP_(void __stdcall) BiQuadFilter::Process(UINT32 InputProcessParameter
 STDMETHODIMP_(void __stdcall) BiQuadFilter::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
     if (ParameterByteSize == sizeof(FilterParam)) {
         const auto& param = *static_cast<const FilterParam*>(pParameters);
+        mType = param.type;
         //フィルタ係数を計算する
         computeCoefficient(param.cutoffFrequency, param.qualityFactor, mInputFmt.nSamplesPerSec);
 
@@ -104,8 +105,8 @@ float BiQuadFilter::computeVolume(float inVolume) {
 }
 
 void BiQuadFilter::computeCoefficient(float cutoffFrequency, float qualityFactor, unsigned sampleRate) {
+    float omega = 2.f * Math::PI * cutoffFrequency / sampleRate;
     if (mType == FilterType::LOW_PASS_FILTER) {
-        float omega = 2.f * Math::PI * cutoffFrequency / sampleRate;
         float alpha = sinf(omega) / (2.f * qualityFactor);
 
         float cosOmega = cosf(omega);
@@ -116,7 +117,6 @@ void BiQuadFilter::computeCoefficient(float cutoffFrequency, float qualityFactor
         mB[1] = (1.f - cosOmega) / mA[0];
         mB[2] = mB[0]; //b0と同じ
     } else if (mType == FilterType::HIGH_PASS_FILTER) {
-        float omega = 2.f * Math::PI * cutoffFrequency / sampleRate;
         float alpha = sinf(omega) / (2.f * qualityFactor);
 
         float cosOmega = cosf(omega);
@@ -127,7 +127,6 @@ void BiQuadFilter::computeCoefficient(float cutoffFrequency, float qualityFactor
         mB[1] = -(1.f + cosOmega) / mA[0];
         mB[2] = mB[0]; //b0と同じ
     } else if (mType == FilterType::BAND_PASS_FILTER) {
-        float omega = 2.f * Math::PI * cutoffFrequency / sampleRate;
         float sinOmega = sinf(omega);
         float alpha = sinOmega * sinhf(logf(2.f) / 2.f * qualityFactor * omega / sinOmega);
 
@@ -136,6 +135,17 @@ void BiQuadFilter::computeCoefficient(float cutoffFrequency, float qualityFactor
         mA[2] = (1.f - alpha) / mA[0];
         mB[0] = alpha / mA[0];
         mB[1] = 0.f;
-        mB[2] = -alpha / mA[0];
+        mB[2] = -mB[0];
+    } else if (mType == FilterType::NOTCH_FILTER) {
+        float sinOmega = sinf(omega);
+        float alpha = sinOmega * sinhf(logf(2.f) / 2.f * qualityFactor * omega / sinOmega);
+
+        float cosOmega = cosf(omega);
+        mA[0] = 1.f + alpha;
+        mA[1] = -2.f * cosOmega / mA[0];
+        mA[2] = (1.f - alpha) / mA[0];
+        mB[0] = 1.f / mA[0];
+        mB[1] = -2.f * cosOmega / mA[0];
+        mB[2] = mB[0]; //b0と同じ
     }
 }

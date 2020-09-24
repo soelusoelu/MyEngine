@@ -331,5 +331,6 @@
     <ClInclude Include="Sound\Effects\Filter\LowPassOnePoleFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\FilterParam.h" />
     <ClInclude Include="Sound\Effects\Filter\BiQuadFilter.h" />
+    <ClInclude Include="Sound\Effects\Filter\FilterType.h" />
   </ItemGroup>
 </Project>

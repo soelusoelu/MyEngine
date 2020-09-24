@@ -8,7 +8,7 @@ MasteringVoice::MasteringVoice(IXAudio2MasteringVoice* XAudio2MasteringVoice) :
     mDetails(),
     mSoundVolume(nullptr),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
-    mSoundEffect(std::make_unique<SoundEffect>(*this, false)) {
+    mSoundEffect(std::make_unique<SoundEffect>(*this)) {
 
     //XAudio2の標準機能からボイス情報を取得
     XAUDIO2_VOICE_DETAILS details = { 0 };

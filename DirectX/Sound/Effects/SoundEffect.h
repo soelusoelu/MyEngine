@@ -13,7 +13,7 @@ class SoundEffectCollection;
 //サウンドエフェクト専用クラス
 class SoundEffect : public IEffectCreater, public IEffectParameter {
 public:
-    SoundEffect(IVoice& voice, bool useFilters);
+    SoundEffect(IVoice& voice);
     ~SoundEffect();
 
     /// <summary>

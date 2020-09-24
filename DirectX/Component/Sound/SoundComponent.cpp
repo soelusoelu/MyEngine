@@ -1,7 +1,5 @@
 ﻿#include "SoundComponent.h"
-#include "../../Device/Flag.h"
 #include "../../Sound/3D/Emitter/Sound3DEmitter.h"
-#include "../../Sound/Flag/SoundFlag.h"
 #include "../../Sound/Player/SoundPlayer.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoice.h"
 #include "../../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
@@ -21,7 +19,6 @@ SoundComponent::~SoundComponent() = default;
 void SoundComponent::awake() {
     if (!mFileName.empty()) {
         SourceVoiceInitParam param;
-        param.flags.set(SoundFlags::USE_FILTER);
         param.maxFrequencyRatio = 4.f;
         param.isCalculate3D = mUse3DSound;
         mSound = SoundEngine::instance().createSourceVoice(mFileName, param);

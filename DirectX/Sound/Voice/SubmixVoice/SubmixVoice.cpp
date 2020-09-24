@@ -1,18 +1,16 @@
 ﻿#include "SubmixVoice.h"
 #include "../../Effects/SoundEffect.h"
-#include "../../Flag/SoundFlag.h"
 #include "../../Voice/VoiceDetails.h"
 #include "../../Voice/MasteringVoice/MasteringVoice.h"
 #include "../../Voice/Output/OutputVoices.h"
 #include "../../Volume/SoundVolume.h"
-#include "../../../Device/Flag.h"
 
 SubmixVoice::SubmixVoice(IXAudio2SubmixVoice* XAudio2SubmixVoice, MasteringVoice& masteringVoice, const SubmixVoiceInitParam& param) :
     mXAudio2SubmixVoice(XAudio2SubmixVoice),
     mDetails{ param.channels, param.inputSampleRate },
     mSoundVolume(std::make_unique<SoundVolume>(*this, param.channels, masteringVoice.getVoiceDetails().channels)),
     mOutputVoices(std::make_unique<OutputVoices>(*this)),
-    mSoundEffect(std::make_unique<SoundEffect>(*this, param.flags.check(SoundFlags::USE_FILTER))) {
+    mSoundEffect(std::make_unique<SoundEffect>(*this)) {
 }
 
 SubmixVoice::~SubmixVoice() {

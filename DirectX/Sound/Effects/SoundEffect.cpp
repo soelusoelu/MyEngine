@@ -4,9 +4,9 @@
 #include "../../DebugLayer/Debug.h"
 #include <cassert>
 
-SoundEffect::SoundEffect(IVoice& voice, bool useFilters) :
+SoundEffect::SoundEffect(IVoice& voice) :
     mVoice(voice),
-    mEffectCollection(std::make_unique<SoundEffectCollection>(voice, *this, *this, useFilters)),
+    mEffectCollection(std::make_unique<SoundEffectCollection>(voice, *this, *this)),
     mDescs(),
     mIsApplied(false) {
 }

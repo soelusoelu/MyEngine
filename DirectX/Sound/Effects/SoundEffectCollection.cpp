@@ -8,9 +8,9 @@
 #include "VolumeMeter/VolumeMeter.h"
 #include <cassert>
 
-SoundEffectCollection::SoundEffectCollection(IVoice& voice, IEffectCreater& effectCreater, IEffectParameter& effectParameter, bool useFilters) :
+SoundEffectCollection::SoundEffectCollection(IVoice& voice, IEffectCreater& effectCreater, IEffectParameter& effectParameter) :
     mEffectCreater(effectCreater),
-    mFilter(std::make_unique<SoundFilter>(voice, effectCreater, effectParameter, useFilters)) {
+    mFilter(std::make_unique<SoundFilter>(voice, effectCreater, effectParameter)) {
 }
 
 SoundEffectCollection::~SoundEffectCollection() = default;
