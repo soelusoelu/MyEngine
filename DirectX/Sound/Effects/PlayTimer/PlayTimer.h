@@ -67,6 +67,4 @@ private:
 
     //現在の再生時間(単位: バイト)
     unsigned mCurrentTime;
-    //フレームカウント
-    unsigned mFrameCount;
 };

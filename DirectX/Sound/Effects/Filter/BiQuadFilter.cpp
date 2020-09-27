@@ -69,10 +69,8 @@ void BiQuadFilter::computeFilter(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, 
 
     //メイン
     for (size_t i = 0; i < inParam.ValidFrameCount; i++) {
-        float inVolume = *inBuf;
-
         //新しい音を計算
-        float outVolume = computeVolume(inVolume);
+        float outVolume = computeVolume(*inBuf);
 
         //全出力チャンネルに新しい音量を設定する
         for (const auto& ch : mOutCh) {

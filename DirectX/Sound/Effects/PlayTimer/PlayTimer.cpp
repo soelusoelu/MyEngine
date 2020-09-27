@@ -5,8 +5,7 @@ PlayTimer::PlayTimer() :
     CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mParams), sizeof(PlayTimerParam), FALSE),
     mInputFmt(),
     mOutputFmt(),
-    mCurrentTime(0),
-    mFrameCount(0) {
+    mCurrentTime(0) {
     for (size_t i = 0; i < EFFECT_PARAMETER_SIZE; i++) {
         mParams[i].setTime = 0.f;
         mParams[i].frequencyRatio = 1.f;
@@ -18,7 +17,6 @@ PlayTimer::~PlayTimer() = default;
 STDMETHODIMP_(HRESULT __stdcall) PlayTimer::LockForProcess(UINT32 InputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pInputLockedParameters, UINT32 OutputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pOutputLockedParameters) {
     mInputFmt = *pInputLockedParameters[0].pFormat;
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
-    mFrameCount = pInputLockedParameters[0].MaxFrameCount;
 
     return CXAPOBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
@@ -57,7 +55,7 @@ STDMETHODIMP_(void __stdcall) PlayTimer::Process(UINT32 InputProcessParameterCou
 STDMETHODIMP_(void __stdcall) PlayTimer::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
     if (ParameterByteSize == sizeof(PlayTimerParam)) {
         const PlayTimerParam param = *static_cast<const PlayTimerParam*>(pParameters);
-        mCurrentTime = static_cast<unsigned>(param.setTime * mFrameCount * EFFECT_PROCESS_COUNT);
+        mCurrentTime = static_cast<unsigned>(param.setTime * mInputFmt.nSamplesPerSec);
         CXAPOParametersBase::SetParameters(pParameters, ParameterByteSize);
     } else {
         Debug::logWarning("Wrong XAPO parameter size");
@@ -66,7 +64,7 @@ STDMETHODIMP_(void __stdcall) PlayTimer::SetParameters(const void* pParameters, 
 
 STDMETHODIMP_(void __stdcall) PlayTimer::GetParameters(void* pParameters, UINT32 ParameterByteSize) {
     if (ParameterByteSize == sizeof(float)) {
-        *static_cast<float*>(pParameters) = static_cast<float>(mCurrentTime) / static_cast<float>(mFrameCount * EFFECT_PROCESS_COUNT);
+        *static_cast<float*>(pParameters) = static_cast<float>(mCurrentTime) / static_cast<float>(mInputFmt.nSamplesPerSec);
     } else {
         Debug::logWarning("Wrong XAPO parameter size");
     }
