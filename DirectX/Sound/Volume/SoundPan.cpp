@@ -6,7 +6,7 @@
 #include "../../System/Window.h"
 #include <vector>
 
-SoundPan::SoundPan(IVoice& voice, const unsigned inChannels, const unsigned outChannels) :
+SoundPan::SoundPan(IVoice& voice, unsigned inChannels, unsigned outChannels) :
     mVoice(voice),
     INPUT_CHANNELS(inChannels),
     MASTER_VOICE_CHANNELS(outChannels) {

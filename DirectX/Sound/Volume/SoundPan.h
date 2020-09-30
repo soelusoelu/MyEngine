@@ -6,7 +6,7 @@
 //音の定位を扱うクラス
 class SoundPan {
 public:
-    SoundPan(IVoice& voice, const unsigned inChannels, const unsigned outChannels);
+    SoundPan(IVoice& voice, unsigned inChannels, unsigned outChannels);
     ~SoundPan();
 
     /// <summary>

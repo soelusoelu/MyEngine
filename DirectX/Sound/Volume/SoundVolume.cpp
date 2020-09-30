@@ -4,7 +4,7 @@
 #include "../../DebugLayer/Debug.h"
 #include "../../Math/Math.h"
 
-SoundVolume::SoundVolume(IVoice& voice, const unsigned inChannels, const unsigned outChannels) :
+SoundVolume::SoundVolume(IVoice& voice, unsigned inChannels, unsigned outChannels) :
     mVoice(voice),
     mFader(std::make_unique<SoundFade>(*this)),
     mSoundPan(std::make_unique<SoundPan>(voice, inChannels, outChannels)),
@@ -40,11 +40,14 @@ void SoundVolume::setVolumeByDecibels(float decibels) {
 }
 
 float SoundVolume::amplitudeRatioToDecibels(float volume) {
-    return XAudio2AmplitudeRatioToDecibels(volume);
+    if (Math::nearZero(volume)) {
+        return -FLT_MAX;
+    }
+    return 20.f * log10f(volume);
 }
 
 float SoundVolume::decibelsToAmplitudeRatio(float decibels) {
-    return XAudio2DecibelsToAmplitudeRatio(decibels);
+    return powf(10.f, decibels / 20.f);
 }
 
 float SoundVolume::getVolume() const {

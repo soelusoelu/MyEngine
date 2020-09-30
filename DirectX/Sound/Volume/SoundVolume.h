@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#define XAUDIO2_HELPER_FUNCTIONS
 #include "../Voice/IVoice.h"
-#include <xaudio2.h>
 #include <memory>
 
 class SoundFade;
@@ -11,7 +9,7 @@ class SoundPan;
 //ボイスの音量を扱うクラス
 class SoundVolume {
 public:
-    SoundVolume(IVoice& voice, const unsigned inChannels, const unsigned outChannels);
+    SoundVolume(IVoice& voice, unsigned inChannels, unsigned outChannels);
     ~SoundVolume();
 
     /// <summary>
