@@ -71,7 +71,6 @@ void SoundStreaming::addBuffer() {
     //次の読み込みがデータサイズを超えるなら
     if (mWrite + READ_SIZE > mLoader->size()) {
         res = read(mRemainBufferSize);
-        mEndOfFile = true;
     } else {
         //再生時間を揃えるために無理やり
         if (mWrite == 0) {
@@ -79,7 +78,12 @@ void SoundStreaming::addBuffer() {
         }
 
         res = read(READ_SIZE);
-        mWrite += res;
+    }
+    mWrite += res;
+
+    //書き込み量がデータサイズを超えたら終了
+    if (mWrite >= mLoader->size()) {
+        mEndOfFile = true;
     }
 
     //バッファ作成

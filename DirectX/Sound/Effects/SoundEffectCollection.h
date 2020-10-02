@@ -49,6 +49,12 @@ public:
     void getPlayTimer();
 
     /// <summary>
+    /// フーリエ変換
+    /// </summary>
+    /// <returns>作成したエフェクトのID 失敗したら-1</returns>
+    int discreteFourierTransform();
+
+    /// <summary>
     /// フィルター管理クラスを返す
     /// </summary>
     /// <returns></returns>

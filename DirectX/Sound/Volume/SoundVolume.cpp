@@ -43,7 +43,7 @@ float SoundVolume::amplitudeRatioToDecibels(float volume) {
     if (Math::nearZero(volume)) {
         return -FLT_MAX;
     }
-    return 20.f * log10f(volume);
+    return 20.f * log10f(fabsf(volume));
 }
 
 float SoundVolume::decibelsToAmplitudeRatio(float decibels) {

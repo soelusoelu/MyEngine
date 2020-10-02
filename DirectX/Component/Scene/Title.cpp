@@ -63,11 +63,6 @@ void Title::start() {
     //mSound->getSoundVolume().setVolume(0.f);
     //mSound->getSoundVolume().getFade().settings(0.5f, 2.f);
     //mSound->getSoundPlayer().getFrequency().setFrequencyRatio(4.f);
-    //mSound->getSoundBuffer().loopCount = 1;
-    //mSound->getSoundBuffer().playBegin = 60.f;
-    //mSound->getSoundBuffer().playLength = 30.f;
-    //mSound->getSoundBuffer().loopBegin = 60.f;
-    //mSound->getSoundBuffer().loopLength = 30.f;
     //mSound->getSoundEffect().getEffectCollection().getFilter().lowPassFilter(2500.f);
     //mSound->getSoundEffect().getEffectCollection().getFilter().lowPassFilterFromRadianFrequency(0.25f);
     //mSound->getSoundEffect().getEffectCollection().getFilter().highPassFilter(500.f);
@@ -84,6 +79,7 @@ void Title::start() {
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
     //mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.1f);
+    mSound->getSoundEffect().getEffectCollection().discreteFourierTransform();
 
     //auto reverbParam = Reverb::getParameters();
     //reverbParam.WetDryMix = 20.f;

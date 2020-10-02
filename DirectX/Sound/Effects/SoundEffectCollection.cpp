@@ -2,6 +2,7 @@
 #include "Echo/Echo.h"
 #include "Equalizer/Equalizer.h"
 #include "Filter/SoundFilter.h"
+#include "FourierTransform/DiscreteFourierTransform.h"
 #include "PlayTimer/PlayTimer.h"
 #include "Reverb/Reverb.h"
 #include "Reverb/SimpleReverb.h"
@@ -42,6 +43,10 @@ int SoundEffectCollection::volumeMeter() {
 void SoundEffectCollection::getPlayTimer() {
     auto id = mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new PlayTimer()));
     assert(id == PLAY_TIMER_ID);
+}
+
+int SoundEffectCollection::discreteFourierTransform() {
+    return mEffectCreater.createEffect(reinterpret_cast<IUnknown*>(new DiscreteFourierTransform()));
 }
 
 SoundFilter& SoundEffectCollection::getFilter() const {

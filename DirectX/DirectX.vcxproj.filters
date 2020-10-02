@@ -149,6 +149,9 @@
     <ClCompile Include="Sound\Effects\Filter\HighPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\LowPassOnePoleFilter.cpp" />
     <ClCompile Include="Sound\Effects\Filter\BiQuadFilter.cpp" />
+    <ClCompile Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.cpp" />
+    <ClCompile Include="Sound\File\WaveformOutput.cpp" />
+    <ClCompile Include="Sound\Factory\SineWaveGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -332,5 +335,8 @@
     <ClInclude Include="Sound\Effects\Filter\FilterParam.h" />
     <ClInclude Include="Sound\Effects\Filter\BiQuadFilter.h" />
     <ClInclude Include="Sound\Effects\Filter\FilterType.h" />
+    <ClInclude Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.h" />
+    <ClInclude Include="Sound\File\WaveformOutput.h" />
+    <ClInclude Include="Sound\Factory\SineWaveGenerator.h" />
   </ItemGroup>
 </Project>
