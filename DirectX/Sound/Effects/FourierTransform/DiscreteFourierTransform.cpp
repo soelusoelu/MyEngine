@@ -2,8 +2,8 @@
 #include "../../Factory/SineWaveGenerator.h"
 #include "../../File/WaveformOutput.h"
 #include "../../../DebugLayer/Debug.h"
-#include "../../../Math/Math.h"
 #include "../../../Input/Input.h"
+#include "../../../Math/Math.h"
 
 DiscreteFourierTransform::DiscreteFourierTransform() :
     CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mParam), sizeof(float), FALSE),
@@ -11,8 +11,7 @@ DiscreteFourierTransform::DiscreteFourierTransform() :
     mOutputFmt() {
 }
 
-DiscreteFourierTransform::~DiscreteFourierTransform() {
-}
+DiscreteFourierTransform::~DiscreteFourierTransform() = default;
 
 STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32 InputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pInputLockedParameters, UINT32 OutputLockedParameterCount, const XAPO_LOCKFORPROCESS_BUFFER_PARAMETERS* pOutputLockedParameters) {
     mInputFmt = *pInputLockedParameters[0].pFormat;
@@ -24,6 +23,27 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
     mImaginary.resize(N, 0.f);
     mOutReal.resize(N);
     mOutImaginary.resize(N);
+
+    //窓関数
+    hanningWindow(mWindowFunc.data(), N);
+
+    auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
+    //for (int i = 0; i < N; i++) {
+    //    sine[i] = sine[i] * mWindowFunc[i];
+    //}
+    //fft(mOutReal.data(), mOutImaginary.data(), sine.data(), mImaginary.data(), N);
+    //float real, imag;
+    //for (int k = 0; k < N; k++) {
+    //    for (int n = 0; n < N; n++) {
+    //        real = cosf(Math::TwoPI * k * n / N);
+    //        imag = -sinf(Math::TwoPI * k * n / N);
+    //        mOutReal[k] += real * sine[n] - imag * mImaginary[n];
+    //        mOutImaginary[k] += real * mImaginary[n] + imag * sine[n];
+    //    }
+    //}
+
+    //WaveformOutput::outputWaveform("sineReal.csv", mOutReal.data(), sine.size() / 2 - 1);
+    //WaveformOutput::outputWaveform("sineImag.csv", mOutImaginary.data(), sine.size() / 2 - 1);
 
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
@@ -63,9 +83,6 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     //fftで計算するサンプル数
     const int N = mWindowFunc.size();
 
-    //窓関数
-    hanningWindow(mWindowFunc.data(), N);
-
     //波形に窓関数を掛ける
     for (int i = 0; i < N; i++) {
         mReal[i] = inBuf[i] * mWindowFunc[i];
@@ -73,25 +90,6 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
 
     //高速フーリエ変換
     fft(mOutReal.data(), mOutImaginary.data(), mReal.data(), mImaginary.data(), N);
-
-    std::vector<float> db(N);
-    for (int i = 0; i < N; i++) {
-        auto vo = mOutReal[i];
-        if (Math::nearZero(vo)) {
-            db[i] = -FLT_MAX;
-        } else {
-            db[i] = 20.f * log10f(fabsf(vo));
-        }
-    }
-
-    auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
-    //for (int i = 0; i < N; i++) {
-    //    sine[i] = sine[i] * mWindowFunc[i];
-    //}
-    //fft(sine.data(), mOutImaginary.data(), sine.data(), mImaginary.data(), N);
-    if (Input::keyboard().getKeyDown(KeyCode::O)) {
-        WaveformOutput::outputWaveform("sine.csv", sine.data(), sine.size());
-    }
 }
 
 void DiscreteFourierTransform::hanningWindow(float* out, int N) {
@@ -111,20 +109,18 @@ void DiscreteFourierTransform::fft(float* outReal, float* outImag, const float* 
     const int numberOfStage = log2(N);
 
     //fft
-    int n, m, r;
-    float aReal, aImag, bReal, bImag, cReal, cImag;
     for (int stage = 1; stage <= numberOfStage; stage++) {
         for (int i = 0; i < pow2(stage - 1); i++) {
             for (int j = 0; j < pow2(numberOfStage - stage); j++) {
-                n = pow2(numberOfStage - stage + 1) * i + j;
-                m = pow2(numberOfStage - stage) + n;
-                r = pow2(stage - 1) * j;
-                aReal = xReal[n];
-                aImag = xImag[n];
-                bReal = xReal[m];
-                bImag = xImag[m];
-                cReal = cosf(Math::TwoPI * r / N);
-                cImag = -sinf(Math::TwoPI * r / N);
+                int n = pow2(numberOfStage - stage + 1) * i + j;
+                int m = pow2(numberOfStage - stage) + n;
+                int r = pow2(stage - 1) * j;
+                float aReal = xReal[n];
+                float aImag = xImag[n];
+                float bReal = xReal[m];
+                float bImag = xImag[m];
+                float cReal = cosf(Math::TwoPI * r / N);
+                float cImag = -sinf(Math::TwoPI * r / N);
 
                 outReal[n] = aReal + bReal;
                 outImag[n] = aImag + bImag;
