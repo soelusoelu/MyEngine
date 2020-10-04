@@ -19,31 +19,32 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
 
     constexpr int N = 512;
     mWindowFunc.resize(N);
-    mReal.resize(N);
-    mImaginary.resize(N, 0.f);
-    mOutReal.resize(N);
-    mOutImaginary.resize(N);
+    mComp.resize(N);
+    mOutComp.resize(N);
 
     //窓関数
     hanningWindow(mWindowFunc.data(), N);
 
     auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
-    //for (int i = 0; i < N; i++) {
-    //    sine[i] = sine[i] * mWindowFunc[i];
-    //}
-    //fft(mOutReal.data(), mOutImaginary.data(), sine.data(), mImaginary.data(), N);
-    //float real, imag;
-    //for (int k = 0; k < N; k++) {
-    //    for (int n = 0; n < N; n++) {
-    //        real = cosf(Math::TwoPI * k * n / N);
-    //        imag = -sinf(Math::TwoPI * k * n / N);
-    //        mOutReal[k] += real * sine[n] - imag * mImaginary[n];
-    //        mOutImaginary[k] += real * mImaginary[n] + imag * sine[n];
-    //    }
-    //}
+    for (int i = 0; i < N; i++) {
+        mComp[i].real(sine[i] * mWindowFunc[i]);
+        mComp[i].imag(0.f);
+    }
+    //fft(mOutComp.data(), mComp.data(), N);
+    for (int k = 0; k < N; k++) {
+        for (int n = 0; n < N; n++) {
+            auto temp = Math::TwoPI * k * n / N;
+            float real = cosf(temp);
+            float imag = -sinf(temp);
+            std::complex<float> add(
+                real * mComp[n].real() - imag * mComp[n].imag(),
+                real * mComp[n].imag() + imag * mComp[n].real()
+            );
+            mOutComp[k] += add;
+        }
+    }
 
-    //WaveformOutput::outputWaveform("sineReal.csv", mOutReal.data(), sine.size() / 2 - 1);
-    //WaveformOutput::outputWaveform("sineImag.csv", mOutImaginary.data(), sine.size() / 2 - 1);
+    WaveformOutput::outputComplexes("sine.csv", mOutComp.data(), mOutComp.size() / 2 - 1);
 
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
@@ -85,11 +86,12 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
 
     //波形に窓関数を掛ける
     for (int i = 0; i < N; i++) {
-        mReal[i] = inBuf[i] * mWindowFunc[i];
+        mComp[i].real(inBuf[i] * mWindowFunc[i]);
+        mComp[i].imag(0.f);
     }
 
     //高速フーリエ変換
-    fft(mOutReal.data(), mOutImaginary.data(), mReal.data(), mImaginary.data(), N);
+    //fft(mOutComp.data(), mComp.data(), N);
 }
 
 void DiscreteFourierTransform::hanningWindow(float* out, int N) {
@@ -104,32 +106,32 @@ void DiscreteFourierTransform::hanningWindow(float* out, int N) {
     }
 }
 
-void DiscreteFourierTransform::fft(float* outReal, float* outImag, const float* xReal, const float* xImag, int N) {
+void DiscreteFourierTransform::fft(std::complex<float>* out, const std::complex<float>* in, int N) {
     //fftの段数を計算
-    const int numberOfStage = log2(N);
+    const int NUMBER_OF_STAGE = log2(N);
 
     //fft
-    for (int stage = 1; stage <= numberOfStage; stage++) {
+    for (int stage = 1; stage <= NUMBER_OF_STAGE; stage++) {
         for (int i = 0; i < pow2(stage - 1); i++) {
-            for (int j = 0; j < pow2(numberOfStage - stage); j++) {
-                int n = pow2(numberOfStage - stage + 1) * i + j;
-                int m = pow2(numberOfStage - stage) + n;
+            for (int j = 0; j < pow2(NUMBER_OF_STAGE - stage); j++) {
+                int n = pow2(NUMBER_OF_STAGE - stage + 1) * i + j;
+                int m = pow2(NUMBER_OF_STAGE - stage) + n;
                 int r = pow2(stage - 1) * j;
-                float aReal = xReal[n];
-                float aImag = xImag[n];
-                float bReal = xReal[m];
-                float bImag = xImag[m];
+                float aReal = in[n].real();
+                float aImag = in[n].imag();
+                float bReal = in[m].real();
+                float bImag = in[m].imag();
                 float cReal = cosf(Math::TwoPI * r / N);
                 float cImag = -sinf(Math::TwoPI * r / N);
 
-                outReal[n] = aReal + bReal;
-                outImag[n] = aImag + bImag;
-                if (stage < numberOfStage) {
-                    outReal[m] = (aReal - bReal) * cReal - (aImag - bImag) * cImag;
-                    outImag[m] = (aImag - bImag) * cReal + (aReal - bReal) * cImag;
+                out[n].real(aReal + bReal);
+                out[n].imag(aImag + bImag);
+                if (stage < NUMBER_OF_STAGE) {
+                    out[m].real((aReal - bReal) * cReal - (aImag - bImag) * cImag);
+                    out[m].imag((aImag - bImag) * cReal + (aReal - bReal) * cImag);
                 } else {
-                    outReal[m] = aReal - bReal;
-                    outImag[m] = aImag - bImag;
+                    out[m].real(aReal - bReal);
+                    out[m].imag(aImag - bImag);
                 }
             }
         }
@@ -137,22 +139,21 @@ void DiscreteFourierTransform::fft(float* outReal, float* outImag, const float* 
 
     //インデックスの並び替えのためのテーブルの作成
     std::vector<int> index(N);
-    for (int stage = 1; stage <= numberOfStage; stage++) {
+    for (int stage = 1; stage <= NUMBER_OF_STAGE; stage++) {
         for (int i = 0; i < pow2(stage - 1); i++) {
-            index[pow2(stage - 1) + i] = index[i] + pow2(numberOfStage - stage);
+            index[pow2(stage - 1) + i] = index[i] + pow2(NUMBER_OF_STAGE - stage);
         }
     }
 
     //インデックスの並び替え
-    float real, imag;
     for (int i = 0; i < N; i++) {
         if (index[i] > i) {
-            real = outReal[index[i]];
-            imag = outImag[index[i]];
-            outReal[index[i]] = outReal[i];
-            outImag[index[i]] = outImag[i];
-            outReal[i] = real;
-            outImag[i] = imag;
+            float real = out[index[i]].real();
+            float imag = out[index[i]].imag();
+            out[index[i]].real(out[i].real());
+            out[index[i]].imag(out[i].imag());
+            out[i].real(real);
+            out[i].imag(imag);
         }
     }
 }

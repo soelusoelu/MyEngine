@@ -2,6 +2,7 @@
 
 #include "../SoundEffectUtility.h"
 #include <xapobase.h>
+#include <complex>
 #include <vector>
 
 #pragma comment(lib, "xapobase.lib")
@@ -45,7 +46,7 @@ private:
     //窓関数(ハニング窓)
     void hanningWindow(float* out, int N);
     //高速フーリエ変換
-    void fft(float* outReal, float* outImag, const float* xReal, const float* xImag, int N);
+    void fft(std::complex<float>* out, const std::complex<float>* in, int N);
     int log2(int x) const;
     int pow2(int x) const;
 
@@ -68,8 +69,6 @@ private:
     float mParam[EFFECT_PARAMETER_SIZE];
 
     std::vector<float> mWindowFunc;
-    std::vector<float> mReal;
-    std::vector<float> mImaginary;
-    std::vector<float> mOutReal;
-    std::vector<float> mOutImaginary;
+    std::vector<std::complex<float>> mComp;
+    std::vector<std::complex<float>> mOutComp;
 };
