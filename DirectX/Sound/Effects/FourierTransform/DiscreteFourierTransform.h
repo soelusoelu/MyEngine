@@ -43,8 +43,6 @@ private:
     DiscreteFourierTransform& operator=(const DiscreteFourierTransform&) = delete;
 
     void discreteFourierTransform(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
-    //窓関数(ハニング窓)
-    void hanningWindow(float* out, int N);
     //高速フーリエ変換
     void fft(std::complex<float>* out, const std::complex<float>* in, int N);
     int log2(int x) const;
@@ -68,7 +66,6 @@ private:
     //パラメータの受信場所
     float mParam[EFFECT_PARAMETER_SIZE];
 
-    std::vector<float> mWindowFunc;
     std::vector<std::complex<float>> mComp;
     std::vector<std::complex<float>> mOutComp;
 };

@@ -1,4 +1,5 @@
 ﻿#include "DiscreteFourierTransform.h"
+#include "WindowFunction.h"
 #include "../../Factory/SineWaveGenerator.h"
 #include "../../File/WaveformOutput.h"
 #include "../../../DebugLayer/Debug.h"
@@ -18,18 +19,11 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
 
     constexpr int N = 512;
-    mWindowFunc.resize(N);
-    mComp.resize(N);
+    mComp.resize(N, 0.f);
     mOutComp.resize(N);
 
-    //窓関数
-    hanningWindow(mWindowFunc.data(), N);
-
     auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
-    for (int i = 0; i < N; i++) {
-        mComp[i].real(sine[i] * mWindowFunc[i]);
-        mComp[i].imag(0.f);
-    }
+    WindowFunction::hanning(mComp.data(), sine.data(), mComp.size());
     //fft(mOutComp.data(), mComp.data(), N);
     for (int k = 0; k < N; k++) {
         for (int n = 0; n < N; n++) {
@@ -44,7 +38,7 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
         }
     }
 
-    WaveformOutput::outputComplexes("sine.csv", mOutComp.data(), mOutComp.size() / 2 - 1);
+    WaveformOutput::outputComplexes("out.csv", mOutComp.data(), mOutComp.size() / 2 - 1);
 
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
@@ -81,29 +75,11 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     //バッファの取得
     float* inBuf = static_cast<float*>(inParam.pBuffer);
 
-    //fftで計算するサンプル数
-    const int N = mWindowFunc.size();
-
     //波形に窓関数を掛ける
-    for (int i = 0; i < N; i++) {
-        mComp[i].real(inBuf[i] * mWindowFunc[i]);
-        mComp[i].imag(0.f);
-    }
+    WindowFunction::hanning(mComp.data(), inBuf, mComp.size());
 
     //高速フーリエ変換
-    //fft(mOutComp.data(), mComp.data(), N);
-}
-
-void DiscreteFourierTransform::hanningWindow(float* out, int N) {
-    if (N % 2 == 0) {
-        for (int n = 0; n < N; n++) {
-            out[n] = 0.5f - 0.5f * cosf(Math::TwoPI * n / N);
-        }
-    } else {
-        for (int n = 0; n < N; n++) {
-            out[n] = 0.5f - 0.5f * cosf(Math::TwoPI * (n + 0.5f) / N);
-        }
-    }
+    //fft(mOutComp.data(), mComp.data(), 4096);
 }
 
 void DiscreteFourierTransform::fft(std::complex<float>* out, const std::complex<float>* in, int N) {
