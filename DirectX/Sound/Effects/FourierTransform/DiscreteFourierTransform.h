@@ -3,9 +3,12 @@
 #include "../SoundEffectUtility.h"
 #include <xapobase.h>
 #include <complex>
+#include <memory>
 #include <vector>
 
 #pragma comment(lib, "xapobase.lib")
+
+class FourierTransform;
 
 //離散フーリエ変換
 class __declspec(uuid("{179D2876-1019-4EE0-8BCB-83EF5E8CB1AA}"))
@@ -43,10 +46,6 @@ private:
     DiscreteFourierTransform& operator=(const DiscreteFourierTransform&) = delete;
 
     void discreteFourierTransform(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
-    //高速フーリエ変換
-    void fft(std::complex<float>* out, const std::complex<float>* in, int N);
-    int log2(int x) const;
-    int pow2(int x) const;
 
 private:
     //プロパティ
@@ -66,6 +65,7 @@ private:
     //パラメータの受信場所
     float mParam[EFFECT_PARAMETER_SIZE];
 
+    std::unique_ptr<FourierTransform> mFourier;
     std::vector<std::complex<float>> mComp;
     std::vector<std::complex<float>> mOutComp;
 };

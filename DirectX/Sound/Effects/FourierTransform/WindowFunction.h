@@ -33,7 +33,7 @@ public:
     /// <param name="out">ハニング窓を掛けた波形の出力先</param>
     /// <param name="in">ハニング窓を掛けたい波形</param>
     /// <param name="size">波形の長さ</param>
-    static void hanning(std::complex<float>* out, float* in, unsigned size);
+    static void hanning(std::complex<float>* out, const float* in, unsigned size);
 
 private:
     WindowFunction() = delete;

@@ -153,6 +153,7 @@
     <ClCompile Include="Sound\File\WaveformOutput.cpp" />
     <ClCompile Include="Sound\Factory\SineWaveGenerator.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\WindowFunction.cpp" />
+    <ClCompile Include="Sound\Effects\FourierTransform\FourierTransform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -340,5 +341,6 @@
     <ClInclude Include="Sound\File\WaveformOutput.h" />
     <ClInclude Include="Sound\Factory\SineWaveGenerator.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\WindowFunction.h" />
+    <ClInclude Include="Sound\Effects\FourierTransform\FourierTransform.h" />
   </ItemGroup>
 </Project>

@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Sound\Effects\FourierTransform\FourierTransform.cpp" />
     <ClCompile Include="Sound\Factory\SineWaveGenerator.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.cpp" />
     <ClCompile Include="Sound\Effects\Filter\BiQuadFilter.cpp" />
@@ -306,6 +307,7 @@
     <ClCompile Include="Sound\Effects\FourierTransform\WindowFunction.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sound\Effects\FourierTransform\FourierTransform.h" />
     <ClInclude Include="Sound\Factory\SineWaveGenerator.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.h" />
     <ClInclude Include="Sound\Effects\Filter\BiQuadFilter.h" />

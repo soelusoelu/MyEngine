@@ -22,7 +22,7 @@ void WindowFunction::hanning(float* data, unsigned size) {
     }
 }
 
-void WindowFunction::hanning(std::complex<float>* out, float* in, unsigned size) {
+void WindowFunction::hanning(std::complex<float>* out, const float* in, unsigned size) {
     for (size_t i = 0; i < size; i++) {
         out[i].real(in[i] * hanningFormula(i, size));
     }

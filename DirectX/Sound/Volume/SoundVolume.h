@@ -34,14 +34,14 @@ public:
     /// </summary>
     /// <param name="volume">変換させたいボリューム値</param>
     /// <returns>変換されたデシベル値</returns>
-    float amplitudeRatioToDecibels(float volume);
+    static float amplitudeRatioToDecibels(float volume);
 
     /// <summary>
     /// デシベル値からボリューム値に変換する
     /// </summary>
     /// <param name="decibels">変換させたいデシベル値</param>
     /// <returns>変換されたボリューム値</returns>
-    float decibelsToAmplitudeRatio(float decibels);
+    static float decibelsToAmplitudeRatio(float decibels);
 
     /// <summary>
     /// 現在設定されている音量を返す
