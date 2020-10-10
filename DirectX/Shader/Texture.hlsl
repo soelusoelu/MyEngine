@@ -13,21 +13,21 @@ cbuffer global
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float2 Tex : TEXCOORD;
+    float2 UV : TEXCOORD;
 };
 
-VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
+VS_OUTPUT VS(float4 Pos : POSITION, float2 uv : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = mul(Pos, mWorldProj);
-    output.Tex = Tex * float2(mUV.z - mUV.x, mUV.w - mUV.y) + float2(mUV.x, mUV.y);
+    output.Pos = mul(mWorldProj, Pos);
+    output.UV = uv * float2(mUV.z - mUV.x, mUV.w - mUV.y) + float2(mUV.x, mUV.y);
 
     return output;
 }
 
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 color = g_texDecal.Sample(g_samLinear, input.Tex);
+    float4 color = g_texDecal.Sample(g_samLinear, input.UV);
     color *= mColor;
     return color;
 }

@@ -1,10 +1,12 @@
 ﻿#pragma once
 
 #include "SystemInclude.h"
+#include "../DirectX/SubResourceDesc.h"
 #include "../DirectX/TextureDesc.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <string>
+#include <vector>
 
 //頂点の構造体
 struct TextureVertex {
@@ -22,10 +24,12 @@ class IndexBuffer;
 class Sampler;
 class ShaderResourceView;
 class VertexBuffer;
+class Texture2D;
 
 class Texture {
 public:
     Texture(const std::string& fileName);
+    Texture(unsigned char* data, unsigned width, unsigned height);
     ~Texture();
     static void finalize();
     const TextureDesc& desc() const;
@@ -39,7 +43,8 @@ public:
 private:
     void createVertexBuffer();
     void createIndexBuffer();
-    void createTexture(const std::string& fileName);
+    void createTextureFromFileName(const std::string& fileName);
+    void createTextureFromMemory(unsigned char* data, unsigned width, unsigned height);
     void createSampler();
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;

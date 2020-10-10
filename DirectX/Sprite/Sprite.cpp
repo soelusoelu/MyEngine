@@ -58,7 +58,6 @@ void Sprite::draw(const Matrix4& proj) const {
         TextureConstantBuffer cb;
         //ワールド、射影行列を渡す
         cb.wp = mTransform->getWorldTransform() * proj;
-        cb.wp.transpose();
         cb.color = mColor;
         cb.uv = mUV;
 
