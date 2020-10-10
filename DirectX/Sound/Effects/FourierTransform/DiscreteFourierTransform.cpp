@@ -7,9 +7,10 @@
 #include "../../../DebugLayer/Debug.h"
 #include "../../../Input/Input.h"
 #include "../../../Math/Math.h"
+#include <algorithm>
 
 DiscreteFourierTransform::DiscreteFourierTransform() :
-    CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mParam), sizeof(float), FALSE),
+    CXAPOParametersBase(&xapoRegProp_, reinterpret_cast<BYTE*>(mParam), sizeof(ComplexArray), TRUE),
     mFourier(std::make_unique<FourierTransform>()),
     mInputFmt(),
     mOutputFmt() {
@@ -26,16 +27,16 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
     mComp.resize(N);
     mOutComp.resize(N);
 
-    auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
-    WindowFunction::hanning(mComp.data(), sine.data(), mComp.size());
-    mFourier->fastFourierTransform(mOutComp.data(), mComp.data(), N);
+    //auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
+    //WindowFunction::hanning(mComp.data(), sine.data(), mComp.size());
+    //mFourier->fastFourierTransform(mOutComp.data(), mComp.data(), N);
 
-    for (size_t i = 0; i < N / 2 - 1; i++) {
-        auto vo = mOutComp[i].imag();
-        mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(vo));
-    }
+    //for (size_t i = 0; i < N / 2 - 1; i++) {
+    //    auto vo = mOutComp[i].imag();
+    //    mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(vo));
+    //}
 
-    WaveformOutput::outputComplexes("out.csv", mOutComp.data(), mOutComp.size() / 2 - 1);
+    //WaveformOutput::outputComplexes("out.csv", mOutComp.data(), mOutComp.size() / 2 - 1);
 
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }
@@ -51,14 +52,6 @@ STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::Process(UINT32 InputProc
         if (inParam.pBuffer != outParam.pBuffer) {
             memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
         }
-    }
-}
-
-STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::SetParameters(const void* pParameters, UINT32 ParameterByteSize) {
-    if (ParameterByteSize == sizeof(float)) {
-        CXAPOParametersBase::SetParameters(pParameters, ParameterByteSize);
-    } else {
-        Debug::logWarning("Wrong size of parameter");
     }
 }
 
@@ -81,7 +74,17 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     //高速フーリエ変換
     mFourier->fastFourierTransform(mOutComp.data(), mComp.data(), N);
 
+    //デシベル値に変換
     for (size_t i = 0; i < N / 2 - 1; i++) {
         mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(mOutComp[i].imag()));
     }
+
+    auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
+
+    if (param->size() != N) {
+        param->resize(N);
+    }
+    std::copy(mOutComp.begin(), mOutComp.end(), param->begin());
+
+    EndProcess();
 }

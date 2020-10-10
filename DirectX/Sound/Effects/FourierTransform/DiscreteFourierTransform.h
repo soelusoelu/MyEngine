@@ -13,6 +13,9 @@ class FourierTransform;
 //離散フーリエ変換
 class __declspec(uuid("{179D2876-1019-4EE0-8BCB-83EF5E8CB1AA}"))
     DiscreteFourierTransform : public CXAPOParametersBase {
+    using Complex = std::complex<float>;
+    using ComplexArray = std::vector<Complex>;
+
 public:
     DiscreteFourierTransform();
     ~DiscreteFourierTransform();
@@ -33,12 +36,6 @@ public:
         UINT32 OutputProcessParameterCount,
         XAPO_PROCESS_BUFFER_PARAMETERS* pOutputProcessParameters,
         BOOL IsEnabled
-        );
-
-    //パラメータ設定関数
-    STDMETHOD_(void, SetParameters)(
-        const void* pParameters,
-        UINT32 ParameterByteSize
         );
 
 private:
@@ -63,9 +60,9 @@ private:
     //出力フォーマットの記憶場所
     WAVEFORMATEX mOutputFmt;
     //パラメータの受信場所
-    float mParam[EFFECT_PARAMETER_SIZE];
+    ComplexArray mParam[EFFECT_PARAMETER_SIZE];
 
     std::unique_ptr<FourierTransform> mFourier;
-    std::vector<std::complex<float>> mComp;
-    std::vector<std::complex<float>> mOutComp;
+    ComplexArray mComp;
+    ComplexArray mOutComp;
 };

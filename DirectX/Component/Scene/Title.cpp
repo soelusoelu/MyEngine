@@ -24,6 +24,8 @@
 #include "../../Sound/Volume/SoundVolume.h"
 #include "../../Sound/XAudio2/SoundEngine.h"
 #include "../../Utility/StringUtil.h"
+#include <complex>
+#include <vector>
 
 Title::Title(GameObject& gameObject) :
     Component(gameObject),
@@ -79,7 +81,7 @@ void Title::start() {
     //int reverbID = mWetSubmix->getSoundEffect().simpleReverb();
     //mWetSubmix->getSoundEffect().getFilter().lowPassOnePoleFilter(0.25f);
     //mWetSubmix->getSoundEffect().getFilter().highPassOnePoleFilter(0.1f);
-    mSound->getSoundEffect().getEffectCollection().discreteFourierTransform();
+    auto fftID = mSound->getSoundEffect().getEffectCollection().discreteFourierTransform();
 
     //auto reverbParam = Reverb::getParameters();
     //reverbParam.WetDryMix = 20.f;
@@ -109,5 +111,10 @@ void Title::update() {
 
     if (Input::keyboard().getKeyDown(KeyCode::Alpha1)) {
         mSound->getSoundPlayer().setPlayPoint(55.f);
+    }
+
+    if (Input::keyboard().getKeyDown(KeyCode::U)) {
+        std::vector<std::complex<float>> co;
+        mSound->getSoundEffect().getEffectParameters(1, &co, sizeof(co));
     }
 }
