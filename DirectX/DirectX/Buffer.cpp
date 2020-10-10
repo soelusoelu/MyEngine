@@ -3,16 +3,18 @@
 #include "Usage.h"
 #include "../System/GlobalFunction.h"
 
-Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data) :
+Buffer::Buffer(const BufferDesc& desc) :
     mDesc(desc),
     mBuffer(nullptr) {
-    auto dev = DirectX::instance().device();
     //バッファの作成
-    if (data) {
-        dev->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
-    } else {
-        dev->CreateBuffer(&toBufferDesc(desc), nullptr, &mBuffer);
-    }
+    DirectX::instance().device()->CreateBuffer(&toBufferDesc(desc), nullptr, &mBuffer);
+}
+
+Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc& data) :
+    mDesc(desc),
+    mBuffer(nullptr) {
+    //バッファの作成
+    DirectX::instance().device()->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
 }
 
 Buffer::~Buffer() {

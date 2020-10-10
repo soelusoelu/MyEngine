@@ -174,7 +174,7 @@ void DirectX::createDepthStencilView() {
     desc.format = Format::FORMAT_D24_UNORM_S8_UINT;
     desc.bindFlags = static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_DEPTH_STENCIL);
 
-    auto tex = std::make_shared<Texture2D>(desc);
+    auto tex = std::make_unique<Texture2D>(desc);
     mDevice->CreateDepthStencilView(tex->texture2D(), nullptr, &mDepthStencilView);
 }
 

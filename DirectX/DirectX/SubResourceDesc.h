@@ -19,7 +19,7 @@ struct SubResourceDesc {
     }
 };
 
-D3D11_SUBRESOURCE_DATA toSubResource(const SubResourceDesc* data);
+D3D11_SUBRESOURCE_DATA toSubResource(const SubResourceDesc& data);
 
 struct MappedSubResourceDesc {
     //データへのポインタ

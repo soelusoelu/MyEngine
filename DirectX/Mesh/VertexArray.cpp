@@ -57,7 +57,7 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     SubResourceDesc sub;
     sub.data = data;
 
-    mVertexBuffer = std::make_unique<VertexBuffer>(bd, &sub);
+    mVertexBuffer = std::make_unique<VertexBuffer>(bd, sub);
 }
 
 void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void* data) {
@@ -73,7 +73,7 @@ void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void
     SubResourceDesc sub;
     sub.data = data;
 
-    mIndexBuffer[index] = std::make_unique<IndexBuffer>(bd, &sub);
+    mIndexBuffer[index] = std::make_unique<IndexBuffer>(bd, sub);
 }
 
 void VertexArray::setVertexBuffer(unsigned numStream, unsigned start, unsigned offset) {

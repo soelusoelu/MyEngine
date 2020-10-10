@@ -97,7 +97,7 @@ void Title::start() {
     //player.setPlayPoint(30.f);
     //player.getLoop().setLoopPoint(60.f, 90.f);
     player.getLoop().loopAll();
-    player.playStreamingFadeIn(1.f, 2.f);
+    //player.playStreamingFadeIn(1.f, 2.f);
 }
 
 void Title::update() {

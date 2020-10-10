@@ -1,7 +1,7 @@
 ﻿#include "VertexBuffer.h"
 #include "DirectX.h"
 
-VertexBuffer::VertexBuffer(const BufferDesc& desc, const SubResourceDesc* data) :
+VertexBuffer::VertexBuffer(const BufferDesc& desc, const SubResourceDesc& data) :
     Buffer(desc, data) {
 }
 
