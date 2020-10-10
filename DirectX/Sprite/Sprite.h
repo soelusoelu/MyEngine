@@ -8,6 +8,7 @@
 class Shader;
 class SpriteManager;
 class Texture;
+class TextureFromFile;
 class Transform2D;
 
 class Sprite : public Object {
@@ -50,7 +51,7 @@ private:
 
 private:
     std::unique_ptr<Transform2D> mTransform;
-    std::shared_ptr<Texture> mTexture;
+    std::shared_ptr<TextureFromFile> mTexture;
     std::shared_ptr<Shader> mShader;
     Vector2 mTextureSize;
     Vector4 mColor;

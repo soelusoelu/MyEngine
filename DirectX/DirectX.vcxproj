@@ -206,6 +206,8 @@
     <ClCompile Include="Sound\Effects\TestEffect.cpp" />
     <ClCompile Include="Sound\Effects\TestEffectParameters.cpp" />
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
+    <ClCompile Include="System\TextureFromMemory.cpp" />
+    <ClCompile Include="System\TextureFromFile.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
@@ -305,6 +307,7 @@
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
     <ClCompile Include="Sound\File\WaveformOutput.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\WindowFunction.cpp" />
+    <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sound\Effects\FourierTransform\FourierTransform.h" />
@@ -376,6 +379,8 @@
     <ClInclude Include="Sound\Effects\TestEffect.h" />
     <ClInclude Include="Sound\Effects\TestEffectParameters.h" />
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
+    <ClInclude Include="System\TextureFromMemory.h" />
+    <ClInclude Include="System\TextureFromFile.h" />
     <ClInclude Include="Transform\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
@@ -493,6 +498,7 @@
     <ClInclude Include="Sound\Effects\VolumeMeter\VolumeMeter.h" />
     <ClInclude Include="Sound\File\WaveformOutput.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\WindowFunction.h" />
+    <ClInclude Include="Component\Sound\WaveformRenderSample.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">

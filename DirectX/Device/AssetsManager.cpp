@@ -3,7 +3,7 @@
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
 #include "../System/Shader.h"
-#include "../System/Texture.h"
+#include "../System/TextureFromFile.h"
 #include "../System/World.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
@@ -31,28 +31,28 @@ std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName
     return shader;
 }
 
-std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & filePath) {
-    std::shared_ptr<Texture> texture = nullptr;
+std::shared_ptr<TextureFromFile> AssetsManager::createTexture(const std::string & filePath) {
+    std::shared_ptr<TextureFromFile> texture = nullptr;
     auto itr = mTextures.find(filePath);
     if (itr != mTextures.end()) { //既に読み込まれている
         texture = itr->second;
     } else { //初読み込み
         World::instance().directory().setTextureDirectory(filePath);
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-        texture = std::make_shared<Texture>(fileName);
+        texture = std::make_shared<TextureFromFile>(fileName);
         mTextures.emplace(filePath, texture);
     }
     return texture;
 }
 
-std::shared_ptr<Texture> AssetsManager::createTextureFromModel(const std::string& fileName) {
-    std::shared_ptr<Texture> texture = nullptr;
+std::shared_ptr<TextureFromFile> AssetsManager::createTextureFromModel(const std::string& fileName) {
+    std::shared_ptr<TextureFromFile> texture = nullptr;
     auto itr = mTextures.find(fileName);
     if (itr != mTextures.end()) { //既に読み込まれている
         texture = itr->second;
     } else { //初読み込み
         //モデルからテクスチャを生成したい場合、事前にディレクトリを移動させている必要がある
-        texture = std::make_shared<Texture>(fileName);
+        texture = std::make_shared<TextureFromFile>(fileName);
         mTextures.emplace(fileName, texture);
     }
     return texture;

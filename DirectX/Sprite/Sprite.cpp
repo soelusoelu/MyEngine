@@ -3,7 +3,7 @@
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../System/Shader.h"
-#include "../System/Texture.h"
+#include "../System/TextureFromFile.h"
 #include "../System/World.h"
 #include "../Transform/Transform2D.h"
 #include <cassert>

@@ -10,7 +10,7 @@
 #include "../../Mesh/Material.h"
 #include "../../Mesh/VertexArray.h"
 #include "../../System/Shader.h"
-#include "../../System/Texture.h"
+#include "../../System/TextureFromFile.h"
 #include "../../System/World.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"

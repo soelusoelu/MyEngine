@@ -5,7 +5,7 @@
 #include "../DirectX/DirectXInclude.h"
 #include "../Utility/FileUtil.h"
 
-Texture::Texture(const std::string& fileName) :
+Texture::Texture() :
     mShaderResourceView(nullptr),
     mSampler(nullptr),
     mDesc() {
@@ -15,24 +15,6 @@ Texture::Texture(const std::string& fileName) :
         //インデックスバッファの作成
         createIndexBuffer();
     }
-    //テクスチャー作成
-    createTextureFromFileName(fileName);
-    //テクスチャー用サンプラー作成
-    createSampler();
-}
-
-Texture::Texture(unsigned char* data, unsigned width, unsigned height) :
-    mShaderResourceView(nullptr),
-    mSampler(nullptr),
-    mDesc() {
-    if (!vertexBuffer || !indexBuffer) {
-        //バーテックスバッファー作成
-        createVertexBuffer();
-        //インデックスバッファの作成
-        createIndexBuffer();
-    }
-    //テクスチャー作成
-    createTextureFromMemory(data, width, height);
     //テクスチャー用サンプラー作成
     createSampler();
 }
@@ -111,68 +93,7 @@ void Texture::createIndexBuffer() {
     indexBuffer = new IndexBuffer(bd, sub);
 }
 
-void Texture::createTextureFromFileName(const std::string & fileName) {
-    //ファイルからテクスチャ情報を取得
-    D3DX11_IMAGE_INFO info;
-    D3DX11GetImageInfoFromFileA(fileName.c_str(), nullptr, &info, nullptr);
-
-    mDesc.width = info.Width;
-    mDesc.height = info.Height;
-
-    ID3D11ShaderResourceView* srv = nullptr;
-
-    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(DirectX::instance().device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
-        Debug::windowMessage(fileName + ": テクスチャ作成失敗");
-    }
-    mShaderResourceView = std::make_unique<ShaderResourceView>(srv);
-}
-
-void Texture::createTextureFromMemory(unsigned char* data, unsigned width, unsigned height) {
-    mDesc.width = width;
-    mDesc.height = height;
-
-    Texture2DDesc tex2DDesc;
-    tex2DDesc.width = width;
-    tex2DDesc.height = height;
-
-    SubResourceDesc sub;
-    sub.data = data;
-    sub.pitch = width * 4;
-
-    auto tex2D = std::make_unique<Texture2D>(tex2DDesc, sub);
-
-    mShaderResourceView = std::make_unique<ShaderResourceView>(*tex2D);
-}
-
 void Texture::createSampler() {
     SamplerDesc sd;
     mSampler = std::make_unique<Sampler>(sd);
-}
-
-D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc & desc) const {
-    D3DX11_IMAGE_LOAD_INFO info;
-    info.Width = desc.width;
-    info.Height = desc.height;
-    info.Depth = desc.depth;
-    info.FirstMipLevel = desc.firstMipLevel;
-    info.MipLevels = desc.mipLevels;
-    info.Usage = toUsage(desc.usage);
-    info.BindFlags = desc.bindFlags;
-    info.CpuAccessFlags = desc.cpuAccessFlags;
-    info.MiscFlags = desc.miscFlags;
-    info.Format = toFormat(desc.format);
-    info.Filter = toFilter(desc.filter);
-    info.MipFilter = toFilter(desc.mipFilter);
-    info.pSrcInfo = desc.srcInfo;
-
-    return info;
-}
-
-unsigned Texture::toFilter(TextureFilter filter) const {
-    const unsigned filters[] = {
-        D3DX11_FILTER_POINT,
-        D3DX11_FILTER_LINEAR,
-        D3DX11_FILTER_TRIANGLE,
-    };
-    return filters[static_cast<unsigned>(filter)];
 }

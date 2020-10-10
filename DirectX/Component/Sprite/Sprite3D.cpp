@@ -6,6 +6,7 @@
 #include "../../Sprite/SpriteManager.h"
 #include "../../System/Shader.h"
 #include "../../System/Texture.h"
+#include "../../System/TextureFromFile.h"
 #include "../../System/Window.h"
 #include "../../System/World.h"
 #include "../../Transform/Transform3D.h"

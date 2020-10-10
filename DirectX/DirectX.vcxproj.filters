@@ -154,6 +154,9 @@
     <ClCompile Include="Sound\Factory\SineWaveGenerator.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\WindowFunction.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\FourierTransform.cpp" />
+    <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
+    <ClCompile Include="System\TextureFromMemory.cpp" />
+    <ClCompile Include="System\TextureFromFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -342,5 +345,8 @@
     <ClInclude Include="Sound\Factory\SineWaveGenerator.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\WindowFunction.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\FourierTransform.h" />
+    <ClInclude Include="Component\Sound\WaveformRenderSample.h" />
+    <ClInclude Include="System\TextureFromMemory.h" />
+    <ClInclude Include="System\TextureFromFile.h" />
   </ItemGroup>
 </Project>

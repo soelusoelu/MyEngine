@@ -1,12 +1,10 @@
 ﻿#pragma once
 
 #include "SystemInclude.h"
-#include "../DirectX/SubResourceDesc.h"
 #include "../DirectX/TextureDesc.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <string>
-#include <vector>
 
 //頂点の構造体
 struct TextureVertex {
@@ -20,18 +18,18 @@ struct TextureConstantBuffer {
     Vector4 uv;
 };
 
-class IndexBuffer;
-class Sampler;
-class ShaderResourceView;
 class VertexBuffer;
-class Texture2D;
+class IndexBuffer;
+class ShaderResourceView;
+class Sampler;
 
 class Texture {
 public:
-    Texture(const std::string& fileName);
-    Texture(unsigned char* data, unsigned width, unsigned height);
-    ~Texture();
+    Texture();
+    virtual ~Texture();
+    //終了処理
     static void finalize();
+    //デスクリプタの取得
     const TextureDesc& desc() const;
     //テクスチャの登録
     void setVSTextures(unsigned start = 0, unsigned numTextures = 1) const;
@@ -43,19 +41,14 @@ public:
 private:
     void createVertexBuffer();
     void createIndexBuffer();
-    void createTextureFromFileName(const std::string& fileName);
-    void createTextureFromMemory(unsigned char* data, unsigned width, unsigned height);
     void createSampler();
-    //各種変換
-    D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
-    unsigned toFilter(TextureFilter filter) const;
 
 public:
     static inline VertexBuffer* vertexBuffer = nullptr;
     static inline VertexBuffer* vertexBuffer3D = nullptr;
     static inline IndexBuffer* indexBuffer = nullptr;
 
-private:
+protected:
     std::unique_ptr<ShaderResourceView> mShaderResourceView;
     std::unique_ptr<Sampler> mSampler;
     TextureDesc mDesc;

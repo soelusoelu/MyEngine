@@ -7,6 +7,7 @@
 class Shader;
 class SpriteManager;
 class Texture;
+class TextureFromFile;
 class Transform3D;
 
 class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D> {
@@ -59,7 +60,7 @@ protected:
 
 protected:
     std::unique_ptr<Transform3D> mTransform;
-    std::shared_ptr<Texture> mTexture;
+    std::shared_ptr<TextureFromFile> mTexture;
     std::shared_ptr<Shader> mShader;
     Vector2 mTextureAspect;
     Vector4 mColor;

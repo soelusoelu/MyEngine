@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-class Texture;
+class TextureFromFile;
 
 struct Material {
     Vector3 ambient; //アンビエント
@@ -16,7 +16,7 @@ struct Material {
     float shininess;
     std::string matName; //newmtl
     std::string textureName; //テクスチャーファイル名
-    std::shared_ptr<Texture> texture;
+    std::shared_ptr<TextureFromFile> texture;
     unsigned numIndices;
 
     Material() :
