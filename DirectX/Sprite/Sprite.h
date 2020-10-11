@@ -21,7 +21,7 @@ public:
     void draw(const Matrix4& proj) const;
     //Transform
     Transform2D& transform() const;
-    //色味、たぶん0～1
+    //色味 [0, 1]
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
     //不透明度(0～1、1が不透明, 0が透明)

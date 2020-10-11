@@ -61,7 +61,7 @@ void Sprite::draw(const Matrix4& proj) const {
         cb.color = mColor;
         cb.uv = mUV;
 
-        memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
+        memcpy_s(msrd.data, msrd.rowPitch, &cb, sizeof(cb));
         mShader->unmap();
     }
     //テクスチャーをシェーダーに渡す

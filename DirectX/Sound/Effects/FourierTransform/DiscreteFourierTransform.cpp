@@ -45,13 +45,24 @@ STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::Process(UINT32 InputProc
     const auto& inParam = pInputProcessParameters[0];
     auto& outParam = pOutputProcessParameters[0];
 
-    if (IsEnabled) { //有効
+    if (IsEnabled) {
+        //高速フーリエ変換
         discreteFourierTransform(inParam, outParam);
-        memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
-    } else { //無効
-        if (inParam.pBuffer != outParam.pBuffer) {
-            memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
+
+        auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
+
+        const int N = mOutComp.size();
+        if (param->size() != N) {
+            param->resize(N);
         }
+        std::copy(mOutComp.begin(), mOutComp.end(), param->begin());
+
+        EndProcess();
+    }
+
+    //波形はそのまま
+    if (inParam.pBuffer != outParam.pBuffer) {
+        memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
     }
 }
 
@@ -78,13 +89,4 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     for (size_t i = 0; i < N / 2 - 1; i++) {
         mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(mOutComp[i].imag()));
     }
-
-    auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
-
-    if (param->size() != N) {
-        param->resize(N);
-    }
-    std::copy(mOutComp.begin(), mOutComp.end(), param->begin());
-
-    EndProcess();
 }
