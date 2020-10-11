@@ -9,15 +9,14 @@
 SpriteComponent::SpriteComponent(GameObject& gameObject) :
     Component(gameObject),
     mDrawOrder(0),
-    mSprite(nullptr) {
+    mSprite(std::make_unique<Sprite>()) {
 }
 
 SpriteComponent::~SpriteComponent() = default;
 
 void SpriteComponent::awake() {
-    if (mSprite) {
-        setActive(gameObject().getActive());
-    }
+    addToManager();
+    setActive(gameObject().getActive());
 }
 
 void SpriteComponent::lateUpdate() {
@@ -36,7 +35,7 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getInt(inObj, "drawOrder", &mDrawOrder);
     std::string str;
     if (JsonHelper::getString(inObj, "fileName", &str)) {
-        setSprite(str);
+        setTextureFromFileName(str);
     }
     bool isActive = true;
     if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
@@ -80,11 +79,6 @@ void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) cons
 
 void SpriteComponent::draw(const Matrix4& proj) const {
     mSprite->draw(proj);
-}
-
-void SpriteComponent::setSprite(const std::string& fileName) {
-    mSprite = std::make_unique<Sprite>(fileName);
-    addToManager();
 }
 
 Transform2D& SpriteComponent::transform() const {
@@ -131,8 +125,12 @@ bool SpriteComponent::isDead() const {
     return mSprite->isDead();
 }
 
-void SpriteComponent::changeTexture(const std::string& fileName) {
-    mSprite->changeTexture(fileName);
+void SpriteComponent::setTextureFromFileName(const std::string& fileName) {
+    mSprite->setTextureFromFileName(fileName);
+}
+
+void SpriteComponent::setTexture(const std::shared_ptr<Texture>& texture) {
+    mSprite->setTexture(texture);
 }
 
 const Texture& SpriteComponent::texture() const {

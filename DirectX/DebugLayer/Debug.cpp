@@ -1,5 +1,6 @@
 ﻿#include "Debug.h"
 #include "DebugUtility.h"
+#include "LineRenderer.h"
 #include "Log.h"
 
 void Debug::windowMessage(const std::string& message) {
@@ -23,5 +24,11 @@ void Debug::logError(const std::string& message) {
 void Debug::logWarning(const std::string& message) {
 #ifdef _DEBUG
     DebugUtility::log()->logWarning(message);
+#endif // _DEBUG
+}
+
+void Debug::renderLine2D(const Vector2& p1, const Vector2& p2, const Vector3& color) {
+#ifdef _DEBUG
+    DebugUtility::lineRenderer()->renderLine2D(p1, p2, color);
 #endif // _DEBUG
 }

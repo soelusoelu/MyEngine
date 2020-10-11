@@ -8,6 +8,7 @@
     <FxCompile Include="Shader\GBuffer.hlsl" />
     <FxCompile Include="Shader\PointLight.hlsl" />
     <FxCompile Include="Shader\ChickenMesh.hlsl" />
+    <FxCompile Include="Shader\Point.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentManager.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
     <ClCompile Include="System\TextureFromMemory.cpp" />
     <ClCompile Include="System\TextureFromFile.cpp" />
+    <ClCompile Include="DebugLayer\LineRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -348,5 +350,6 @@
     <ClInclude Include="Component\Sound\WaveformRenderSample.h" />
     <ClInclude Include="System\TextureFromMemory.h" />
     <ClInclude Include="System\TextureFromFile.h" />
+    <ClInclude Include="DebugLayer\LineRenderer.h" />
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "../Sound/SoundComponent.h"
 #include "../../DebugLayer/Debug.h"
+#include "../../GameObject/GameObjectFactory.h"
 #include "../../Input/Input.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundEffectCollection.h"
@@ -98,6 +99,8 @@ void Title::start() {
     //player.getLoop().setLoopPoint(60.f, 90.f);
     player.getLoop().loopAll();
     //player.playStreamingFadeIn(1.f, 2.f);
+
+    GameObjectCreater::create("Waveform");
 }
 
 void Title::update() {

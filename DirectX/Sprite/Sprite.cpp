@@ -9,18 +9,15 @@
 #include <cassert>
 #include <vector>
 
-Sprite::Sprite(const std::string& fileName) :
+Sprite::Sprite() :
     mTransform(std::make_unique<Transform2D>()),
     mTexture(nullptr),
     mShader(World::instance().assetsManager().createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
-    mFileName(fileName),
+    mFileName(),
     mIsActive(true) {
-
-    //テクスチャ生成
-    changeTexture(fileName);
 
     mShader->createConstantBuffer(sizeof(TextureConstantBuffer), 0);
 
@@ -34,6 +31,12 @@ Sprite::Sprite(const std::string& fileName) :
     computeWorldTransform();
 }
 
+Sprite::Sprite(const std::string& fileName) :
+    Sprite() {
+    //テクスチャ生成
+    setTextureFromFileName(fileName);
+}
+
 Sprite::~Sprite() = default;
 
 void Sprite::computeWorldTransform() {
@@ -43,6 +46,10 @@ void Sprite::computeWorldTransform() {
 }
 
 void Sprite::draw(const Matrix4& proj) const {
+    if (!mTexture) {
+        return;
+    }
+
     //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -132,7 +139,7 @@ bool Sprite::getActive() const {
     return mIsActive;
 }
 
-void Sprite::changeTexture(const std::string& fileName) {
+void Sprite::setTextureFromFileName(const std::string& fileName) {
     if (mTexture) {
         mTexture.reset();
     }
@@ -147,6 +154,23 @@ void Sprite::changeTexture(const std::string& fileName) {
 
     //ファイル名変更
     mFileName = fileName;
+}
+
+void Sprite::setTexture(const std::shared_ptr<Texture>& texture) {
+    if (mTexture) {
+        mTexture.reset();
+    }
+    mTexture = texture;
+
+    //デスクをもとにサイズ取得
+    const auto& desc = mTexture->desc();
+    mTextureSize = Vector2(desc.width, desc.height);
+
+    //Transformに通知
+    mTransform->setSize(mTextureSize);
+
+    //ファイル名変更
+    mFileName.clear();
 }
 
 const Texture& Sprite::texture() const {

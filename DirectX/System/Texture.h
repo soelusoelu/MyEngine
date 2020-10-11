@@ -8,8 +8,8 @@
 
 //頂点の構造体
 struct TextureVertex {
-    Vector3 mPos; //位置
-    Vector2 mTex; //テクスチャ座標
+    Vector3 pos; //位置
+    Vector2 uv; //テクスチャ座標
 };
 
 struct TextureConstantBuffer {

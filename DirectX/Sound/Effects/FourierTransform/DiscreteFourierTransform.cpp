@@ -51,7 +51,7 @@ STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::Process(UINT32 InputProc
 
         auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
 
-        const int N = mOutComp.size();
+        const size_t N = mOutComp.size();
         if (param->size() != N) {
             param->resize(N);
         }
@@ -77,7 +77,7 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     float* inBuf = static_cast<float*>(inParam.pBuffer);
 
     //サンプル数
-    const int N = mComp.size();
+    const unsigned N = mComp.size();
 
     //波形に窓関数を掛ける
     WindowFunction::hanning(mComp.data(), inBuf, N);
@@ -86,7 +86,8 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     mFourier->fastFourierTransform(mOutComp.data(), mComp.data(), N);
 
     //デシベル値に変換
-    for (size_t i = 0; i < N / 2 - 1; i++) {
-        mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(mOutComp[i].imag()));
-    }
+    //size_t end = N / 2 - 1;
+    //for (size_t i = 0; i < end; i++) {
+    //    mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(mOutComp[i].imag()));
+    //}
 }

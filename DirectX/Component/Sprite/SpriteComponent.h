@@ -25,8 +25,6 @@ public:
     //描画
     void draw(const Matrix4& proj) const;
 
-    //スプライトを生成しセット
-    void setSprite(const std::string& fileName);
     //トランスフォーム
     Transform2D& transform() const;
     //色味
@@ -45,7 +43,9 @@ public:
     bool getActive() const;
     bool isDead() const;
     //テクスチャの張替え
-    void changeTexture(const std::string& fileName);
+    void setTextureFromFileName(const std::string& fileName);
+    //テクスチャを設定する
+    void setTexture(const std::shared_ptr<Texture>& texture);
     //テクスチャ
     const Texture& texture() const;
     //シェーダーの取得

@@ -16,6 +16,7 @@
 #include "../Component/Scene/Title.h"
 #include "../Component/Sound/ListenerComponent.h"
 #include "../Component/Sound/SoundComponent.h"
+#include "../Component/Sound/WaveformRenderSample.h"
 #include "../Component/Sprite/Sprite3D.h"
 #include "../Component/Sprite/SpriteComponent.h"
 #include "../Component/Text/Text.h"
@@ -53,6 +54,7 @@ GameObjectFactory::GameObjectFactory() {
 
     ADD_COMPONENT(ListenerComponent);
     ADD_COMPONENT(SoundComponent);
+    ADD_COMPONENT(WaveformRenderSample);
 
     ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteComponent);

@@ -6,6 +6,7 @@
 #include "../Component/Scene/Scene.h"
 #include "../Component/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
+#include "../DebugLayer/LineRenderer.h"
 #include "../DebugLayer/Pause.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
@@ -65,6 +66,7 @@ void SceneManager::initialize() {
 void SceneManager::update() {
     //アップデートの最初で文字列削除
     DebugUtility::drawStringClear();
+    DebugUtility::lineRenderer()->clear();
     mShouldDraw = true;
 
     //Escでゲーム終了
@@ -125,6 +127,7 @@ void SceneManager::draw() const {
     auto proj = Matrix4::identity;
     mRenderer->renderSprite2D(&proj);
     mSpriteManager->drawComponents(proj);
+
     //テキスト一括描画
     mTextDrawer->drawAll(proj);
 
@@ -134,6 +137,10 @@ void SceneManager::draw() const {
     //デバッグ表示
     DebugUtility::draw(proj);
 #endif // _DEBUG
+
+    //2Dライン
+    mRenderer->renderLine2D(&proj);
+    DebugUtility::lineRenderer()->drawLine2Ds(proj);
 }
 
 void SceneManager::change(const StringSet& tags) {

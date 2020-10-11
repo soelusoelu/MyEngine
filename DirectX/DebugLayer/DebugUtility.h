@@ -10,6 +10,7 @@ class Hierarchy;
 class Inspector;
 class Log;
 class Pause;
+class LineRenderer;
 
 class DebugUtility {
     DebugUtility() = delete;
@@ -34,6 +35,7 @@ public:
     static Hierarchy* hierarchy();
     static Inspector* inspector();
     static Pause* pause();
+    static LineRenderer* lineRenderer();
 
 private:
     static inline DrawString* mDrawString = nullptr;
@@ -42,4 +44,5 @@ private:
     static inline Hierarchy* mHierarchy = nullptr;
     static inline Inspector* mInspector = nullptr;
     static inline Pause* mPause = nullptr;
+    static inline LineRenderer* mLineRenderer = nullptr;
 };

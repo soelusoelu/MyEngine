@@ -2,6 +2,7 @@
 #include "FixedDebugInformation.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "LineRenderer.h"
 #include "Log.h"
 #include "Pause.h"
 #include "../Device/DrawString.h"
@@ -33,9 +34,12 @@ void DebugUtility::initialize() {
     mHierarchy->initialize();
     mInspector->initialize();
     mPause->initialize();
+    mLineRenderer = new LineRenderer();
 }
 
 void DebugUtility::finalize() {
+    LineRenderer::finalize();
+    safeDelete(mLineRenderer);
     safeDelete(mPause);
     safeDelete(mInspector);
     safeDelete(mHierarchy);
@@ -85,4 +89,8 @@ Inspector* DebugUtility::inspector() {
 
 Pause* DebugUtility::pause() {
     return mPause;
+}
+
+LineRenderer* DebugUtility::lineRenderer() {
+    return mLineRenderer;
 }

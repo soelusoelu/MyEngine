@@ -8,13 +8,13 @@
 class Shader;
 class SpriteManager;
 class Texture;
-class TextureFromFile;
 class Transform2D;
 
 class Sprite : public Object {
 public:
+    Sprite();
     Sprite(const std::string& fileName);
-    ~Sprite();
+    virtual ~Sprite();
     //行列の計算をする
     void computeWorldTransform();
     //描画
@@ -36,8 +36,9 @@ public:
     void setActive(bool value);
     //アクティブ状態の取得
     bool getActive() const;
-    //テクスチャの張替え
-    void changeTexture(const std::string& fileName);
+    //テクスチャを設定する
+    void setTextureFromFileName(const std::string& fileName);
+    void setTexture(const std::shared_ptr<Texture>& texture);
     //テクスチャの取得
     const Texture& texture() const;
     //シェーダーの取得
@@ -51,7 +52,7 @@ private:
 
 private:
     std::unique_ptr<Transform2D> mTransform;
-    std::shared_ptr<TextureFromFile> mTexture;
+    std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
     Vector2 mTextureSize;
     Vector4 mColor;

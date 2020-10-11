@@ -1,4 +1,5 @@
 ﻿#include "Renderer.h"
+#include "../DebugLayer/LineRenderer.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../System/GBuffer.h"
 #include "../System/Texture.h"
@@ -23,6 +24,29 @@ void Renderer::renderToTexture() {
 void Renderer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {
     DirectX::instance().setViewport(Window::width(), Window::height());
     mGBuffer->renderFromTexture(camera, lightManager);
+}
+
+void Renderer::renderLine2D(Matrix4* proj) const {
+    //原点をスクリーン左上にするために平行移動
+    proj->m[3][0] = -1.f;
+    proj->m[3][1] = 1.f;
+    //ピクセル単位で扱うために
+    proj->m[0][0] = 2.f / Window::width();
+    proj->m[1][1] = -2.f / Window::height();
+
+    auto& dx = DirectX::instance();
+    //ビューポートの設定
+    dx.setViewport(Window::width(), Window::height());
+    //プリミティブ・トポロジーをセット
+    dx.setPrimitive(PrimitiveType::LINE_LIST);
+    //インデックスバッファーをセット
+    LineRenderer::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    //カリングオフ
+    dx.rasterizerState()->setCulling(CullMode::NONE);
+    //半透明合成
+    dx.blendState()->translucent();
+    //デプステスト無効化
+    DirectX::instance().depthStencilState()->depthTest(false);
 }
 
 void Renderer::renderSprite() const {

@@ -11,6 +11,9 @@ public:
     ~TextureFromFile();
 
 private:
+    TextureFromFile(const TextureFromFile&) = delete;
+    TextureFromFile& operator=(const TextureFromFile&) = delete;
+
     //ファイル名からテクスチャを作成する
     void createTextureFromFileName(const std::string& fileName);
     //各種変換
