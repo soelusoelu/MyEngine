@@ -29,6 +29,8 @@ public:
     void createInputLayout(const std::vector<InputElementDesc>& layout);
     //自身を登録
     void setInputLayout() const;
+    //描画に必要な要素をすべて登録する
+    void setShaderInfo(unsigned constantBufferIndex = 0) const;
 
 private:
     //シェーダの生成

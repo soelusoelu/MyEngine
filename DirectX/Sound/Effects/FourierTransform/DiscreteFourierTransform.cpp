@@ -1,11 +1,8 @@
 ﻿#include "DiscreteFourierTransform.h"
 #include "FourierTransform.h"
 #include "WindowFunction.h"
-#include "../../Factory/SineWaveGenerator.h"
-#include "../../File/WaveformOutput.h"
 #include "../../Volume/SoundVolume.h"
 #include "../../../DebugLayer/Debug.h"
-#include "../../../Input/Input.h"
 #include "../../../Math/Math.h"
 #include <algorithm>
 
@@ -26,17 +23,6 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
     mFourier->initialize(N);
     mComp.resize(N);
     mOutComp.resize(N);
-
-    //auto sine = SineWaveGenerator::generate(441.f, 44100.f, 1.f, N);
-    //WindowFunction::hanning(mComp.data(), sine.data(), mComp.size());
-    //mFourier->fastFourierTransform(mOutComp.data(), mComp.data(), N);
-
-    //for (size_t i = 0; i < N / 2 - 1; i++) {
-    //    auto vo = mOutComp[i].imag();
-    //    mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(vo));
-    //}
-
-    //WaveformOutput::outputComplexes("out.csv", mOutComp.data(), mOutComp.size() / 2 - 1);
 
     return CXAPOParametersBase::LockForProcess(InputLockedParameterCount, pInputLockedParameters, OutputLockedParameterCount, pOutputLockedParameters);
 }

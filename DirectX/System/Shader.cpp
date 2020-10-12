@@ -70,6 +70,14 @@ void Shader::setInputLayout() const {
     DirectX::instance().deviceContext()->IASetInputLayout(mVertexLayout->layout());
 }
 
+void Shader::setShaderInfo(unsigned constantBufferIndex) const {
+    setVSShader();
+    setPSShader();
+    setVSConstantBuffers(constantBufferIndex);
+    setPSConstantBuffers(constantBufferIndex);
+    setInputLayout();
+}
+
 void Shader::createVertexShader(const std::string& fileName) {
     //ブロブからバーテックスシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {

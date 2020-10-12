@@ -1,5 +1,4 @@
 ﻿#include "Renderer.h"
-#include "../DebugLayer/LineRenderer.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../System/GBuffer.h"
 #include "../System/Texture.h"
@@ -39,8 +38,6 @@ void Renderer::renderLine2D(Matrix4* proj) const {
     dx.setViewport(Window::width(), Window::height());
     //プリミティブ・トポロジーをセット
     dx.setPrimitive(PrimitiveType::LINE_LIST);
-    //インデックスバッファーをセット
-    LineRenderer::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //カリングオフ
     dx.rasterizerState()->setCulling(CullMode::NONE);
     //半透明合成

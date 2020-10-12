@@ -6,9 +6,9 @@
 #include "../../Transform/Transform2D.h"
 #include "../../Sound/Effects/SoundEffect.h"
 #include "../../Sound/Effects/SoundEffectCollection.h"
+#include "../../Sound/Effects/Filter/SoundFilter.h"
 #include "../../Sound/Effects/FourierTransform/DiscreteFourierTransform.h"
 #include "../../Sound/Player/SoundPlayer.h"
-#include "../../Input/Input.h"
 #include "../../System/Window.h"
 #include <complex>
 
@@ -32,7 +32,7 @@ void WaveformRenderSample::start() {
 
     mSound = getComponent<SoundComponent>();
     mFourierID = mSound->getSoundEffect().getEffectCollection().discreteFourierTransform();
-    mSound->getSoundPlayer().playStreamingFadeIn(0.25f, 1.f);
+    mSound->getSoundPlayer().playStreamingFadeIn(0.5f, 1.f);
 }
 
 void WaveformRenderSample::update() {
@@ -43,7 +43,7 @@ void WaveformRenderSample::update() {
 
     //mTexture->clear();
     //for (size_t i = 0; i < mFourierData.size() / 2 - 1; i++) {
-    //    auto y = Math::clamp<unsigned>(fabsf(mFourierData[i].imag()) * 10.f + HEIGHT / 2, 0, HEIGHT - 1);
+    //    auto y = Math::clamp<unsigned>(HEIGHT - fabsf(mFourierData[i].imag()) * 10.f, 0, HEIGHT - 1);
     //    mTexture->setPixel(i, y, ColorPalette::black);
     //}
     //mTexture->apply();
@@ -52,8 +52,8 @@ void WaveformRenderSample::update() {
     size_t loopEnd = mFourierData.size() / 2 - 1;
     auto incX = static_cast<float>(Window::standardWidth()) / static_cast<float>(loopEnd);
     for (size_t i = 0; i < loopEnd; i++) {
-        //auto y = Math::clamp<unsigned>(Window::standardHeight() - fabsf(mFourierData[i].imag()) * 10.f, 0, Window::standardHeight());
-        auto y = Math::clamp<unsigned>(mFourierData[i].imag() * 10.f + Window::standardHeight() / 2.f, 0, Window::standardHeight());
+        auto y = Math::clamp<unsigned>(Window::standardHeight() - fabsf(mFourierData[i].imag()) * 10.f, 0, Window::standardHeight());
+        //auto y = Math::clamp<unsigned>(mFourierData[i].imag() * 10.f + Window::standardHeight() / 2.f, 0, Window::standardHeight());
 
         auto next = Vector2(i * incX, y);
         Debug::renderLine2D(pre, next);

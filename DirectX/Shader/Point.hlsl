@@ -1,6 +1,6 @@
 cbuffer global
 {
-    matrix proj;
+    matrix wp;
     float4 color;
 };
 
@@ -13,7 +13,7 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 Pos : POSITION)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = mul(proj, Pos);
+    output.Pos = mul(wp, Pos);
 
     return output;
 }

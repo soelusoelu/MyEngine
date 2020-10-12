@@ -20,6 +20,7 @@ private:
     std::shared_ptr<SoundComponent> mSound;
     std::vector<std::complex<float>> mFourierData;
     int mFourierID;
+
     static constexpr unsigned WIDTH = 256;
     static constexpr unsigned HEIGHT = 512;
 };

@@ -16,6 +16,7 @@ void DebugUtility::create() {
     mHierarchy = new Hierarchy(mDrawString);
     mInspector = new Inspector(mDrawString);
     mPause = new Pause();
+    mLineRenderer = new LineRenderer();
 }
 
 void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
@@ -34,11 +35,10 @@ void DebugUtility::initialize() {
     mHierarchy->initialize();
     mInspector->initialize();
     mPause->initialize();
-    mLineRenderer = new LineRenderer();
+    mLineRenderer->initialize();
 }
 
 void DebugUtility::finalize() {
-    LineRenderer::finalize();
     safeDelete(mLineRenderer);
     safeDelete(mPause);
     safeDelete(mInspector);

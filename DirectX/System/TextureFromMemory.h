@@ -16,7 +16,7 @@ public:
     void setPixel(unsigned x, unsigned y, const Vector3& color);
     //指定した座標の色を設定する [0, 255]
     void setPixel(unsigned x, unsigned y, unsigned char r, unsigned char g, unsigned char b);
-    //setPixel関数での変更を適用する
+    //clear, setPixel関数での変更を適用する
     void apply();
 
 private:

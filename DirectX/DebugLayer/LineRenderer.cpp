@@ -1,17 +1,28 @@
 ﻿#include "LineRenderer.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../System/GlobalFunction.h"
 #include "../System/Shader.h"
 #include "../System/Window.h"
 #include "../System/World.h"
+#include "../Transform/Transform2D.h"
 
 LineRenderer::LineRenderer() :
-    mShader(World::instance().assetsManager().createShader("Point.hlsl")) {
-    if (!indexBuffer) {
-        //インデックスバッファの作成
-        createIndexBuffer();
-    }
+    mShader(nullptr),
+    mVertexBuffer(nullptr),
+    mIndexBuffer(nullptr),
+    mTransform(std::make_unique<Transform2D>()) {
+}
+
+LineRenderer::~LineRenderer() = default;
+
+void LineRenderer::initialize() {
+    mShader = World::instance().assetsManager().createShader("Point.hlsl");
+    //バーテックスバッファの作成
+    createVertexBuffer();
+    //インデックスバッファの作成
+    createIndexBuffer();
+    //ラインのサイズはバーテックスバッファに合わせる
+    mTransform->setSize(Vector2::one);
 
     mShader->createConstantBuffer(sizeof(LineConstantBuffer));
     //インプットレイアウトの生成
@@ -21,13 +32,15 @@ LineRenderer::LineRenderer() :
     mShader->createInputLayout(layout);
 }
 
-LineRenderer::~LineRenderer() = default;
-
-void LineRenderer::finalize() {
-    safeDelete(indexBuffer);
-}
-
 void LineRenderer::drawLine2Ds(const Matrix4& proj) const {
+    //描画共通処理は最初に済ませる
+    //シェーダーを登録
+    mShader->setShaderInfo();
+    //バーテックスバッファーを登録
+    mVertexBuffer->setVertexBuffer();
+    //インデックスバッファーを登録
+    mIndexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+
     for (const auto& line : mLine2Ds) {
         drawLine2D(line, proj);
     }
@@ -41,9 +54,9 @@ void LineRenderer::clear() {
     mLine2Ds.clear();
 }
 
-std::unique_ptr<VertexBuffer> LineRenderer::createVertexBuffer(const Vector2& p1, const Vector2& p2) const {
-    LineVertex vert[] = {
-        p1 * 1024.f / 1920.f, p2 * 576.f / 1080.f
+void LineRenderer::createVertexBuffer() {
+    static const LineVertex vert[] = {
+        Vector2::zero, Vector2::one
     };
 
     BufferDesc bd;
@@ -55,7 +68,7 @@ std::unique_ptr<VertexBuffer> LineRenderer::createVertexBuffer(const Vector2& p1
     SubResourceDesc sub;
     sub.data = vert;
 
-    return std::make_unique<VertexBuffer>(bd, sub);
+    mVertexBuffer = std::make_unique<VertexBuffer>(bd, sub);
 }
 
 void LineRenderer::createIndexBuffer() {
@@ -69,29 +82,21 @@ void LineRenderer::createIndexBuffer() {
 
     SubResourceDesc sub;
     sub.data = indices;
-    indexBuffer = new IndexBuffer(bd, sub);
+
+    mIndexBuffer = std::make_unique<IndexBuffer>(bd, sub);
 }
 
 void LineRenderer::drawLine2D(const Line2DParam& param, const Matrix4& proj) const {
-    //シェーダーを登録
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //コンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers();
-    mShader->setPSConstantBuffers();
-    //頂点レイアウトをセット
-    mShader->setInputLayout();
-
     //シェーダーのコンスタントバッファーに各種データを渡す
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd)) {
+        //パラメータからワールド行列を計算する
+        mTransform->setScale(param.p2 - param.p1);
+        mTransform->setPosition(param.p1);
+        mTransform->computeWorldTransform();
+
         LineConstantBuffer cb;
-
-        auto vertBuf = createVertexBuffer(param.p1, param.p2);
-        vertBuf->setVertexBuffer();
-
-        //ワールド、射影行列を渡す
-        cb.proj = proj;
+        cb.wp = mTransform->getWorldTransform() * proj;
         cb.color = Vector4(param.color, 1.f);
 
         memcpy_s(msrd.data, msrd.rowPitch, &cb, sizeof(cb));
