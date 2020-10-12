@@ -14,13 +14,13 @@ public:
     ~Log();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
-    void update();
     void log(const std::string& message);
     void logError(const std::string& message);
     void logWarning(const std::string& message);
     void drawLogs(DrawString* drawString) const;
 
 private:
+    void addLog(const std::string& message, const Vector3& color);
     void adjustCapacity();
 
 private:

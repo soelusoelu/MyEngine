@@ -38,12 +38,14 @@ public:
         BOOL IsEnabled
         );
 
+    //フーリエ変換を掛けた波形を返す
+    STDMETHOD_(void, GetParameters)(void* pParameters, UINT32 ParameterByteSize);
+
 private:
     DiscreteFourierTransform(const DiscreteFourierTransform&) = delete;
     DiscreteFourierTransform& operator=(const DiscreteFourierTransform&) = delete;
 
     void discreteFourierTransform(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
-    void updateParam();
 
 private:
     //プロパティ
@@ -66,4 +68,5 @@ private:
     std::unique_ptr<FourierTransform> mFourier;
     ComplexArray mComp;
     ComplexArray mOutComp;
+    static constexpr unsigned N = 512;
 };

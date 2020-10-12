@@ -21,20 +21,16 @@ void Log::initialize() {
     mNumRowsToDisplay = (Window::debugHeight() - Window::height()) / (DrawString::HEIGHT * mScale.y);
 }
 
-void Log::update() {
-    adjustCapacity();
-}
-
 void Log::log(const std::string & message) {
-    mLogs.emplace_back(std::make_pair(message, ColorPalette::white));
+    addLog(message, ColorPalette::white);
 }
 
 void Log::logError(const std::string & message) {
-    mLogs.emplace_back(std::make_pair(message, ColorPalette::red));
+    addLog(message, ColorPalette::red);
 }
 
 void Log::logWarning(const std::string & message) {
-    mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
+    addLog(message, ColorPalette::yellow);
 }
 
 void Log::drawLogs(DrawString* drawString) const {
@@ -44,6 +40,11 @@ void Log::drawLogs(DrawString* drawString) const {
         drawString->drawString(log.first, pos, mScale, log.second);
         pos.y -= height;
     }
+}
+
+void Log::addLog(const std::string& message, const Vector3& color) {
+    mLogs.emplace_back(message, color);
+    adjustCapacity();
 }
 
 void Log::adjustCapacity() {

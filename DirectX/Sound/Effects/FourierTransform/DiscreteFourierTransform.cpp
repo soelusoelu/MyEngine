@@ -1,7 +1,6 @@
 ﻿#include "DiscreteFourierTransform.h"
 #include "FourierTransform.h"
 #include "WindowFunction.h"
-#include "../../Volume/SoundVolume.h"
 #include "../../../DebugLayer/Debug.h"
 #include "../../../Math/Math.h"
 #include <algorithm>
@@ -19,7 +18,6 @@ STDMETHODIMP_(HRESULT __stdcall) DiscreteFourierTransform::LockForProcess(UINT32
     mInputFmt = *pInputLockedParameters[0].pFormat;
     mOutputFmt = *pOutputLockedParameters[0].pFormat;
 
-    constexpr int N = 512;
     mFourier->initialize(N);
     mComp.resize(N);
     mOutComp.resize(N);
@@ -34,13 +32,26 @@ STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::Process(UINT32 InputProc
     if (IsEnabled) {
         //高速フーリエ変換
         discreteFourierTransform(inParam, outParam);
-        //getParameter用パラメータを更新する
-        updateParam();
     }
 
     //波形はそのまま
     if (inParam.pBuffer != outParam.pBuffer) {
         memcpy(outParam.pBuffer, inParam.pBuffer, mOutputFmt.nBlockAlign * inParam.ValidFrameCount);
+    }
+}
+
+STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::GetParameters(void* pParameters, UINT32 ParameterByteSize) {
+    if (ParameterByteSize == sizeof(ComplexArray)) {
+        auto& param = *static_cast<ComplexArray*>(pParameters);
+        if (param.size() != N) {
+            param.resize(N);
+        }
+        //フーリエ変換した波形を全コピーする
+        std::copy(mOutComp.begin(), mOutComp.end(), param.begin());
+
+        //本来なら基底クラスのGetParametersを呼ぶが、今回はポインタ(vector)を扱っている関係上ハックしてる
+    } else {
+        Debug::logWarning("Wrong XAPO parameter size");
     }
 }
 
@@ -54,31 +65,9 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     //バッファの取得
     float* inBuf = static_cast<float*>(inParam.pBuffer);
 
-    //サンプル数
-    const unsigned N = mComp.size();
-
     //波形に窓関数を掛ける
     WindowFunction::hanning(mComp.data(), inBuf, N);
 
     //高速フーリエ変換
     mFourier->fastFourierTransform(mOutComp.data(), mComp.data(), N);
-
-    //デシベル値に変換
-    //size_t end = N / 2 - 1;
-    //for (size_t i = 0; i < end; i++) {
-    //    mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(mOutComp[i].imag()));
-    //}
-}
-
-void DiscreteFourierTransform::updateParam() {
-    auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
-
-    const size_t N = mOutComp.size();
-    if (param->size() != N) {
-        param->resize(N);
-    }
-    //フーリエ変換した波形を全コピーする
-    std::copy(mOutComp.begin(), mOutComp.end(), param->begin());
-
-    EndProcess();
 }

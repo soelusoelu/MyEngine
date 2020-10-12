@@ -66,7 +66,6 @@ void SceneManager::initialize() {
 void SceneManager::update() {
     //アップデートの最初で文字列削除
     DebugUtility::drawStringClear();
-    DebugUtility::lineRenderer()->clear();
     mShouldDraw = true;
 
     //Escでゲーム終了
@@ -80,6 +79,8 @@ void SceneManager::update() {
         return;
     }
 
+    //ライン描画情報を削除
+    DebugUtility::lineRenderer()->clear();
     //保有しているテキストを全削除
     mTextDrawer->clear();
     //全ゲームオブジェクトの更新
