@@ -48,16 +48,8 @@ STDMETHODIMP_(void __stdcall) DiscreteFourierTransform::Process(UINT32 InputProc
     if (IsEnabled) {
         //高速フーリエ変換
         discreteFourierTransform(inParam, outParam);
-
-        auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
-
-        const size_t N = mOutComp.size();
-        if (param->size() != N) {
-            param->resize(N);
-        }
-        std::copy(mOutComp.begin(), mOutComp.end(), param->begin());
-
-        EndProcess();
+        //getParameter用パラメータを更新する
+        updateParam();
     }
 
     //波形はそのまま
@@ -90,4 +82,17 @@ void DiscreteFourierTransform::discreteFourierTransform(const XAPO_PROCESS_BUFFE
     //for (size_t i = 0; i < end; i++) {
     //    mOutComp[i].imag(SoundVolume::amplitudeRatioToDecibels(mOutComp[i].imag()));
     //}
+}
+
+void DiscreteFourierTransform::updateParam() {
+    auto param = reinterpret_cast<ComplexArray*>(BeginProcess());
+
+    const size_t N = mOutComp.size();
+    if (param->size() != N) {
+        param->resize(N);
+    }
+    //フーリエ変換した波形を全コピーする
+    std::copy(mOutComp.begin(), mOutComp.end(), param->begin());
+
+    EndProcess();
 }

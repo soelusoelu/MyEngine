@@ -8,22 +8,22 @@ class VertexBuffer;
 class IndexBuffer;
 class Shader;
 
-struct LineVertex {
-    Vector2 pos;
-};
-
-struct LineConstantBuffer {
-    Matrix4 proj;
-    Vector4 color;
-};
-
-struct Line2DParam {
-    Vector2 p1;
-    Vector2 p2;
-    Vector3 color;
-};
-
 class LineRenderer {
+    struct LineVertex {
+        Vector2 pos;
+    };
+
+    struct LineConstantBuffer {
+        Matrix4 proj;
+        Vector4 color;
+    };
+
+    struct Line2DParam {
+        Vector2 p1;
+        Vector2 p2;
+        Vector3 color;
+    };
+
 public:
     LineRenderer();
     ~LineRenderer();

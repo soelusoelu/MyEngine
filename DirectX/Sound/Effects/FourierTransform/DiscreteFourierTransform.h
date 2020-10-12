@@ -43,6 +43,7 @@ private:
     DiscreteFourierTransform& operator=(const DiscreteFourierTransform&) = delete;
 
     void discreteFourierTransform(const XAPO_PROCESS_BUFFER_PARAMETERS& inParam, XAPO_PROCESS_BUFFER_PARAMETERS& outParam);
+    void updateParam();
 
 private:
     //プロパティ
