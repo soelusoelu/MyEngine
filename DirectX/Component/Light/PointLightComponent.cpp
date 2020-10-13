@@ -55,22 +55,19 @@ void PointLightComponent::draw(const Camera& camera, const PointLight& pointLigh
     auto shader = pointLight.shader;
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    MappedSubResourceDesc msrd;
-    if (shader->map(&msrd)) {
-        PointLightConstantBuffer cb;
-        cb.wvp = world * camera.getViewProjection();
-        cb.wvp.transpose();
-        cb.worldPos = transform().getPosition();
-        cb.cameraPos = camera.getPosition();
-        cb.windowSize = Vector2(Window::width(), Window::height());
-        cb.diffuseColor = mLightColor;
-        cb.innerRadius = mInnerRadius;
-        cb.outerRadius = mOuterRadius;
-        cb.intensity = mIntensity;
+    PointLightConstantBuffer cb;
+    cb.wvp = world * camera.getViewProjection();
+    cb.wvp.transpose();
+    cb.worldPos = transform().getPosition();
+    cb.cameraPos = camera.getPosition();
+    cb.windowSize = Vector2(Window::width(), Window::height());
+    cb.diffuseColor = mLightColor;
+    cb.innerRadius = mInnerRadius;
+    cb.outerRadius = mOuterRadius;
+    cb.intensity = mIntensity;
 
-        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-        shader->unmap();
-    }
+    //シェーダーにデータ転送
+    shader->transferData(&cb, sizeof(cb));
 
     auto mesh = pointLight.mesh;
     auto mats = pointLight.materials;

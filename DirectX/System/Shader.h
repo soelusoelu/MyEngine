@@ -2,7 +2,6 @@
 
 #include "SystemInclude.h"
 #include "../DirectX/InputElementDesc.h"
-#include "../DirectX/SubResourceDesc.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -14,9 +13,8 @@ class Shader {
 public:
     Shader(const std::string& fileName);
     ~Shader();
-    //シェーダーとのやり取り
-    bool map(MappedSubResourceDesc* data, unsigned index = 0, unsigned sub = 0, D3D11_MAP type = D3D11_MAP_WRITE_DISCARD, unsigned flag = 0) const;
-    void unmap(unsigned index = 0, unsigned sub = 0) const;
+    //シェーダーにデータを転送する
+    void transferData(const void* data, unsigned size, unsigned index = 0) const;
     //自身をシェーダーとして登録
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0) const;
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0) const;
@@ -36,7 +34,9 @@ private:
     //シェーダの生成
     void createVertexShader(const std::string& fileName);
     void createPixelShader(const std::string& fileName);
-    D3D11_MAPPED_SUBRESOURCE toMappedSubResource(const MappedSubResourceDesc* desc) const;
+    //シェーダーに値を渡すための開始・終了処理
+    void map(D3D11_MAPPED_SUBRESOURCE* mapRes, unsigned index = 0, unsigned sub = 0, D3D11_MAP type = D3D11_MAP_WRITE_DISCARD, unsigned flag = 0) const;
+    void unmap(unsigned index = 0, unsigned sub = 0) const;
 
 private:
     Microsoft::WRL::ComPtr<ID3DBlob> mCompileShader;

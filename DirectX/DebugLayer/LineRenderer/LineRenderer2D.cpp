@@ -46,22 +46,18 @@ void LineRenderer2D::drawLines(const Matrix4& proj) const {
 }
 
 void LineRenderer2D::drawLine(const Line2DParam& param, const Matrix4& proj) const {
-    //シェーダーのコンスタントバッファーに各種データを渡す
-    MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd)) {
-        //パラメータからワールド行列を計算する
-        mTransform->setScale(param.p2 - param.p1);
-        mTransform->setPosition(param.p1);
-        mTransform->computeWorldTransform();
+    //パラメータからワールド行列を計算する
+    mTransform->setScale(param.p2 - param.p1);
+    mTransform->setPosition(param.p1);
+    mTransform->computeWorldTransform();
 
-        //シェーダーに値を渡す
-        LineConstantBuffer cb;
-        cb.wp = mTransform->getWorldTransform() * proj;
-        cb.color = Vector4(param.color, 1.f);
+    //シェーダーに値を渡す
+    LineConstantBuffer cb;
+    cb.wp = mTransform->getWorldTransform() * proj;
+    cb.color = Vector4(param.color, 1.f);
 
-        memcpy_s(msrd.data, msrd.rowPitch, &cb, sizeof(cb));
-        mShader->unmap();
-    }
+    //データ転送
+    mShader->transferData(&cb, sizeof(cb));
 
     //描画
     DirectX::instance().drawIndexed(2);

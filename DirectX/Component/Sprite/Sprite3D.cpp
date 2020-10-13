@@ -106,27 +106,17 @@ void Sprite3D::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
 
 void Sprite3D::draw(const Matrix4& viewProj) const {
     //シェーダーを登録
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //コンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers();
-    mShader->setPSConstantBuffers();
-    //頂点レイアウトをセット
-    mShader->setInputLayout();
+    mShader->setShaderInfo();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd)) {
-        TextureConstantBuffer cb;
-        //ワールド、射影行列を渡す
-        cb.wp = mTransform->getWorldTransform() * viewProj;
-        cb.wp.transpose();
-        cb.color = mColor;
-        cb.uv = mUV;
+    TextureConstantBuffer cb;
+    cb.wp = mTransform->getWorldTransform() * viewProj;
+    cb.color = mColor;
+    cb.uv = mUV;
 
-        memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
-        mShader->unmap();
-    }
+    //シェーダーにデータ転送
+    mShader->transferData(&cb, sizeof(cb));
+
     //テクスチャーをシェーダーに渡す
     mTexture->setPSTextures();
     //サンプラーのセット
@@ -137,27 +127,18 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
 
 void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
     //シェーダーを登録
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //コンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers();
-    mShader->setPSConstantBuffers();
-    //頂点レイアウトをセット
-    mShader->setInputLayout();
+    mShader->setShaderInfo();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd)) {
-        TextureConstantBuffer cb;
-        //ワールド、射影行列を渡す
-        cb.wp = invView * mTransform->getWorldTransform() * viewProj;
-        cb.wp.transpose();
-        cb.color = mColor;
-        cb.uv = mUV;
+    TextureConstantBuffer cb;
+    //ワールド、射影行列を渡す
+    cb.wp = invView * mTransform->getWorldTransform() * viewProj;
+    cb.color = mColor;
+    cb.uv = mUV;
 
-        memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
-        mShader->unmap();
-    }
+    //シェーダーにデータ転送
+    mShader->transferData(&cb, sizeof(cb));
+
     //テクスチャーをシェーダーに渡す
     mTexture->setPSTextures();
     //サンプラーのセット

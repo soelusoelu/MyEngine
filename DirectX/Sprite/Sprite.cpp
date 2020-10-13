@@ -51,26 +51,17 @@ void Sprite::draw(const Matrix4& proj) const {
     }
 
     //シェーダーを登録
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //コンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers();
-    mShader->setPSConstantBuffers();
-    //頂点レイアウトをセット
-    mShader->setInputLayout();
+    mShader->setShaderInfo();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd)) {
-        TextureConstantBuffer cb;
-        //ワールド、射影行列を渡す
-        cb.wp = mTransform->getWorldTransform() * proj;
-        cb.color = mColor;
-        cb.uv = mUV;
+    TextureConstantBuffer cb;
+    cb.wp = mTransform->getWorldTransform() * proj;
+    cb.color = mColor;
+    cb.uv = mUV;
 
-        memcpy_s(msrd.data, msrd.rowPitch, &cb, sizeof(cb));
-        mShader->unmap();
-    }
+    //シェーダーにデータ転送
+    mShader->transferData(&cb, sizeof(cb));
+
     //テクスチャーをシェーダーに渡す
     mTexture->setPSTextures();
     //サンプラーのセット

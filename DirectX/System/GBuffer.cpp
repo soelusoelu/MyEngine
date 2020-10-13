@@ -120,17 +120,15 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     //サンプラーをセット
     mSampler->setPSSamplers();
 
-    MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd)) {
-        GBufferShaderConstantBuffer cb;
-        cb.dirLightDir = lightManager.getDirectionalLight().getDirection();
-        cb.dirLightColor = lightManager.getDirectionalLight().getLightColor();
-        cb.cameraPos = camera.getPosition();
-        cb.ambientLight = lightManager.getAmbientLight();
+    GBufferShaderConstantBuffer cb;
+    cb.dirLightDir = lightManager.getDirectionalLight().getDirection();
+    cb.dirLightColor = lightManager.getDirectionalLight().getLightColor();
+    cb.cameraPos = camera.getPosition();
+    cb.ambientLight = lightManager.getAmbientLight();
 
-        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-        mShader->unmap();
-    }
+    //シェーダーにデータ転送
+    mShader->transferData(&cb, sizeof(cb));
+
     //スクリーンサイズのポリゴンをレンダー
     dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //バーテックスバッファーをセット

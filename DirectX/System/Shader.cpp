@@ -14,19 +14,14 @@ Shader::Shader(const std::string& fileName) :
 
 Shader::~Shader() = default;
 
-bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {
-    auto msr = toMappedSubResource(data);
-    auto res = DirectX::instance().deviceContext()->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
-
-    data->data = msr.pData;
-    data->rowPitch = msr.RowPitch;
-    data->depthPitch = msr.DepthPitch;
-
-    return (SUCCEEDED(res));
-}
-
-void Shader::unmap(unsigned index, unsigned sub) const {
-    DirectX::instance().deviceContext()->Unmap(mConstantBuffers[index]->buffer(), sub);
+void Shader::transferData(const void* data, unsigned size, unsigned index) const {
+    //開く
+    D3D11_MAPPED_SUBRESOURCE mapRes = { 0 };
+    map(&mapRes, index);
+    //データ転送
+    memcpy_s(mapRes.pData, mapRes.RowPitch, data, size);
+    //閉じる
+    unmap(index);
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
@@ -103,11 +98,10 @@ void Shader::createPixelShader(const std::string& fileName) {
     }
 }
 
-D3D11_MAPPED_SUBRESOURCE Shader::toMappedSubResource(const MappedSubResourceDesc* desc) const {
-    D3D11_MAPPED_SUBRESOURCE msr;
-    msr.pData = desc->data;
-    msr.RowPitch = desc->rowPitch;
-    msr.DepthPitch = desc->depthPitch;
+void Shader::map(D3D11_MAPPED_SUBRESOURCE* mapRes, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {
+    DirectX::instance().deviceContext()->Map(mConstantBuffers[index]->buffer(), sub, type, flag, mapRes);
+}
 
-    return msr;
+void Shader::unmap(unsigned index, unsigned sub) const {
+    DirectX::instance().deviceContext()->Unmap(mConstantBuffers[index]->buffer(), sub);
 }

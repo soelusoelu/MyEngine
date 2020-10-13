@@ -65,30 +65,23 @@ void TransparentMeshComponent::setShader() {
 
 void TransparentMeshComponent::draw(const Camera& camera) const {
     //使用するシェーダーの登録
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //このコンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers(0);
-    mShader->setPSConstantBuffers(0);
-    //頂点インプットレイアウトをセット
-    mShader->setInputLayout();
+    mShader->setShaderInfo(0);
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd, 0)) {
-        TransparentConstantBuffer cb;
-        //ワールド行列を渡す
-        cb.world = transform().getWorldTransform();
-        cb.world.transpose();
-        //ワールド、カメラ、射影行列を渡す
-        cb.WVP = transform().getWorldTransform() * camera.getViewProjection();
-        cb.WVP.transpose();
-        cb.lightDir = mDirLight->getDirection();
-        cb.cameraPos = camera.getPosition();
+    TransparentConstantBuffer tcb;
+    //ワールド行列を渡す
+    tcb.world = transform().getWorldTransform();
+    tcb.world.transpose();
+    //ワールド、カメラ、射影行列を渡す
+    tcb.WVP = transform().getWorldTransform() * camera.getViewProjection();
+    tcb.WVP.transpose();
+    tcb.lightDir = mDirLight->getDirection();
+    tcb.cameraPos = camera.getPosition();
 
-        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-        mShader->unmap(0);
-    }
+    //シェーダーにデータ転送
+    mShader->transferData(&tcb, sizeof(tcb));
+
+
 
     auto vertArray = mMesh->getVertexArray();
 
@@ -109,23 +102,21 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
         //インデックスバッファーをセット
         vertArray->setIndexBuffer(i);
 
-        if (mShader->map(&msrd, 1)) {
-            MaterialConstantBuffer cb;
-            cb.diffuse = Vector4(mat->diffuse, mAlpha);
-            //cb.diffuse = Vector4(mColor, mAlpha);
-            cb.specular = Vector4(mat->specular, 1.f);
+        MaterialConstantBuffer mcb;
+        mcb.diffuse = Vector4(mat->diffuse, mAlpha);
+        //tcb.diffuse = Vector4(mColor, mAlpha);
+        mcb.specular = Vector4(mat->specular, 1.f);
 
-            if (auto t = mat->texture) {
-                t->setPSTextures();
-                t->setPSSamplers();
-                cb.textureFlag = 1;
-            } else {
-                cb.textureFlag = 0;
-            }
-
-            memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-            mShader->unmap(1);
+        if (auto t = mat->texture) {
+            t->setPSTextures();
+            t->setPSSamplers();
+            mcb.textureFlag = 1;
+        } else {
+            mcb.textureFlag = 0;
         }
+
+        //シェーダーにデータ転送
+        mShader->transferData(&mcb, sizeof(mcb), 1);
 
         //プリミティブをレンダリング
         DirectX::instance().drawIndexed(mat->numIndices);
