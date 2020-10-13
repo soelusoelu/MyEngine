@@ -160,6 +160,7 @@
     <ClCompile Include="System\TextureFromFile.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer2D.cpp" />
+    <ClCompile Include="DebugLayer\LineRenderer\LineRenderer3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -353,5 +354,6 @@
     <ClInclude Include="System\TextureFromFile.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer2D.h" />
+    <ClInclude Include="DebugLayer\LineRenderer\LineRenderer3D.h" />
   </ItemGroup>
 </Project>

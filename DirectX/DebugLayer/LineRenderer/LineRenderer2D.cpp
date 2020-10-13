@@ -14,11 +14,11 @@ LineRenderer2D::LineRenderer2D() :
 LineRenderer2D::~LineRenderer2D() = default;
 
 void LineRenderer2D::clear() {
-    mLine2Ds.clear();
+    mLines.clear();
 }
 
 void LineRenderer2D::renderLine(const Vector2& p1, const Vector2& p2, const Vector3& color) {
-    mLine2Ds.emplace_back(Line2DParam{ p1, p2, color });
+    mLines.emplace_back(Line2DParam{ p1, p2, color });
 }
 
 unsigned LineRenderer2D::getParamSize() const {
@@ -40,12 +40,12 @@ std::vector<InputElementDesc> LineRenderer2D::getInputLayout() const {
 }
 
 void LineRenderer2D::drawLines(const Matrix4& proj) const {
-    for (const auto& line : mLine2Ds) {
-        drawLine2D(line, proj);
+    for (const auto& line : mLines) {
+        drawLine(line, proj);
     }
 }
 
-void LineRenderer2D::drawLine2D(const Line2DParam& param, const Matrix4& proj) const {
+void LineRenderer2D::drawLine(const Line2DParam& param, const Matrix4& proj) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd)) {

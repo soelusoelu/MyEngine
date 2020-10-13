@@ -14,5 +14,6 @@ public:
     static void log(const std::string& message);
     static void logError(const std::string& message);
     static void logWarning(const std::string& message);
-    static void renderLine2D(const Vector2& p1, const Vector2& p2, const Vector3& color = ColorPalette::white);
+    static void renderLine(const Vector2& p1, const Vector2& p2, const Vector3& color = ColorPalette::white);
+    static void renderLine(const Vector3& p1, const Vector3& p2, const Vector3& color = ColorPalette::white);
 };

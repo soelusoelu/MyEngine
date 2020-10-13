@@ -3,6 +3,7 @@
 #include "Hierarchy.h"
 #include "Inspector.h"
 #include "LineRenderer/LineRenderer2D.h"
+#include "LineRenderer/LineRenderer3D.h"
 #include "Log.h"
 #include "Pause.h"
 #include "../Device/DrawString.h"
@@ -17,6 +18,7 @@ void DebugUtility::create() {
     mInspector = new Inspector(mDrawString);
     mPause = new Pause();
     mLineRenderer2D = new LineRenderer2D();
+    mLineRenderer3D = new LineRenderer3D();
 }
 
 void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
@@ -36,9 +38,11 @@ void DebugUtility::initialize() {
     mInspector->initialize();
     mPause->initialize();
     mLineRenderer2D->initialize();
+    mLineRenderer3D->initialize();
 }
 
 void DebugUtility::finalize() {
+    safeDelete(mLineRenderer3D);
     safeDelete(mLineRenderer2D);
     safeDelete(mPause);
     safeDelete(mInspector);
@@ -70,26 +74,30 @@ void DebugUtility::drawStringClear() {
     mDrawString->clear();
 }
 
-Log* DebugUtility::log() {
-    return mLog;
+Log& DebugUtility::log() {
+    return *mLog;
 }
 
 FixedDebugInformation* DebugUtility::fixedDebugInfo() {
     return mFixedDebugInfo;
 }
 
-Hierarchy* DebugUtility::hierarchy() {
-    return mHierarchy;
+Hierarchy& DebugUtility::hierarchy() {
+    return *mHierarchy;
 }
 
-Inspector* DebugUtility::inspector() {
-    return mInspector;
+Inspector& DebugUtility::inspector() {
+    return *mInspector;
 }
 
-Pause* DebugUtility::pause() {
-    return mPause;
+Pause& DebugUtility::pause() {
+    return *mPause;
 }
 
-LineRenderer2D* DebugUtility::lineRenderer2D() {
-    return mLineRenderer2D;
+LineRenderer2D& DebugUtility::lineRenderer2D() {
+    return *mLineRenderer2D;
+}
+
+LineRenderer3D& DebugUtility::lineRenderer3D() {
+    return *mLineRenderer3D;
 }

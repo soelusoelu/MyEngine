@@ -83,7 +83,7 @@ void Hierarchy::update() {
                 continue;
             }
             if (b.second) {
-                DebugUtility::inspector()->setTarget(b.second);
+                DebugUtility::inspector().setTarget(b.second);
                 break;
             }
         }

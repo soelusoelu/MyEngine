@@ -21,6 +21,7 @@ class LineRenderer2D : public LineRenderer {
 public:
     LineRenderer2D();
     ~LineRenderer2D();
+
     virtual void clear() override;
 
     //描画したいライン情報を指定する
@@ -36,9 +37,9 @@ private:
     virtual void drawLines(const Matrix4& proj) const override;
 
     //実際にラインを描画する
-    void drawLine2D(const Line2DParam& param, const Matrix4& proj) const;
+    void drawLine(const Line2DParam& param, const Matrix4& proj) const;
 
 private:
-    std::list<Line2DParam> mLine2Ds;
+    std::list<Line2DParam> mLines;
     std::unique_ptr<Transform2D> mTransform;
 };

@@ -20,7 +20,7 @@ protected:
 
 public:
     LineRenderer();
-    ~LineRenderer();
+    virtual ~LineRenderer();
     void draw(const Matrix4& proj) const;
     void initialize();
 
@@ -45,7 +45,7 @@ private:
     void createIndexBuffer();
 
 protected:
-    std::shared_ptr<Shader> mShader;
+    std::unique_ptr<Shader> mShader;
     std::unique_ptr<VertexBuffer> mVertexBuffer;
     std::unique_ptr<IndexBuffer> mIndexBuffer;
 };

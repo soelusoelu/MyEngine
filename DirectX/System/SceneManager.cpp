@@ -7,6 +7,7 @@
 #include "../Component/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/LineRenderer/LineRenderer2D.h"
+#include "../DebugLayer/LineRenderer/LineRenderer3D.h"
 #include "../DebugLayer/Pause.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
@@ -74,13 +75,14 @@ void SceneManager::update() {
     }
 
     //ポーズ中はデバッグだけアップデートを行う
-    if (DebugUtility::pause()->isPausing()) {
+    if (DebugUtility::pause().isPausing()) {
         DebugUtility::update();
         return;
     }
 
     //ライン描画情報を削除
-    DebugUtility::lineRenderer2D()->clear();
+    DebugUtility::lineRenderer2D().clear();
+    DebugUtility::lineRenderer3D().clear();
     //保有しているテキストを全削除
     mTextDrawer->clear();
     //全ゲームオブジェクトの更新
@@ -106,6 +108,7 @@ void SceneManager::draw() const {
     if (!mShouldDraw) {
         return;
     }
+
     //各テクスチャ上にレンダリング
     mRenderer->renderToTexture();
     //メッシュの一括描画
@@ -141,7 +144,10 @@ void SceneManager::draw() const {
 
     //2Dライン
     mRenderer->renderLine2D(&proj);
-    DebugUtility::lineRenderer2D()->draw(proj);
+    DebugUtility::lineRenderer2D().draw(proj);
+    //3Dライン
+    mRenderer->renderLine3D();
+    DebugUtility::lineRenderer3D().draw(mCamera->getViewProjection());
 }
 
 void SceneManager::change(const StringSet& tags) {

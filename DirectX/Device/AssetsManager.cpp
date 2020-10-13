@@ -18,17 +18,9 @@ AssetsManager::~AssetsManager() {
     mInstantiated = false;
 }
 
-std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName) {
-    std::shared_ptr<Shader> shader = nullptr;
-    auto itr = mShaders.find(fileName);
-    if (itr != mShaders.end()) { //既に読み込まれている
-        shader = itr->second;
-    } else { //初読み込み
-        World::instance().directory().setShaderDirectory();
-        shader = std::make_shared<Shader>(fileName);
-        mShaders.emplace(fileName, shader);
-    }
-    return shader;
+std::unique_ptr<Shader> AssetsManager::createShader(const std::string & fileName) {
+    World::instance().directory().setShaderDirectory();
+    return std::make_unique<Shader>(fileName);
 }
 
 std::shared_ptr<TextureFromFile> AssetsManager::createTexture(const std::string & filePath) {

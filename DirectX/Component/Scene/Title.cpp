@@ -120,4 +120,8 @@ void Title::update() {
         std::vector<std::complex<float>> co;
         mSound->getSoundEffect().getEffectParameters(1, &co, sizeof(co));
     }
+
+    //Debug::renderLine(Vector3::left * 100.f, Vector3::right * 100.f, ColorPalette::red);
+    //Debug::renderLine(Vector3::down * 100.f, Vector3::up * 100.f, ColorPalette::green);
+    //Debug::renderLine(Vector3::back * 100.f, Vector3::forward * 100.f, ColorPalette::blue);
 }

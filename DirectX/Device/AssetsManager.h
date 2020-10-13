@@ -12,7 +12,7 @@ class AssetsManager {
 public:
     AssetsManager();
     ~AssetsManager();
-    std::shared_ptr<Shader> createShader(const std::string& fileName);
+    std::unique_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<TextureFromFile> createTexture(const std::string& filePath);
     std::shared_ptr<TextureFromFile> createTextureFromModel(const std::string& fileName);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& filePath);
@@ -23,7 +23,6 @@ private:
     AssetsManager& operator=(const AssetsManager&) = delete;
 
 private:
-    std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
     std::unordered_map<std::string, std::shared_ptr<TextureFromFile>> mTextures;
     std::unordered_map<std::string, std::shared_ptr<IMeshLoader>> mMeshLoaders;
 

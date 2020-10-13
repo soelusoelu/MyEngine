@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer2D.cpp" />
+    <ClCompile Include="DebugLayer\LineRenderer\LineRenderer3D.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\FourierTransform.cpp" />
     <ClCompile Include="Sound\Factory\SineWaveGenerator.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.cpp" />
@@ -314,6 +315,7 @@
   <ItemGroup>
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer2D.h" />
+    <ClInclude Include="DebugLayer\LineRenderer\LineRenderer3D.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\FourierTransform.h" />
     <ClInclude Include="Sound\Factory\SineWaveGenerator.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.h" />

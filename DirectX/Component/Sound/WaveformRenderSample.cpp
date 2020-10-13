@@ -40,7 +40,7 @@ void WaveformRenderSample::update() {
         auto y = Math::clamp<unsigned>(mFourierData[i].imag() * 10.f + Window::standardHeight() / 2.f, 0, Window::standardHeight());
 
         auto next = Vector2(i * incX, y);
-        Debug::renderLine2D(pre, next);
+        Debug::renderLine(pre, next);
         pre = next;
     }
 
