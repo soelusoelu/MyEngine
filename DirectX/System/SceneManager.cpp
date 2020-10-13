@@ -6,7 +6,7 @@
 #include "../Component/Scene/Scene.h"
 #include "../Component/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
-#include "../DebugLayer/LineRenderer.h"
+#include "../DebugLayer/LineRenderer/LineRenderer2D.h"
 #include "../DebugLayer/Pause.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
@@ -80,7 +80,7 @@ void SceneManager::update() {
     }
 
     //ライン描画情報を削除
-    DebugUtility::lineRenderer()->clear();
+    DebugUtility::lineRenderer2D()->clear();
     //保有しているテキストを全削除
     mTextDrawer->clear();
     //全ゲームオブジェクトの更新
@@ -141,7 +141,7 @@ void SceneManager::draw() const {
 
     //2Dライン
     mRenderer->renderLine2D(&proj);
-    DebugUtility::lineRenderer()->drawLine2Ds(proj);
+    DebugUtility::lineRenderer2D()->draw(proj);
 }
 
 void SceneManager::change(const StringSet& tags) {

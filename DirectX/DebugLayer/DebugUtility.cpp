@@ -2,7 +2,7 @@
 #include "FixedDebugInformation.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
-#include "LineRenderer.h"
+#include "LineRenderer/LineRenderer2D.h"
 #include "Log.h"
 #include "Pause.h"
 #include "../Device/DrawString.h"
@@ -16,7 +16,7 @@ void DebugUtility::create() {
     mHierarchy = new Hierarchy(mDrawString);
     mInspector = new Inspector(mDrawString);
     mPause = new Pause();
-    mLineRenderer = new LineRenderer();
+    mLineRenderer2D = new LineRenderer2D();
 }
 
 void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
@@ -35,11 +35,11 @@ void DebugUtility::initialize() {
     mHierarchy->initialize();
     mInspector->initialize();
     mPause->initialize();
-    mLineRenderer->initialize();
+    mLineRenderer2D->initialize();
 }
 
 void DebugUtility::finalize() {
-    safeDelete(mLineRenderer);
+    safeDelete(mLineRenderer2D);
     safeDelete(mPause);
     safeDelete(mInspector);
     safeDelete(mHierarchy);
@@ -90,6 +90,6 @@ Pause* DebugUtility::pause() {
     return mPause;
 }
 
-LineRenderer* DebugUtility::lineRenderer() {
-    return mLineRenderer;
+LineRenderer2D* DebugUtility::lineRenderer2D() {
+    return mLineRenderer2D;
 }
