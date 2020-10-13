@@ -27,8 +27,8 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL)
     //射影変換（ワールド→ビュー→プロジェクション）
     //法線をワールド空間に
     Norm.w = 0; //移動成分を反映させない
-    output.Normal = mul(Norm, mW);
-    output.Pos = mul(Pos, mWVP);
+    output.Normal = mul(mW, Norm);
+    output.Pos = mul(mWVP, Pos);
 
     return output;
 }

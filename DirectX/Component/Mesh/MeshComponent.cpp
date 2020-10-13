@@ -116,12 +116,8 @@ void MeshComponent::draw(const Camera& camera) const {
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     MeshConstantBuffer mcb;
-    //ワールド行列を渡す
     mcb.world = transform().getWorldTransform();
-    mcb.world.transpose();
-    //ワールド、カメラ、射影行列を渡す
     mcb.WVP = transform().getWorldTransform() * camera.getViewProjection();
-    mcb.WVP.transpose();
 
     //シェーダーにデータ転送
     mShader->transferData(&mcb, sizeof(mcb));
@@ -137,7 +133,7 @@ void MeshComponent::draw(const Camera& camera) const {
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        auto mat = getMaterial(i);
+        const auto& mat = getMaterial(i);
         if (mat->numIndices == 0) {
             continue;
         }

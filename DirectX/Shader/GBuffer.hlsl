@@ -3,15 +3,15 @@ SamplerState g_samLinear : register(s0);
 
 cbuffer global_0 : register(b0)
 {
-    matrix mWorld; //ワールド行列
-    matrix mWVP; //ワールドから射影までの変換行列
+    matrix world; //ワールド行列
+    matrix wvp; //ワールドから射影までの変換行列
 };
 
 cbuffer global_1 : register(b1)
 {
-    float4 mDiffuse;
-    float4 mSpecular;
-    float mTextureFlag;
+    float4 diffuse;
+    float4 specular;
+    float textureFlag;
 }
 
 //バーテックスバッファー出力
@@ -35,10 +35,10 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
 
-    output.Pos = mul(Pos, mWVP);
-    output.WorldPos = mul(Pos, mWorld);
+    output.Pos = mul(wvp, Pos);
+    output.WorldPos = mul(world, Pos);
     Norm.w = 0;
-    output.WorldNormal = mul(Norm, mWorld);
+    output.WorldNormal = mul(world, Norm);
 
     output.UV = UV;
 
@@ -50,8 +50,8 @@ PS_OUTPUT PS(VS_OUTPUT input)
     PS_OUTPUT Out = (PS_OUTPUT) 0;
 
     //カラーテクスチャーへ出力
-    Out.Color = mDiffuse;
-    if (mTextureFlag == 1)
+    Out.Color = diffuse;
+    if (textureFlag == 1)
     {
         Out.Color = g_tex.Sample(g_samLinear, input.UV);
     }
@@ -64,7 +64,7 @@ PS_OUTPUT PS(VS_OUTPUT input)
     Out.Position = float4(input.WorldPos.xyz, 1.0);
 
     //スペキュラテクスチャへ出力
-    Out.Specular = float4(mSpecular.xyz, 1.0);
+    Out.Specular = float4(specular.xyz, 1.0);
 
     return Out;
 }

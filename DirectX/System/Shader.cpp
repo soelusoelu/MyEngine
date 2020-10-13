@@ -24,14 +24,6 @@ void Shader::transferData(const void* data, unsigned size, unsigned index) const
     unmap(index);
 }
 
-void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
-    DirectX::instance().deviceContext()->VSSetShader(mVertexShader.Get(), &classInstances, numClassInstances);
-}
-
-void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
-    DirectX::instance().deviceContext()->PSSetShader(mPixelShader.Get(), &classInstances, numClassInstances);
-}
-
 void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
     auto num = mConstantBuffers.size();
     if (index >= num) {
@@ -47,6 +39,18 @@ void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
     mConstantBuffers[index] = std::make_unique<Buffer>(cb);
 }
 
+void Shader::createInputLayout(const std::vector<InputElementDesc>& layout) {
+    mVertexLayout = std::make_unique<InputElement>(layout, mCompileShader.Get());
+}
+
+void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
+    DirectX::instance().deviceContext()->VSSetShader(mVertexShader.Get(), &classInstances, numClassInstances);
+}
+
+void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
+    DirectX::instance().deviceContext()->PSSetShader(mPixelShader.Get(), &classInstances, numClassInstances);
+}
+
 void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) const {
     auto buf = mConstantBuffers[index]->buffer();
     DirectX::instance().deviceContext()->VSSetConstantBuffers(index, numBuffers, &buf);
@@ -55,10 +59,6 @@ void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) const {
 void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) const {
     auto buf = mConstantBuffers[index]->buffer();
     DirectX::instance().deviceContext()->PSSetConstantBuffers(index, numBuffers, &buf);
-}
-
-void Shader::createInputLayout(const std::vector<InputElementDesc>& layout) {
-    mVertexLayout = std::make_unique<InputElement>(layout, mCompileShader.Get());
 }
 
 void Shader::setInputLayout() const {

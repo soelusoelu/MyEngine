@@ -37,11 +37,11 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
     VS_OUTPUT output = (VS_OUTPUT) 0;
     //射影変換（ワールド→ビュー→プロジェクション）
     //法線をワールド空間に
-    output.Pos = mul(Pos, g_mWVP);
+    output.Pos = mul(g_mWVP, Pos);
     Norm.w = 0; //移動成分を反映させない
-    output.Normal = mul(Norm, g_mW);
+    output.Normal = mul(g_mW, Norm);
     //ライト方向
-    output.WorldPos = mul(Pos, g_mW);
+    output.WorldPos = mul(g_mW, Pos);
     output.Light = normalize(g_vLightPos - output.WorldPos);
     //視線ベクトル
     output.EyeVector = normalize(g_vEye - output.WorldPos);

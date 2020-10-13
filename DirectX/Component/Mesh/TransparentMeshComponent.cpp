@@ -69,12 +69,8 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     TransparentConstantBuffer tcb;
-    //ワールド行列を渡す
     tcb.world = transform().getWorldTransform();
-    tcb.world.transpose();
-    //ワールド、カメラ、射影行列を渡す
     tcb.WVP = transform().getWorldTransform() * camera.getViewProjection();
-    tcb.WVP.transpose();
     tcb.lightDir = mDirLight->getDirection();
     tcb.cameraPos = camera.getPosition();
 
@@ -95,7 +91,7 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        auto mat = getMaterial(i);
+        const auto& mat = getMaterial(i);
         if (mat->numIndices == 0) {
             continue;
         }

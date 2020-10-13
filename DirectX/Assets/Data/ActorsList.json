@@ -3,7 +3,7 @@
     {
       "type": "Camera",
       "properties": {
-        "position": [ 0.0, 8.0, -10.0 ]
+        "position": [ 5.0, 8.0, -10.0 ]
       },
       "components": [
         {
@@ -76,6 +76,12 @@
         {
           "type": "GamePlay",
           "properties": {
+          }
+        },
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "Shape/Sphere.obj"
           }
         }
       ]

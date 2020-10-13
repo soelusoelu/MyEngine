@@ -52,6 +52,8 @@ void Sprite::draw(const Matrix4& proj) const {
 
     //シェーダーを登録
     mShader->setShaderInfo();
+    //テクスチャーを登録
+    mTexture->setTextureInfo();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     TextureConstantBuffer cb;
@@ -62,10 +64,6 @@ void Sprite::draw(const Matrix4& proj) const {
     //シェーダーにデータ転送
     mShader->transferData(&cb, sizeof(cb));
 
-    //テクスチャーをシェーダーに渡す
-    mTexture->setPSTextures();
-    //サンプラーのセット
-    mTexture->setPSSamplers();
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(6);
 }

@@ -13,18 +13,21 @@ class Shader {
 public:
     Shader(const std::string& fileName);
     ~Shader();
+
     //シェーダーにデータを転送する
     void transferData(const void* data, unsigned size, unsigned index = 0) const;
+
+    //コンスタントバッファの作成
+    void createConstantBuffer(unsigned bufferSize, unsigned index = 0);
+    //インプットレイアウトの生成
+    void createInputLayout(const std::vector<InputElementDesc>& layout);
+
     //自身をシェーダーとして登録
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0) const;
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0) const;
-    //コンスタントバッファの作成
-    void createConstantBuffer(unsigned bufferSize, unsigned index = 0);
     //使用するコンスタントバッファを登録
     void setVSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1) const;
     void setPSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1) const;
-    //インプットレイアウトの生成
-    void createInputLayout(const std::vector<InputElementDesc>& layout);
     //自身を登録
     void setInputLayout() const;
     //描画に必要な要素をすべて登録する

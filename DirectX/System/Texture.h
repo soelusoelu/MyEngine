@@ -37,6 +37,8 @@ public:
     //サンプラーの登録
     void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
     void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
+    //描画に必要な要素をすべて登録する
+    void setTextureInfo(unsigned start = 0, unsigned numSamplers = 1) const;
 
 private:
     void createVertexBuffer();

@@ -47,6 +47,13 @@ void Texture::setPSSamplers(unsigned start, unsigned numSamplers) const {
     mSampler->setPSSamplers(start, numSamplers);
 }
 
+void Texture::setTextureInfo(unsigned start, unsigned numSamplers) const {
+    setVSTextures(start, numSamplers);
+    setPSTextures(start, numSamplers);
+    setVSSamplers(start, numSamplers);
+    setPSSamplers(start, numSamplers);
+}
+
 void Texture::createVertexBuffer() {
     static const TextureVertex vertices[] = {
         Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上

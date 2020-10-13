@@ -39,7 +39,7 @@ void Sprite3D::awake() {
     mShader = World::instance().assetsManager().createShader("Texture.hlsl");
 
     //デスクをもとにテクスチャのアスペクト比を取得
-    auto desc = mTexture->desc();
+    const auto& desc = mTexture->desc();
     auto v = static_cast<float>(desc.height) / static_cast<float>(desc.width);
     mTextureAspect.set(1.f, v);
     mTransform->setScale(mTransform->getScale() * Vector3(mTextureAspect, 1.f));
@@ -107,6 +107,8 @@ void Sprite3D::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
 void Sprite3D::draw(const Matrix4& viewProj) const {
     //シェーダーを登録
     mShader->setShaderInfo();
+    //テクスチャーを登録
+    mTexture->setTextureInfo();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     TextureConstantBuffer cb;
@@ -117,10 +119,6 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
     //シェーダーにデータ転送
     mShader->transferData(&cb, sizeof(cb));
 
-    //テクスチャーをシェーダーに渡す
-    mTexture->setPSTextures();
-    //サンプラーのセット
-    mTexture->setPSSamplers();
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(6);
 }
@@ -128,6 +126,8 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
 void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
     //シェーダーを登録
     mShader->setShaderInfo();
+    //テクスチャーを登録
+    mTexture->setTextureInfo();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     TextureConstantBuffer cb;
@@ -139,10 +139,6 @@ void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
     //シェーダーにデータ転送
     mShader->transferData(&cb, sizeof(cb));
 
-    //テクスチャーをシェーダーに渡す
-    mTexture->setPSTextures();
-    //サンプラーのセット
-    mTexture->setPSSamplers();
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(6);
 }

@@ -57,7 +57,6 @@ void PointLightComponent::draw(const Camera& camera, const PointLight& pointLigh
     //シェーダーのコンスタントバッファーに各種データを渡す
     PointLightConstantBuffer cb;
     cb.wvp = world * camera.getViewProjection();
-    cb.wvp.transpose();
     cb.worldPos = transform().getPosition();
     cb.cameraPos = camera.getPosition();
     cb.windowSize = Vector2(Window::width(), Window::height());
