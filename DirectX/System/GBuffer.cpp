@@ -1,6 +1,7 @@
 ﻿#include "GBuffer.h"
-#include "Shader.h"
 #include "Window.h"
+#include "Shader/ConstantBuffers.h"
+#include "Shader/Shader.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Light/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
@@ -164,7 +165,6 @@ void GBuffer::createSampler() {
 void GBuffer::createShader() {
     //シェーダー生成
     mShader = World::instance().assetsManager().createShader("Deferred.hlsl");
-    mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
 }
 
 void GBuffer::createVertexBuffer() {

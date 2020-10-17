@@ -59,7 +59,7 @@ void Renderer::renderSprite() const {
     //プリミティブ・トポロジーをセット
     dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //インデックスバッファーをセット
-    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    Texture::indexBuffer->setIndexBuffer();
     //半透明合成
     dx.blendState()->translucent();
     //カリングオフ

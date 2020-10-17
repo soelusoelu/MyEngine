@@ -1,11 +1,15 @@
 ﻿#include "LineRenderer2D.h"
+#include "../../Device/AssetsManager.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../System/Shader.h"
+#include "../../System/World.h"
+#include "../../System/Shader/ConstantBuffers.h"
+#include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform2D.h"
 #include <vector>
 
 LineRenderer2D::LineRenderer2D() :
     LineRenderer(),
+    mShader(nullptr),
     mTransform(std::make_unique<Transform2D>()) {
     //ラインのサイズはバーテックスバッファに合わせる
     mTransform->setSize(Vector2::one);
@@ -32,14 +36,15 @@ const void* LineRenderer2D::getVertexData() const {
     return vert;
 }
 
-std::vector<InputElementDesc> LineRenderer2D::getInputLayout() const {
-    std::vector<InputElementDesc> layout = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 }
-    };
-    return layout;
+void LineRenderer2D::createShader() {
+    //シェーダー作成
+    mShader = World::instance().assetsManager().createShader("Line2D.hlsl");
 }
 
 void LineRenderer2D::drawLines(const Matrix4& proj) const {
+    //シェーダーを登録
+    mShader->setShaderInfo();
+
     for (const auto& line : mLines) {
         drawLine(line, proj);
     }

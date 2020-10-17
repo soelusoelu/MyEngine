@@ -5,6 +5,7 @@
 #include <list>
 #include <memory>
 
+class Shader;
 class Transform3D;
 
 class LineRenderer3D : public LineRenderer {
@@ -33,14 +34,14 @@ private:
 
     virtual unsigned getParamSize() const override;
     virtual const void* getVertexData() const override;
-    virtual std::vector<InputElementDesc> getInputLayout() const override;
+    virtual void createShader() override;
     virtual void drawLines(const Matrix4& proj) const override;
 
     //実際にラインを描画する
     void drawLine(const Line3DParam& param, const Matrix4& proj) const;
 
 private:
+    std::unique_ptr<Shader> mShader;
     std::list<Line3DParam> mLines;
     std::unique_ptr<Transform3D> mTransform;
-
 };

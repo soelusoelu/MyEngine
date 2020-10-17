@@ -10,8 +10,7 @@ cbuffer global_0 : register(b0)
 cbuffer global_1 : register(b1)
 {
     float4 diffuse;
-    float4 specular;
-    float textureFlag;
+    float3 specular;
 }
 
 //バーテックスバッファー出力
@@ -22,6 +21,7 @@ struct VS_OUTPUT
     float4 WorldNormal : NORMAL;
     float2 UV : TEXCOORD;
 };
+
 //ピクセルシェーダー出力
 struct PS_OUTPUT
 {
@@ -51,10 +51,10 @@ PS_OUTPUT PS(VS_OUTPUT input)
 
     //カラーテクスチャーへ出力
     Out.Color = diffuse;
-    if (textureFlag == 1)
-    {
-        Out.Color = g_tex.Sample(g_samLinear, input.UV);
-    }
+    //if (textureFlag == 1)
+    //{
+    //    Out.Color = g_tex.Sample(g_samLinear, input.UV);
+    //}
 
     //ワールド法線テクスチャーへ出力
     float3 normal = input.WorldNormal.xyz;
@@ -64,7 +64,7 @@ PS_OUTPUT PS(VS_OUTPUT input)
     Out.Position = float4(input.WorldPos.xyz, 1.0);
 
     //スペキュラテクスチャへ出力
-    Out.Specular = float4(specular.xyz, 1.0);
+    Out.Specular = float4(specular, 1.0);
 
     return Out;
 }

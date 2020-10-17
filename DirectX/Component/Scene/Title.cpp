@@ -100,28 +100,24 @@ void Title::start() {
     player.getLoop().loopAll();
     //player.playStreamingFadeIn(1.f, 2.f);
 
-    GameObjectCreater::create("Waveform");
+    //GameObjectCreater::create("Waveform");
+    GameObjectCreater::create("ObjTest");
 }
 
 void Title::update() {
-    auto isEnd = Input::joyPad().getEnter();
-    if (!isEnd) {
-        isEnd = Input::keyboard().getEnter();
-    }
-    if (isEnd) {
-        mScene->next("GamePlay");
-    }
+    //auto isEnd = Input::joyPad().getEnter();
+    //if (!isEnd) {
+    //    isEnd = Input::keyboard().getEnter();
+    //}
+    //if (isEnd) {
+    //    mScene->next("GamePlay");
+    //}
 
-    if (Input::keyboard().getKeyDown(KeyCode::Alpha1)) {
-        mSound->getSoundPlayer().setPlayPoint(55.f);
-    }
+    //if (Input::keyboard().getKeyDown(KeyCode::Alpha1)) {
+    //    mSound->getSoundPlayer().setPlayPoint(55.f);
+    //}
 
-    if (Input::keyboard().getKeyDown(KeyCode::U)) {
-        std::vector<std::complex<float>> co;
-        mSound->getSoundEffect().getEffectParameters(1, &co, sizeof(co));
-    }
-
-    //Debug::renderLine(Vector3::left * 100.f, Vector3::right * 100.f, ColorPalette::red);
-    //Debug::renderLine(Vector3::down * 100.f, Vector3::up * 100.f, ColorPalette::green);
-    //Debug::renderLine(Vector3::back * 100.f, Vector3::forward * 100.f, ColorPalette::blue);
+    Debug::renderLine(Vector3::left * 100.f, Vector3::right * 100.f, ColorPalette::red);
+    Debug::renderLine(Vector3::down * 100.f, Vector3::up * 100.f, ColorPalette::green);
+    Debug::renderLine(Vector3::back * 100.f, Vector3::forward * 100.f, ColorPalette::blue);
 }

@@ -1,15 +1,22 @@
 ﻿#include "Shader.h"
-#include "../DebugLayer/Debug.h"
-#include "../DirectX/DirectXInclude.h"
+#include "ConstantBufferManager.h"
+#include "InputElementManager.h"
+#include "../../DebugLayer/Debug.h"
+#include "../../DirectX/DirectXInclude.h"
 
 Shader::Shader(const std::string& fileName) :
     mCompileShader(nullptr),
     mVertexShader(nullptr),
     mPixelShader(nullptr),
-    mVertexLayout(nullptr) {
-
+    mVertexLayout(nullptr),
+    mConstantBufferManager(std::make_unique<ConstantBufferManager>()),
+    mInputElementManager(std::make_unique<InputElementManager>())
+{
     createVertexShader(fileName);
     createPixelShader(fileName);
+    mConstantBuffers = mConstantBufferManager->createConstantBuffer(fileName);
+    const auto& layout = mInputElementManager->createInputLayout(fileName);
+    createInputLayout(layout);
 }
 
 Shader::~Shader() = default;
@@ -22,25 +29,6 @@ void Shader::transferData(const void* data, unsigned size, unsigned index) const
     memcpy_s(mapRes.pData, mapRes.RowPitch, data, size);
     //閉じる
     unmap(index);
-}
-
-void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
-    auto num = mConstantBuffers.size();
-    if (index >= num) {
-        mConstantBuffers.resize(num + 1);
-    }
-
-    BufferDesc cb;
-    cb.size = bufferSize;
-    cb.usage = Usage::USAGE_DYNAMIC;
-    cb.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_CONSTANT_BUFFER);
-    cb.cpuAccessFlags = static_cast<unsigned>(BufferCPUAccessFlag::CPU_ACCESS_WRITE);
-
-    mConstantBuffers[index] = std::make_unique<Buffer>(cb);
-}
-
-void Shader::createInputLayout(const std::vector<InputElementDesc>& layout) {
-    mVertexLayout = std::make_unique<InputElement>(layout, mCompileShader.Get());
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
@@ -96,6 +84,10 @@ void Shader::createPixelShader(const std::string& fileName) {
         Debug::windowMessage(fileName + ": ピクセルシェーダー作成失敗");
         return;
     }
+}
+
+void Shader::createInputLayout(const std::vector<InputElementDesc>& layout) {
+    mVertexLayout = std::make_unique<InputElement>(layout, mCompileShader.Get());
 }
 
 void Shader::map(D3D11_MAPPED_SUBRESOURCE* mapRes, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {

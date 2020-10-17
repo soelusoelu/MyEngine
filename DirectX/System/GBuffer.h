@@ -14,13 +14,6 @@ class Shader;
 class ShaderResourceView;
 class VertexBuffer;
 
-struct GBufferShaderConstantBuffer {
-    ALIGN16 Vector3 dirLightDir; //ライト方向
-    ALIGN16 Vector3 dirLightColor; //ライト色
-    ALIGN16 Vector3 cameraPos; //カメラ位置
-    ALIGN16 Vector3 ambientLight; //環境光
-};
-
 class GBuffer {
     enum class Type {
         DIFFUSE,

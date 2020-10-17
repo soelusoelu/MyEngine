@@ -13,7 +13,6 @@ cbuffer global_1 : register(b1)
 {
     float4 diffuse : packoffset(c0) = float4(1, 0, 0, 0); //拡散反射(色）
     float4 specular : packoffset(c1) = float4(1, 1, 1, 1); //鏡面反射
-    float isTexture : packoffset(c2) = 0; //テクスチャーが貼られているメッシュかどうかのフラグ
 };
 
 struct VS_OUTPUT
@@ -62,10 +61,10 @@ float4 PS(VS_OUTPUT input) : SV_Target
 {
     float4 color = diffuse;
     //float4 color = input.Color;
-    if (isTexture == 1)
-    {
-        color = g_texDecal.Sample(g_samLinear, input.Tex);
-    }
+    //if (isTexture == 1)
+    //{
+    //    color = g_texDecal.Sample(g_samLinear, input.Tex);
+    //}
     color.a = diffuse.a;
 
     return color;

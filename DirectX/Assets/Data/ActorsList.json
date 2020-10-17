@@ -102,6 +102,17 @@
           }
         }
       ]
+    },
+    {
+      "type": "ObjTest",
+      "components": [
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "Shape/Sphere.obj"
+          }
+        }
+      ]
     }
   ]
 }

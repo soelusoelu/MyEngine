@@ -36,5 +36,5 @@ private:
     unsigned mNumFace; //ƒ|ƒŠƒSƒ“”
 
     std::unique_ptr<VertexBuffer> mVertexBuffer;
-    IndexBufferPtrArray mIndexBuffer;
+    IndexBufferPtrArray mIndexBufferArray;
 };

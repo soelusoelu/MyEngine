@@ -3,8 +3,8 @@
 #include "../DirectX/InputElement.h"
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
-#include "../System/Shader.h"
 #include "../System/World.h"
+#include "../System/Shader/Shader.h"
 #include "../Utility/LevelLoader.h"
 
 PointLight::PointLight() :
@@ -23,19 +23,8 @@ void PointLight::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void PointLight::initialize() {
-    mesh = World::instance().assetsManager().createMesh(mMeshFileName);
-    mesh->setInitMaterials(&materials);
-    radius = mesh->getRadius();
-    shader = World::instance().assetsManager().createShader("PointLight.hlsl");
-
-    //コンスタントバッファ生成
-    shader->createConstantBuffer(sizeof(PointLightConstantBuffer));
-
-    //インプットレイアウトの生成
-    std::vector<InputElementDesc> layout = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-    };
-    shader->createInputLayout(layout);
+    //mesh = World::instance().assetsManager().createMesh(mMeshFileName);
+    //mesh->setInitMaterials(&materials);
+    //radius = mesh->getRadius();
+    //shader = World::instance().assetsManager().createShader("PointLight.hlsl");
 }

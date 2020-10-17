@@ -6,8 +6,8 @@
 #include "../../Mesh/IMeshLoader.h"
 #include "../../Mesh/Material.h"
 #include "../../Mesh/VertexArray.h"
-#include "../../System/Shader.h"
 #include "../../System/Window.h"
+#include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
@@ -48,40 +48,40 @@ void PointLightComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) 
 }
 
 void PointLightComponent::draw(const Camera& camera, const PointLight& pointLight) const {
-    auto scale = Matrix4::createScale(transform().getScale() * mOuterRadius / pointLight.radius);
-    auto trans = Matrix4::createTranslation(transform().getPosition());
-    auto world = scale * trans;
+    //auto scale = Matrix4::createScale(transform().getScale() * mOuterRadius / pointLight.radius);
+    //auto trans = Matrix4::createTranslation(transform().getPosition());
+    //auto world = scale * trans;
 
-    auto shader = pointLight.shader;
+    //auto shader = pointLight.shader;
 
-    //シェーダーのコンスタントバッファーに各種データを渡す
-    PointLightConstantBuffer cb;
-    cb.wvp = world * camera.getViewProjection();
-    cb.worldPos = transform().getPosition();
-    cb.cameraPos = camera.getPosition();
-    cb.windowSize = Vector2(Window::width(), Window::height());
-    cb.diffuseColor = mLightColor;
-    cb.innerRadius = mInnerRadius;
-    cb.outerRadius = mOuterRadius;
-    cb.intensity = mIntensity;
+    ////シェーダーのコンスタントバッファーに各種データを渡す
+    //PointLightConstantBuffer cb;
+    //cb.wvp = world * camera.getViewProjection();
+    //cb.worldPos = transform().getPosition();
+    //cb.cameraPos = camera.getPosition();
+    //cb.windowSize = Vector2(Window::width(), Window::height());
+    //cb.diffuseColor = mLightColor;
+    //cb.innerRadius = mInnerRadius;
+    //cb.outerRadius = mOuterRadius;
+    //cb.intensity = mIntensity;
 
-    //シェーダーにデータ転送
-    shader->transferData(&cb, sizeof(cb));
+    ////シェーダーにデータ転送
+    //shader->transferData(&cb, sizeof(cb));
 
-    auto mesh = pointLight.mesh;
-    auto mats = pointLight.materials;
-    //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < mats.size(); i++) {
-        //使用されていないマテリアル対策
-        if (mats[i]->numIndices == 0) {
-            continue;
-        }
-        //インデックスバッファーをセット
-        mesh->getVertexArray()->setIndexBuffer(i);
+    //auto mesh = pointLight.mesh;
+    //auto mats = pointLight.materials;
+    ////マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
+    //for (size_t i = 0; i < mats.size(); i++) {
+    //    //使用されていないマテリアル対策
+    //    if (mats[i]->numIndices == 0) {
+    //        continue;
+    //    }
+    //    //インデックスバッファーをセット
+    //    mesh->getVertexArray()->setIndexBuffer(i);
 
-        //プリミティブをレンダリング
-        DirectX::instance().drawIndexed(mats[i]->numIndices);
-    }
+    //    //プリミティブをレンダリング
+    //    DirectX::instance().drawIndexed(mats[i]->numIndices);
+    //}
 }
 
 void PointLightComponent::setLightColor(const Vector3& color) {

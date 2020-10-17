@@ -2,9 +2,9 @@
 #include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
-#include "../System/Shader.h"
 #include "../System/TextureFromFile.h"
 #include "../System/World.h"
+#include "../System/Shader/Shader.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include <cassert>
@@ -50,7 +50,7 @@ std::shared_ptr<TextureFromFile> AssetsManager::createTextureFromModel(const std
     return texture;
 }
 
-std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath) {
+std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath, std::vector<MeshVertex>& vertices) {
     std::shared_ptr<IMeshLoader> mesh = nullptr;
     auto itr = mMeshLoaders.find(filePath);
     if (itr != mMeshLoaders.end()) { //既に読み込まれている
@@ -60,13 +60,13 @@ std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileP
         if (ext == ".obj") {
             mesh = std::make_shared<OBJ>();
         } else if (ext == ".fbx") {
-            mesh = std::make_shared<FBX>();
+            //mesh = std::make_shared<FBX>();
         } else {
             Debug::windowMessage(filePath + ": 対応していない拡張子です");
         }
         World::instance().directory().setModelDirectory(filePath);
         auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-        mesh->perse(fileName);
+        mesh->perse(fileName, vertices);
         mMeshLoaders.emplace(filePath, mesh);
     }
     return mesh;

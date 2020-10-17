@@ -1,13 +1,15 @@
 ﻿#pragma once
 
-#include "SystemInclude.h"
-#include "../DirectX/InputElementDesc.h"
+#include "../SystemInclude.h"
+#include "../../DirectX/InputElementDesc.h"
 #include <memory>
 #include <string>
 #include <vector>
 
 class Buffer;
 class InputElement;
+class ConstantBufferManager;
+class InputElementManager;
 
 class Shader {
 public:
@@ -16,11 +18,6 @@ public:
 
     //シェーダーにデータを転送する
     void transferData(const void* data, unsigned size, unsigned index = 0) const;
-
-    //コンスタントバッファの作成
-    void createConstantBuffer(unsigned bufferSize, unsigned index = 0);
-    //インプットレイアウトの生成
-    void createInputLayout(const std::vector<InputElementDesc>& layout);
 
     //自身をシェーダーとして登録
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0) const;
@@ -37,6 +34,8 @@ private:
     //シェーダの生成
     void createVertexShader(const std::string& fileName);
     void createPixelShader(const std::string& fileName);
+    //インプットレイアウトの生成
+    void createInputLayout(const std::vector<InputElementDesc>& layout);
     //シェーダーに値を渡すための開始・終了処理
     void map(D3D11_MAPPED_SUBRESOURCE* mapRes, unsigned index = 0, unsigned sub = 0, D3D11_MAP type = D3D11_MAP_WRITE_DISCARD, unsigned flag = 0) const;
     void unmap(unsigned index = 0, unsigned sub = 0) const;
@@ -47,4 +46,7 @@ private:
     Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader;
     std::vector<std::unique_ptr<Buffer>> mConstantBuffers;
     std::unique_ptr<InputElement> mVertexLayout;
+
+    std::unique_ptr<ConstantBufferManager> mConstantBufferManager;
+    std::unique_ptr<InputElementManager> mInputElementManager;
 };

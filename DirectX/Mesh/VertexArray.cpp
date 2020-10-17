@@ -61,19 +61,19 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
 }
 
 void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void* data) {
-    auto num = mIndexBuffer.size();
+    auto num = mIndexBufferArray.size();
     if (index >= num) {
-        mIndexBuffer.resize(num + 1);
+        mIndexBufferArray.resize(num + 1);
     }
 
     BufferDesc bd;
-    bd.size = sizeof(int) * numFace;
+    bd.size = sizeof(unsigned short) * numFace;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
     SubResourceDesc sub;
     sub.data = data;
 
-    mIndexBuffer[index] = std::make_unique<IndexBuffer>(bd, sub);
+    mIndexBufferArray[index] = std::make_unique<IndexBuffer>(bd, sub);
 }
 
 void VertexArray::setVertexBuffer(unsigned numStream, unsigned start, unsigned offset) {
@@ -81,5 +81,5 @@ void VertexArray::setVertexBuffer(unsigned numStream, unsigned start, unsigned o
 }
 
 void VertexArray::setIndexBuffer(unsigned index, unsigned offset) {
-    mIndexBuffer[index]->setIndexBuffer(Format::FORMAT_R32_UINT, offset);
+    mIndexBufferArray[index]->setIndexBuffer(Format::FORMAT_R16_UINT, offset);
 }
