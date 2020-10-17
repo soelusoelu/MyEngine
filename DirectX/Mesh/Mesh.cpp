@@ -11,8 +11,7 @@ Mesh::Mesh() :
     mVertexBuffer(nullptr),
     mIndexBuffer(nullptr),
     mCenter(Vector3::zero),
-    mRadius(0.f)
-{
+    mRadius(0.f) {
 }
 
 Mesh::~Mesh() = default;
@@ -44,6 +43,10 @@ void Mesh::draw() const {
 
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(mMesh->getIndices().size());
+}
+
+const auto& Mesh::getMaterial(unsigned index) const {
+    return mMesh->getMaterial(index);
 }
 
 const Vector3& Mesh::getCenter() const {

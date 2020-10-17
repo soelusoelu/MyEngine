@@ -7,7 +7,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Mesh/IMeshLoader.h"
-#include "../Mesh/VertexArray.h"
 #include "../System/SystemInclude.h"
 #include "../System/Shader/Shader.h"
 #include "../Utility/LevelLoader.h"

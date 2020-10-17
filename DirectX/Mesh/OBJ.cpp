@@ -1,5 +1,4 @@
 ﻿#include "OBJ.h"
-#include "VertexArray.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
 #include "../System/World.h"
@@ -17,14 +16,14 @@ void OBJ::perse(const std::string& fileName, std::vector<MeshVertex>& vertices) 
         return;
     }
 
-    //1行ずつ読み込む
+    //解析開始
     std::string line;
     while (!ifs.eof()) {
-        //キーワード読み込み
+        //1行ずつ読み込む
         std::getline(ifs, line);
 
-        //空白かコメントだったらスキップ
-        if (line.empty() || line[0] == '#') {
+        //読み込みに不要な行ならスキップ
+        if (isSkip(line)) {
             continue;
         }
 
@@ -35,58 +34,16 @@ void OBJ::perse(const std::string& fileName, std::vector<MeshVertex>& vertices) 
         std::string key;
         std::getline(lineStream, key, ' ');
 
-        //先頭文字列がvなら頂点座標
-        if (key == "v") {
-            //座標読み込み
-            Vector3 pos;
-            lineStream >> pos.x;
-            lineStream >> pos.y;
-            lineStream >> pos.z;
-            //座標データに追加
-            mPositions.emplace_back(pos);
-        } else if (key == "vt") {
-            //UV成分を読み込む
-            Vector2 uv;
-            lineStream >> uv.x;
-            lineStream >> uv.y;
-            //V方向反転
-            uv.y = 1.f - uv.y;
-            //テクスチャ座標データに追加
-            mUVs.emplace_back(uv);
-        } else if (key == "vn") {
-            //xyz成分を読み込む
-            Vector3 normal;
-            lineStream >> normal.x;
-            lineStream >> normal.y;
-            lineStream >> normal.z;
-            //法線ベクトルデータに追加
-            mNormals.emplace_back(normal);
-        } else if (key == "f") {
-            //半角スペース区切りで行の続きを読み込む
-            std::string indexString;
-            while (std::getline(lineStream, indexString, ' ')) {
-                //頂点インデックス1個分の文字列をストリームに変換して解析しやすくする
-                std::istringstream indexStream(indexString);
-                unsigned short indexPos, indexNormal, indexUV;
-                indexStream >> indexPos;
-                //1文字分読み飛ばす
-                indexStream.seekg(1, std::ios_base::cur);
-                //indexStream >> indexUV;
-                //1文字分読み飛ばす
-                indexStream.seekg(1, std::ios_base::cur);
-                indexStream >> indexNormal;
-
-                //頂点データ追加
-                MeshVertex vertex{};
-                vertex.pos = mPositions[indexPos - 1];
-                vertex.normal = mNormals[indexNormal - 1];
-                //vertex.uv = mUVs[indexUV - 1];
-                vertex.uv = Vector2(0.f, 0.f);
-                vertices.emplace_back(vertex);
-
-                //頂点インデックスに追加
-                mIndices.emplace_back(mIndices.size());
-            }
+        if (key == "v") { //先頭文字列がvなら頂点座標
+            loadPosition(lineStream);
+        } else if (key == "vt") { //先頭文字列がvtならuv座標
+            loadUV(lineStream);
+        } else if (key == "vn") { //先頭文字列がvnなら法線
+            loadNormal(lineStream);
+        } else if (key == "f") { //先頭文字列がfならポリゴン
+            loadFace(lineStream, vertices);
+        } else if (key == "mtlib") {
+            loadMaterial(lineStream);
         }
     }
 }
@@ -105,6 +62,10 @@ const std::vector<Vector2>& OBJ::getUVs() const {
 
 const std::vector<unsigned short>& OBJ::getIndices() const {
     return mIndices;
+}
+
+const Material& OBJ::getMaterial(unsigned index) const {
+    return mMaterials[index];
 }
 
 Vector3 OBJ::getCenter() const {
@@ -159,62 +120,150 @@ float OBJ::getRadius() const {
     return (max - min) / 2.f;
 }
 
-bool OBJ::materialLoad(const std::string& materialName) {
-    //std::ifstream ifs(materialName, std::ios::in);
-    //if (ifs.fail()) {
-    //    Debug::windowMessage(materialName + ": ファイルが存在しません");
-    //    return false;
-    //}
+void OBJ::loadPosition(std::istringstream& iss) {
+    //座標読み込み
+    Vector3 pos;
+    iss >> pos.x;
+    iss >> pos.y;
+    iss >> pos.z;
+    //座標データに追加
+    mPositions.emplace_back(pos);
+}
 
-    ////ファイルの先頭に戻る
-    //ifs.clear();
-    //ifs.seekg(0, std::ios_base::beg);
+void OBJ::loadNormal(std::istringstream& iss) {
+    //xyz成分を読み込む
+    Vector3 normal;
+    iss >> normal.x;
+    iss >> normal.y;
+    iss >> normal.z;
+    //法線ベクトルデータに追加
+    mNormals.emplace_back(normal);
+}
 
-    //std::string line;
-    //char s[256]; //ダミー
-    //Vector3 v;
-    //int matCount = -1;
+void OBJ::loadUV(std::istringstream& iss) {
+    //UV成分を読み込む
+    Vector2 uv;
+    iss >> uv.x;
+    iss >> uv.y;
+    //V方向反転
+    uv.y = 1.f - uv.y;
+    //テクスチャ座標データに追加
+    mUVs.emplace_back(uv);
+}
 
-    ////本読み込み
-    //while (!ifs.eof()) {
-    //    //キーワード読み込み
-    //    std::getline(ifs, line);
+void OBJ::loadFace(std::istringstream& iss, std::vector<MeshVertex>& vertices) {
+    //半角スペース区切りで行の続きを読み込む
+    std::string indexString;
+    while (std::getline(iss, indexString, ' ')) {
+        //頂点インデックス1個分の文字列をストリームに変換して解析しやすくする
+        std::istringstream indexStream(indexString);
+        unsigned short indexPos, indexNormal, indexUV;
+        indexStream >> indexPos;
+        //1文字分読み飛ばす
+        indexStream.seekg(1, std::ios_base::cur);
+        //indexStream >> indexUV;
+        //1文字分読み飛ばす
+        indexStream.seekg(1, std::ios_base::cur);
+        indexStream >> indexNormal;
 
-    //    if (line.empty() || line[0] == '#') {
-    //        continue;
-    //    }
+        //頂点データ追加
+        MeshVertex vertex{};
+        vertex.pos = mPositions[indexPos - 1];
+        vertex.normal = mNormals[indexNormal - 1];
+        //vertex.uv = mUVs[indexUV - 1];
+        vertices.emplace_back(vertex);
 
-    //    sscanf_s(line.c_str(), "%s", s, sizeof(s));
+        //頂点インデックスに追加
+        mIndices.emplace_back(mIndices.size());
+    }
+}
 
-    //    //マテリアル名
-    //    if (strcmp(s, "newmtl") == 0) {
-    //        matCount++;
-    //        mInitMaterials[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
-    //    }
-    //    //アンビエント
-    //    if (strcmp(s, "Ka") == 0) {
-    //        sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
-    //        mInitMaterials[matCount]->ambient = v;
-    //    }
-    //    //ディフューズ
-    //    if (strcmp(s, "Kd") == 0) {
-    //        sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
-    //        mInitMaterials[matCount]->diffuse = v;
-    //    }
-    //    //スペキュラー
-    //    if (strcmp(s, "Ks") == 0) {
-    //        sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
-    //        mInitMaterials[matCount]->specular = v;
-    //    }
-    //    //テクスチャー
-    //    if (strcmp(s, "map_Kd") == 0) {
-    //        mInitMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
+void OBJ::loadMaterial(std::istringstream& iss) {
+    //マテリアルのファイル名読み込み
+    std::string fileName;
+    iss >> fileName;
 
-    //        //テクスチャーを作成
-    //        //ディレクトリが変わってない前提
-    //        mInitMaterials[matCount]->texture = World::instance().assetsManager().createTextureFromModel(mInitMaterials[matCount]->textureName);
-    //    }
-    //}
+    //マテリアルファイルを開く
+    std::ifstream ifs(fileName);
+    if (ifs.fail()) {
+        Debug::windowMessage(fileName + ": ファイルが存在しません");
+        return;
+    }
 
-    return true;
+    //解析開始
+    std::string line;
+    while (!ifs.eof()) {
+        //1行ずつ読み込む
+        std::getline(ifs, line);
+
+        //読み込みに不要な行ならスキップ
+        if (isSkip(line)) {
+            continue;
+        }
+
+        //1行分の文字列をストリームに変換
+        std::istringstream lineStream(line);
+
+        //半角スペース区切りで行の先頭文字列を取得
+        std::string key;
+        std::getline(lineStream, key, ' ');
+
+        //先頭のタブ文字は無視する
+        if (key[0] == '\t') {
+            //先頭の文字を削除
+            key.erase(key.begin());
+        }
+
+        //マテリアルの各属性を読み込む
+        if (key == "newmtl") {
+            loadMaterialName(iss);
+        } else if (key == "Ka") {
+            loadAmbient(iss);
+        } else if (key == "Kd") {
+            loadDiffuse(iss);
+        } else if (key == "Ks") {
+            loadSpecular(iss);
+        } else if (key == "map_Kd") {
+            loadTexture(iss);
+        }
+    }
+}
+
+void OBJ::loadMaterialName(std::istringstream& iss) {
+    mMaterials.resize(mMaterials.size() + 1);
+    iss >> mMaterials.back().materialName;
+}
+
+void OBJ::loadAmbient(std::istringstream& iss) {
+    auto& mat = mMaterials.back();
+    iss >> mat.ambient.x;
+    iss >> mat.ambient.y;
+    iss >> mat.ambient.z;
+}
+
+void OBJ::loadDiffuse(std::istringstream& iss) {
+    auto& mat = mMaterials.back();
+    iss >> mat.diffuse.x;
+    iss >> mat.diffuse.y;
+    iss >> mat.diffuse.z;
+}
+
+void OBJ::loadSpecular(std::istringstream& iss) {
+    auto& mat = mMaterials.back();
+    iss >> mat.specular.x;
+    iss >> mat.specular.y;
+    iss >> mat.specular.z;
+}
+
+void OBJ::loadTexture(std::istringstream& iss) {
+    auto& mat = mMaterials.back();
+    //テクスチャ名読み込み
+    iss >> mat.textureName;
+    //テクスチャ読み込み
+    mat.texture = World::instance().assetsManager().createTextureFromModel(mat.textureName);
+}
+
+bool OBJ::isSkip(const std::string& line) {
+    //空白かコメントだったらスキップ
+    return (line.empty() || line[0] == '#');
 }

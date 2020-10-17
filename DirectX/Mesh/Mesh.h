@@ -21,6 +21,8 @@ public:
     //メッシュを描画する
     void draw() const;
 
+    //マテリアルの取得
+    const auto& getMaterial(unsigned index = 0) const;
     //中心座標の取得
     const Vector3& getCenter() const;
     //半径の取得

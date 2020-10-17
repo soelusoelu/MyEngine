@@ -5,7 +5,6 @@
 #include "../../Light/PointLight.h"
 #include "../../Mesh/IMeshLoader.h"
 #include "../../Mesh/Material.h"
-#include "../../Mesh/VertexArray.h"
 #include "../../System/Window.h"
 #include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform3D.h"

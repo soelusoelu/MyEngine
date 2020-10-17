@@ -303,7 +303,6 @@
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
-    <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="DirectX\VertexBuffer.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
@@ -501,7 +500,6 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="DirectX\VertexBuffer.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />

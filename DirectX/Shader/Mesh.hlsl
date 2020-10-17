@@ -18,10 +18,8 @@ cbuffer global_1 : register(b1)
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float4 WorldPos : POSITION;
     float3 Normal : NORMAL;
-    float4 Color : COLOR;
-    float3 Light : TEXCOORD0;
+    float3 LightDir : TEXCOORD0;
     float3 EyeVector : TEXCOORD1;
     float2 UV : TEXCOORD2;
 };
@@ -29,41 +27,39 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-	//射影変換（ワールド→ビュー→プロジェクション）
 	//法線をワールド空間に
     output.Pos = mul(wvp, pos);
-    output.WorldPos = mul(world, pos);
     output.Normal = normal;
-	//ライト方向
-    output.Light = lightDir;
-	//視線ベクトル
-    float3 posWorld = mul(world, pos);
-    output.EyeVector = cameraPos - posWorld;
-	
-    float3 Normal = normalize(output.Normal);
-    float3 LightDir = normalize(output.Light);
-    float3 ViewDir = normalize(output.EyeVector);
-    float NL = saturate(dot(Normal, LightDir));
-	
-    float3 Reflect = normalize(2 * NL * Normal - LightDir);
-    float4 specular = pow(saturate(dot(Reflect, ViewDir)), 4);
-
-    output.Color = diffuse * NL + specular * specular;
-	
 	//テクスチャー座標
     output.UV = uv;
+	//ライト方向
+    output.LightDir = normalize(lightDir);
+	//視線ベクトル
+    float3 posWorld = mul(world, pos).xyz;
+    output.EyeVector = normalize(cameraPos - posWorld);	
 
     return output;
 }
 
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 color = input.Color;
-    //if (isTexture == 1)
-    //{
-    //    color = g_texDecal.Sample(g_samLinear, input.UV);
-    //}
-    color.a = diffuse.a;
+    //float4 color = input.Color;
+    ////if (isTexture == 1)
+    ////{
+    ////    color = g_texDecal.Sample(g_samLinear, input.UV);
+    ////}
+    //color.a = diffuse.a;
+
+    float3 normal = input.Normal;
+    float3 lightDir = input.LightDir;
+    float3 viewDir = input.EyeVector;
+    float NL = saturate(dot(normal, lightDir));
+	
+    float3 Reflect = normalize(2 * NL * normal - lightDir);
+    float4 specular = pow(saturate(dot(Reflect, viewDir)), 4);
+
+    float4 color = diffuse * NL + specular * specular;
+    color = saturate(color * diffuse);
 
     return color;
 }
