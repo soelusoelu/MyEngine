@@ -56,3 +56,8 @@ struct PointLightConstantBuffer {
     ALIGN16 float outerRadius;
     ALIGN16 float intensity;
 };
+
+//シンプルメッシュ
+struct SimpleMeshConstantBuffer {
+    Matrix4 wvp;
+};

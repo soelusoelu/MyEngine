@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
-class Camera;
 class Mesh;
 class MeshManager;
+class Camera;
 
 class MeshComponent : public Component, public std::enable_shared_from_this<MeshComponent> {
     enum class State {
@@ -26,7 +26,7 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
-    virtual void draw(const Camera& camera) const;
+    virtual void draw(const Camera& camera) const = 0;
 
     //中心座標の取得
     const Vector3& getCenter() const;

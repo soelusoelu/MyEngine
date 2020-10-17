@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "Texture.h"
 #include "Window.h"
+#include "Shader/Shader.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../Device/FPSCounter.h"
 #include "../DirectX/DirectX.h"
@@ -23,6 +24,7 @@ Game::Game() :
 Game::~Game() {
     safeDelete(mSceneManager);
 
+    Shader::finalize();
     Texture::finalize();
     GameObjectCreater::finalize();
     InputUtility::finalize();

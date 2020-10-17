@@ -29,29 +29,18 @@ void MeshComponent::onEnable(bool value) {
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     //ファイル名からメッシュを生成
     if (JsonHelper::getString(inObj, "fileName", &mFileName)) {
-        mMesh->loadMesh(mFileName);
+        //メッシュファイル名が取得できたら
+        //シェーダーのデフォルトを設定
+        std::string shader = "Mesh.hlsl";
+        JsonHelper::getString(inObj, "shaderName", &shader);
+        mMesh->loadMesh(mFileName, shader);
+        addToManager();
     }
 }
 
 void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
     inspect->emplace_back("Color", mColor);
-}
-
-void MeshComponent::draw(const Camera& camera) const {
-    //シェーダーのコンスタントバッファーに各種データを渡す
-    MeshConstantBuffer meshcb;
-    meshcb.world = transform().getWorldTransform();
-    meshcb.wvp = transform().getWorldTransform() * camera.getViewProjection();
-    mMesh->setShaderData(&meshcb, sizeof(meshcb), 0);
-
-    MaterialConstantBuffer matcb;
-    matcb.diffuse = Vector4(mColor, 1.f);
-    matcb.specular = Vector3(0.3f, 0.3f, 0.3f);
-    mMesh->setShaderData(&matcb, sizeof(matcb), 1);
-
-    //描画
-    mMesh->draw();
 }
 
 const Vector3& MeshComponent::getCenter() const {
@@ -98,5 +87,5 @@ void MeshComponent::addToManager() {
     }
 
     //マネージャーに自身を登録する
-    mMeshManager->add(shared_from_this());
+    mMeshManager->addTransparent(shared_from_this());
 }

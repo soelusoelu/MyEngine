@@ -18,5 +18,9 @@ public:
     BufferPtrArray createConstantBuffer(const std::string& shaderName) const;
 
 private:
+    ConstantBufferManager(const ConstantBufferManager&) = delete;
+    ConstantBufferManager& operator=(const ConstantBufferManager&) = delete;
+
+private:
     std::unordered_map<std::string, BuffersSize> mConstantBuffers;
 };

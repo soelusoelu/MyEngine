@@ -15,7 +15,7 @@ public:
     Mesh();
     ~Mesh();
     //ファイル名からメッシュを生成する
-    void loadMesh(const std::string& fileName);
+    void loadMesh(const std::string& fileName, const std::string& shaderName);
     //コンスタントバッファを設定する
     void setShaderData(const void* data, unsigned size, unsigned index = 0) const;
     //メッシュを描画する
@@ -28,11 +28,11 @@ public:
 
 private:
     //初期化処理
-    void initialize(const std::string& fileName);
+    void initialize(const std::string& fileName, const std::string& shaderName);
     //メッシュを生成する
     void createMesh(const std::string& fileName);
     //シェーダーを生成する
-    void createShader();
+    void createShader(const std::string& fileName);
     //バーテックスバッファを生成する
     void createVertexBuffer();
     //インデックスバッファを生成する

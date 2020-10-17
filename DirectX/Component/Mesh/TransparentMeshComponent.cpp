@@ -3,18 +3,14 @@
 #include "../Camera/Camera.h"
 #include "../Light/DirectionalLight.h"
 #include "../../Device/AssetsManager.h"
-#include "../../DirectX/DirectX.h"
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectManager.h"
-#include "../../Mesh/IMeshLoader.h"
-#include "../../Mesh/Material.h"
-#include "../../Mesh/VertexArray.h"
-#include "../../System/Shader/Shader.h"
-#include "../../System/TextureFromFile.h"
+#include "../../Mesh/Mesh.h"
 #include "../../System/World.h"
+#include "../../System/Shader/ConstantBuffers.h"
+#include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
-#include <vector>
 
 TransparentMeshComponent::TransparentMeshComponent(GameObject& gameObject) :
     MeshComponent(gameObject),
@@ -43,74 +39,23 @@ void TransparentMeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList * ins
     inspect->emplace_back("Alpha", mAlpha);
 }
 
-//void TransparentMeshComponent::setShader() {
-//    mShader = World::instance().assetsManager().createShader("Mesh.hlsl");
-//    //メッシュ用コンスタントバッファの作成
-//    mShader->createConstantBuffer(sizeof(TransparentConstantBuffer), 0);
-//    mShader->createConstantBuffer(sizeof(MaterialConstantBuffer), 1);
-//    //インプットレイアウトの生成
-//    std::vector<InputElementDesc> layout = {
-//        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-//        { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-//        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-//    };
-//    mShader->createInputLayout(layout);
-//}
-
 void TransparentMeshComponent::draw(const Camera& camera) const {
-    ////使用するシェーダーの登録
-    //mShader->setShaderInfo(0);
+    //シェーダーのコンスタントバッファーに各種データを渡す
+    TransparentConstantBuffer meshcb;
+    const auto& world = transform().getWorldTransform();
+    meshcb.world = world;
+    meshcb.wvp = world * camera.getViewProjection();
+    meshcb.lightDir = mDirLight->getDirection();
+    meshcb.cameraPos = camera.getPosition();
+    mMesh->setShaderData(&meshcb, sizeof(meshcb), 0);
 
-    ////シェーダーのコンスタントバッファーに各種データを渡す
-    //TransparentConstantBuffer tcb;
-    //tcb.world = transform().getWorldTransform();
-    //tcb.wvp = transform().getWorldTransform() * camera.getViewProjection();
-    //tcb.lightDir = mDirLight->getDirection();
-    //tcb.cameraPos = camera.getPosition();
+    MaterialConstantBuffer matcb;
+    matcb.diffuse = Vector4(mColor, mAlpha);
+    matcb.specular = Vector3(0.3f, 0.3f, 0.3f);
+    mMesh->setShaderData(&matcb, sizeof(matcb), 1);
 
-    ////シェーダーにデータ転送
-    //mShader->transferData(&tcb, sizeof(tcb));
-
-
-
-    //auto vertArray = mMesh->getVertexArray();
-
-    ////バーテックスバッファーをセット
-    //vertArray->setVertexBuffer();
-
-    ////このコンスタントバッファーを使うシェーダーの登録
-    //mShader->setVSConstantBuffers(1);
-    //mShader->setPSConstantBuffers(1);
-
-    ////マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    //for (size_t i = 0; i < getNumMaterial(); i++) {
-    //    //使用されていないマテリアル対策
-    //    const auto& mat = getMaterial(i);
-    //    if (mat->numIndices == 0) {
-    //        continue;
-    //    }
-    //    //インデックスバッファーをセット
-    //    vertArray->setIndexBuffer(i);
-
-    //    MaterialConstantBuffer mcb;
-    //    mcb.diffuse = Vector4(mat->diffuse, mAlpha);
-    //    //tcb.diffuse = Vector4(mColor, mAlpha);
-    //    mcb.specular = Vector4(mat->specular, 1.f);
-
-    //    if (auto t = mat->texture) {
-    //        t->setPSTextures();
-    //        t->setPSSamplers();
-    //        mcb.textureFlag = 1;
-    //    } else {
-    //        mcb.textureFlag = 0;
-    //    }
-
-    //    //シェーダーにデータ転送
-    //    mShader->transferData(&mcb, sizeof(mcb), 1);
-
-    //    //プリミティブをレンダリング
-    //    DirectX::instance().drawIndexed(mat->numIndices);
-    //}
+    //描画
+    mMesh->draw();
 }
 
 void TransparentMeshComponent::setAlpha(float alpha) {

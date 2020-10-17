@@ -12,9 +12,15 @@ class ConstantBufferManager;
 class InputElementManager;
 
 class Shader {
+    using BufferPtr = std::unique_ptr<Buffer>;
+    using BufferPtrArray = std::vector<BufferPtr>;
+
 public:
     Shader(const std::string& fileName);
     ~Shader();
+
+    //プログラムの終わりの終了処理
+    static void finalize();
 
     //シェーダーにデータを転送する
     void transferData(const void* data, unsigned size, unsigned index = 0) const;
@@ -44,9 +50,9 @@ private:
     Microsoft::WRL::ComPtr<ID3DBlob> mCompileShader;
     Microsoft::WRL::ComPtr<ID3D11VertexShader> mVertexShader;
     Microsoft::WRL::ComPtr<ID3D11PixelShader> mPixelShader;
-    std::vector<std::unique_ptr<Buffer>> mConstantBuffers;
+    BufferPtrArray mConstantBuffers;
     std::unique_ptr<InputElement> mVertexLayout;
 
-    std::unique_ptr<ConstantBufferManager> mConstantBufferManager;
-    std::unique_ptr<InputElementManager> mInputElementManager;
+    static inline ConstantBufferManager* constantBufferManager = nullptr;
+    static inline InputElementManager* inputElementManager = nullptr;
 };

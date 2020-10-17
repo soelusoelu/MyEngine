@@ -11,34 +11,33 @@ cbuffer global_0 : register(b0)
 
 cbuffer global_1 : register(b1)
 {
-    float4 diffuse : packoffset(c0) = float4(1, 0, 0, 0); //拡散反射(色）
-    float4 specular : packoffset(c1) = float4(1, 1, 1, 1); //鏡面反射
+    float4 diffuse : packoffset(c0) = float4(1, 1, 1, 1); //拡散反射(色）
+    float3 specular : packoffset(c1) = float3(1, 1, 1); //鏡面反射
 };
 
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float4 WorldPos : POSITION;
-    float4 Color : COLOR0;
+    float3 Normal : NORMAL;
+    float4 Color : COLOR;
     float3 Light : TEXCOORD0;
-    float3 Normal : TEXCOORD1;
-    float3 EyeVector : TEXCOORD2;
-    float2 Tex : TEXCOORD3;
+    float3 EyeVector : TEXCOORD1;
+    float2 UV : TEXCOORD2;
 };
 
-VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
+VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
 	//射影変換（ワールド→ビュー→プロジェクション）
 	//法線をワールド空間に
-    Norm.w = 0; //移動成分を反映させない
-    output.Normal = mul(world, Norm);
-    output.Pos = mul(wvp, Pos);
-    output.WorldPos = mul(world, Pos);
+    output.Pos = mul(wvp, pos);
+    output.WorldPos = mul(world, pos);
+    output.Normal = normal;
 	//ライト方向
     output.Light = lightDir;
 	//視線ベクトル
-    float3 posWorld = mul(world, Pos);
+    float3 posWorld = mul(world, pos);
     output.EyeVector = cameraPos - posWorld;
 	
     float3 Normal = normalize(output.Normal);
@@ -52,18 +51,17 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
     output.Color = diffuse * NL + specular * specular;
 	
 	//テクスチャー座標
-    output.Tex = UV;
+    output.UV = uv;
 
     return output;
 }
 
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 color = diffuse;
-    //float4 color = input.Color;
+    float4 color = input.Color;
     //if (isTexture == 1)
     //{
-    //    color = g_texDecal.Sample(g_samLinear, input.Tex);
+    //    color = g_texDecal.Sample(g_samLinear, input.UV);
     //}
     color.a = diffuse.a;
 

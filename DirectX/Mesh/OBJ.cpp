@@ -81,6 +81,7 @@ void OBJ::perse(const std::string& fileName, std::vector<MeshVertex>& vertices) 
                 vertex.pos = mPositions[indexPos - 1];
                 vertex.normal = mNormals[indexNormal - 1];
                 //vertex.uv = mUVs[indexUV - 1];
+                vertex.uv = Vector2(0.f, 0.f);
                 vertices.emplace_back(vertex);
 
                 //頂点インデックスに追加

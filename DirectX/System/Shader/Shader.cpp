@@ -1,6 +1,7 @@
 ﻿#include "Shader.h"
 #include "ConstantBufferManager.h"
 #include "InputElementManager.h"
+#include "../GlobalFunction.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../DirectX/DirectXInclude.h"
 
@@ -8,18 +9,24 @@ Shader::Shader(const std::string& fileName) :
     mCompileShader(nullptr),
     mVertexShader(nullptr),
     mPixelShader(nullptr),
-    mVertexLayout(nullptr),
-    mConstantBufferManager(std::make_unique<ConstantBufferManager>()),
-    mInputElementManager(std::make_unique<InputElementManager>())
-{
+    mVertexLayout(nullptr) {
+    if (!constantBufferManager || !inputElementManager) {
+        constantBufferManager = new ConstantBufferManager();
+        inputElementManager = new InputElementManager();
+    }
     createVertexShader(fileName);
     createPixelShader(fileName);
-    mConstantBuffers = mConstantBufferManager->createConstantBuffer(fileName);
-    const auto& layout = mInputElementManager->createInputLayout(fileName);
+    mConstantBuffers = constantBufferManager->createConstantBuffer(fileName);
+    const auto& layout = inputElementManager->createInputLayout(fileName);
     createInputLayout(layout);
 }
 
 Shader::~Shader() = default;
+
+void Shader::finalize() {
+    safeDelete(constantBufferManager);
+    safeDelete(inputElementManager);
+}
 
 void Shader::transferData(const void* data, unsigned size, unsigned index) const {
     //開く

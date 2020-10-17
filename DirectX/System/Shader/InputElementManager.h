@@ -15,5 +15,9 @@ public:
     const InputLayout& createInputLayout(const std::string& shaderName) const;
 
 private:
+    InputElementManager(const InputElementManager&) = delete;
+    InputElementManager& operator=(const InputElementManager&) = delete;
+
+private:
     std::unordered_map<std::string, InputLayout> mInputLayouts;
 };

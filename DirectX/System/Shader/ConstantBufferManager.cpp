@@ -13,6 +13,7 @@ ConstantBufferManager::ConstantBufferManager() {
     mConstantBuffers.emplace("Line2D.hlsl", BuffersSize{ sizeof(LineConstantBuffer) });
     mConstantBuffers.emplace("Line3D.hlsl", BuffersSize{ sizeof(LineConstantBuffer) });
     mConstantBuffers.emplace("PointLight.hlsl", BuffersSize{ sizeof(PointLightConstantBuffer) });
+    mConstantBuffers.emplace("SimpleMesh.hlsl", BuffersSize{ sizeof(SimpleMeshConstantBuffer) });
 }
 
 ConstantBufferManager::~ConstantBufferManager() = default;

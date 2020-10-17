@@ -36,7 +36,7 @@
           }
         },
         {
-          "type": "MeshComponent",
+          "type": "TransparentMeshComponent",
           "properties": {
             "fileName": "Light/DLight.obj"
           }
@@ -79,7 +79,7 @@
           }
         },
         {
-          "type": "MeshComponent",
+          "type": "TransparentMeshComponent",
           "properties": {
             "fileName": "Shape/Sphere.obj"
           }
@@ -107,7 +107,7 @@
       "type": "ObjTest",
       "components": [
         {
-          "type": "MeshComponent",
+          "type": "TransparentMeshComponent",
           "properties": {
             "fileName": "Shape/Sphere.obj"
           }

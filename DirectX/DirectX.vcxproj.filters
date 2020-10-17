@@ -10,6 +10,7 @@
     <FxCompile Include="Shader\ChickenMesh.hlsl" />
     <FxCompile Include="Shader\Line2D.hlsl" />
     <FxCompile Include="Shader\Line3D.hlsl" />
+    <FxCompile Include="Shader\SimpleMesh.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentManager.cpp" />

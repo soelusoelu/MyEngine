@@ -17,13 +17,13 @@ Mesh::Mesh() :
 
 Mesh::~Mesh() = default;
 
-void Mesh::loadMesh(const std::string& fileName) {
+void Mesh::loadMesh(const std::string& fileName, const std::string& shaderName) {
     //すでに生成済みなら終了する
     if (mMesh) {
         return;
     }
 
-    initialize(fileName);
+    initialize(fileName, shaderName);
 }
 
 void Mesh::setShaderData(const void* data, unsigned size, unsigned index) const {
@@ -31,7 +31,7 @@ void Mesh::setShaderData(const void* data, unsigned size, unsigned index) const 
     mShader->setVSConstantBuffers(index);
     mShader->setPSConstantBuffers(index);
     //シェーダーにデータを転送する
-    mShader->transferData(data, size);
+    mShader->transferData(data, size, index);
 }
 
 void Mesh::draw() const {
@@ -54,9 +54,9 @@ float Mesh::getRadius() const {
     return mRadius;
 }
 
-void Mesh::initialize(const std::string& fileName) {
+void Mesh::initialize(const std::string& fileName, const std::string& shaderName) {
     createMesh(fileName);
-    createShader();
+    createShader(shaderName);
     createVertexBuffer();
     createIndexBuffer();
 }
@@ -66,9 +66,9 @@ void Mesh::createMesh(const std::string& fileName) {
     mMesh = World::instance().assetsManager().createMesh(fileName, mVertices);
 }
 
-void Mesh::createShader() {
+void Mesh::createShader(const std::string& fileName) {
     //アセットマネージャーからシェーダーを作成する
-    mShader = World::instance().assetsManager().createShader("GBuffer.hlsl");
+    mShader = World::instance().assetsManager().createShader(fileName);
 }
 
 void Mesh::createVertexBuffer() {
