@@ -42,7 +42,7 @@ void OBJ::perse(const std::string& fileName, std::vector<MeshVertex>& vertices) 
             loadNormal(lineStream);
         } else if (key == "f") { //先頭文字列がfならポリゴン
             loadFace(lineStream, vertices);
-        } else if (key == "mtlib") {
+        } else if (key == "mtllib") {
             loadMaterial(lineStream);
         }
     }
@@ -66,6 +66,10 @@ const std::vector<unsigned short>& OBJ::getIndices() const {
 
 const Material& OBJ::getMaterial(unsigned index) const {
     return mMaterials[index];
+}
+
+bool OBJ::isUseMaterial() const {
+    return (mMaterials.size() > 0);
 }
 
 Vector3 OBJ::getCenter() const {
@@ -155,22 +159,34 @@ void OBJ::loadFace(std::istringstream& iss, std::vector<MeshVertex>& vertices) {
     //半角スペース区切りで行の続きを読み込む
     std::string indexString;
     while (std::getline(iss, indexString, ' ')) {
-        //頂点インデックス1個分の文字列をストリームに変換して解析しやすくする
+        //頂点データを追加していく
+        MeshVertex vertex{};
         std::istringstream indexStream(indexString);
         unsigned short indexPos, indexNormal, indexUV;
-        indexStream >> indexPos;
-        //1文字分読み飛ばす
-        indexStream.seekg(1, std::ios_base::cur);
-        //indexStream >> indexUV;
-        //1文字分読み飛ばす
-        indexStream.seekg(1, std::ios_base::cur);
-        indexStream >> indexNormal;
 
-        //頂点データ追加
-        MeshVertex vertex{};
+        indexStream >> indexPos;
         vertex.pos = mPositions[indexPos - 1];
-        vertex.normal = mNormals[indexNormal - 1];
-        //vertex.uv = mUVs[indexUV - 1];
+
+        //1文字分読み飛ばす
+        indexStream.seekg(1, std::ios_base::cur);
+
+        indexStream >> indexUV;
+        //テクスチャがない場合の対応
+        if (indexUV == 0) {
+            indexStream.clear();
+            indexStream.seekg(1, std::ios_base::cur);
+        } else {
+            //テクスチャが有るなら追加
+            vertex.uv = mUVs[indexUV - 1];
+        }
+
+        indexStream >> indexNormal;
+        //法線が有るなら追加
+        if (indexNormal > 0) {
+            vertex.normal = mNormals[indexNormal - 1];
+        }
+
+        //頂点データを登録
         vertices.emplace_back(vertex);
 
         //頂点インデックスに追加
@@ -216,15 +232,15 @@ void OBJ::loadMaterial(std::istringstream& iss) {
 
         //マテリアルの各属性を読み込む
         if (key == "newmtl") {
-            loadMaterialName(iss);
+            loadMaterialName(lineStream);
         } else if (key == "Ka") {
-            loadAmbient(iss);
+            loadAmbient(lineStream);
         } else if (key == "Kd") {
-            loadDiffuse(iss);
+            loadDiffuse(lineStream);
         } else if (key == "Ks") {
-            loadSpecular(iss);
+            loadSpecular(lineStream);
         } else if (key == "map_Kd") {
-            loadTexture(iss);
+            loadTexture(lineStream);
         }
     }
 }

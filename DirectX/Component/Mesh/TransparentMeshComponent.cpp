@@ -5,7 +5,9 @@
 #include "../../Device/AssetsManager.h"
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectManager.h"
+#include "../../Mesh/Material.h"
 #include "../../Mesh/Mesh.h"
+#include "../../System/TextureFromFile.h"
 #include "../../System/World.h"
 #include "../../System/Shader/ConstantBuffers.h"
 #include "../../System/Shader/Shader.h"
@@ -50,8 +52,17 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
     mMesh->setShaderData(&meshcb, sizeof(meshcb), 0);
 
     MaterialConstantBuffer matcb;
-    matcb.diffuse = Vector4(mColor, mAlpha);
-    matcb.specular = Vector3(0.3f, 0.3f, 0.3f);
+    //マテリアルが有るなら使用
+    if (mMesh->isUseMaterial()) {
+        const auto& mat = mMesh->getMaterial();
+        matcb.ambient = mat.ambient;
+        matcb.diffuse = Vector4(mat.diffuse, mAlpha);
+        matcb.specular = mat.specular;
+    } else {
+        matcb.ambient = Vector3::zero;
+        matcb.diffuse = Vector4(Vector3::one, mAlpha);
+        matcb.specular = Vector3::zero;
+    }
     mMesh->setShaderData(&matcb, sizeof(matcb), 1);
 
     //描画

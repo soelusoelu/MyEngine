@@ -2,6 +2,7 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
+#include "../System/TextureFromFile.h"
 #include "../System/World.h"
 #include "../System/Shader/Shader.h"
 
@@ -16,19 +17,20 @@ Mesh::Mesh() :
 
 Mesh::~Mesh() = default;
 
-void Mesh::loadMesh(const std::string& fileName, const std::string& shaderName) {
+void Mesh::loadMesh(const std::string& fileName) {
     //すでに生成済みなら終了する
     if (mMesh) {
         return;
     }
 
-    initialize(fileName, shaderName);
+    initialize(fileName);
+}
+
+void Mesh::loadShader(const std::string& shaderName) {
+    createShader(shaderName);
 }
 
 void Mesh::setShaderData(const void* data, unsigned size, unsigned index) const {
-    //コンスタントバッファを指定する
-    mShader->setVSConstantBuffers(index);
-    mShader->setPSConstantBuffers(index);
     //シェーダーにデータを転送する
     mShader->transferData(data, size, index);
 }
@@ -41,12 +43,25 @@ void Mesh::draw() const {
     //インデックスバッファーをセット
     mIndexBuffer->setIndexBuffer();
 
+    //マテリアルを使用していて
+    if (mMesh->isUseMaterial()) {
+        const auto& mat = mMesh->getMaterial();
+        //テクスチャが有るなら登録
+        if (mat.texture) {
+            mat.texture->setTextureInfo();
+        }
+    }
+
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(mMesh->getIndices().size());
 }
 
-const auto& Mesh::getMaterial(unsigned index) const {
+const Material& Mesh::getMaterial(unsigned index) const {
     return mMesh->getMaterial(index);
+}
+
+bool Mesh::isUseMaterial() const {
+    return mMesh->isUseMaterial();
 }
 
 const Vector3& Mesh::getCenter() const {
@@ -57,9 +72,8 @@ float Mesh::getRadius() const {
     return mRadius;
 }
 
-void Mesh::initialize(const std::string& fileName, const std::string& shaderName) {
+void Mesh::initialize(const std::string& fileName) {
     createMesh(fileName);
-    createShader(shaderName);
     createVertexBuffer();
     createIndexBuffer();
 }
@@ -74,7 +88,7 @@ void Mesh::createShader(const std::string& fileName) {
     mShader = World::instance().assetsManager().createShader(fileName);
 }
 
-void Mesh::createVertexBuffer() {
+void Mesh::createVertexBuffer() { 
     BufferDesc bd;
     bd.oneSize = sizeof(MeshVertex);
     bd.size = bd.oneSize * mVertices.size();

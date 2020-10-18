@@ -32,9 +32,6 @@ public:
     const Vector3& getCenter() const;
     //半径の取得
     float getRadius() const;
-    //全体の色合い(シェーダー側で使用している必要あり)
-    void setColor(const Vector3& color);
-    const Vector3& getColor() const;
     //状態
     void destroy();
     void setActive(bool value);
@@ -51,7 +48,6 @@ protected:
     std::unique_ptr<Mesh> mMesh;
     std::string mFileName;
     State mState;
-    Vector3 mColor;
 
     static inline MeshManager* mMeshManager = nullptr;
 };

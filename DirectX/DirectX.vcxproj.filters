@@ -3,7 +3,6 @@
   <ItemGroup>
     <FxCompile Include="Shader\Texture.hlsl" />
     <FxCompile Include="Shader\Mesh.hlsl" />
-    <FxCompile Include="Shader\Mesh2.hlsl" />
     <FxCompile Include="Shader\Deferred.hlsl" />
     <FxCompile Include="Shader\GBuffer.hlsl" />
     <FxCompile Include="Shader\PointLight.hlsl" />
@@ -11,6 +10,7 @@
     <FxCompile Include="Shader\Line2D.hlsl" />
     <FxCompile Include="Shader\Line3D.hlsl" />
     <FxCompile Include="Shader\SimpleMesh.hlsl" />
+    <FxCompile Include="Shader\MeshTexture.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentManager.cpp" />

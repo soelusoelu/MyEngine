@@ -9,8 +9,9 @@ cbuffer global_0 : register(b0)
 
 cbuffer global_1 : register(b1)
 {
-    float4 diffuse;
-    float3 specular;
+    float3 ambient : packoffset(c0);
+    float4 diffuse : packoffset(c1);
+    float3 specular : packoffset(c2);
 }
 
 //バーテックスバッファー出力

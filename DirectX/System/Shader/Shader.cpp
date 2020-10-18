@@ -28,14 +28,24 @@ void Shader::finalize() {
     safeDelete(inputElementManager);
 }
 
-void Shader::transferData(const void* data, unsigned size, unsigned index) const {
+void Shader::setShaderInfo() const {
+    setVSShader();
+    setPSShader();
+    setInputLayout();
+}
+
+void Shader::transferData(const void* data, unsigned size, unsigned constantBufferIndex) const {
+    //コンスタントバッファを登録する
+    setVSConstantBuffers(constantBufferIndex);
+    setPSConstantBuffers(constantBufferIndex);
+
     //開く
     D3D11_MAPPED_SUBRESOURCE mapRes = { 0 };
-    map(&mapRes, index);
+    map(&mapRes, constantBufferIndex);
     //データ転送
     memcpy_s(mapRes.pData, mapRes.RowPitch, data, size);
     //閉じる
-    unmap(index);
+    unmap(constantBufferIndex);
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
@@ -58,14 +68,6 @@ void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) const {
 
 void Shader::setInputLayout() const {
     DirectX::instance().deviceContext()->IASetInputLayout(mVertexLayout->layout());
-}
-
-void Shader::setShaderInfo(unsigned constantBufferIndex) const {
-    setVSShader();
-    setPSShader();
-    setVSConstantBuffers(constantBufferIndex);
-    setPSConstantBuffers(constantBufferIndex);
-    setInputLayout();
 }
 
 void Shader::createVertexShader(const std::string& fileName) {

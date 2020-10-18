@@ -19,6 +19,7 @@ struct MeshConstantBuffer {
 
 //マテリアル
 struct MaterialConstantBuffer {
+    ALIGN16 Vector3 ambient;
     ALIGN16 Vector4 diffuse;
     ALIGN16 Vector3 specular;
 };

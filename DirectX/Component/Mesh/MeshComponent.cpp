@@ -12,8 +12,7 @@ MeshComponent::MeshComponent(GameObject& gameObject) :
     Component(gameObject),
     mMesh(std::make_unique<Mesh>()),
     mFileName(),
-    mState(State::ACTIVE),
-    mColor(ColorPalette::white) {
+    mState(State::ACTIVE) {
 }
 
 MeshComponent::~MeshComponent() = default;
@@ -29,18 +28,30 @@ void MeshComponent::onEnable(bool value) {
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     //ファイル名からメッシュを生成
     if (JsonHelper::getString(inObj, "fileName", &mFileName)) {
-        //メッシュファイル名が取得できたら
-        //シェーダーのデフォルトを設定
-        std::string shader = "Mesh.hlsl";
-        JsonHelper::getString(inObj, "shaderName", &shader);
-        mMesh->loadMesh(mFileName, shader);
+        mMesh->loadMesh(mFileName);
         addToManager();
+    }
+
+    std::string shader;
+    //シェーダー名が取得できたら読み込む
+    if (JsonHelper::getString(inObj, "shaderName", &shader)) {
+        mMesh->loadShader(shader);
+    } else {
+        //シェーダー名が取得できなかったらデフォルトのシェーダーを使う
+        shader = "Mesh.hlsl";
+        //マテリアルが有るなら
+        if (mMesh->isUseMaterial()) {
+            //テクスチャが有るなら
+            if (mMesh->getMaterial().texture) {
+                shader = "MeshTexture.hlsl";
+            }
+        }
+        mMesh->loadShader(shader);
     }
 }
 
 void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
-    inspect->emplace_back("Color", mColor);
 }
 
 const Vector3& MeshComponent::getCenter() const {
@@ -49,14 +60,6 @@ const Vector3& MeshComponent::getCenter() const {
 
 float MeshComponent::getRadius() const {
     return mMesh->getRadius();
-}
-
-void MeshComponent::setColor(const Vector3& color) {
-    mColor = color;
-}
-
-const Vector3& MeshComponent::getColor() const {
-    return mColor;
 }
 
 void MeshComponent::destroy() {
