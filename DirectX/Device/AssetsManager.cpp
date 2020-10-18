@@ -60,7 +60,7 @@ std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileP
         if (ext == ".obj") {
             mesh = std::make_shared<OBJ>();
         } else if (ext == ".fbx") {
-            //mesh = std::make_shared<FBX>();
+            mesh = std::make_shared<FBX>();
         } else {
             Debug::windowMessage(filePath + ": 対応していない拡張子です");
         }

@@ -109,7 +109,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Test/test.obj"
+            "fileName": "Shape/sphere.fbx"
           }
         }
       ]

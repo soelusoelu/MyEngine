@@ -19,8 +19,6 @@ public:
     virtual const std::vector<unsigned short>& getIndices() const override;
     virtual const Material& getMaterial(unsigned index = 0) const override;
     virtual bool isUseMaterial() const override;
-    virtual Vector3 getCenter() const override;
-    virtual float getRadius() const override;
 
 private:
     //頂点情報関連

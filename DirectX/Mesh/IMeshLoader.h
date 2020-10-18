@@ -23,6 +23,4 @@ public:
     virtual const std::vector<unsigned short>& getIndices() const = 0;
     virtual const Material& getMaterial(unsigned index = 0) const = 0;
     virtual bool isUseMaterial() const = 0;
-    virtual Vector3 getCenter() const = 0;
-    virtual float getRadius() const = 0;
 };

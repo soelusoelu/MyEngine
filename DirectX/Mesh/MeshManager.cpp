@@ -30,8 +30,8 @@ void MeshManager::draw(const Camera& camera) const {
             continue;
         }
 
-        //dx.rasterizerState()->setCulling(CullMode::FRONT);
-        //mesh->draw(camera);
+        dx.rasterizerState()->setCulling(CullMode::FRONT);
+        mesh->draw(camera);
 
         dx.rasterizerState()->setCulling(CullMode::BACK);
         mesh->draw(camera);

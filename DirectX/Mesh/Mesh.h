@@ -44,6 +44,10 @@ private:
     void createVertexBuffer();
     //インデックスバッファを生成する
     void createIndexBuffer();
+    //メッシュの中心を計算する
+    void computeCenter();
+    //メッシュの半径を計算する
+    void computeRadius();
 
 private:
     std::shared_ptr<IMeshLoader> mMesh;

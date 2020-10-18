@@ -76,6 +76,8 @@ void Mesh::initialize(const std::string& fileName) {
     createMesh(fileName);
     createVertexBuffer();
     createIndexBuffer();
+    computeCenter();
+    computeRadius();
 }
 
 void Mesh::createMesh(const std::string& fileName) {
@@ -110,4 +112,58 @@ void Mesh::createIndexBuffer() {
     sub.data = indices.data();
 
     mIndexBuffer = std::make_unique<IndexBuffer>(bd, sub);
+}
+
+void Mesh::computeCenter() {
+    const auto& positions = mMesh->getPositions();
+    auto min = Vector3::one * Math::infinity;
+    auto max = Vector3::one * Math::negInfinity;
+    for (size_t i = 0; i < positions.size(); i++) {
+        if (positions[i].x < min.x) {
+            min.x = positions[i].x;
+        }
+        if (positions[i].x > max.x) {
+            max.x = positions[i].x;
+        }
+        if (positions[i].y < min.y) {
+            min.y = positions[i].y;
+        }
+        if (positions[i].y > max.y) {
+            max.y = positions[i].y;
+        }
+        if (positions[i].z < min.z) {
+            min.z = positions[i].z;
+        }
+        if (positions[i].z > max.z) {
+            max.z = positions[i].z;
+        }
+    }
+    mCenter = (max + min) / 2.f;
+}
+
+void Mesh::computeRadius() {
+    const auto& positions = mMesh->getPositions();
+    float min = Math::infinity;
+    float max = Math::negInfinity;
+    for (size_t i = 0; i < positions.size(); i++) {
+        if (positions[i].x < min) {
+            min = positions[i].x;
+        }
+        if (positions[i].x > max) {
+            max = positions[i].x;
+        }
+        if (positions[i].y < min) {
+            min = positions[i].y;
+        }
+        if (positions[i].y > max) {
+            max = positions[i].y;
+        }
+        if (positions[i].z < min) {
+            min = positions[i].z;
+        }
+        if (positions[i].z > max) {
+            max = positions[i].z;
+        }
+    }
+    mRadius = (max - min) / 2.f;
 }

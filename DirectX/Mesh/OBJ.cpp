@@ -72,58 +72,6 @@ bool OBJ::isUseMaterial() const {
     return (mMaterials.size() > 0);
 }
 
-Vector3 OBJ::getCenter() const {
-    auto min = Vector3::one * Math::infinity;
-    auto max = Vector3::one * Math::negInfinity;
-    for (size_t i = 0; i < mPositions.size(); i++) {
-        if (mPositions[i].x < min.x) {
-            min.x = mPositions[i].x;
-        }
-        if (mPositions[i].x > max.x) {
-            max.x = mPositions[i].x;
-        }
-        if (mPositions[i].y < min.y) {
-            min.y = mPositions[i].y;
-        }
-        if (mPositions[i].y > max.y) {
-            max.y = mPositions[i].y;
-        }
-        if (mPositions[i].z < min.z) {
-            min.z = mPositions[i].z;
-        }
-        if (mPositions[i].z > max.z) {
-            max.z = mPositions[i].z;
-        }
-    }
-    return (max + min) / 2.f;
-}
-
-float OBJ::getRadius() const {
-    float min = Math::infinity;
-    float max = Math::negInfinity;
-    for (size_t i = 0; i < mPositions.size(); i++) {
-        if (mPositions[i].x < min) {
-            min = mPositions[i].x;
-        }
-        if (mPositions[i].x > max) {
-            max = mPositions[i].x;
-        }
-        if (mPositions[i].y < min) {
-            min = mPositions[i].y;
-        }
-        if (mPositions[i].y > max) {
-            max = mPositions[i].y;
-        }
-        if (mPositions[i].z < min) {
-            min = mPositions[i].z;
-        }
-        if (mPositions[i].z > max) {
-            max = mPositions[i].z;
-        }
-    }
-    return (max - min) / 2.f;
-}
-
 void OBJ::loadPosition(std::istringstream& iss) {
     //座標読み込み
     Vector3 pos;
