@@ -33,10 +33,15 @@ void FBX::perse(const std::string& fileName, std::vector<MeshVertex>& vertices) 
     FbxGeometryConverter geometryConverter(manager);
     geometryConverter.Triangulate(scene, true);
 
-    //Scene解析
-    FbxNode* root = scene->GetRootNode();
-    if (root) {
-        perse(vertices, root, 0);
+    //マテリアル単位でメッシュを分割する
+    geometryConverter.SplitMeshesPerMaterial(scene, true);
+
+    //FbxMeshの数を取得
+    auto numMesh = scene->GetSrcObjectCount<FbxMesh>();
+    //FbxMeshの数だけメッシュを作成する
+    for (size_t i = 0; i < numMesh; i++) {
+        auto mesh = scene->GetSrcObject<FbxMesh>(i);
+        createMesh(vertices, mesh);
     }
 
     //マネージャー解放
@@ -67,33 +72,12 @@ bool FBX::isUseMaterial() const {
     return (mMaterials.size() > 0);
 }
 
-void FBX::perse(std::vector<MeshVertex>& vertices, FbxNode* node, int indent) {
-    int attrCount = node->GetNodeAttributeCount();
-
-    for (size_t i = 0; i < attrCount; i++) {
-        FbxNodeAttribute* attr = node->GetNodeAttributeByIndex(i);
-        FbxNodeAttribute::EType type = attr->GetAttributeType();
-        if (i + 1 == attrCount) {
-            FbxMesh* mesh = nullptr;
-            switch (type) {
-            case fbxsdk::FbxNodeAttribute::eMesh:
-                mesh = node->GetMesh();
-                loadPosition(mesh);
-                loadNormal(mesh);
-                loadUV(mesh);
-                loadFace(vertices, mesh);
-                loadMaterial(mesh);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    int childCount = node->GetChildCount();
-    for (int i = 0; i < childCount; ++i) {
-        perse(vertices, node->GetChild(i), indent + 1);
-    }
+void FBX::createMesh(std::vector<MeshVertex>& vertices, FbxMesh* mesh) {
+    loadPosition(mesh);
+    loadNormal(mesh);
+    loadUV(mesh);
+    loadFace(vertices, mesh);
+    loadMaterial(mesh);
 }
 
 void FBX::loadPosition(FbxMesh* mesh) {
@@ -107,6 +91,7 @@ void FBX::loadPosition(FbxMesh* mesh) {
     for (size_t i = 0; i < mPositions.size(); i++) {
         int index = indices[i];
 
+        //xはマイナスのはずだけど背面カリングがうまくいかないから
         mPositions[i].x = static_cast<float>(src[index][0]);
         mPositions[i].y = static_cast<float>(src[index][1]);
         mPositions[i].z = static_cast<float>(src[index][2]);
@@ -119,11 +104,13 @@ void FBX::loadNormal(FbxMesh* mesh) {
     mNormals.resize(normals.Size());
 
     for (size_t i = 0; i < normals.Size(); i++) {
+        //xはマイナスのはずだけど背面カリングがうまくいかないから
         mNormals[i].x = static_cast<float>(normals[i][0]);
         mNormals[i].y = static_cast<float>(normals[i][1]);
         mNormals[i].z = static_cast<float>(normals[i][2]);
     }
 
+#pragma region 公式サンプル
     //FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
     //if (!normalElement) {
     //    return;
@@ -166,21 +153,26 @@ void FBX::loadNormal(FbxMesh* mesh) {
     //        }
     //    }
     //}
+#pragma endregion
 }
 
 void FBX::loadUV(FbxMesh* mesh) {
+    //UVSetの名前リストを取得
     FbxStringList uvSetNameList;
     mesh->GetUVSetNames(uvSetNameList);
 
+    //UVSetの名前からUVSetを取得する
     FbxArray<FbxVector2> uvs;
     mesh->GetPolygonVertexUVs(uvSetNameList.GetStringAt(0), uvs);
     mUVs.resize(uvs.Size());
 
     for (size_t i = 0; i < uvs.Size(); i++) {
+        //xは1から引かないはずだけど背面カリングがうまくいかないから
         mUVs[i].x = 1.f - static_cast<float>(uvs[i][0]);
         mUVs[i].y = 1.f - static_cast<float>(uvs[i][1]);
     }
 
+#pragma region 公式サンプル
     //すべてのUVセットを反復処理する
     //for (int uvSetIndex = 0; uvSetIndex < uvSetNameList.GetCount(); uvSetIndex++) {
     //    //uvSetIndex-番目のUVセットを取得
@@ -238,6 +230,7 @@ void FBX::loadUV(FbxMesh* mesh) {
     //        }
     //    }
     //}
+#pragma endregion
 }
 
 void FBX::loadFace(std::vector<MeshVertex>& vertices, FbxMesh* mesh) {
@@ -256,6 +249,7 @@ void FBX::loadFace(std::vector<MeshVertex>& vertices, FbxMesh* mesh) {
         vertices[i].pos = mPositions[i];
         vertices[i].normal = mNormals[i];
 
+        //uvは使われてる場合のみ
         if (mUVs.size() > 0) {
             vertices[i].uv = mUVs[i];
         }
@@ -263,126 +257,134 @@ void FBX::loadFace(std::vector<MeshVertex>& vertices, FbxMesh* mesh) {
 }
 
 void FBX::loadMaterial(FbxMesh* mesh) {
-    FbxNode* node = mesh->GetNode();
-    if (!node) {
+    //マテリアルがなければ終了
+    if (mesh->GetElementMaterialCount() == 0) {
         return;
     }
 
-    //マテリアルの数
-    int materialNum = node->GetMaterialCount();
-    if (materialNum == 0) {
-        return;
+    //Mesh側のマテリアル情報を取得
+    FbxLayerElementMaterial* material = mesh->GetElementMaterial(0);
+
+    //インデックスバッファからインデックスを取得
+    int index = material->GetIndexArray().GetAt(0);
+    //マテリアル取得
+    FbxSurfaceMaterial* surfaceMaterial = mesh->GetNode()->GetSrcObject<FbxSurfaceMaterial>(index);
+
+    //マテリアル名の保存
+    if (surfaceMaterial) {
+        auto& mat = mMaterials.emplace_back();
+
+        //マテリアル名を取得
+        mat.materialName = surfaceMaterial->GetName();
+
+        //テクスチャ以外の情報を取得
+        loadMaterialAttribute(surfaceMaterial);
+
+        //テクスチャを取得
+        loadMaterialTexture(surfaceMaterial);
+    }
+}
+
+void FBX::loadMaterialAttribute(FbxSurfaceMaterial* material) {
+    auto& mat = mMaterials.back();
+    //まずはランバート分読み込む
+    FbxSurfaceLambert* lambert = static_cast<FbxSurfaceLambert*>(material);
+
+    //アンビエント
+    auto prop = lambert->FindProperty(FbxSurfaceMaterial::sAmbient);
+    if (prop.IsValid()) {
+        auto ambient = lambert->Ambient.Get();
+        mat.ambient.x = static_cast<float>(ambient[0]);
+        mat.ambient.y = static_cast<float>(ambient[1]);
+        mat.ambient.z = static_cast<float>(ambient[2]);
     }
 
-    //マテリアル情報を取得
-    for (size_t i = 0; i < materialNum; i++) {
-        mMaterials.resize(mMaterials.size() + 1);
+    //ディヒューズ
+    prop = lambert->FindProperty(FbxSurfaceMaterial::sDiffuse);
+    if (prop.IsValid()) {
+        auto diffuse = lambert->Diffuse.Get();
+        mat.diffuse.x = static_cast<float>(diffuse[0]);
+        mat.diffuse.y = static_cast<float>(diffuse[1]);
+        mat.diffuse.z = static_cast<float>(diffuse[2]);
+    }
 
-        FbxSurfaceMaterial* material = node->GetMaterial(i);
-        if (!material) {
-            continue;
-        }
+    //エミッシブ
+    prop = lambert->FindProperty(FbxSurfaceMaterial::sEmissive);
+    if (prop.IsValid()) {
+        auto emissive = lambert->Emissive.Get();
+        mat.emissive.x = static_cast<float>(emissive[0]);
+        mat.emissive.y = static_cast<float>(emissive[1]);
+        mat.emissive.z = static_cast<float>(emissive[2]);
+    }
 
-        //解析
-        //LambertかPhongか
-        if (material->GetClassId().Is(FbxSurfaceLambert::ClassId)) {
-            FbxSurfaceLambert* lambert = static_cast<FbxSurfaceLambert*>(material);
+    //バンプ
+    prop = lambert->FindProperty(FbxSurfaceMaterial::sBump);
+    if (prop.IsValid()) {
+        auto bump = lambert->Bump.Get();
+        mat.bump.x = static_cast<float>(bump[0]);
+        mat.bump.y = static_cast<float>(bump[1]);
+        mat.bump.z = static_cast<float>(bump[2]);
+    }
 
-            auto& mat = mMaterials[i];
+    //透過度
+    prop = lambert->FindProperty(FbxSurfaceMaterial::sTransparencyFactor);
+    if (prop.IsValid()) {
+        mat.transparency = static_cast<float>(lambert->TransparencyFactor.Get());
+    }
 
-            //アンビエント
-            auto ambient = lambert->Ambient.Get();
-            mat.ambient.x = static_cast<float>(ambient[0]);
-            mat.ambient.y = static_cast<float>(ambient[1]);
-            mat.ambient.z = static_cast<float>(ambient[2]);
+    //Phongだったら追加読み込み
+    if (material->GetClassId().Is(FbxSurfacePhong::ClassId)) {
+        FbxSurfacePhong* phong = static_cast<FbxSurfacePhong*>(material);
 
-            //ディヒューズ
-            auto diffuse = lambert->Diffuse.Get();
-            mat.diffuse.x = static_cast<float>(diffuse[0]);
-            mat.diffuse.y = static_cast<float>(diffuse[1]);
-            mat.diffuse.z = static_cast<float>(diffuse[2]);
-
-            //エミッシブ
-            auto emissive = lambert->Emissive.Get();
-            mat.emissive.x = static_cast<float>(emissive[0]);
-            mat.emissive.y = static_cast<float>(emissive[1]);
-            mat.emissive.z = static_cast<float>(emissive[2]);
-
-            //バンプ
-            auto bump = lambert->Bump.Get();
-            mat.bump.x = static_cast<float>(bump[0]);
-            mat.bump.y = static_cast<float>(bump[1]);
-            mat.bump.z = static_cast<float>(bump[2]);
-
-            //透過度
-            mat.transparency = static_cast<float>(lambert->TransparencyFactor.Get());
-        } else if (material->GetClassId().Is(FbxSurfacePhong::ClassId)) {
-            FbxSurfacePhong* phong = static_cast<FbxSurfacePhong*>(material);
-
-            auto& mat = mMaterials[i];
-
-            //アンビエント
-            auto ambient = phong->Ambient.Get();
-            mat.ambient.x = static_cast<float>(ambient[0]);
-            mat.ambient.y = static_cast<float>(ambient[1]);
-            mat.ambient.z = static_cast<float>(ambient[2]);
-
-            //ディヒューズ
-            auto diffuse = phong->Diffuse.Get();
-            mat.diffuse.x = static_cast<float>(diffuse[0]);
-            mat.diffuse.y = static_cast<float>(diffuse[1]);
-            mat.diffuse.z = static_cast<float>(diffuse[2]);
-
-            //エミッシブ
-            auto emissive = phong->Emissive.Get();
-            mat.emissive.x = static_cast<float>(emissive[0]);
-            mat.emissive.y = static_cast<float>(emissive[1]);
-            mat.emissive.z = static_cast<float>(emissive[2]);
-
-            //バンプ
-            auto bump = phong->Bump.Get();
-            mat.bump.x = static_cast<float>(bump[0]);
-            mat.bump.y = static_cast<float>(bump[1]);
-            mat.bump.z = static_cast<float>(bump[2]);
-
-            //透過度
-            mat.transparency = static_cast<float>(phong->TransparencyFactor.Get());
-
-            //スペキュラ
+        //スペキュラ
+        prop = lambert->FindProperty(FbxSurfaceMaterial::sSpecular);
+        if (prop.IsValid()) {
             auto specular = phong->Specular.Get();
             mat.specular.x = static_cast<float>(specular[0]);
             mat.specular.y = static_cast<float>(specular[1]);
             mat.specular.z = static_cast<float>(specular[2]);
+        }
 
-            //光沢
+        //光沢
+        prop = lambert->FindProperty(FbxSurfaceMaterial::sShininess);
+        if (prop.IsValid()) {
             mat.shininess = static_cast<float>(phong->Shininess.Get());
         }
+    }
+}
 
-        //ディフューズプロパティを検索
-        FbxProperty property = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
+void FBX::loadMaterialTexture(FbxSurfaceMaterial* material) {
+    //Diffuseプロパティを取得
+    auto prop = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
 
-        //プロパティが持っているレイヤードテクスチャの枚数をチェック
-        int layerNum = property.GetSrcObjectCount<FbxLayeredTexture>();
-
-        //レイヤードテクスチャが無ければ通常テクスチャ
-        if (layerNum == 0) {
-            //通常テクスチャの枚数をチェック
-            int numGeneralTexture = property.GetSrcObjectCount<FbxTexture>();
-
-            //各テクスチャについてテクスチャ情報をゲット
-            for (int j = 0; j < numGeneralTexture; ++j) {
-                //j番目のテクスチャオブジェクト取得
-                FbxTexture* texture = FbxCast<FbxTexture>(property.GetSrcObject<FbxTexture>(j));
-
-                //テクスチャ名
-                mMaterials[i].textureName = texture->GetName();
-
-                //テクスチャを作成
-                //ディレクトリが変わってない前提
-                mMaterials[i].texture = World::instance().assetsManager().createTextureFromModel(mMaterials[i].textureName);
-
-                break; //とりあえず今は1枚だけサポート
-            }
+    //テクスチャを取得する
+    FbxFileTexture* texture = nullptr;
+    int numTexture = prop.GetSrcObjectCount<FbxFileTexture>();
+    if (numTexture > 0) {
+        auto& mat = mMaterials.back();
+        texture = prop.GetSrcObject<FbxFileTexture>(0);
+    } else {
+        //失敗したらマルチテクスチャの可能性を考えて、FbxLayerdTextureを指定する
+        //FbxLayerdTextureからテクスチャを取得する
+        int numLayer = prop.GetSrcObjectCount<FbxLayeredTexture>();
+        if (numLayer > 0) {
+            texture = prop.GetSrcObject<FbxFileTexture>(0);
         }
     }
+
+    //テクスチャを使用していなかったら終了
+    if (!texture) {
+        return;
+    }
+
+    //適用したいマテリアル
+    auto& mat = mMaterials.back();
+
+    //ファイルパスを相対パスで取得
+    auto filePath = texture->GetRelativeFileName();
+    //ファイルパスからファイル名を取得する
+    mat.textureName = FileUtil::getFileNameFromDirectry(filePath);
+
+    //テクスチャ作成
+    mat.texture = World::instance().assetsManager().createTextureFromModel(mat.textureName);
 }

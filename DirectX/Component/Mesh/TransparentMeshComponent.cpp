@@ -56,7 +56,7 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
     if (mMesh->isUseMaterial()) {
         const auto& mat = mMesh->getMaterial();
         matcb.ambient = mat.ambient;
-        matcb.diffuse = Vector4(mat.diffuse, mAlpha);
+        matcb.diffuse = Vector4(mat.diffuse, mat.transparency * mAlpha);
         matcb.specular = mat.specular;
     } else {
         matcb.ambient = Vector3::zero;

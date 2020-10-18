@@ -20,12 +20,15 @@ public:
     virtual bool isUseMaterial() const override;
 
 private:
-    void perse(std::vector<MeshVertex>& vertices, FbxNode* node, int indent);
+    void createMesh(std::vector<MeshVertex>& vertices, FbxMesh* mesh);
     void loadPosition(FbxMesh* mesh);
     void loadNormal(FbxMesh* mesh);
     void loadUV(FbxMesh* mesh);
     void loadFace(std::vector<MeshVertex>& vertices, FbxMesh* mesh);
+
     void loadMaterial(FbxMesh* mesh);
+    void loadMaterialAttribute(FbxSurfaceMaterial* material);
+    void loadMaterialTexture(FbxSurfaceMaterial* material);
 
 private:
     std::vector<Vector3> mPositions;

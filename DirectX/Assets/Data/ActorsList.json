@@ -105,11 +105,13 @@
     },
     {
       "type": "ObjTest",
+      "properties": {
+      },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Shape/sphere.fbx"
+            "fileName": "Player.fbx"
           }
         }
       ]
