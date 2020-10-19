@@ -68,9 +68,6 @@ unsigned FBX::getMeshCount() const {
 }
 
 void FBX::createMesh(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex) {
-    //loadPosition(mesh, meshIndex);
-    //loadNormal(mesh, meshIndex);
-    //loadUV(mesh, meshIndex);
     loadFace(meshVertices, mesh, meshIndex);
     computeIndices(mesh, meshIndex);
     loadMaterial(mesh, meshIndex);
@@ -262,12 +259,10 @@ void FBX::loadFace(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex
         MeshVertex vertex;
 
         int index = indices[i];
-        //xはマイナスのはずだけど背面カリングがうまくいかないから
         vertex.pos.x = static_cast<float>(-src[index][0]);
         vertex.pos.y = static_cast<float>(src[index][1]);
         vertex.pos.z = static_cast<float>(src[index][2]);
 
-        //xはマイナスのはずだけど背面カリングがうまくいかないから
         vertex.normal.x = static_cast<float>(-normalArray[i][0]);
         vertex.normal.y = static_cast<float>(normalArray[i][1]);
         vertex.normal.z = static_cast<float>(normalArray[i][2]);

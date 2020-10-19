@@ -39,7 +39,7 @@ VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL)
 float4 PS(VS_OUTPUT input) : SV_Target
 {
     float3 normal = input.Normal;
-    float3 lightDir = input.LightDir;
+    float3 lightDir = -input.LightDir;
     float3 viewDir = input.EyeVector;
     float NL = dot(normal, lightDir);
 

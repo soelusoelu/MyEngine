@@ -91,7 +91,6 @@
     <ClCompile Include="Component\Text\TextNumber.cpp" />
     <ClCompile Include="Component\Sprite\Sprite3D.cpp" />
     <ClCompile Include="Component\Sprite\SpriteComponent.cpp" />
-    <ClCompile Include="Component\Mesh\TransparentMeshComponent.cpp" />
     <ClCompile Include="Component\Mesh\MeshComponent.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\Fade.cpp" />
@@ -263,7 +262,6 @@
     <ClInclude Include="Component\Text\TextNumber.h" />
     <ClInclude Include="Component\Sprite\SpriteComponent.h" />
     <ClInclude Include="Component\Sprite\Sprite3D.h" />
-    <ClInclude Include="Component\Mesh\TransparentMeshComponent.h" />
     <ClInclude Include="Component\Mesh\MeshComponent.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />

@@ -19,11 +19,11 @@ Camera::~Camera() = default;
 
 void Camera::awake() {
     calcLookAt();
-    calcPerspectiveFOV(Window::width(), Window::height());
+    calcPerspectiveFOV(Window::standardWidth(), Window::standardHeight());
 }
 
 void Camera::lateUpdate() {
-    constexpr float CAMERA_SPEED = 10.f;
+    constexpr float CAMERA_SPEED = 5.f;
     if (Input::keyboard().getKey(KeyCode::W)) {
         transform().translate(transform().forward() * CAMERA_SPEED * Time::deltaTime);
     }
@@ -42,6 +42,13 @@ void Camera::lateUpdate() {
     if (Input::keyboard().getKey(KeyCode::DownArrow)) {
         transform().translate(-transform().up() * CAMERA_SPEED * Time::deltaTime);
     }
+    if (Input::keyboard().getKey(KeyCode::RightArrow)) {
+        transform().rotate(Vector3::up, 40.f * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::LeftArrow)) {
+        transform().rotate(Vector3::up, -40.f * Time::deltaTime);
+    }
+
     lookAt({ transform().getPosition() + transform().forward() * 10.f });
     calcLookAt();
 }

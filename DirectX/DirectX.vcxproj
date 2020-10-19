@@ -234,7 +234,6 @@
     <ClCompile Include="Math\Matrix4.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Component\Sprite\SpriteComponent.cpp" />
-    <ClCompile Include="Component\Mesh\TransparentMeshComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="Device\Subject.cpp" />
     <ClCompile Include="Component\Sprite\Sprite3D.cpp" />
@@ -417,7 +416,6 @@
     <ClInclude Include="Math\Matrix4.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Component\Sprite\SpriteComponent.h" />
-    <ClInclude Include="Component\Mesh\TransparentMeshComponent.h" />
     <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="Device\Subject.h" />
     <ClInclude Include="Component\Sprite\Sprite3D.h" />

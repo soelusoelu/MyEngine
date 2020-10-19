@@ -112,12 +112,9 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     dx.clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //コンスタントバッファの登録
-    mShader->setPSConstantBuffers();
+    mShader->setShaderInfo();
     //1パス目で作成したテクスチャー3枚をセット
-    setPSShaderResources();
+    setShaderResources();
     //サンプラーをセット
     mSampler->setPSSamplers();
 
@@ -135,23 +132,17 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     //バーテックスバッファーをセット
     mVertexBuffer->setVertexBuffer();
     //インデックスバッファをセット
-    mIndexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    mIndexBuffer->setIndexBuffer();
     //デプステスト無効化
     dx.depthStencilState()->depthTest(false);
 
     dx.drawIndexed(6);
 }
 
-void GBuffer::setVSShaderResources() const {
+void GBuffer::setShaderResources() const {
     static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
         mShaderResourceViews[i]->setVSShaderResources(i);
-    }
-}
-
-void GBuffer::setPSShaderResources() const {
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
-    for (size_t i = 0; i < numGBuffer; i++) {
         mShaderResourceViews[i]->setPSShaderResources(i);
     }
 }

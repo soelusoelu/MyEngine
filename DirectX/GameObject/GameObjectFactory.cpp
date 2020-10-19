@@ -7,7 +7,7 @@
 #include "../Component/Collider/SphereCollider.h"
 #include "../Component/Light/DirectionalLight.h"
 #include "../Component/Light/PointLightComponent.h"
-#include "../Component/Mesh/TransparentMeshComponent.h"
+#include "../Component/Mesh/MeshComponent.h"
 #include "../Component/Other/Fade.h"
 #include "../Component/Other/HitPointComponent.h"
 #include "../Component/Scene/GamePlay.h"
@@ -41,7 +41,7 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(PointLightComponent);
 
-    ADD_COMPONENT(TransparentMeshComponent);
+    ADD_COMPONENT(MeshComponent);
 
     ADD_COMPONENT(Fade);
     ADD_COMPONENT(HitPointComponent);

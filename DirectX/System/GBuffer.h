@@ -40,8 +40,7 @@ public:
     void renderFromTexture(const Camera& camera, const LightManager& lightManager);
 
     //全シェーダーリソースの登録
-    void setVSShaderResources() const;
-    void setPSShaderResources() const;
+    void setShaderResources() const;
 
 private:
     void createSampler();

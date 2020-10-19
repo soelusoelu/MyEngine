@@ -19,6 +19,8 @@ public:
     //GBufferのテクスチャを参照して書き込み
     void renderFromTexture(const Camera& camera, const LightManager& lightManager);
 
+    //3Dメッシュ処理
+    void renderMesh() const;
     //2Dライン処理
     void renderLine2D(Matrix4* proj) const;
     //3Dライン処理
