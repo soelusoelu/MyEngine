@@ -51,22 +51,17 @@ void TransparentMeshComponent::draw(const Camera& camera) const {
     meshcb.cameraPos = camera.getPosition();
     mMesh->setShaderData(&meshcb, sizeof(meshcb), 0);
 
-    MaterialConstantBuffer matcb;
-    //マテリアルが有るなら使用
-    if (mMesh->isUseMaterial()) {
-        const auto& mat = mMesh->getMaterial();
+    for (size_t i = 0; i < mMesh->getMeshCount(); i++) {
+        MaterialConstantBuffer matcb;
+        const auto& mat = mMesh->getMaterial(i);
         matcb.ambient = mat.ambient;
         matcb.diffuse = Vector4(mat.diffuse, mat.transparency * mAlpha);
         matcb.specular = mat.specular;
-    } else {
-        matcb.ambient = Vector3::zero;
-        matcb.diffuse = Vector4(Vector3::one, mAlpha);
-        matcb.specular = Vector3::zero;
-    }
-    mMesh->setShaderData(&matcb, sizeof(matcb), 1);
+        mMesh->setShaderData(&matcb, sizeof(matcb), 1);
 
-    //描画
-    mMesh->draw();
+        //描画
+        mMesh->draw(i);
+    }
 }
 
 void TransparentMeshComponent::setAlpha(float alpha) {

@@ -2,9 +2,15 @@
 
 #include "../Math/Math.h"
 #include "Material.h"
-#include <memory>
 #include <string>
 #include <vector>
+
+//一つのメッシュが持つ情報
+struct MeshParam {
+    std::vector<Vector3> positions;
+    std::vector<Vector3> normals;
+    std::vector<Vector2> uvs;
+};
 
 //頂点の構造体
 struct MeshVertex {
@@ -16,11 +22,9 @@ struct MeshVertex {
 class IMeshLoader {
 public:
     virtual ~IMeshLoader() = default;
-    virtual void perse(const std::string& fileName, std::vector<MeshVertex>& vertices) = 0;
-    virtual const std::vector<Vector3>& getPositions() const = 0;
-    virtual const std::vector<Vector3>& getNormals() const = 0;
-    virtual const std::vector<Vector2>& getUVs() const = 0;
-    virtual const std::vector<unsigned short>& getIndices() const = 0;
-    virtual const Material& getMaterial(unsigned index = 0) const = 0;
-    virtual bool isUseMaterial() const = 0;
+    virtual void perse(const std::string& fileName, std::vector<MeshParam>& meshes) = 0;
+    virtual const std::vector<Vector3>& getPositions(unsigned meshIndex) const = 0;
+    virtual const std::vector<unsigned short>& getIndices(unsigned meshIndex) const = 0;
+    virtual const Material& getMaterial(unsigned index) const = 0;
+    virtual unsigned getMeshCount() const = 0;
 };

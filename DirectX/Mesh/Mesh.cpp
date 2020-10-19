@@ -9,8 +9,6 @@
 Mesh::Mesh() :
     mMesh(nullptr),
     mShader(nullptr),
-    mVertexBuffer(nullptr),
-    mIndexBuffer(nullptr),
     mCenter(Vector3::zero),
     mRadius(0.f) {
 }
@@ -35,33 +33,30 @@ void Mesh::setShaderData(const void* data, unsigned size, unsigned index) const 
     mShader->transferData(data, size, index);
 }
 
-void Mesh::draw() const {
+void Mesh::draw(unsigned meshIndex) const {
     //使用するシェーダーの登録
     mShader->setShaderInfo();
     //バーテックスバッファーをセット
-    mVertexBuffer->setVertexBuffer();
+    mVertexBuffer[meshIndex]->setVertexBuffer();
     //インデックスバッファーをセット
-    mIndexBuffer->setIndexBuffer();
+    mIndexBuffer[meshIndex]->setIndexBuffer();
 
-    //マテリアルを使用していて
-    if (mMesh->isUseMaterial()) {
-        const auto& mat = mMesh->getMaterial();
-        //テクスチャが有るなら登録
-        if (mat.texture) {
-            mat.texture->setTextureInfo();
-        }
+    const auto& mat = mMesh->getMaterial(meshIndex);
+    //テクスチャが有るなら登録
+    if (mat.texture) {
+        mat.texture->setTextureInfo();
     }
 
     //プリミティブをレンダリング
-    DirectX::instance().drawIndexed(mMesh->getIndices().size());
+    DirectX::instance().drawIndexed(mMesh->getIndices(meshIndex).size());
 }
 
 const Material& Mesh::getMaterial(unsigned index) const {
     return mMesh->getMaterial(index);
 }
 
-bool Mesh::isUseMaterial() const {
-    return mMesh->isUseMaterial();
+unsigned Mesh::getMeshCount() const {
+    return mMesh->getMeshCount();
 }
 
 const Vector3& Mesh::getCenter() const {
@@ -74,15 +69,17 @@ float Mesh::getRadius() const {
 
 void Mesh::initialize(const std::string& fileName) {
     createMesh(fileName);
-    createVertexBuffer();
-    createIndexBuffer();
+    for (size_t i = 0; i < mMesh->getMeshCount(); i++) {
+        createVertexBuffer(i);
+        createIndexBuffer(i);
+    }
     computeCenter();
     computeRadius();
 }
 
 void Mesh::createMesh(const std::string& fileName) {
     //アセットマネージャーからメッシュを作成する
-    mMesh = World::instance().assetsManager().createMesh(fileName, mVertices);
+    mMesh = World::instance().assetsManager().createMesh(fileName, mMeshes);
 }
 
 void Mesh::createShader(const std::string& fileName) {
@@ -90,20 +87,32 @@ void Mesh::createShader(const std::string& fileName) {
     mShader = World::instance().assetsManager().createShader(fileName);
 }
 
-void Mesh::createVertexBuffer() { 
+void Mesh::createVertexBuffer(unsigned meshIndex) {
     BufferDesc bd;
     bd.oneSize = sizeof(MeshVertex);
-    bd.size = bd.oneSize * mVertices.size();
+    bd.size = bd.oneSize * mMeshes[meshIndex].positions.size();
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
     SubResourceDesc sub;
-    sub.data = mVertices.data();
 
-    mVertexBuffer = std::make_unique<VertexBuffer>(bd, sub);
+    std::vector<MeshVertex> vertices;
+    const auto& v = mMeshes[meshIndex];
+    for (size_t i = 0; i < v.positions.size(); i++) {
+        MeshVertex vertex;
+        vertex.pos = v.positions[i];
+        vertex.normal = v.normals[i];
+        if (v.uvs.size() > 0) {
+            vertex.uv = v.uvs[i];
+        }
+        vertices.emplace_back(vertex);
+    }
+    sub.data = vertices.data();
+
+    mVertexBuffer.emplace_back(std::make_unique<VertexBuffer>(bd, sub));
 }
 
-void Mesh::createIndexBuffer() {
-    const auto& indices = mMesh->getIndices();
+void Mesh::createIndexBuffer(unsigned meshIndex) {
+    const auto& indices = mMesh->getIndices(meshIndex);
     BufferDesc bd;
     bd.size = sizeof(indices[0]) * indices.size();
     bd.usage = Usage::USAGE_DEFAULT;
@@ -111,59 +120,59 @@ void Mesh::createIndexBuffer() {
     SubResourceDesc sub;
     sub.data = indices.data();
 
-    mIndexBuffer = std::make_unique<IndexBuffer>(bd, sub);
+    mIndexBuffer.emplace_back(std::make_unique<IndexBuffer>(bd, sub));
 }
 
 void Mesh::computeCenter() {
-    const auto& positions = mMesh->getPositions();
-    auto min = Vector3::one * Math::infinity;
-    auto max = Vector3::one * Math::negInfinity;
-    for (size_t i = 0; i < positions.size(); i++) {
-        if (positions[i].x < min.x) {
-            min.x = positions[i].x;
-        }
-        if (positions[i].x > max.x) {
-            max.x = positions[i].x;
-        }
-        if (positions[i].y < min.y) {
-            min.y = positions[i].y;
-        }
-        if (positions[i].y > max.y) {
-            max.y = positions[i].y;
-        }
-        if (positions[i].z < min.z) {
-            min.z = positions[i].z;
-        }
-        if (positions[i].z > max.z) {
-            max.z = positions[i].z;
-        }
-    }
-    mCenter = (max + min) / 2.f;
+    //const auto& positions = mMesh->getPositions();
+    //auto min = Vector3::one * Math::infinity;
+    //auto max = Vector3::one * Math::negInfinity;
+    //for (size_t i = 0; i < positions.size(); i++) {
+    //    if (positions[i].x < min.x) {
+    //        min.x = positions[i].x;
+    //    }
+    //    if (positions[i].x > max.x) {
+    //        max.x = positions[i].x;
+    //    }
+    //    if (positions[i].y < min.y) {
+    //        min.y = positions[i].y;
+    //    }
+    //    if (positions[i].y > max.y) {
+    //        max.y = positions[i].y;
+    //    }
+    //    if (positions[i].z < min.z) {
+    //        min.z = positions[i].z;
+    //    }
+    //    if (positions[i].z > max.z) {
+    //        max.z = positions[i].z;
+    //    }
+    //}
+    //mCenter = (max + min) / 2.f;
 }
 
 void Mesh::computeRadius() {
-    const auto& positions = mMesh->getPositions();
-    float min = Math::infinity;
-    float max = Math::negInfinity;
-    for (size_t i = 0; i < positions.size(); i++) {
-        if (positions[i].x < min) {
-            min = positions[i].x;
-        }
-        if (positions[i].x > max) {
-            max = positions[i].x;
-        }
-        if (positions[i].y < min) {
-            min = positions[i].y;
-        }
-        if (positions[i].y > max) {
-            max = positions[i].y;
-        }
-        if (positions[i].z < min) {
-            min = positions[i].z;
-        }
-        if (positions[i].z > max) {
-            max = positions[i].z;
-        }
-    }
-    mRadius = (max - min) / 2.f;
+    //const auto& positions = mMesh->getPositions();
+    //float min = Math::infinity;
+    //float max = Math::negInfinity;
+    //for (size_t i = 0; i < positions.size(); i++) {
+    //    if (positions[i].x < min) {
+    //        min = positions[i].x;
+    //    }
+    //    if (positions[i].x > max) {
+    //        max = positions[i].x;
+    //    }
+    //    if (positions[i].y < min) {
+    //        min = positions[i].y;
+    //    }
+    //    if (positions[i].y > max) {
+    //        max = positions[i].y;
+    //    }
+    //    if (positions[i].z < min) {
+    //        min = positions[i].z;
+    //    }
+    //    if (positions[i].z > max) {
+    //        max = positions[i].z;
+    //    }
+    //}
+    //mRadius = (max - min) / 2.f;
 }

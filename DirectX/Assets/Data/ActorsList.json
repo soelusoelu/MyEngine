@@ -3,14 +3,14 @@
     {
       "type": "Camera",
       "properties": {
-        "position": [ 5.0, 8.0, -10.0 ]
+        "position": [ 0.0, 5.0, -10.0 ]
       },
       "components": [
         {
           "type": "Camera",
           "properties": {
             "fov": 45.0,
-            "nearClip": 0.1,
+            "nearClip": 0.0001,
             "farClip": 1000.0
           }
         },
@@ -33,12 +33,6 @@
           "properties": {
             "direction": [ -50.0, 0.0, 0.0 ],
             "color": [ 0.5, 0.75, 1.0 ]
-          }
-        },
-        {
-          "type": "TransparentMeshComponent",
-          "properties": {
-            "fileName": "Light/DLight.obj"
           }
         }
       ]
@@ -106,12 +100,13 @@
     {
       "type": "ObjTest",
       "properties": {
+        "rotation": [ -90.0, 180.0, 0.0 ]
       },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Player.fbx"
+            "fileName": "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx"
           }
         }
       ]

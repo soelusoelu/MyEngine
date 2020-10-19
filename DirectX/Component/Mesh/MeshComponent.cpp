@@ -39,12 +39,9 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     } else {
         //シェーダー名が取得できなかったらデフォルトのシェーダーを使う
         shader = "Mesh.hlsl";
-        //マテリアルが有るなら
-        if (mMesh->isUseMaterial()) {
-            //テクスチャが有るなら
-            if (mMesh->getMaterial().texture) {
-                shader = "MeshTexture.hlsl";
-            }
+        //テクスチャが有るなら
+        if (mMesh->getMaterial(0).texture) {
+            shader = "MeshTexture.hlsl";
         }
         mMesh->loadShader(shader);
     }

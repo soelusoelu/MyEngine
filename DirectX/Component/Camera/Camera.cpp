@@ -1,11 +1,13 @@
 ﻿#include "Camera.h"
+#include "../../Device/Time.h"
+#include "../../Input/Input.h"
 #include "../../System/Window.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 Camera::Camera(GameObject& gameObject) :
     Component(gameObject),
-    mLookAt(Vector3::zero),
+    mLookAt(Vector3::forward * 10.f),
     mFOV(45.f),
     mNearClip(0.1f),
     mFarClip(100.f),
@@ -21,6 +23,26 @@ void Camera::awake() {
 }
 
 void Camera::lateUpdate() {
+    constexpr float CAMERA_SPEED = 10.f;
+    if (Input::keyboard().getKey(KeyCode::W)) {
+        transform().translate(transform().forward() * CAMERA_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::S)) {
+        transform().translate(-transform().forward() * CAMERA_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::D)) {
+        transform().translate(transform().right() * CAMERA_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::A)) {
+        transform().translate(-transform().right() * CAMERA_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::UpArrow)) {
+        transform().translate(transform().up() * CAMERA_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::DownArrow)) {
+        transform().translate(-transform().up() * CAMERA_SPEED * Time::deltaTime);
+    }
+    lookAt({ transform().getPosition() + transform().forward() * 10.f });
     calcLookAt();
 }
 

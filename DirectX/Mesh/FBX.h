@@ -11,29 +11,30 @@ class FBX : public IMeshLoader {
 public:
     FBX();
     ~FBX();
-    virtual void perse(const std::string& fileName, std::vector<MeshVertex>& vertices) override;
-    virtual const std::vector<Vector3>& getPositions() const override;
-    virtual const std::vector<Vector3>& getNormals() const override;
-    virtual const std::vector<Vector2>& getUVs() const override;
-    virtual const std::vector<unsigned short>& getIndices() const override;
-    virtual const Material& getMaterial(unsigned index = 0) const override;
-    virtual bool isUseMaterial() const override;
+    virtual void perse(const std::string& fileName, std::vector<MeshParam>& meshes) override;
+    virtual const std::vector<Vector3>& getPositions(unsigned meshIndex) const override;
+    virtual const std::vector<unsigned short>& getIndices(unsigned meshIndex) const override;
+    virtual const Material& getMaterial(unsigned index) const override;
+    virtual unsigned getMeshCount() const override;
 
 private:
-    void createMesh(std::vector<MeshVertex>& vertices, FbxMesh* mesh);
-    void loadPosition(FbxMesh* mesh);
-    void loadNormal(FbxMesh* mesh);
-    void loadUV(FbxMesh* mesh);
-    void loadFace(std::vector<MeshVertex>& vertices, FbxMesh* mesh);
+    void createMesh(MeshParam& meshParam, FbxMesh* mesh, unsigned meshIndex);
+    void loadPosition(FbxMesh* mesh, unsigned meshIndex);
+    void loadNormal(FbxMesh* mesh, unsigned meshIndex);
+    void loadUV(FbxMesh* mesh, unsigned meshIndex);
+    void loadFace(MeshParam& meshParam, FbxMesh* mesh, unsigned meshIndex);
 
-    void loadMaterial(FbxMesh* mesh);
-    void loadMaterialAttribute(FbxSurfaceMaterial* material);
-    void loadMaterialTexture(FbxSurfaceMaterial* material);
+    void loadMaterial(FbxMesh* mesh, unsigned meshIndex);
+    void loadMaterialAttribute(FbxSurfaceMaterial* material, unsigned meshIndex);
+    void loadMaterialTexture(FbxSurfaceMaterial* material, unsigned meshIndex);
 
 private:
-    std::vector<Vector3> mPositions;
-    std::vector<Vector3> mNormals;
-    std::vector<Vector2> mUVs;
-    std::vector<unsigned short> mIndices;
+    std::vector<MeshParam> mMeshesParam;
+    unsigned mNumMeshes;
+
+    std::vector<std::vector<Vector3>> mPositions;
+    std::vector<std::vector<Vector3>> mNormals;
+    std::vector<std::vector<Vector2>> mUVs;
+    std::vector<std::vector<unsigned short>> mIndices;
     std::vector<Material> mMaterials;
 };

@@ -22,12 +22,12 @@ public:
     //コンスタントバッファを設定する
     void setShaderData(const void* data, unsigned size, unsigned index = 0) const;
     //メッシュを描画する
-    void draw() const;
+    void draw(unsigned meshIndex) const;
 
     //マテリアルの取得
-    const Material& getMaterial(unsigned index = 0) const;
-    //マテリアルを使用しているか
-    bool isUseMaterial() const;
+    const Material& getMaterial(unsigned index) const;
+    //メッシュの数を取得する
+    unsigned getMeshCount() const;
     //中心座標の取得
     const Vector3& getCenter() const;
     //半径の取得
@@ -41,9 +41,9 @@ private:
     //シェーダーを生成する
     void createShader(const std::string& fileName);
     //バーテックスバッファを生成する
-    void createVertexBuffer();
+    void createVertexBuffer(unsigned meshIndex);
     //インデックスバッファを生成する
-    void createIndexBuffer();
+    void createIndexBuffer(unsigned meshIndex);
     //メッシュの中心を計算する
     void computeCenter();
     //メッシュの半径を計算する
@@ -51,10 +51,10 @@ private:
 
 private:
     std::shared_ptr<IMeshLoader> mMesh;
-    std::vector<MeshVertex> mVertices;
+    std::vector<MeshParam> mMeshes;
     std::unique_ptr<Shader> mShader;
-    std::unique_ptr<VertexBuffer> mVertexBuffer;
-    std::unique_ptr<IndexBuffer> mIndexBuffer;
+    std::vector<std::unique_ptr<VertexBuffer>> mVertexBuffer;
+    std::vector<std::unique_ptr<IndexBuffer>> mIndexBuffer;
 
     Vector3 mCenter;
     float mRadius;
