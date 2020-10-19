@@ -28,14 +28,14 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-	//法線をワールド空間に
+    //法線をワールド空間に
     output.Pos = mul(wvp, pos);
     output.Normal = normal;
-	//テクスチャー座標
+    //テクスチャー座標
     output.UV = uv;
-	//ライト方向
+    //ライト方向
     output.LightDir = normalize(lightDir);
-	//視線ベクトル
+    //視線ベクトル
     float3 posWorld = mul(world, pos).xyz;
     output.EyeVector = normalize(cameraPos - posWorld);
 

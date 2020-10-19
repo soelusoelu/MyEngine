@@ -17,8 +17,7 @@ Shader::Shader(const std::string& fileName) :
     createVertexShader(fileName);
     createPixelShader(fileName);
     mConstantBuffers = constantBufferManager->createConstantBuffer(fileName);
-    const auto& layout = inputElementManager->createInputLayout(fileName);
-    createInputLayout(layout);
+    createInputLayout(inputElementManager->createInputLayout(fileName));
 }
 
 Shader::~Shader() = default;

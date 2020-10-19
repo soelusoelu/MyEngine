@@ -12,9 +12,9 @@ struct Material {
     Vector3 specular; //スペキュラー
     Vector3 emissive;
     Vector3 bump;
-    float transparency;
+    float transparency; //透明値
     float shininess;
-    std::string materialName; //newmtl
+    std::string materialName; //マテリアル名
     std::string textureName; //テクスチャーファイル名
     std::shared_ptr<TextureFromFile> texture;
 

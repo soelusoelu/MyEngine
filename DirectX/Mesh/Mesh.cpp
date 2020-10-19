@@ -37,9 +37,9 @@ void Mesh::draw(unsigned meshIndex) const {
     //使用するシェーダーの登録
     mShader->setShaderInfo();
     //バーテックスバッファーをセット
-    mVertexBuffer[meshIndex]->setVertexBuffer();
+    mVertexBuffers[meshIndex]->setVertexBuffer();
     //インデックスバッファーをセット
-    mIndexBuffer[meshIndex]->setIndexBuffer();
+    mIndexBuffers[meshIndex]->setIndexBuffer();
 
     const auto& mat = mMesh->getMaterial(meshIndex);
     //テクスチャが有るなら登録
@@ -79,7 +79,7 @@ void Mesh::initialize(const std::string& fileName) {
 
 void Mesh::createMesh(const std::string& fileName) {
     //アセットマネージャーからメッシュを作成する
-    mMesh = World::instance().assetsManager().createMesh(fileName, mMeshes);
+    mMesh = World::instance().assetsManager().createMesh(fileName, mMeshesVertices);
 }
 
 void Mesh::createShader(const std::string& fileName) {
@@ -88,27 +88,16 @@ void Mesh::createShader(const std::string& fileName) {
 }
 
 void Mesh::createVertexBuffer(unsigned meshIndex) {
+    const auto& vertices = mMeshesVertices[meshIndex];
     BufferDesc bd;
-    bd.oneSize = sizeof(MeshVertex);
-    bd.size = bd.oneSize * mMeshes[meshIndex].positions.size();
+    bd.oneSize = sizeof(vertices[0]);
+    bd.size = bd.oneSize * vertices.size();
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
     SubResourceDesc sub;
-
-    std::vector<MeshVertex> vertices;
-    const auto& v = mMeshes[meshIndex];
-    for (size_t i = 0; i < v.positions.size(); i++) {
-        MeshVertex vertex;
-        vertex.pos = v.positions[i];
-        vertex.normal = v.normals[i];
-        if (v.uvs.size() > 0) {
-            vertex.uv = v.uvs[i];
-        }
-        vertices.emplace_back(vertex);
-    }
     sub.data = vertices.data();
 
-    mVertexBuffer.emplace_back(std::make_unique<VertexBuffer>(bd, sub));
+    mVertexBuffers.emplace_back(std::make_unique<VertexBuffer>(bd, sub));
 }
 
 void Mesh::createIndexBuffer(unsigned meshIndex) {
@@ -120,59 +109,70 @@ void Mesh::createIndexBuffer(unsigned meshIndex) {
     SubResourceDesc sub;
     sub.data = indices.data();
 
-    mIndexBuffer.emplace_back(std::make_unique<IndexBuffer>(bd, sub));
+    mIndexBuffers.emplace_back(std::make_unique<IndexBuffer>(bd, sub));
 }
 
 void Mesh::computeCenter() {
-    //const auto& positions = mMesh->getPositions();
-    //auto min = Vector3::one * Math::infinity;
-    //auto max = Vector3::one * Math::negInfinity;
-    //for (size_t i = 0; i < positions.size(); i++) {
-    //    if (positions[i].x < min.x) {
-    //        min.x = positions[i].x;
-    //    }
-    //    if (positions[i].x > max.x) {
-    //        max.x = positions[i].x;
-    //    }
-    //    if (positions[i].y < min.y) {
-    //        min.y = positions[i].y;
-    //    }
-    //    if (positions[i].y > max.y) {
-    //        max.y = positions[i].y;
-    //    }
-    //    if (positions[i].z < min.z) {
-    //        min.z = positions[i].z;
-    //    }
-    //    if (positions[i].z > max.z) {
-    //        max.z = positions[i].z;
-    //    }
-    //}
-    //mCenter = (max + min) / 2.f;
+    auto min = Vector3::one * Math::infinity;
+    auto max = Vector3::one * Math::negInfinity;
+
+    //すべてのメッシュ情報から中心位置を割り出す
+    for (size_t i = 0; i < mMeshesVertices.size(); ++i) {
+        const auto& vertices = mMeshesVertices[i];
+        for (size_t j = 0; j < vertices.size(); ++j) {
+            const auto& p = vertices[j].pos;
+            if (p.x < min.x) {
+                min.x = p.x;
+            }
+            if (p.x > max.x) {
+                max.x = p.x;
+            }
+            if (p.y < min.y) {
+                min.y = p.y;
+            }
+            if (p.y > max.y) {
+                max.y = p.y;
+            }
+            if (p.z < min.z) {
+                min.z = p.z;
+            }
+            if (p.z > max.z) {
+                max.z = p.z;
+            }
+        }
+    }
+
+    mCenter = (max + min) / 2.f;
 }
 
 void Mesh::computeRadius() {
-    //const auto& positions = mMesh->getPositions();
-    //float min = Math::infinity;
-    //float max = Math::negInfinity;
-    //for (size_t i = 0; i < positions.size(); i++) {
-    //    if (positions[i].x < min) {
-    //        min = positions[i].x;
-    //    }
-    //    if (positions[i].x > max) {
-    //        max = positions[i].x;
-    //    }
-    //    if (positions[i].y < min) {
-    //        min = positions[i].y;
-    //    }
-    //    if (positions[i].y > max) {
-    //        max = positions[i].y;
-    //    }
-    //    if (positions[i].z < min) {
-    //        min = positions[i].z;
-    //    }
-    //    if (positions[i].z > max) {
-    //        max = positions[i].z;
-    //    }
-    //}
-    //mRadius = (max - min) / 2.f;
+    float min = Math::infinity;
+    float max = Math::negInfinity;
+
+    //すべてのメッシュ情報から半径を割り出す
+    for (size_t i = 0; i < mMeshesVertices.size(); ++i) {
+        const auto& vertices = mMeshesVertices[i];
+        for (size_t j = 0; j < vertices.size(); ++j) {
+            const auto& p = vertices[j].pos;
+            if (p.x < min) {
+                min = p.x;
+            }
+            if (p.x > max) {
+                max = p.x;
+            }
+            if (p.y < min) {
+                min = p.y;
+            }
+            if (p.y > max) {
+                max = p.y;
+            }
+            if (p.z < min) {
+                min = p.z;
+            }
+            if (p.z > max) {
+                max = p.z;
+            }
+        }
+    }
+    mRadius = (max - min) / 2.f;
 }

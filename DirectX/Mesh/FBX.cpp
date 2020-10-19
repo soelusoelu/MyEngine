@@ -11,7 +11,7 @@ FBX::FBX() :
 
 FBX::~FBX() = default;
 
-void FBX::perse(const std::string& fileName, std::vector<MeshParam>& meshes) {
+void FBX::perse(const std::string& fileName, std::vector<MeshVertices>& meshes) {
     //マネージャーを生成
     auto manager = FbxManager::Create();
 
@@ -43,23 +43,16 @@ void FBX::perse(const std::string& fileName, std::vector<MeshParam>& meshes) {
 
     //メッシュの数に合わせて拡張する
     meshes.resize(mNumMeshes);
-    mPositions.resize(mNumMeshes);
-    mNormals.resize(mNumMeshes);
-    mUVs.resize(mNumMeshes);
     mIndices.resize(mNumMeshes);
 
     //FbxMeshの数だけメッシュを作成する
-    for (size_t i = 0; i < mNumMeshes; i++) {
+    for (size_t i = 0; i < mNumMeshes; ++i) {
         auto mesh = scene->GetSrcObject<FbxMesh>(i);
         createMesh(meshes[i], mesh, i);
     }
 
     //マネージャー解放
     manager->Destroy();
-}
-
-const std::vector<Vector3>& FBX::getPositions(unsigned meshIndex) const {
-    return mPositions[meshIndex];
 }
 
 const std::vector<unsigned short>& FBX::getIndices(unsigned meshIndex) const {
@@ -74,48 +67,49 @@ unsigned FBX::getMeshCount() const {
     return mNumMeshes;
 }
 
-void FBX::createMesh(MeshParam& meshParam, FbxMesh* mesh, unsigned meshIndex) {
-    loadPosition(mesh, meshIndex);
-    loadNormal(mesh, meshIndex);
-    loadUV(mesh, meshIndex);
-    loadFace(meshParam, mesh, meshIndex);
+void FBX::createMesh(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex) {
+    //loadPosition(mesh, meshIndex);
+    //loadNormal(mesh, meshIndex);
+    //loadUV(mesh, meshIndex);
+    loadFace(meshVertices, mesh, meshIndex);
+    computeIndices(mesh, meshIndex);
     loadMaterial(mesh, meshIndex);
 }
 
 void FBX::loadPosition(FbxMesh* mesh, unsigned meshIndex) {
-    auto& positions = mPositions[meshIndex];
+    //auto& positions = mPositions[meshIndex];
 
-    //頂点数
-    auto polygonVertexCount = mesh->GetPolygonVertexCount();
-    positions.resize(polygonVertexCount);
-    auto indices = mesh->GetPolygonVertices();
+    ////頂点数
+    //auto polygonVertexCount = mesh->GetPolygonVertexCount();
+    //positions.resize(polygonVertexCount);
+    //auto indices = mesh->GetPolygonVertices();
 
-    //頂点座標配列
-    FbxVector4* src = mesh->GetControlPoints();
-    for (size_t i = 0; i < positions.size(); i++) {
-        int index = indices[i];
+    ////頂点座標配列
+    //FbxVector4* src = mesh->GetControlPoints();
+    //for (size_t i = 0; i < positions.size(); i++) {
+    //    int index = indices[i];
 
-        //xはマイナスのはずだけど背面カリングがうまくいかないから
-        positions[i].x = static_cast<float>(src[index][0]);
-        positions[i].y = static_cast<float>(src[index][1]);
-        positions[i].z = static_cast<float>(src[index][2]);
-    }
+    //    //xはマイナスのはずだけど背面カリングがうまくいかないから
+    //    positions[i].x = static_cast<float>(src[index][0]);
+    //    positions[i].y = static_cast<float>(src[index][1]);
+    //    positions[i].z = static_cast<float>(src[index][2]);
+    //}
 }
 
 void FBX::loadNormal(FbxMesh* mesh, unsigned meshIndex) {
-    auto& normals = mNormals[meshIndex];
+    //auto& normals = mNormals[meshIndex];
 
-    //法線配列を取得する
-    FbxArray<FbxVector4> normalArray;
-    mesh->GetPolygonVertexNormals(normalArray);
-    normals.resize(normalArray.Size());
+    ////法線配列を取得する
+    //FbxArray<FbxVector4> normalArray;
+    //mesh->GetPolygonVertexNormals(normalArray);
+    //normals.resize(normalArray.Size());
 
-    for (size_t i = 0; i < normals.size(); i++) {
-        //xはマイナスのはずだけど背面カリングがうまくいかないから
-        normals[i].x = static_cast<float>(normalArray[i][0]);
-        normals[i].y = static_cast<float>(normalArray[i][1]);
-        normals[i].z = static_cast<float>(normalArray[i][2]);
-    }
+    //for (size_t i = 0; i < normals.size(); i++) {
+    //    //xはマイナスのはずだけど背面カリングがうまくいかないから
+    //    normals[i].x = static_cast<float>(normalArray[i][0]);
+    //    normals[i].y = static_cast<float>(normalArray[i][1]);
+    //    normals[i].z = static_cast<float>(normalArray[i][2]);
+    //}
 
 #pragma region 公式サンプル
     //FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
@@ -164,22 +158,22 @@ void FBX::loadNormal(FbxMesh* mesh, unsigned meshIndex) {
 }
 
 void FBX::loadUV(FbxMesh* mesh, unsigned meshIndex) {
-    auto& uvs = mUVs[meshIndex];
+    //auto& uvs = mUVs[meshIndex];
 
-    //UVSetの名前リストを取得
-    FbxStringList uvSetNameList;
-    mesh->GetUVSetNames(uvSetNameList);
+    ////UVSetの名前リストを取得
+    //FbxStringList uvSetNameList;
+    //mesh->GetUVSetNames(uvSetNameList);
 
-    //UVSetの名前からUVSetを取得する
-    FbxArray<FbxVector2> uvArray;
-    mesh->GetPolygonVertexUVs(uvSetNameList.GetStringAt(0), uvArray);
-    uvs.resize(uvArray.Size());
+    ////UVSetの名前からUVSetを取得する
+    //FbxArray<FbxVector2> uvArray;
+    //mesh->GetPolygonVertexUVs(uvSetNameList.GetStringAt(0), uvArray);
+    //uvs.resize(uvArray.Size());
 
-    for (size_t i = 0; i < uvs.size(); i++) {
-        //xは1から引かないはずだけど背面カリングがうまくいかないから
-        uvs[i].x = 1.f - static_cast<float>(uvArray[i][0]);
-        uvs[i].y = 1.f - static_cast<float>(uvArray[i][1]);
-    }
+    //for (size_t i = 0; i < uvs.size(); i++) {
+    //    //xは1から引かないはずだけど背面カリングがうまくいかないから
+    //    uvs[i].x = 1.f - static_cast<float>(uvArray[i][0]);
+    //    uvs[i].y = 1.f - static_cast<float>(uvArray[i][1]);
+    //}
 
 #pragma region 公式サンプル
     //すべてのUVセットを反復処理する
@@ -242,38 +236,66 @@ void FBX::loadUV(FbxMesh* mesh, unsigned meshIndex) {
 #pragma endregion
 }
 
-void FBX::loadFace(MeshParam& meshParam, FbxMesh* mesh, unsigned meshIndex) {
+void FBX::loadFace(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex) {
+    //頂点数
+    auto polygonVertexCount = mesh->GetPolygonVertexCount();
+    //インデックスバッファの取得
+    int* indices = mesh->GetPolygonVertices();
+    //頂点座標配列
+    FbxVector4* src = mesh->GetControlPoints();
+
+    //法線配列を取得する
+    FbxArray<FbxVector4> normalArray;
+    mesh->GetPolygonVertexNormals(normalArray);
+
+    //UVSetの名前リストを取得
+    FbxStringList uvSetNameList;
+    mesh->GetUVSetNames(uvSetNameList);
+    //UVSetの名前からUVSetを取得する
+    FbxArray<FbxVector2> uvArray;
+    mesh->GetPolygonVertexUVs(uvSetNameList.GetStringAt(0), uvArray);
+
+    //事前に拡張しとく
+    meshVertices.resize(polygonVertexCount);
+
+    for (size_t i = 0; i < polygonVertexCount; ++i) {
+        MeshVertex vertex;
+
+        int index = indices[i];
+        //xはマイナスのはずだけど背面カリングがうまくいかないから
+        vertex.pos.x = static_cast<float>(-src[index][0]);
+        vertex.pos.y = static_cast<float>(src[index][1]);
+        vertex.pos.z = static_cast<float>(src[index][2]);
+
+        //xはマイナスのはずだけど背面カリングがうまくいかないから
+        vertex.normal.x = static_cast<float>(-normalArray[i][0]);
+        vertex.normal.y = static_cast<float>(normalArray[i][1]);
+        vertex.normal.z = static_cast<float>(normalArray[i][2]);
+
+        //UVは使用している場合のみ
+        if (uvArray.Size() > 0) {
+            vertex.uv.x = static_cast<float>(uvArray[i][0]);
+            vertex.uv.y = 1.f - static_cast<float>(uvArray[i][1]);
+        }
+
+        //頂点情報を格納
+        meshVertices[i] = vertex;
+    }
+}
+
+void FBX::computeIndices(FbxMesh* mesh, unsigned meshIndex) {
     auto& indices = mIndices[meshIndex];
 
     //indicesはポリゴン数の3倍
     auto polygonCount = mesh->GetPolygonCount();
     indices.resize(polygonCount * 3);
 
-    for (int i = 0; i < polygonCount; i++) {
-        indices[i * 3] = i * 3;
+    //Fbxは右手系なので、DirectXの左手系に直すために2->1->0の順にインデックスを格納していく
+    for (int i = 0; i < polygonCount; ++i) {
+        indices[i * 3 + 0] = i * 3 + 2;
         indices[i * 3 + 1] = i * 3 + 1;
-        indices[i * 3 + 2] = i * 3 + 2;
+        indices[i * 3 + 2] = i * 3;
     }
-
-    auto& positions = mPositions[meshIndex];
-    auto& normals = mNormals[meshIndex];
-    auto& uvs = mUVs[meshIndex];
-    meshParam.positions.resize(positions.size());
-    meshParam.normals.resize(normals.size());
-    meshParam.uvs.resize(uvs.size());
-    std::copy(positions.begin(), positions.end(), meshParam.positions.begin());
-    std::copy(normals.begin(), normals.end(), meshParam.normals.begin());
-    std::copy(uvs.begin(), uvs.end(), meshParam.uvs.begin());
-    //meshParam.resize(indices.size());
-    //for (size_t i = 0; i < indices.size(); i++) {
-    //    meshParam.positions[i] = positions[i];
-    //    meshParam.normals[i] = normals[i];
-
-    //    //uvは使われてる場合のみ
-    //    if (uvs.size() > 0) {
-    //        meshParam.uvs[i] = uvs[i];
-    //    }
-    //}
 }
 
 void FBX::loadMaterial(FbxMesh* mesh, unsigned meshIndex) {

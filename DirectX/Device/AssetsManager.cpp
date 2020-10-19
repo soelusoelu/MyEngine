@@ -50,7 +50,7 @@ std::shared_ptr<TextureFromFile> AssetsManager::createTextureFromModel(const std
     return texture;
 }
 
-std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath, std::vector<MeshParam>& vertices) {
+std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath, std::vector<MeshVertices>& vertices) {
     std::shared_ptr<IMeshLoader> mesh = nullptr;
     auto itr = mMeshLoaders.find(filePath);
     if (itr != mMeshLoaders.end()) { //既に読み込まれている

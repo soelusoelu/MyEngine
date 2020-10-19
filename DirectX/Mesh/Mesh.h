@@ -51,10 +51,10 @@ private:
 
 private:
     std::shared_ptr<IMeshLoader> mMesh;
-    std::vector<MeshParam> mMeshes;
+    std::vector<MeshVertices> mMeshesVertices;
     std::unique_ptr<Shader> mShader;
-    std::vector<std::unique_ptr<VertexBuffer>> mVertexBuffer;
-    std::vector<std::unique_ptr<IndexBuffer>> mIndexBuffer;
+    std::vector<std::unique_ptr<VertexBuffer>> mVertexBuffers;
+    std::vector<std::unique_ptr<IndexBuffer>> mIndexBuffers;
 
     Vector3 mCenter;
     float mRadius;
