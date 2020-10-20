@@ -23,7 +23,7 @@ void PointLight::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void PointLight::initialize() {
-    //mesh = World::instance().assetsManager().createMesh(mMeshFileName);
+    //mesh = World::instance().assetsManager().createMeshLoader(mMeshFileName);
     //mesh->setInitMaterials(&materials);
     //radius = mesh->getRadius();
     //shader = World::instance().assetsManager().createShader("PointLight.hlsl");

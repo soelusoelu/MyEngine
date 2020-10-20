@@ -51,7 +51,7 @@ private:
     void addToManager();
 
 protected:
-    std::unique_ptr<Mesh> mMesh;
+    std::shared_ptr<Mesh> mMesh;
     std::string mFileName;
     State mState;
     float mAlpha;

@@ -79,7 +79,7 @@ void Mesh::initialize(const std::string& fileName) {
 
 void Mesh::createMesh(const std::string& fileName) {
     //アセットマネージャーからメッシュを作成する
-    mMesh = World::instance().assetsManager().createMesh(fileName, mMeshesVertices);
+    mMesh = World::instance().assetsManager().createMeshLoader(fileName, mMeshesVertices);
 }
 
 void Mesh::createShader(const std::string& fileName) {

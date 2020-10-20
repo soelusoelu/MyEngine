@@ -1,6 +1,7 @@
 ﻿#include "AssetsManager.h"
 #include "../DebugLayer/Debug.h"
 #include "../Mesh/FBX.h"
+#include "../Mesh/Mesh.h"
 #include "../Mesh/OBJ.h"
 #include "../System/TextureFromFile.h"
 #include "../System/World.h"
@@ -50,25 +51,35 @@ std::shared_ptr<TextureFromFile> AssetsManager::createTextureFromModel(const std
     return texture;
 }
 
-std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & filePath, std::vector<MeshVertices>& vertices) {
-    std::shared_ptr<IMeshLoader> mesh = nullptr;
-    auto itr = mMeshLoaders.find(filePath);
-    if (itr != mMeshLoaders.end()) { //既に読み込まれている
+std::shared_ptr<Mesh> AssetsManager::createMesh(const std::string& filePath) {
+    std::shared_ptr<Mesh> mesh = nullptr;
+    auto itr = mMeshes.find(filePath);
+    if (itr != mMeshes.end()) { //既に読み込まれている
         mesh = itr->second;
     } else { //初読み込み
-        auto ext = FileUtil::getFileExtension(filePath);
-        if (ext == ".obj") {
-            mesh = std::make_shared<OBJ>();
-        } else if (ext == ".fbx") {
-            mesh = std::make_shared<FBX>();
-        } else {
-            Debug::windowMessage(filePath + ": 対応していない拡張子です");
-        }
-        World::instance().directory().setModelDirectory(filePath);
-        auto fileName = FileUtil::getFileNameFromDirectry(filePath);
-        mesh->perse(fileName, vertices);
-        mMeshLoaders.emplace(filePath, mesh);
+        mesh = std::make_shared<Mesh>();
+        mesh->loadMesh(filePath);
+        mMeshes.emplace(filePath, mesh);
     }
+    return mesh;
+}
+
+std::shared_ptr<IMeshLoader> AssetsManager::createMeshLoader(const std::string & filePath, std::vector<MeshVertices>& vertices) {
+    std::shared_ptr<IMeshLoader> mesh = nullptr;
+
+    //拡張子によって処理を分ける
+    auto ext = FileUtil::getFileExtension(filePath);
+    if (ext == ".obj") {
+        mesh = std::make_shared<OBJ>();
+    } else if (ext == ".fbx") {
+        mesh = std::make_shared<FBX>();
+    } else {
+        Debug::windowMessage(filePath + ": 対応していない拡張子です");
+    }
+
+    World::instance().directory().setModelDirectory(filePath);
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
+    mesh->perse(fileName, vertices);
     return mesh;
 }
 
