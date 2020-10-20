@@ -1,30 +1,19 @@
 ﻿#pragma once
 
+#include "Material.h"
+#include "Vertex.h"
 #include "../Math/Math.h"
-#include <memory>
 #include <string>
 #include <vector>
 
-struct Material;
-class VertexArray;
-
-//頂点の構造体
-struct MeshVertex {
-    Vector3 pos;
-    Vector3 normal;
-    Vector2 uv;
-};
+//頂点構造体の配列を別名定義
+using MeshVertices = std::vector<MeshVertex>;
 
 class IMeshLoader {
-protected:
-    using MaterialPtr = std::shared_ptr<Material>;
-    using MaterialPtrArray = std::vector<MaterialPtr>;
-
 public:
-    virtual ~IMeshLoader() {};
-    virtual void perse(const std::string& fileName) = 0;
-    virtual void setInitMaterials(MaterialPtrArray* rhs) const = 0;
-    virtual std::shared_ptr<VertexArray> getVertexArray() const = 0;
-    virtual Vector3 getCenter() const = 0;
-    virtual float getRadius() const = 0;
+    virtual ~IMeshLoader() = default;
+    virtual void perse(const std::string& fileName, std::vector<MeshVertices>& meshes) = 0;
+    virtual const std::vector<unsigned short>& getIndices(unsigned meshIndex) const = 0;
+    virtual const Material& getMaterial(unsigned index) const = 0;
+    virtual unsigned getMeshCount() const = 0;
 };

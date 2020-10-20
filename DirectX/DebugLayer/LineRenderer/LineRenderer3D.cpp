@@ -1,11 +1,15 @@
 ﻿#include "LineRenderer3D.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../System/Shader.h"
+#include "../../Device/AssetsManager.h"
+#include "../../System/World.h"
+#include "../../System/Shader/ConstantBuffers.h"
+#include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform3D.h"
 #include <vector>
 
 LineRenderer3D::LineRenderer3D() :
     LineRenderer(),
+    mShader(nullptr),
     mTransform(std::make_unique<Transform3D>()) {
 }
 
@@ -30,14 +34,15 @@ const void* LineRenderer3D::getVertexData() const {
     return vert;
 }
 
-std::vector<InputElementDesc> LineRenderer3D::getInputLayout() const {
-    std::vector<InputElementDesc> layout = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 }
-    };
-    return layout;
+void LineRenderer3D::createShader() {
+    //シェーダー作成
+    mShader = World::instance().assetsManager().createShader("Line3D.hlsl");
 }
 
 void LineRenderer3D::drawLines(const Matrix4& proj) const {
+    //シェーダーを登録
+    mShader->setShaderInfo();
+
     for (const auto& line : mLines) {
         drawLine(line, proj);
     }

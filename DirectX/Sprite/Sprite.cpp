@@ -2,9 +2,10 @@
 #include "SpriteManager.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../System/Shader.h"
 #include "../System/TextureFromFile.h"
 #include "../System/World.h"
+#include "../System/shader/ConstantBuffers.h"
+#include "../System/shader/Shader.h"
 #include "../Transform/Transform2D.h"
 #include <cassert>
 #include <vector>
@@ -18,15 +19,6 @@ Sprite::Sprite() :
     mUV(0.f, 0.f, 1.f, 1.f),
     mFileName(),
     mIsActive(true) {
-
-    mShader->createConstantBuffer(sizeof(TextureConstantBuffer), 0);
-
-    //インプットレイアウトの生成
-    std::vector<InputElementDesc> layout = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-    };
-    mShader->createInputLayout(layout);
 
     computeWorldTransform();
 }

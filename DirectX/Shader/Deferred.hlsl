@@ -22,7 +22,7 @@ struct VS_OUTPUT
     float2 UV : TEXCOORD;
 };
 
-VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
+VS_OUTPUT VS(float4 Pos : POSITION, float3 Norm : NORMAL, float2 UV : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
 

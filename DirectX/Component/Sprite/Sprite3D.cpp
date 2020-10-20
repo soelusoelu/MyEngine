@@ -4,11 +4,12 @@
 #include "../../DirectX/DirectX.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Sprite/SpriteManager.h"
-#include "../../System/Shader.h"
 #include "../../System/Texture.h"
 #include "../../System/TextureFromFile.h"
 #include "../../System/Window.h"
 #include "../../System/World.h"
+#include "../../System/Shader/ConstantBuffers.h"
+#include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 #include <cassert>
@@ -43,15 +44,6 @@ void Sprite3D::awake() {
     auto v = static_cast<float>(desc.height) / static_cast<float>(desc.width);
     mTextureAspect.set(1.f, v);
     mTransform->setScale(mTransform->getScale() * Vector3(mTextureAspect, 1.f));
-
-    mShader->createConstantBuffer(sizeof(TextureConstantBuffer));
-
-    //インプットレイアウトの生成
-    std::vector<InputElementDesc> layout = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-    };
-    mShader->createInputLayout(layout);
 
     addToManager();
 

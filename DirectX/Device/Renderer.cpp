@@ -25,6 +25,20 @@ void Renderer::renderFromTexture(const Camera& camera, const LightManager& light
     mGBuffer->renderFromTexture(camera, lightManager);
 }
 
+void Renderer::renderMesh() const {
+    auto& dx = DirectX::instance();
+    //ビューポートの設定
+    dx.setViewport(Window::width(), Window::height());
+    //プリミティブ・トポロジーをセット
+    dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
+    //デプステスト有効化
+    dx.depthStencilState()->depthTest(true);
+    //デプスマスク有効化
+    dx.depthStencilState()->depthMask(true);
+    //半透明合成
+    dx.blendState()->translucent();
+}
+
 void Renderer::renderLine2D(Matrix4* proj) const {
     //原点をスクリーン左上にするために平行移動
     proj->m[3][0] = -1.f;
@@ -59,7 +73,7 @@ void Renderer::renderSprite() const {
     //プリミティブ・トポロジーをセット
     dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
     //インデックスバッファーをセット
-    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    Texture::indexBuffer->setIndexBuffer();
     //半透明合成
     dx.blendState()->translucent();
     //カリングオフ
@@ -109,5 +123,5 @@ void Renderer::renderToDebug(Matrix4* proj) const {
 }
 
 void Renderer::renderPointLight() const {
-    mGBuffer->setPSShaderResources();
+    mGBuffer->setShaderResources();
 }

@@ -12,12 +12,6 @@ struct TextureVertex {
     Vector2 uv; //テクスチャ座標
 };
 
-struct TextureConstantBuffer {
-    Matrix4 wp;
-    Vector4 color;
-    Vector4 uv;
-};
-
 class VertexBuffer;
 class IndexBuffer;
 class ShaderResourceView;

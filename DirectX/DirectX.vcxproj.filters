@@ -3,12 +3,15 @@
   <ItemGroup>
     <FxCompile Include="Shader\Texture.hlsl" />
     <FxCompile Include="Shader\Mesh.hlsl" />
-    <FxCompile Include="Shader\Mesh2.hlsl" />
     <FxCompile Include="Shader\Deferred.hlsl" />
     <FxCompile Include="Shader\GBuffer.hlsl" />
     <FxCompile Include="Shader\PointLight.hlsl" />
     <FxCompile Include="Shader\ChickenMesh.hlsl" />
-    <FxCompile Include="Shader\Point.hlsl" />
+    <FxCompile Include="Shader\Line2D.hlsl" />
+    <FxCompile Include="Shader\Line3D.hlsl" />
+    <FxCompile Include="Shader\SimpleMesh.hlsl" />
+    <FxCompile Include="Shader\MeshTexture.hlsl" />
+    <FxCompile Include="Shader\NormalMap.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentManager.cpp" />
@@ -33,7 +36,6 @@
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="Utility\FileUtil.cpp" />
-    <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="Mesh\OBJ.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
@@ -63,7 +65,6 @@
     <ClCompile Include="DebugLayer\Pause.cpp" />
     <ClCompile Include="DebugLayer\Button.cpp" />
     <ClCompile Include="Device\Subject.cpp" />
-    <ClCompile Include="System\Shader.cpp" />
     <ClCompile Include="DirectX\BlendState.cpp" />
     <ClCompile Include="DirectX\Buffer.cpp" />
     <ClCompile Include="DirectX\ComparisonFunc.cpp" />
@@ -91,7 +92,6 @@
     <ClCompile Include="Component\Text\TextNumber.cpp" />
     <ClCompile Include="Component\Sprite\Sprite3D.cpp" />
     <ClCompile Include="Component\Sprite\SpriteComponent.cpp" />
-    <ClCompile Include="Component\Mesh\TransparentMeshComponent.cpp" />
     <ClCompile Include="Component\Mesh\MeshComponent.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\Fade.cpp" />
@@ -161,6 +161,10 @@
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer2D.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer3D.cpp" />
+    <ClCompile Include="Mesh\Mesh.cpp" />
+    <ClCompile Include="System\Shader\ConstantBufferManager.cpp" />
+    <ClCompile Include="System\Shader\Shader.cpp" />
+    <ClCompile Include="System\Shader\InputElementManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -186,7 +190,6 @@
     <ClInclude Include="Mesh\FBX.h" />
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="Utility\FileUtil.h" />
-    <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="Mesh\OBJ.h" />
     <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="Utility\Directory.h" />
@@ -221,7 +224,6 @@
     <ClInclude Include="DebugLayer\Button.h" />
     <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="Device\Subject.h" />
-    <ClInclude Include="System\Shader.h" />
     <ClInclude Include="System\SystemInclude.h" />
     <ClInclude Include="System\GlobalFunction.h" />
     <ClInclude Include="DirectX\BlendDesc.h" />
@@ -261,7 +263,6 @@
     <ClInclude Include="Component\Text\TextNumber.h" />
     <ClInclude Include="Component\Sprite\SpriteComponent.h" />
     <ClInclude Include="Component\Sprite\Sprite3D.h" />
-    <ClInclude Include="Component\Mesh\TransparentMeshComponent.h" />
     <ClInclude Include="Component\Mesh\MeshComponent.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
@@ -355,5 +356,11 @@
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer2D.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer3D.h" />
+    <ClInclude Include="Mesh\Mesh.h" />
+    <ClInclude Include="System\Shader\ConstantBuffers.h" />
+    <ClInclude Include="System\Shader\ConstantBufferManager.h" />
+    <ClInclude Include="System\Shader\Shader.h" />
+    <ClInclude Include="System\Shader\InputElementManager.h" />
+    <ClInclude Include="Mesh\Vertex.h" />
   </ItemGroup>
 </Project>

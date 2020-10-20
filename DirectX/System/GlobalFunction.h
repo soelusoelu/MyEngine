@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#define ALIGN16 _declspec(align(16))
-
 template <typename T>
 inline void safeDelete(T*& p) {
     delete p;

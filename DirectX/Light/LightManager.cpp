@@ -7,9 +7,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Mesh/IMeshLoader.h"
-#include "../Mesh/VertexArray.h"
-#include "../System/Shader.h"
 #include "../System/SystemInclude.h"
+#include "../System/Shader/Shader.h"
 #include "../Utility/LevelLoader.h"
 
 LightManager::LightManager() :
@@ -60,32 +59,32 @@ void LightManager::removePointLight(const PointLightPtr& pointLight) {
 }
 
 void LightManager::drawPointLights(const Camera& camera) {
-    if (mPointLights.empty()) {
-        return;
-    }
+    //if (mPointLights.empty()) {
+    //    return;
+    //}
 
-    auto& dx = DirectX::instance();
-    auto shader = mPointLight->shader;
-    //使用するシェーダーの登録
-    shader->setVSShader();
-    shader->setPSShader();
-    //このコンスタントバッファーを使うシェーダーの登録
-    shader->setVSConstantBuffers();
-    shader->setPSConstantBuffers();
-    //頂点インプットレイアウトをセット
-    shader->setInputLayout();
-    //バーテックスバッファーをセット
-    mPointLight->mesh->getVertexArray()->setVertexBuffer();
-    //プリミティブ指定
-    dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
-    //デプステスト有効化
-    dx.depthStencilState()->depthTest(true);
-    //デプスマスク無効化
-    dx.depthStencilState()->depthMask(false);
-    //加算合成
-    dx.blendState()->add();
+    //auto& dx = DirectX::instance();
+    //auto shader = mPointLight->shader;
+    ////使用するシェーダーの登録
+    //shader->setVSShader();
+    //shader->setPSShader();
+    ////このコンスタントバッファーを使うシェーダーの登録
+    //shader->setVSConstantBuffers();
+    //shader->setPSConstantBuffers();
+    ////頂点インプットレイアウトをセット
+    //shader->setInputLayout();
+    ////バーテックスバッファーをセット
+    ////mPointLight->mesh->getVertexArray()->setVertexBuffer();
+    ////プリミティブ指定
+    //dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
+    ////デプステスト有効化
+    //dx.depthStencilState()->depthTest(true);
+    ////デプスマスク無効化
+    //dx.depthStencilState()->depthMask(false);
+    ////加算合成
+    //dx.blendState()->add();
 
-    for (const auto& pointLight : mPointLights) {
-        pointLight->draw(camera, *mPointLight);
-    }
+    //for (const auto& pointLight : mPointLights) {
+    //    pointLight->draw(camera, *mPointLight);
+    //}
 }

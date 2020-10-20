@@ -1,11 +1,13 @@
 ﻿#include "GBuffer.h"
-#include "Shader.h"
 #include "Window.h"
+#include "Shader/ConstantBuffers.h"
+#include "Shader/Shader.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Light/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../Light/LightManager.h"
+#include "../Mesh/Vertex.h"
 #include "../System/SystemInclude.h"
 #include "../System/World.h"
 
@@ -111,12 +113,9 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     dx.clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
-    mShader->setVSShader();
-    mShader->setPSShader();
-    //コンスタントバッファの登録
-    mShader->setPSConstantBuffers();
+    mShader->setShaderInfo();
     //1パス目で作成したテクスチャー3枚をセット
-    setPSShaderResources();
+    setShaderResources();
     //サンプラーをセット
     mSampler->setPSSamplers();
 
@@ -134,23 +133,17 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     //バーテックスバッファーをセット
     mVertexBuffer->setVertexBuffer();
     //インデックスバッファをセット
-    mIndexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    mIndexBuffer->setIndexBuffer();
     //デプステスト無効化
     dx.depthStencilState()->depthTest(false);
 
     dx.drawIndexed(6);
 }
 
-void GBuffer::setVSShaderResources() const {
+void GBuffer::setShaderResources() const {
     static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
         mShaderResourceViews[i]->setVSShaderResources(i);
-    }
-}
-
-void GBuffer::setPSShaderResources() const {
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
-    for (size_t i = 0; i < numGBuffer; i++) {
         mShaderResourceViews[i]->setPSShaderResources(i);
     }
 }
@@ -164,19 +157,18 @@ void GBuffer::createSampler() {
 void GBuffer::createShader() {
     //シェーダー生成
     mShader = World::instance().assetsManager().createShader("Deferred.hlsl");
-    mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
 }
 
 void GBuffer::createVertexBuffer() {
     //バーテックスバッファ生成
-    static const MeshVertex vertices[] = {
+    static const PosNormUVVertex vertices[] = {
         Vector3(-1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 1.f),
         Vector3(-1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 0.f),
         Vector3(1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 1.f),
         Vector3(1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 0.f)
     };
     BufferDesc bd;
-    bd.oneSize = sizeof(MeshVertex);
+    bd.oneSize = sizeof(PosNormUVVertex);
     bd.size = bd.oneSize * 4;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);

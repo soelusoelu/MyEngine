@@ -1,11 +1,13 @@
 ﻿#include "Camera.h"
+#include "../../Device/Time.h"
+#include "../../Input/Input.h"
 #include "../../System/Window.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
 Camera::Camera(GameObject& gameObject) :
     Component(gameObject),
-    mLookAt(Vector3::zero),
+    mLookAt(Vector3::forward * 10.f),
     mFOV(45.f),
     mNearClip(0.1f),
     mFarClip(100.f),
@@ -17,10 +19,45 @@ Camera::~Camera() = default;
 
 void Camera::awake() {
     calcLookAt();
-    calcPerspectiveFOV(Window::width(), Window::height());
+    calcPerspectiveFOV(Window::standardWidth(), Window::standardHeight());
 }
 
 void Camera::lateUpdate() {
+    constexpr float MOVE_SPEED = 5.f;
+    if (Input::keyboard().getKey(KeyCode::W)) {
+        transform().translate(transform().forward() * MOVE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::S)) {
+        transform().translate(-transform().forward() * MOVE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::D)) {
+        transform().translate(transform().right() * MOVE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::A)) {
+        transform().translate(-transform().right() * MOVE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::E)) {
+        transform().translate(transform().up() * MOVE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::Q)) {
+        transform().translate(-transform().up() * MOVE_SPEED * Time::deltaTime);
+    }
+
+    constexpr float ROTATE_SPEED = 40.f;
+    if (Input::keyboard().getKey(KeyCode::RightArrow)) {
+        transform().rotate(Vector3::up, ROTATE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::LeftArrow)) {
+        transform().rotate(Vector3::up, -ROTATE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::UpArrow)) {
+        transform().rotate(Vector3::right, -ROTATE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::DownArrow)) {
+        transform().rotate(Vector3::right, ROTATE_SPEED * Time::deltaTime);
+    }
+
+    lookAt({ transform().getPosition() + transform().forward() * 10.f });
     calcLookAt();
 }
 

@@ -161,9 +161,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="System\Shader\InputElementManager.cpp" />
+    <ClCompile Include="System\Shader\ConstantBufferManager.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer2D.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer3D.cpp" />
+    <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\FourierTransform.cpp" />
     <ClCompile Include="Sound\Factory\SineWaveGenerator.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.cpp" />
@@ -231,7 +234,6 @@
     <ClCompile Include="Math\Matrix4.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Component\Sprite\SpriteComponent.cpp" />
-    <ClCompile Include="Component\Mesh\TransparentMeshComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="Device\Subject.cpp" />
     <ClCompile Include="Component\Sprite\Sprite3D.cpp" />
@@ -290,7 +292,7 @@
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Component\Mesh\MeshComponent.cpp" />
     <ClCompile Include="System\SceneManager.cpp" />
-    <ClCompile Include="System\Shader.cpp" />
+    <ClCompile Include="System\Shader\Shader.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
     <ClCompile Include="DirectX\Buffer.cpp" />
@@ -300,7 +302,6 @@
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
-    <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="DirectX\VertexBuffer.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
@@ -313,9 +314,13 @@
     <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Mesh\Vertex.h" />
+    <ClInclude Include="System\Shader\InputElementManager.h" />
+    <ClInclude Include="System\Shader\ConstantBufferManager.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer2D.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer3D.h" />
+    <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\FourierTransform.h" />
     <ClInclude Include="Sound\Factory\SineWaveGenerator.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\DiscreteFourierTransform.h" />
@@ -385,6 +390,7 @@
     <ClInclude Include="Sound\Effects\TestEffect.h" />
     <ClInclude Include="Sound\Effects\TestEffectParameters.h" />
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
+    <ClInclude Include="System\Shader\ConstantBuffers.h" />
     <ClInclude Include="System\TextureFromMemory.h" />
     <ClInclude Include="System\TextureFromFile.h" />
     <ClInclude Include="Transform\Transform3D.h" />
@@ -411,7 +417,6 @@
     <ClInclude Include="Math\Matrix4.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Component\Sprite\SpriteComponent.h" />
-    <ClInclude Include="Component\Mesh\TransparentMeshComponent.h" />
     <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="Device\Subject.h" />
     <ClInclude Include="Component\Sprite\Sprite3D.h" />
@@ -481,7 +486,7 @@
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Component\Mesh\MeshComponent.h" />
     <ClInclude Include="System\SceneManager.h" />
-    <ClInclude Include="System\Shader.h" />
+    <ClInclude Include="System\Shader\Shader.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />
     <ClInclude Include="DirectX\Buffer.h" />
@@ -494,7 +499,6 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="DirectX\VertexBuffer.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
@@ -529,6 +533,24 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shader\Line2D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\Line3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\Mesh.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -537,20 +559,25 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
     </FxCompile>
-    <FxCompile Include="Shader\Mesh2.hlsl">
+    <FxCompile Include="Shader\MeshTexture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="Shader\Point.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\NormalMap.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\PointLight.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
@@ -559,6 +586,15 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\SimpleMesh.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\Texture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>

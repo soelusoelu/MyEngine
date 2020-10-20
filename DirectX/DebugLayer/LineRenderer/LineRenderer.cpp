@@ -1,12 +1,7 @@
 ﻿#include "LineRenderer.h"
-#include "../../Device/AssetsManager.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../System/Shader.h"
-#include "../../System/Window.h"
-#include "../../System/World.h"
 
 LineRenderer::LineRenderer() :
-    mShader(nullptr),
     mVertexBuffer(nullptr),
     mIndexBuffer(nullptr) {
 }
@@ -15,12 +10,10 @@ LineRenderer::~LineRenderer() = default;
 
 void LineRenderer::draw(const Matrix4& proj) const {
     //描画共通処理は最初に済ませる
-    //シェーダーを登録
-    mShader->setShaderInfo();
     //バーテックスバッファーを登録
     mVertexBuffer->setVertexBuffer();
     //インデックスバッファーを登録
-    mIndexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    mIndexBuffer->setIndexBuffer();
 
     //描画指令を出す
     drawLines(proj);
@@ -32,10 +25,8 @@ void LineRenderer::initialize() {
     //インデックスバッファの作成
     createIndexBuffer();
 
-    //シェーダー作成
-    mShader = World::instance().assetsManager().createShader("Point.hlsl");
-    mShader->createConstantBuffer(sizeof(LineConstantBuffer));
-    mShader->createInputLayout(getInputLayout());
+    //子クラスのシェーダーを作成する
+    createShader();
 }
 
 void LineRenderer::createVertexBuffer() {

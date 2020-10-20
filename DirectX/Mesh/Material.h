@@ -12,24 +12,22 @@ struct Material {
     Vector3 specular; //スペキュラー
     Vector3 emissive;
     Vector3 bump;
-    float transparency;
+    float transparency; //透明値
     float shininess;
-    std::string matName; //newmtl
-    std::string textureName; //テクスチャーファイル名
+    std::string materialName; //マテリアル名
     std::shared_ptr<TextureFromFile> texture;
-    unsigned numIndices;
+    std::shared_ptr<TextureFromFile> mapTexture;
 
     Material() :
         ambient(Vector3::zero),
-        diffuse(Vector3::zero),
+        diffuse(Vector3::one),
         specular(Vector3::zero),
         emissive(Vector3::zero),
         bump(Vector3::zero),
         transparency(1.f),
         shininess(1.f),
-        matName(""),
-        textureName(""),
+        materialName(),
         texture(nullptr),
-        numIndices(0) {
+        mapTexture(nullptr) {
     }
 };

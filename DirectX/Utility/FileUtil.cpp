@@ -16,7 +16,10 @@ std::string FileUtil::getFileExtension(const std::string& filePath) {
 std::string FileUtil::getFileNameFromDirectry(const std::string& filePath) {
     auto pos = filePath.find_last_of('/');
     if (pos == std::string::npos) {
-        return filePath;
+        pos = filePath.find_last_of('\\');
+        if (pos == std::string::npos) {
+            return filePath;
+        }
     }
     return filePath.substr(pos + 1);
 }
@@ -24,7 +27,10 @@ std::string FileUtil::getFileNameFromDirectry(const std::string& filePath) {
 std::string FileUtil::getDirectryFromFilePath(const std::string& filePath) {
     auto pos = filePath.find_last_of('/');
     if (pos == std::string::npos) {
-        return "";
+        pos = filePath.find_last_of('\\');
+        if (pos == std::string::npos) {
+            return "";
+        }
     }
     return filePath.substr(0, pos);
 }
