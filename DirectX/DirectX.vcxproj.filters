@@ -11,6 +11,7 @@
     <FxCompile Include="Shader\Line3D.hlsl" />
     <FxCompile Include="Shader\SimpleMesh.hlsl" />
     <FxCompile Include="Shader\MeshTexture.hlsl" />
+    <FxCompile Include="Shader\NormalMap.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentManager.cpp" />
@@ -360,5 +361,6 @@
     <ClInclude Include="System\Shader\ConstantBufferManager.h" />
     <ClInclude Include="System\Shader\Shader.h" />
     <ClInclude Include="System\Shader\InputElementManager.h" />
+    <ClInclude Include="Mesh\Vertex.h" />
   </ItemGroup>
 </Project>

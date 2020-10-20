@@ -252,6 +252,12 @@ void FBX::loadFace(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex
     FbxArray<FbxVector2> uvArray;
     mesh->GetPolygonVertexUVs(uvSetNameList.GetStringAt(0), uvArray);
 
+    //UVSetの名前からTangent(接線)を生成する
+    mesh->GenerateTangentsData(uvSetNameList.GetStringAt(0));
+    FbxLayerElementArrayTemplate<FbxVector4>* tangents;
+    //生成後、取得する
+    mesh->GetTangents(&tangents);
+
     //事前に拡張しとく
     meshVertices.resize(polygonVertexCount);
 
@@ -271,6 +277,14 @@ void FBX::loadFace(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex
         if (uvArray.Size() > 0) {
             vertex.uv.x = static_cast<float>(uvArray[i][0]);
             vertex.uv.y = 1.f - static_cast<float>(uvArray[i][1]);
+        }
+
+        //タンジェントは上手く生成できた場合のみ
+        if (tangents) {
+            const auto& tangent = *tangents;
+            vertex.tangent.x = tangent[i][0];
+            vertex.tangent.y = tangent[i][1];
+            vertex.tangent.z = tangent[i][2];
         }
 
         //頂点情報を格納

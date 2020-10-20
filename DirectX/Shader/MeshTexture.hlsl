@@ -21,23 +21,16 @@ struct VS_OUTPUT
     float4 Pos : SV_POSITION;
     float3 Normal : NORMAL;
     float2 UV : TEXCOORD0;
-    float3 LightDir : TEXCOORD1;
-    float3 EyeVector : TEXCOORD2;
+    float3 WorldPos : POSITION;
 };
 
 VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    //法線をワールド空間に
     output.Pos = mul(wvp, pos);
-    output.Normal = normal;
-    //テクスチャー座標
+    output.Normal = mul(world, float4(normal, 0)).xyz;
     output.UV = uv;
-    //ライト方向
-    output.LightDir = normalize(lightDir);
-    //視線ベクトル
-    float3 posWorld = mul(world, pos).xyz;
-    output.EyeVector = normalize(cameraPos - posWorld);
+    output.WorldPos = mul(world, pos).xyz;
 
     return output;
 }
@@ -45,18 +38,16 @@ VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOORD
 float4 PS(VS_OUTPUT input) : SV_Target
 {
     float3 normal = input.Normal;
-    float3 lightDir = input.LightDir;
-    float3 viewDir = input.EyeVector;
-    float NL = saturate(dot(normal, -lightDir));
+    float3 viewDir = normalize(cameraPos - input.WorldPos);
 
-    //float3 Reflect = normalize(2 * NL * normal - lightDir);
-    //float spec = pow(saturate(dot(Reflect, viewDir)), 4);
+    float NL = dot(normal, lightDir);
+    float3 Reflect = normalize(2 * NL * normal - lightDir);
+    float spec = pow(saturate(dot(Reflect, viewDir)), 4);
 
-    float4 color = float4(ambient + diffuse.rgb * NL, diffuse.a);
+    float3 color = saturate(ambient + diffuse.rgb * NL + specular * spec);
     float4 texColor = tex.Sample(samplerState, input.UV);
 
-    color *= texColor;
-    color = saturate(color);
+    color *= texColor.rgb;
 
-    return texColor;
+    return float4(color, texColor.a * diffuse.a);
 }

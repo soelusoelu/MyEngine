@@ -64,15 +64,15 @@ std::shared_ptr<Mesh> AssetsManager::createMesh(const std::string& filePath) {
     return mesh;
 }
 
-std::shared_ptr<IMeshLoader> AssetsManager::createMeshLoader(const std::string & filePath, std::vector<MeshVertices>& vertices) {
-    std::shared_ptr<IMeshLoader> mesh = nullptr;
+std::unique_ptr<IMeshLoader> AssetsManager::createMeshLoader(const std::string & filePath, std::vector<MeshVertices>& vertices) {
+    std::unique_ptr<IMeshLoader> mesh = nullptr;
 
     //拡張子によって処理を分ける
     auto ext = FileUtil::getFileExtension(filePath);
     if (ext == ".obj") {
-        mesh = std::make_shared<OBJ>();
+        mesh = std::make_unique<OBJ>();
     } else if (ext == ".fbx") {
-        mesh = std::make_shared<FBX>();
+        mesh = std::make_unique<FBX>();
     } else {
         Debug::windowMessage(filePath + ": 対応していない拡張子です");
     }

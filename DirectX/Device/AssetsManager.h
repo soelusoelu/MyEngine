@@ -18,7 +18,7 @@ public:
     std::shared_ptr<TextureFromFile> createTexture(const std::string& filePath);
     std::shared_ptr<TextureFromFile> createTextureFromModel(const std::string& fileName);
     std::shared_ptr<Mesh> createMesh(const std::string& filePath);
-    std::shared_ptr<IMeshLoader> createMeshLoader(const std::string& filePath, std::vector<MeshVertices>& vertices);
+    std::unique_ptr<IMeshLoader> createMeshLoader(const std::string& filePath, std::vector<MeshVertices>& vertices);
     void setDataDirectory(const std::string& filePath) const;
 
 private:

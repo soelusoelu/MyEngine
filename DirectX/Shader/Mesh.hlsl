@@ -17,21 +17,15 @@ struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float3 Normal : NORMAL;
-    float3 LightDir : TEXCOORD0;
-    float3 EyeVector : TEXCOORD1;
+    float3 WorldPos : POSITION;
 };
 
 VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    //法線をワールド空間に
     output.Pos = mul(wvp, pos);
-    output.Normal = normal;
-    //ライト方向
-    output.LightDir = normalize(lightDir);
-    //視線ベクトル
-    float3 posWorld = mul(world, pos).xyz;
-    output.EyeVector = normalize(cameraPos - posWorld);
+    output.Normal = mul(world, float4(normal, 0)).xyz;
+    output.WorldPos = mul(world, pos).xyz;
 
     return output;
 }
@@ -39,10 +33,9 @@ VS_OUTPUT VS(float4 pos : POSITION, float3 normal : NORMAL)
 float4 PS(VS_OUTPUT input) : SV_Target
 {
     float3 normal = input.Normal;
-    float3 lightDir = input.LightDir;
-    float3 viewDir = input.EyeVector;
-    float NL = dot(normal, lightDir);
+    float3 viewDir = normalize(cameraPos - input.WorldPos);
 
+    float NL = dot(normal, lightDir);
     float3 Reflect = normalize(2 * NL * normal - lightDir);
     float spec = pow(saturate(dot(Reflect, viewDir)), 4);
 

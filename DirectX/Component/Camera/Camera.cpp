@@ -23,30 +23,38 @@ void Camera::awake() {
 }
 
 void Camera::lateUpdate() {
-    constexpr float CAMERA_SPEED = 5.f;
+    constexpr float MOVE_SPEED = 5.f;
     if (Input::keyboard().getKey(KeyCode::W)) {
-        transform().translate(transform().forward() * CAMERA_SPEED * Time::deltaTime);
+        transform().translate(transform().forward() * MOVE_SPEED * Time::deltaTime);
     }
     if (Input::keyboard().getKey(KeyCode::S)) {
-        transform().translate(-transform().forward() * CAMERA_SPEED * Time::deltaTime);
+        transform().translate(-transform().forward() * MOVE_SPEED * Time::deltaTime);
     }
     if (Input::keyboard().getKey(KeyCode::D)) {
-        transform().translate(transform().right() * CAMERA_SPEED * Time::deltaTime);
+        transform().translate(transform().right() * MOVE_SPEED * Time::deltaTime);
     }
     if (Input::keyboard().getKey(KeyCode::A)) {
-        transform().translate(-transform().right() * CAMERA_SPEED * Time::deltaTime);
+        transform().translate(-transform().right() * MOVE_SPEED * Time::deltaTime);
     }
-    if (Input::keyboard().getKey(KeyCode::UpArrow)) {
-        transform().translate(transform().up() * CAMERA_SPEED * Time::deltaTime);
+    if (Input::keyboard().getKey(KeyCode::E)) {
+        transform().translate(transform().up() * MOVE_SPEED * Time::deltaTime);
     }
-    if (Input::keyboard().getKey(KeyCode::DownArrow)) {
-        transform().translate(-transform().up() * CAMERA_SPEED * Time::deltaTime);
+    if (Input::keyboard().getKey(KeyCode::Q)) {
+        transform().translate(-transform().up() * MOVE_SPEED * Time::deltaTime);
     }
+
+    constexpr float ROTATE_SPEED = 40.f;
     if (Input::keyboard().getKey(KeyCode::RightArrow)) {
-        transform().rotate(Vector3::up, 40.f * Time::deltaTime);
+        transform().rotate(Vector3::up, ROTATE_SPEED * Time::deltaTime);
     }
     if (Input::keyboard().getKey(KeyCode::LeftArrow)) {
-        transform().rotate(Vector3::up, -40.f * Time::deltaTime);
+        transform().rotate(Vector3::up, -ROTATE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::UpArrow)) {
+        transform().rotate(Vector3::right, -ROTATE_SPEED * Time::deltaTime);
+    }
+    if (Input::keyboard().getKey(KeyCode::DownArrow)) {
+        transform().rotate(Vector3::right, ROTATE_SPEED * Time::deltaTime);
     }
 
     lookAt({ transform().getPosition() + transform().forward() * 10.f });

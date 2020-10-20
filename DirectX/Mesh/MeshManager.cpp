@@ -26,8 +26,8 @@ void MeshManager::draw(const Camera& camera, const DirectionalLight& dirLight) c
             continue;
         }
 
-        //dx.rasterizerState()->setCulling(CullMode::FRONT);
-        //mesh->draw(camera);
+        //DirectX::instance().rasterizerState()->setCulling(CullMode::FRONT);
+        //mesh->draw(camera, dirLight);
 
         DirectX::instance().rasterizerState()->setCulling(CullMode::BACK);
         mesh->draw(camera, dirLight);

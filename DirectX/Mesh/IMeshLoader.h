@@ -1,16 +1,10 @@
 ﻿#pragma once
 
-#include "../Math/Math.h"
 #include "Material.h"
+#include "Vertex.h"
+#include "../Math/Math.h"
 #include <string>
 #include <vector>
-
-//頂点の構造体
-struct MeshVertex {
-    Vector3 pos;
-    Vector3 normal;
-    Vector2 uv;
-};
 
 //頂点構造体の配列を別名定義
 using MeshVertices = std::vector<MeshVertex>;

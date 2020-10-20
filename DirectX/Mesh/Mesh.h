@@ -50,7 +50,7 @@ private:
     void computeRadius();
 
 private:
-    std::shared_ptr<IMeshLoader> mMesh;
+    std::unique_ptr<IMeshLoader> mMesh;
     std::vector<MeshVertices> mMeshesVertices;
     std::unique_ptr<Shader> mShader;
     std::vector<std::unique_ptr<VertexBuffer>> mVertexBuffers;

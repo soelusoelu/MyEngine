@@ -29,7 +29,7 @@ struct TransparentConstantBuffer {
     ALIGN16 Matrix4 world; //ワールド行列
     ALIGN16 Matrix4 wvp; //ワールドから射影までの変換行列
     ALIGN16 Vector3 lightDir; //ワールド行列
-    ALIGN16 Vector3 cameraPos; //ワールドから射影までの変換行列
+    ALIGN16 Vector3 cameraPos; //カメラ位置
 };
 
 //ライン

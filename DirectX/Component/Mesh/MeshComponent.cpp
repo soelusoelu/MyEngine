@@ -6,6 +6,7 @@
 #include "../../GameObject/GameObject.h"
 #include "../../Mesh/Mesh.h"
 #include "../../Mesh/MeshManager.h"
+#include "../../System/TextureFromFile.h"
 #include "../../System/Shader/ConstantBuffers.h"
 #include "../../Transform/Transform3D.h"
 #include "../../System/World.h"
@@ -45,6 +46,10 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
         if (mMesh->getMaterial(0).texture) {
             shader = "MeshTexture.hlsl";
         }
+        //ノーマルマップが有るなら
+        if (mMesh->getMaterial(0).mapTexture) {
+            shader = "NormalMap.hlsl";
+        }
     }
     //シェーダーを生成する
     mMesh->loadShader(shader);
@@ -79,7 +84,13 @@ void MeshComponent::draw(const Camera& camera, const DirectionalLight& dirLight)
         }
         matcb.diffuse = Vector4(mat.diffuse, alpha);
         matcb.specular = mat.specular;
+        //データ転送
         mMesh->setShaderData(&matcb, sizeof(matcb), 1);
+
+        //テクスチャが有るなら登録
+        if (mat.texture) {
+            mat.texture->setTextureInfo();
+        }
 
         //描画
         mMesh->draw(i);

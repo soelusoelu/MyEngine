@@ -7,6 +7,7 @@
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../Light/LightManager.h"
+#include "../Mesh/Vertex.h"
 #include "../System/SystemInclude.h"
 #include "../System/World.h"
 
@@ -160,14 +161,14 @@ void GBuffer::createShader() {
 
 void GBuffer::createVertexBuffer() {
     //バーテックスバッファ生成
-    static const MeshVertex vertices[] = {
+    static const PosNormUVVertex vertices[] = {
         Vector3(-1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 1.f),
         Vector3(-1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 0.f),
         Vector3(1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 1.f),
         Vector3(1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 0.f)
     };
     BufferDesc bd;
-    bd.oneSize = sizeof(MeshVertex);
+    bd.oneSize = sizeof(PosNormUVVertex);
     bd.size = bd.oneSize * 4;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);

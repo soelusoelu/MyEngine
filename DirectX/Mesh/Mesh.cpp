@@ -2,7 +2,6 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../System/TextureFromFile.h"
 #include "../System/World.h"
 #include "../System/Shader/Shader.h"
 
@@ -40,12 +39,6 @@ void Mesh::draw(unsigned meshIndex) const {
     mVertexBuffers[meshIndex]->setVertexBuffer();
     //インデックスバッファーをセット
     mIndexBuffers[meshIndex]->setIndexBuffer();
-
-    const auto& mat = mMesh->getMaterial(meshIndex);
-    //テクスチャが有るなら登録
-    if (mat.texture) {
-        mat.texture->setTextureInfo();
-    }
 
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(mMesh->getIndices(meshIndex).size());
