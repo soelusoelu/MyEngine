@@ -15,8 +15,8 @@ struct Material {
     float transparency; //透明値
     float shininess;
     std::string materialName; //マテリアル名
-    std::string textureName; //テクスチャーファイル名
     std::shared_ptr<TextureFromFile> texture;
+    std::shared_ptr<TextureFromFile> mapTexture;
 
     Material() :
         ambient(Vector3::zero),
@@ -27,7 +27,7 @@ struct Material {
         transparency(1.f),
         shininess(1.f),
         materialName(),
-        textureName(),
-        texture(nullptr) {
+        texture(nullptr),
+        mapTexture(nullptr) {
     }
 };

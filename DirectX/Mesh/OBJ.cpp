@@ -215,9 +215,10 @@ void OBJ::loadSpecular(std::istringstream& iss) {
 void OBJ::loadTexture(std::istringstream& iss) {
     auto& mat = mMaterials.back();
     //テクスチャ名読み込み
-    iss >> mat.textureName;
+    std::string textureName;
+    iss >> textureName;
     //テクスチャ読み込み
-    mat.texture = World::instance().assetsManager().createTextureFromModel(mat.textureName);
+    mat.texture = World::instance().assetsManager().createTextureFromModel(textureName);
 }
 
 bool OBJ::isSkip(const std::string& line) {

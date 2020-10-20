@@ -17,16 +17,29 @@ public:
     virtual unsigned getMeshCount() const override;
 
 private:
+    //メッシュ作成
     void createMesh(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex);
+
+    //現状使用してない(サンプル確認用)
     void loadPosition(FbxMesh* mesh, unsigned meshIndex);
     void loadNormal(FbxMesh* mesh, unsigned meshIndex);
     void loadUV(FbxMesh* mesh, unsigned meshIndex);
+
+    //頂点情報 & 添字読み込み
     void loadFace(MeshVertices& meshVertices, FbxMesh* mesh, unsigned meshIndex);
+    //添字計算
     void computeIndices(FbxMesh* mesh, unsigned meshIndex);
 
+    //マテリアル読み込み
     void loadMaterial(FbxMesh* mesh, unsigned meshIndex);
     void loadMaterialAttribute(FbxSurfaceMaterial* material, unsigned meshIndex);
-    void loadMaterialTexture(FbxSurfaceMaterial* material, unsigned meshIndex);
+    void loadLambert(const FbxSurfaceLambert* lambert, unsigned meshIndex);
+    void loadPhong(const FbxSurfacePhong* phong, unsigned meshIndex);
+
+    //テクスチャ読み込み
+    void loadTextures(FbxSurfaceMaterial* material, unsigned meshIndex);
+    void createTexture(const FbxSurfaceMaterial* material, const char* type, unsigned meshIndex);
+    FbxFileTexture* getFbxTexture(const FbxProperty& prop) const;
 
 private:
     unsigned mNumMeshes;
