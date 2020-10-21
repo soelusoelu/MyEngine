@@ -104,7 +104,7 @@
       ]
     },
     {
-      "type": "ObjTest",
+      "type": "ObjTest2",
       "properties": {
         "rotation": [ -90.0, 180.0, 0.0 ],
         "scale": [ 0.5, 0.5, 0.5 ]
@@ -114,6 +114,20 @@
           "type": "MeshComponent",
           "properties": {
             "fileName": "zunko_model_data/TouhokuZunko_FromBlender_20140620_3.fbx"
+          }
+        }
+      ]
+    },
+    {
+      "type": "ObjTest",
+      "properties": {
+        "scale": [ 2.0, 2.0, 2.0 ]
+      },
+      "components": [
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "Shape/Sphere.obj"
           }
         }
       ]
