@@ -1,14 +1,13 @@
 ﻿#include "Texture.h"
-#include "GlobalFunction.h"
-#include "Shader/Shader.h"
-#include "../DebugLayer/Debug.h"
-#include "../DirectX/DirectXInclude.h"
-#include "../Utility/FileUtil.h"
+#include "../GlobalFunction.h"
+#include "../Shader/Shader.h"
+#include "../../DebugLayer/Debug.h"
+#include "../../DirectX/DirectXInclude.h"
 
 Texture::Texture() :
     mShaderResourceView(nullptr),
     mSampler(nullptr),
-    mDesc() {
+    mTextureSize() {
     if (!vertexBuffer || !indexBuffer) {
         //バーテックスバッファー作成
         createVertexBuffer();
@@ -27,8 +26,8 @@ void Texture::finalize() {
     safeDelete(indexBuffer);
 }
 
-const TextureDesc& Texture::desc() const {
-    return mDesc;
+const Vector2& Texture::getTextureSize() const {
+    return mTextureSize;
 }
 
 void Texture::setVSTextures(unsigned start, unsigned numTextures) const {

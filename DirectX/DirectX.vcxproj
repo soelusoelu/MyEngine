@@ -212,8 +212,8 @@
     <ClCompile Include="Sound\Effects\TestEffect.cpp" />
     <ClCompile Include="Sound\Effects\TestEffectParameters.cpp" />
     <ClCompile Include="Sound\Effects\Converter\SurroundStereoConverter.cpp" />
-    <ClCompile Include="System\TextureFromMemory.cpp" />
-    <ClCompile Include="System\TextureFromFile.cpp" />
+    <ClCompile Include="System\Texture\TextureFromMemory.cpp" />
+    <ClCompile Include="System\Texture\TextureFromFile.cpp" />
     <ClCompile Include="Transform\Transform3D.cpp" />
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
@@ -282,7 +282,7 @@
     <ClCompile Include="DirectX\DepthStencilState.cpp" />
     <ClCompile Include="DirectX\RasterizerState.cpp" />
     <ClCompile Include="DirectX\SubResourceDesc.cpp" />
-    <ClCompile Include="System\Texture.cpp" />
+    <ClCompile Include="System\Texture\Texture.cpp" />
     <ClCompile Include="DirectX\Texture2D.cpp" />
     <ClCompile Include="DirectX\Usage.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
@@ -391,8 +391,8 @@
     <ClInclude Include="Sound\Effects\TestEffectParameters.h" />
     <ClInclude Include="Sound\Effects\Converter\SurroundStereoConverter.h" />
     <ClInclude Include="System\Shader\ConstantBuffers.h" />
-    <ClInclude Include="System\TextureFromMemory.h" />
-    <ClInclude Include="System\TextureFromFile.h" />
+    <ClInclude Include="System\Texture\TextureFromMemory.h" />
+    <ClInclude Include="System\Texture\TextureFromFile.h" />
     <ClInclude Include="Transform\Transform3D.h" />
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
@@ -475,7 +475,7 @@
     <ClInclude Include="DirectX\RasterizerDesc.h" />
     <ClInclude Include="DirectX\RasterizerState.h" />
     <ClInclude Include="DirectX\ShaderResourceViewDesc.h" />
-    <ClInclude Include="System\Texture.h" />
+    <ClInclude Include="System\Texture\Texture.h" />
     <ClInclude Include="DirectX\Texture2DDesc.h" />
     <ClInclude Include="DirectX\Texture2D.h" />
     <ClInclude Include="DirectX\Usage.h" />
@@ -494,7 +494,6 @@
     <ClInclude Include="DirectX\InputElement.h" />
     <ClInclude Include="DirectX\InputElementDesc.h" />
     <ClInclude Include="DirectX\SubResourceDesc.h" />
-    <ClInclude Include="DirectX\TextureDesc.h" />
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="System\Game.h" />

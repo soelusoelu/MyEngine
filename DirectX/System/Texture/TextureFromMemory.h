@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Texture.h"
-#include "../Math/Math.h"
+#include "../../Math/Math.h"
 #include <vector>
 
 class TextureFromMemory : public Texture {

@@ -1,5 +1,5 @@
 ﻿#include "TextureFromMemory.h"
-#include "../DirectX/DirectXInclude.h"
+#include "../../DirectX/DirectXInclude.h"
 #include <algorithm>
 
 TextureFromMemory::TextureFromMemory(unsigned width, unsigned height) :
@@ -27,19 +27,18 @@ void TextureFromMemory::setPixel(unsigned x, unsigned y, const Vector3 & color) 
 
 void TextureFromMemory::setPixel(unsigned x, unsigned y, unsigned char r, unsigned char g, unsigned char b) {
     //データがunsigned char型で色3つアルファ値1つ並んでるから
-    auto p = y * mDesc.width * PIXEL_DATA_SIZE + x * PIXEL_DATA_SIZE;
+    auto p = y * mTextureSize.x * PIXEL_DATA_SIZE + x * PIXEL_DATA_SIZE;
     mPixelData[p] = r;
     mPixelData[p + 1] = g;
     mPixelData[p + 2] = b;
 }
 
 void TextureFromMemory::apply() {
-    createTextureFromMemory(mPixelData.data(), mDesc.width, mDesc.height);
+    createTextureFromMemory(mPixelData.data(), mTextureSize.x, mTextureSize.y);
 }
 
 void TextureFromMemory::createTextureFromMemory(unsigned char* data, unsigned width, unsigned height) {
-    mDesc.width = width;
-    mDesc.height = height;
+    mTextureSize = Vector2(width, height);
 
     Texture2DDesc tex2DDesc;
     tex2DDesc.width = width;

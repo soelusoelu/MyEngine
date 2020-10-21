@@ -1,8 +1,8 @@
 ﻿#include "Renderer.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../System/GBuffer.h"
-#include "../System/Texture.h"
 #include "../System/Window.h"
+#include "../System/Texture/Texture.h"
 #include "../Utility/LevelLoader.h"
 
 Renderer::Renderer() :

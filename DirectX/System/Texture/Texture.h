@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-#include "SystemInclude.h"
-#include "../DirectX/TextureDesc.h"
-#include "../Math/Math.h"
+#include "../../Math/Math.h"
 #include <memory>
 #include <string>
 
@@ -23,8 +21,8 @@ public:
     virtual ~Texture();
     //終了処理
     static void finalize();
-    //デスクリプタの取得
-    const TextureDesc& desc() const;
+    //テクスチャサイズを返す
+    const Vector2& getTextureSize() const;
     //テクスチャの登録
     void setVSTextures(unsigned start = 0, unsigned numTextures = 1) const;
     void setPSTextures(unsigned start = 0, unsigned numTextures = 1) const;
@@ -47,5 +45,5 @@ public:
 protected:
     std::unique_ptr<ShaderResourceView> mShaderResourceView;
     std::unique_ptr<Sampler> mSampler;
-    TextureDesc mDesc;
+    Vector2 mTextureSize;
 };
