@@ -9,10 +9,10 @@ class Mouse : public IMouse {
 public:
     Mouse();
     ~Mouse();
-    virtual bool getMouseButtonDown(MouseCode button) override;
-    virtual bool getMouseButton(MouseCode button) override;
-    virtual bool getMouseButtonUp(MouseCode button) override;
-    virtual const Vector2& getMousePosition() override;
+    virtual bool getMouseButtonDown(MouseCode button) const override;
+    virtual bool getMouseButton(MouseCode button) const override;
+    virtual bool getMouseButtonUp(MouseCode button) const override;
+    virtual const Vector2& getMousePosition() const override;
 
     bool initialize(HWND hWnd, IDirectInput8* directInput);
     void update();

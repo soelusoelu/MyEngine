@@ -17,11 +17,11 @@ class IMouse {
 public:
     virtual ~IMouse() = default;
     //キーが押された瞬間
-    virtual bool getMouseButtonDown(MouseCode button) = 0;
+    virtual bool getMouseButtonDown(MouseCode button) const = 0;
     //キーが押され続けているか
-    virtual bool getMouseButton(MouseCode button) = 0;
+    virtual bool getMouseButton(MouseCode button) const = 0;
     //キーが離れた瞬間
-    virtual bool getMouseButtonUp(MouseCode button) = 0;
+    virtual bool getMouseButtonUp(MouseCode button) const = 0;
     //マウスのウィンドウ位置
-    virtual const Vector2& getMousePosition() = 0;
+    virtual const Vector2& getMousePosition() const = 0;
 };

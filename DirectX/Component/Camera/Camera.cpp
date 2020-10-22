@@ -19,7 +19,7 @@ Camera::~Camera() = default;
 
 void Camera::awake() {
     calcLookAt();
-    calcPerspectiveFOV(Window::standardWidth(), Window::standardHeight());
+    calcPerspectiveFOV(Window::width(), Window::height());
 }
 
 void Camera::lateUpdate() {
@@ -59,6 +59,10 @@ void Camera::lateUpdate() {
 
     lookAt({ transform().getPosition() + transform().forward() * 10.f });
     calcLookAt();
+
+    if (Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
+        screenToWorldPoint(Input::mouse().getMousePosition(), 1.f);
+    }
 }
 
 void Camera::loadProperties(const rapidjson::Value & inObj) {
@@ -98,24 +102,29 @@ void Camera::lookAt(const Vector3 & position) {
 }
 
 Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
-    //各行列の逆行列を算出
+    //マウス座標をスクリーンの中心が原点になるように補正
+    //Vector3 mousePos3D = Vector3(
+    //    (position.x / static_cast<float>(Window::width())) * 2.f - 1.f,
+    //    -(position.y / static_cast<float>(Window::height())) * 2.f + 1.f,
+    //    z
+    //);
+    //return mousePos3D;
+
     auto invView = mView;
-    auto invProj = mProjection;
-    auto viewport = Matrix4::identity;
     invView.inverse();
+    auto invProj = mProjection;
     invProj.inverse();
-    viewport.m[0][0] = Window::width() / 2.f;
-    viewport.m[1][1] = -Window::height() / 2.f;
-    viewport.m[3][0] = Window::width() / 2.f;
-    viewport.m[3][1] = Window::height() / 2.f;
-    viewport.inverse();
 
-    //逆変換
-    auto temp = viewport * invProj * invView;
-    Vector3 out = Vector3::zero;
-    //out = Vector3(position, z) * temp;
+    auto invViewport = Matrix4::identity;
+    invViewport.m[0][0] = Window::width() / 2.f;
+    invViewport.m[1][1] = -Window::height() / 2.f;
+    invViewport.m[3][0] = Window::width() / 2.f;
+    invViewport.m[3][1] = Window::height() / 2.f;
+    invViewport.inverse();
 
-    return out;
+    auto m = invViewport * invProj * invView;
+
+    return Vector3::transformWithPerspDiv(Vector3(position, z), m);
 }
 
 bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {

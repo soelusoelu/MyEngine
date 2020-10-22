@@ -15,19 +15,19 @@ Mouse::~Mouse() {
     safeRelease<IDirectInputDevice8>(mMouseDevice);
 }
 
-bool Mouse::getMouseButtonDown(MouseCode button) {
+bool Mouse::getMouseButtonDown(MouseCode button) const {
     return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80 && !(mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80));
 }
 
-bool Mouse::getMouseButton(MouseCode button) {
+bool Mouse::getMouseButton(MouseCode button) const {
     return mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80;
 }
 
-bool Mouse::getMouseButtonUp(MouseCode button) {
+bool Mouse::getMouseButtonUp(MouseCode button) const {
     return (!(mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80) && mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80);
 }
 
-const Vector2& Mouse::getMousePosition() {
+const Vector2& Mouse::getMousePosition() const {
     return mMousePosition;
 }
 
@@ -87,8 +87,10 @@ void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {
 }
 
 void Mouse::updateMousePosition() {
-    POINT point;
+    POINT point = { 0 };
+    //カーソル位置の絶対座標を取得
     GetCursorPos(&point);
+    //ウィンドウ内の座標に変換
     ScreenToClient(mhWnd, &point);
     mMousePosition.x = static_cast<float>(point.x);
     mMousePosition.y = static_cast<float>(point.y);

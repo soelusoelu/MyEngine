@@ -102,6 +102,7 @@ void Title::start() {
 
     //GameObjectCreater::create("Waveform");
     GameObjectCreater::create("ObjTest");
+    GameObjectCreater::create("RayTest");
 }
 
 void Title::update() {

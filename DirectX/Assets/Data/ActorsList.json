@@ -106,12 +106,24 @@
     {
       "type": "ObjTest",
       "properties": {
+        "rotation": [ -90.0, 0.0, 0.0 ],
+        "scale": [ 10.0, 10.0, 10.0 ]
       },
       "components": [
         {
           "type": "MeshComponent",
           "properties": {
-            "fileName": "Shape/Sphere.obj"
+            "fileName": "Shape/Plane.fbx"
+          }
+        }
+      ]
+    },
+    {
+      "type": "RayTest",
+      "components": [
+        {
+          "type": "RayMouse",
+          "properties": {
           }
         }
       ]

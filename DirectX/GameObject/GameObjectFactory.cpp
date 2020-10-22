@@ -10,6 +10,7 @@
 #include "../Component/Mesh/MeshComponent.h"
 #include "../Component/Other/Fade.h"
 #include "../Component/Other/HitPointComponent.h"
+#include "../Component/Sample/RayMouse.h"
 #include "../Component/Scene/GamePlay.h"
 #include "../Component/Scene/Scene.h"
 #include "../Component/Scene/Title.h"
@@ -45,6 +46,8 @@ GameObjectFactory::GameObjectFactory() {
 
     ADD_COMPONENT(Fade);
     ADD_COMPONENT(HitPointComponent);
+
+    ADD_COMPONENT(RayMouse);
 
     ADD_COMPONENT(GamePlay);
     ADD_COMPONENT(Scene);
