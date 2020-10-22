@@ -102,14 +102,7 @@ void Camera::lookAt(const Vector3 & position) {
 }
 
 Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
-    //マウス座標をスクリーンの中心が原点になるように補正
-    //Vector3 mousePos3D = Vector3(
-    //    (position.x / static_cast<float>(Window::width())) * 2.f - 1.f,
-    //    -(position.y / static_cast<float>(Window::height())) * 2.f + 1.f,
-    //    z
-    //);
-    //return mousePos3D;
-
+    //ビューポート、射影、ビュー、それぞれの逆行列を求める
     auto invView = mView;
     invView.inverse();
     auto invProj = mProjection;
@@ -122,8 +115,10 @@ Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
     invViewport.m[3][1] = Window::height() / 2.f;
     invViewport.inverse();
 
+    //ビューポート、射影、ビュー、それぞれの逆行列を掛ける
     auto m = invViewport * invProj * invView;
 
+    //スクリーン座標をワールド座標に変換
     return Vector3::transformWithPerspDiv(Vector3(position, z), m);
 }
 

@@ -4,7 +4,7 @@
 
 struct Ray {
     Ray(const Vector3& origin, const Vector3& direction, float maxDistance = Math::infinity);
-    //線分上の点を返す 0 <= t <= 1
+    //線分上の点を返す [0, t, 1]
     Vector3 pointOnSegment(float t) const;
     //最短距離の2乗
     float minDistanceSquare(const Vector3& point) const;

@@ -5,7 +5,7 @@
 
 SphereCollider::SphereCollider(GameObject& gameObject) :
     Collider(gameObject),
-    mSphere(std::make_unique<Sphere>()),
+    mSphere(),
     mDefaultCenter(Vector3::zero),
     mDefaultRadius(0.f) {
 }
@@ -17,18 +17,18 @@ void SphereCollider::start() {
 
     auto mesh = getComponent<MeshComponent>();
     if (mesh) {
-        mSphere->center = mesh->getCenter();
-        mSphere->radius = mesh->getRadius();
-        mDefaultCenter = mSphere->center;
-        mDefaultRadius = mSphere->radius;
+        mSphere.center = mesh->getCenter();
+        mSphere.radius = mesh->getRadius();
+        mDefaultCenter = mSphere.center;
+        mDefaultRadius = mSphere.radius;
     }
 }
 
 void SphereCollider::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     Collider::drawDebugInfo(inspect);
 
-    inspect->emplace_back("Center", mSphere->center);
-    inspect->emplace_back("Radius", mSphere->radius);
+    inspect->emplace_back("Center", mSphere.center);
+    inspect->emplace_back("Radius", mSphere.radius);
 }
 
 void SphereCollider::onUpdateWorldTransform() {
@@ -43,16 +43,16 @@ void SphereCollider::onUpdateWorldTransform() {
     auto maxScaleValue = Math::Max<float>(scale.x, Math::Max<float>(scale.y, scale.z));
     auto radius = mDefaultRadius * maxScaleValue;
 
-    mSphere->set(center, radius);
+    mSphere.set(center, radius);
 }
 
 void SphereCollider::set(const Vector3& center, float radius) {
-    mSphere->set(center, radius);
+    mSphere.set(center, radius);
     if (mIsAutoUpdate) {
         mIsAutoUpdate = false;
     }
 }
 
 const Sphere& SphereCollider::getSphere() const {
-    return *mSphere;
+    return mSphere;
 }

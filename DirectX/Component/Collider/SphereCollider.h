@@ -16,7 +16,7 @@ public:
     const Sphere& getSphere() const;
 
 private:
-    std::unique_ptr<Sphere> mSphere;
+    Sphere mSphere;
     Vector3 mDefaultCenter;
     float mDefaultRadius;
 };
