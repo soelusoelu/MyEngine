@@ -38,12 +38,16 @@ struct Sphere {
     float radius;
 };
 
-//oriented bounding box つまり回転する直方体
-//AABBよりはるかに計算コストが高い
-struct OBB {
-    Vector3 mCenter;
-    Quaternion mRotation;
-    Vector3 mExtents;
+struct AABB {
+    AABB();
+    AABB(const Vector3& min, const Vector3& max);
+    void updateMinMax(const Vector3& point);
+    void rotate(const Quaternion& q);
+    bool contains(const Vector3& point) const;
+    float minDistanceSquare(const Vector3& point) const;
+
+    Vector3 min;
+    Vector3 max;
 };
 
 //交差判定
@@ -54,6 +58,9 @@ bool intersectCircle(const Circle& a, const Circle& b);
 //球同士の衝突判定を行う
 bool intersectSphere(const Sphere& a, const Sphere& b);
 
+//AABB同士の衝突判定を行う
+bool intersectAABB(const AABB& a, const AABB& b);
+
 //無限平面とレイの衝突判定を行う
 bool intersectRayPlane(const Ray& ray, const Plane& p, Vector3& intersectPoint);
 
@@ -63,9 +70,10 @@ bool intersectRayPolygon(const Ray& ray, const Vector3& p1, const Vector3& p2, c
 //球とレイの衝突判定を行う
 bool intersectRaySphere(const Ray& r, const Sphere& s, float* outT);
 
+//AABBとレイの衝突判定を行う
+bool intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& intersectPoint);
+
 //メッシュとレイの衝突判定を行う
 //めちゃめちゃ重い
 bool intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform);
-
-bool SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* t);
 }

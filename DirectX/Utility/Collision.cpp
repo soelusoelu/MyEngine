@@ -153,6 +153,78 @@ bool Sphere::contains(const Vector3& point) const {
 
 
 
+AABB::AABB() :
+    min(Vector3::zero),
+    max(Vector3::one) {
+}
+
+AABB::AABB(const Vector3& min, const Vector3& max) :
+    min(min),
+    max(max) {
+}
+
+void AABB::updateMinMax(const Vector3& point) {
+    min.x = Math::Min(min.x, point.x);
+    min.y = Math::Min(min.y, point.y);
+    min.z = Math::Min(min.z, point.z);
+
+    max.x = Math::Max(max.x, point.x);
+    max.y = Math::Max(max.y, point.y);
+    max.z = Math::Max(max.z, point.z);
+}
+
+void AABB::rotate(const Quaternion& q) {
+    //ボックスの角の8つの点を格納する
+    std::array<Vector3, 8> points;
+    //最小点からボックスの角の点を計算していく
+    points[0] = min;
+    points[1] = Vector3(max.x, min.y, min.z);
+    points[2] = Vector3(min.x, max.y, min.z);
+    points[3] = Vector3(min.x, min.y, max.z);
+    points[4] = Vector3(min.x, max.y, max.z);
+    points[5] = Vector3(max.x, min.y, max.z);
+    points[6] = Vector3(max.x, max.y, min.z);
+    points[7] = max;
+
+    //最初に最小の点を回転させる
+    auto p = Vector3::transform(points[0], q);
+    //最小、最大点を回転した点に設定
+    min = p;
+    max = p;
+    //回転した点に基づいて最小、最大点を更新する
+    for (size_t i = 1; i < points.size(); ++i) {
+        p = Vector3::transform(points[i], q);
+        updateMinMax(p);
+    }
+}
+
+bool AABB::contains(const Vector3& point) const {
+    bool outside = (
+        point.x < min.x ||
+        point.y < min.y ||
+        point.z < min.z ||
+        point.x > max.x ||
+        point.y > max.y ||
+        point.z > max.z
+    );
+    //いずれにも当てはまらなければ内側
+    return !outside;
+}
+
+float AABB::minDistanceSquare(const Vector3& point) const {
+    //各軸の差を計算する
+    float dx = Math::Max(min.x - point.x, 0.f);
+    dx = Math::Max(dx, point.x - max.x);
+    float dy = Math::Max(min.y - point.y, 0.f);
+    dy = Math::Max(dy, point.y - max.y);
+    float dz = Math::Max(min.z - point.z, 0.f);
+    dz = Math::Max(dy, point.z - max.z);
+    //距離の2乗
+    return (dx * dx + dy * dy + dz * dz);
+}
+
+
+
 bool Intersect::intersectCircle(const Circle& a, const Circle& b) {
     Vector2 dist = a.center - b.center;
     float distSq = dist.lengthSq();
@@ -165,6 +237,19 @@ bool Intersect::intersectSphere(const Sphere& a, const Sphere& b) {
     float distSq = dist.lengthSq();
     float sumRadii = a.radius + b.radius;
     return distSq <= (sumRadii * sumRadii);
+}
+
+bool Intersect::intersectAABB(const AABB& a, const AABB& b) {
+    bool no = (
+        a.max.x < b.min.x ||
+        a.max.y < b.min.y ||
+        a.max.z < b.min.z ||
+        b.max.x < a.min.x ||
+        b.max.y < a.min.y ||
+        b.max.z < a.min.z
+    );
+    //いずれにも当てはまらなければ衝突している
+    return !no;
 }
 
 bool Intersect::intersectRayPlane(const Ray& ray, const Plane& p, Vector3& intersectPoint) {
@@ -243,6 +328,57 @@ bool Intersect::intersectRaySphere(const Ray& r, const Sphere& s, float* outT) {
     }
 }
 
+bool testSidePlane(float start, float end, float negd, std::vector<float>& out) {
+    float denom = end - start;
+    if (Math::nearZero(denom)) {
+        return false;
+    }
+
+    float numer = -start + negd;
+    float t = numer / denom;
+    //tが線分の範囲内にあるか
+    if (t >= 0.f && t <= 1.f) {
+        out.emplace_back(t);
+        return true;
+    } 
+
+    //範囲外
+    return false;
+}
+
+bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& intersectPoint) {
+    //すべてのt値を格納する
+    std::vector<float> tValues;
+    //x平面テスト
+    testSidePlane(ray.start.x, ray.end.x, aabb.min.x, tValues);
+    testSidePlane(ray.start.x, ray.end.x, aabb.max.x, tValues);
+    //y平面テスト
+    testSidePlane(ray.start.y, ray.end.y, aabb.min.y, tValues);
+    testSidePlane(ray.start.y, ray.end.y, aabb.max.y, tValues);
+    //z平面テスト
+    testSidePlane(ray.start.z, ray.end.z, aabb.min.z, tValues);
+    testSidePlane(ray.start.z, ray.end.z, aabb.max.z, tValues);
+
+    //t値を昇順で並べ替える
+    //std::sort(tValues.begin(), tValues.end(), [](
+    //    const std::pair<float, Vector3>& a,
+    //    const std::pair<float, Vector3>& b) {
+    //        return a.first < b.first;
+    //    });
+
+    //ボックスに交点が含まれているか調べる
+    for (const auto& t : tValues) {
+        auto point = ray.pointOnSegment(t);
+        if (aabb.contains(point)) {
+            intersectPoint = point;
+            return true;
+        }
+    }
+
+    //衝突していない
+    return false;
+}
+
 bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform) {
     //ワールド行列を先に取得しておく
     const auto& world = transform.getWorldTransform();
@@ -273,28 +409,4 @@ bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transf
 
     //衝突していない
     return false;
-}
-
-bool Intersect::SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* outT) {
-    //X, Y, a, b, cを計算
-    Vector3 X = P0.center - Q0.center;
-    Vector3 Y = P1.center - P0.center - (Q1.center - Q0.center);
-    float a = Vector3::dot(Y, Y);
-    float b = 2.0f * Vector3::dot(X, Y);
-    float sumRadii = P0.radius + Q0.radius;
-    float c = Vector3::dot(X, X) - sumRadii * sumRadii;
-    //判別式を解く
-    float disc = b * b - 4.0f * a * c;
-    if (disc < 0.0f) {
-        return false;
-    } else {
-        disc = Math::sqrt(disc);
-        //小さい方の解だけが重要
-        *outT = (-b - disc) / (2.0f * a);
-        if (0.f <= *outT && *outT <= 0.0f) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
