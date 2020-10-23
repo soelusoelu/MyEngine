@@ -23,10 +23,6 @@ public:
     virtual unsigned getMeshCount() const override;
     //すべての頂点情報を取得
     virtual const std::vector<MeshVertices>& getMeshesVertices() const override;
-    //中心座標の取得
-    virtual const Vector3& getCenter() const override;
-    //半径の取得
-    virtual float getRadius() const override;
 
     //ファイル名からメッシュを生成する
     void loadMesh(const std::string& fileName);
@@ -48,10 +44,6 @@ private:
     void createVertexBuffer(unsigned meshIndex);
     //インデックスバッファを生成する
     void createIndexBuffer(unsigned meshIndex);
-    //メッシュの中心を計算する
-    void computeCenter();
-    //メッシュの半径を計算する
-    void computeRadius();
 
 private:
     std::unique_ptr<IMeshLoader> mMesh;
@@ -59,7 +51,4 @@ private:
     std::unique_ptr<Shader> mShader;
     std::vector<std::unique_ptr<VertexBuffer>> mVertexBuffers;
     std::vector<std::unique_ptr<IndexBuffer>> mIndexBuffers;
-
-    Vector3 mCenter;
-    float mRadius;
 };

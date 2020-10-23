@@ -2,6 +2,7 @@
 
 #include "Collider.h"
 #include "../../Math/Math.h"
+#include "../../Mesh/IMeshLoader.h"
 #include "../../Utility/Collision.h"
 #include <memory>
 
@@ -12,8 +13,16 @@ public:
     virtual void start() override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     virtual void onUpdateWorldTransform() override;
+    //中心位置と半径を直接設定する
     void set(const Vector3& center, float radius);
+    //球を取得する
     const Sphere& getSphere() const;
+
+private:
+    //メッシュから中心位置を割り出す
+    void computeCenter(const std::vector<MeshVertices>& meshesVertices);
+    //メッシュから半径を割り出す
+    void computeRadius(const std::vector<MeshVertices>& meshesVertices);
 
 private:
     Sphere mSphere;
