@@ -113,12 +113,8 @@ bool MeshComponent::isDead() const {
     return mState == State::DEAD;
 }
 
-const Vector3& MeshComponent::getCenter() const {
-    return mMesh->getCenter();
-}
-
-float MeshComponent::getRadius() const {
-    return mMesh->getRadius();
+const IMesh& MeshComponent::getMesh() const {
+    return *mMesh;
 }
 
 void MeshComponent::setAlpha(float alpha) {

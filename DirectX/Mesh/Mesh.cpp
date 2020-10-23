@@ -14,6 +14,26 @@ Mesh::Mesh() :
 
 Mesh::~Mesh() = default;
 
+const Material& Mesh::getMaterial(unsigned index) const {
+    return mMesh->getMaterial(index);
+}
+
+unsigned Mesh::getMeshCount() const {
+    return mMesh->getMeshCount();
+}
+
+const std::vector<MeshVertices>& Mesh::getMeshesVertices() const {
+    return mMeshesVertices;
+}
+
+const Vector3& Mesh::getCenter() const {
+    return mCenter;
+}
+
+float Mesh::getRadius() const {
+    return mRadius;
+}
+
 void Mesh::loadMesh(const std::string& fileName) {
     //すでに生成済みなら終了する
     if (mMesh) {
@@ -42,22 +62,6 @@ void Mesh::draw(unsigned meshIndex) const {
 
     //プリミティブをレンダリング
     DirectX::instance().drawIndexed(mMesh->getIndices(meshIndex).size());
-}
-
-const Material& Mesh::getMaterial(unsigned index) const {
-    return mMesh->getMaterial(index);
-}
-
-unsigned Mesh::getMeshCount() const {
-    return mMesh->getMeshCount();
-}
-
-const Vector3& Mesh::getCenter() const {
-    return mCenter;
-}
-
-float Mesh::getRadius() const {
-    return mRadius;
 }
 
 void Mesh::initialize(const std::string& fileName) {

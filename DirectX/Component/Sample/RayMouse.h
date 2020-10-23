@@ -2,9 +2,11 @@
 
 #include "../Component.h"
 #include "../../Math/Math.h"
+#include "../../Utility/Collision.h"
 #include <memory>
 
 class Camera;
+class MeshComponent;
 
 class RayMouse : public Component {
 public:
@@ -15,5 +17,5 @@ public:
 
 private:
     std::shared_ptr<Camera> mCamera;
-    Vector3 mClickPos;
+    std::shared_ptr<MeshComponent> mMesh;
 };

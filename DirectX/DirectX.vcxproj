@@ -315,6 +315,7 @@
     <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Mesh\IMesh.h" />
     <ClInclude Include="Mesh\Vertex.h" />
     <ClInclude Include="Component\Sample\RayMouse.h" />
     <ClInclude Include="System\Shader\InputElementManager.h" />

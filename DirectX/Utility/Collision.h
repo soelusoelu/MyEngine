@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 #include "../Math/Math.h"
+#include "../Mesh/IMesh.h"
+
+class Transform3D;
 
 struct Ray {
     Ray(const Vector3& origin, const Vector3& direction, float maxDistance);
@@ -45,15 +48,24 @@ struct OBB {
 
 //交差判定
 namespace Intersect {
-bool intersect(const Circle& a, const Circle& b);
+//円同士の衝突判定を行う
+bool intersectCircle(const Circle& a, const Circle& b);
 
-bool intersect(const Sphere& a, const Sphere& b);
+//球同士の衝突判定を行う
+bool intersectSphere(const Sphere& a, const Sphere& b);
 
-bool intersectRayPlane(const Ray& r, const Plane& p, Vector3& intersectPoint);
+//無限平面とレイの衝突判定を行う
+bool intersectRayPlane(const Ray& ray, const Plane& p, Vector3& intersectPoint);
 
-bool intersectRayPolygon(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint);
+//ポリゴンとレイの衝突判定を行う
+bool intersectRayPolygon(const Ray& ray, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint);
 
-bool intersect(const Ray& r, const Sphere& s, float* outT);
+//球とレイの衝突判定を行う
+bool intersectRaySphere(const Ray& r, const Sphere& s, float* outT);
+
+//メッシュとレイの衝突判定を行う
+//めちゃめちゃ重い
+bool intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform);
 
 bool SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* t);
 }

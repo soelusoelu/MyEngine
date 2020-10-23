@@ -1,6 +1,7 @@
 ﻿#include "SphereCollider.h"
 #include "../Mesh/MeshComponent.h"
 #include "../../GameObject/GameObject.h"
+#include "../../Mesh/IMesh.h"
 #include "../../Transform/Transform3D.h"
 
 SphereCollider::SphereCollider(GameObject& gameObject) :
@@ -15,10 +16,11 @@ SphereCollider::~SphereCollider() = default;
 void SphereCollider::start() {
     Collider::start();
 
-    auto mesh = getComponent<MeshComponent>();
-    if (mesh) {
-        mSphere.center = mesh->getCenter();
-        mSphere.radius = mesh->getRadius();
+    auto meshComponent = getComponent<MeshComponent>();
+    if (meshComponent) {
+        const auto& mesh = meshComponent->getMesh();
+        mSphere.center = mesh.getCenter();
+        mSphere.radius = mesh.getRadius();
         mDefaultCenter = mSphere.center;
         mDefaultRadius = mSphere.radius;
     }

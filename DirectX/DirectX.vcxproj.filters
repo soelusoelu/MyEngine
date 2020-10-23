@@ -363,5 +363,6 @@
     <ClInclude Include="System\Texture\TextureFromFile.h" />
     <ClInclude Include="System\Texture\TextureFromMemory.h" />
     <ClInclude Include="Component\Sample\RayMouse.h" />
+    <ClInclude Include="Mesh\IMesh.h" />
   </ItemGroup>
 </Project>

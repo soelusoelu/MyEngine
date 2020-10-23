@@ -1,4 +1,6 @@
 ﻿#include "Collision.h"
+#include "../Mesh/IMesh.h"
+#include "../Transform/Transform3D.h"
 #include <algorithm>
 #include <array>
 #include <vector>
@@ -151,34 +153,34 @@ bool Sphere::contains(const Vector3& point) const {
 
 
 
-bool Intersect::intersect(const Circle& a, const Circle& b) {
+bool Intersect::intersectCircle(const Circle& a, const Circle& b) {
     Vector2 dist = a.center - b.center;
     float distSq = dist.lengthSq();
     float sumRadius = a.radius + b.radius;
     return distSq <= (sumRadius * sumRadius);
 }
 
-bool Intersect::intersect(const Sphere& a, const Sphere& b) {
+bool Intersect::intersectSphere(const Sphere& a, const Sphere& b) {
     Vector3 dist = a.center - b.center;
     float distSq = dist.lengthSq();
     float sumRadii = a.radius + b.radius;
     return distSq <= (sumRadii * sumRadii);
 }
 
-bool Intersect::intersectRayPlane(const Ray& r, const Plane& p, Vector3& intersectPoint) {
+bool Intersect::intersectRayPlane(const Ray& ray, const Plane& p, Vector3& intersectPoint) {
     //tの解決策があるかどうかの最初のテスト
-    float denom = Vector3::dot(r.end - r.start, p.normal());
+    float denom = Vector3::dot(ray.end - ray.start, p.normal());
     if (Math::nearZero(denom)) {
         //交差するのは、開始が平面上の点(P dot N) == dである場合だけ
-        return (Math::nearZero(Vector3::dot(r.start, p.normal()) - p.d));
+        return (Math::nearZero(Vector3::dot(ray.start, p.normal()) - p.d));
     }
 
-    float numer = -Vector3::dot(r.start, p.normal()) - p.d;
+    float numer = -Vector3::dot(ray.start, p.normal()) - p.d;
     float t = numer / denom;
     //tが線分の範囲内にあるか
     if (t >= 0.f && t <= 1.f) {
         //衝突点を取得する
-        intersectPoint = r.pointOnSegment(t);
+        intersectPoint = ray.pointOnSegment(t);
         return true;
     }
 
@@ -186,10 +188,10 @@ bool Intersect::intersectRayPlane(const Ray& r, const Plane& p, Vector3& interse
     return false;
 }
 
-bool Intersect::intersectRayPolygon(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint) {
+bool Intersect::intersectRayPolygon(const Ray& ray, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint) {
     //まずは無限平面でテストする
     Plane plane(p1, p2, p3);
-    if (!intersectRayPlane(r, plane, intersectPoint)) {
+    if (!intersectRayPlane(ray, plane, intersectPoint)) {
         return false;
     }
 
@@ -212,7 +214,7 @@ bool Intersect::intersectRayPolygon(const Ray& r, const Vector3& p1, const Vecto
     return !(dotAB < 0.f || dotBC < 0.f || dotCA < 0.f);
 }
 
-bool Intersect::intersect(const Ray& r, const Sphere& s, float* outT) {
+bool Intersect::intersectRaySphere(const Ray& r, const Sphere& s, float* outT) {
     //方程式のX, Y, a, b, cを計算
     Vector3 X = r.start - s.center;
     Vector3 Y = r.end - r.start;
@@ -239,6 +241,38 @@ bool Intersect::intersect(const Ray& r, const Sphere& s, float* outT) {
             return false;
         }
     }
+}
+
+bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform) {
+    //ワールド行列を先に取得しておく
+    const auto& world = transform.getWorldTransform();
+
+    //すべてのメッシュとレイによる判定を行う
+    const auto& meshesVertices = mesh.getMeshesVertices();
+    for (size_t i = 0; i < mesh.getMeshCount(); ++i) {
+        const auto& meshVertices = meshesVertices[i];
+        const auto polygonCount = meshVertices.size() / 3;
+        for (size_t j = 0; j < polygonCount; ++j) {
+            //それぞれの頂点にワールド行列を掛ける
+            auto p1 = Vector3::transform(meshVertices[j * 3].pos, world);
+            auto p2 = Vector3::transform(meshVertices[j * 3 + 1].pos, world);
+            auto p3 = Vector3::transform(meshVertices[j * 3 + 2].pos, world);
+
+            //同じ頂点が入っていることが有るから強制的に
+            if (Math::equal(p1.x, p2.x) || Math::equal(p2.x, p3.x) || Math::equal(p3.x, p1.x)) {
+                continue;
+            }
+
+            //ポリゴンとレイの衝突判定
+            Vector3 out;
+            if (Intersect::intersectRayPolygon(ray, p1, p2, p3, out)) {
+                return true;
+            }
+        }
+    }
+
+    //衝突していない
+    return false;
 }
 
 bool Intersect::SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* outT) {
