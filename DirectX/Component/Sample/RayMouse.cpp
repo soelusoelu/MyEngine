@@ -39,7 +39,7 @@ void RayMouse::update() {
         Ray ray(cameraPos, dir, 10000.f);
         Vector3 out;
         //ポリゴンとレイの衝突判定
-        if (intersectPolygonRay(ray, v1, v2, v3, out)) {
+        if (Intersect::intersectRayPolygon(ray, v1, v2, v3, out)) {
             transform().setPosition(out);
             Debug::log("hit");
         } else {

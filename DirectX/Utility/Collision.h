@@ -3,7 +3,7 @@
 #include "../Math/Math.h"
 
 struct Ray {
-    Ray(const Vector3& origin, const Vector3& direction, float maxDistance = Math::infinity);
+    Ray(const Vector3& origin, const Vector3& direction, float maxDistance);
     //線分上の点を返す [0, t, 1]
     Vector3 pointOnSegment(float t) const;
     //最短距離の2乗
@@ -44,14 +44,16 @@ struct OBB {
 };
 
 //交差判定
+namespace Intersect {
 bool intersect(const Circle& a, const Circle& b);
 
 bool intersect(const Sphere& a, const Sphere& b);
 
-bool intersectPlaneRay(const Ray& r, const Plane& p, Vector3& intersectPoint);
+bool intersectRayPlane(const Ray& r, const Plane& p, Vector3& intersectPoint);
 
-bool intersectPolygonRay(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint);
+bool intersectRayPolygon(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint);
 
 bool intersect(const Ray& r, const Sphere& s, float* outT);
 
 bool SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* t);
+}

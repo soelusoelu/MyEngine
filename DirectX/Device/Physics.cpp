@@ -59,7 +59,7 @@ void Physics::sweepAndPrune() {
             //mCircles[i]と交差する可能性があるボックスは存在しない
             if (bs.center.x - bs.radius > max) {
                 break;
-            } else if (intersect(as, bs)) {
+            } else if (Intersect::intersect(as, bs)) {
                 a->addHitCollider(b);
                 b->addHitCollider(a);
             }

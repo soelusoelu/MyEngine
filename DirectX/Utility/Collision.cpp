@@ -151,21 +151,21 @@ bool Sphere::contains(const Vector3& point) const {
 
 
 
-bool intersect(const Circle& a, const Circle& b) {
+bool Intersect::intersect(const Circle& a, const Circle& b) {
     Vector2 dist = a.center - b.center;
     float distSq = dist.lengthSq();
     float sumRadius = a.radius + b.radius;
     return distSq <= (sumRadius * sumRadius);
 }
 
-bool intersect(const Sphere& a, const Sphere& b) {
+bool Intersect::intersect(const Sphere& a, const Sphere& b) {
     Vector3 dist = a.center - b.center;
     float distSq = dist.lengthSq();
     float sumRadii = a.radius + b.radius;
     return distSq <= (sumRadii * sumRadii);
 }
 
-bool intersectPlaneRay(const Ray& r, const Plane& p, Vector3& intersectPoint) {
+bool Intersect::intersectRayPlane(const Ray& r, const Plane& p, Vector3& intersectPoint) {
     //tの解決策があるかどうかの最初のテスト
     float denom = Vector3::dot(r.end - r.start, p.normal());
     if (Math::nearZero(denom)) {
@@ -186,10 +186,10 @@ bool intersectPlaneRay(const Ray& r, const Plane& p, Vector3& intersectPoint) {
     return false;
 }
 
-bool intersectPolygonRay(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint) {
+bool Intersect::intersectRayPolygon(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint) {
     //まずは無限平面でテストする
     Plane plane(p1, p2, p3);
-    if (!intersectPlaneRay(r, plane, intersectPoint)) {
+    if (!intersectRayPlane(r, plane, intersectPoint)) {
         return false;
     }
 
@@ -212,7 +212,7 @@ bool intersectPolygonRay(const Ray& r, const Vector3& p1, const Vector3& p2, con
     return !(dotAB < 0.f || dotBC < 0.f || dotCA < 0.f);
 }
 
-bool intersect(const Ray& r, const Sphere& s, float* outT) {
+bool Intersect::intersect(const Ray& r, const Sphere& s, float* outT) {
     //方程式のX, Y, a, b, cを計算
     Vector3 X = r.start - s.center;
     Vector3 Y = r.end - r.start;
@@ -241,24 +241,7 @@ bool intersect(const Ray& r, const Sphere& s, float* outT) {
     }
 }
 
-bool testSidePlane(float start, float end, float negd, const Vector3& norm, std::vector<std::pair<float, Vector3>>* out) {
-    float denom = end - start;
-    if (Math::nearZero(denom)) {
-        return false;
-    } else {
-        float numer = -start + negd;
-        float t = numer / denom;
-        //tが範囲内にあることをテスト
-        if (0.f <= t && t <= 1.0f) {
-            out->emplace_back(t, norm);
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
-
-bool SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* outT) {
+bool Intersect::SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* outT) {
     //X, Y, a, b, cを計算
     Vector3 X = P0.center - Q0.center;
     Vector3 Y = P1.center - P0.center - (Q1.center - Q0.center);
