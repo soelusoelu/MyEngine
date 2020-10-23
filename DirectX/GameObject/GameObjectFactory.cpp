@@ -3,6 +3,7 @@
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/Camera/Camera.h"
+#include "../Component/Collider/AABBCollider.h"
 #include "../Component/Collider/CircleCollider.h"
 #include "../Component/Collider/SphereCollider.h"
 #include "../Component/Light/DirectionalLight.h"
@@ -36,6 +37,7 @@ GameObjectFactory::GameObjectFactory() {
 
     ADD_COMPONENT(Camera);
 
+    ADD_COMPONENT(AABBCollider);
     ADD_COMPONENT(CircleCollider);
     ADD_COMPONENT(SphereCollider);
 

@@ -1,5 +1,6 @@
 ﻿#include "RayMouse.h"
 #include "../Camera/Camera.h"
+#include "../Collider/AABBCollider.h"
 #include "../Mesh/MeshComponent.h"
 #include "../../Collision/Collision.h"
 #include "../../DebugLayer/Debug.h"
@@ -45,4 +46,7 @@ void RayMouse::update() {
             Debug::log("not hit");
         }
     }
+
+    auto aabb = getComponent<AABBCollider>();
+    Debug::renderLine(aabb->getAABB().min, aabb->getAABB().max, ColorPalette::green);
 }

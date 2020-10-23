@@ -21,6 +21,6 @@ private:
     void circleUpdate();
 
 private:
+    Circle mCircle;
     std::shared_ptr<SpriteComponent> mSprite;
-    std::unique_ptr<Circle> mCircle;
 };

@@ -4,15 +4,14 @@
 #include "../../Collision/Collision.h"
 #include "../../Math/Math.h"
 #include "../../Mesh/IMeshLoader.h"
-#include <memory>
 
 class SphereCollider : public Collider {
 public:
     SphereCollider(GameObject& gameObject);
     ~SphereCollider();
     virtual void start() override;
-    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     virtual void onUpdateWorldTransform() override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //中心位置と半径を直接設定する
     void set(const Vector3& center, float radius);
     //球を取得する

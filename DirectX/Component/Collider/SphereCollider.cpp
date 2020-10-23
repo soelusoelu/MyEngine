@@ -1,6 +1,5 @@
 ﻿#include "SphereCollider.h"
 #include "../Mesh/MeshComponent.h"
-#include "../../GameObject/GameObject.h"
 #include "../../Mesh/IMesh.h"
 #include "../../Transform/Transform3D.h"
 
@@ -27,13 +26,6 @@ void SphereCollider::start() {
     }
 }
 
-void SphereCollider::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    Collider::drawDebugInfo(inspect);
-
-    inspect->emplace_back("Center", mSphere.center);
-    inspect->emplace_back("Radius", mSphere.radius);
-}
-
 void SphereCollider::onUpdateWorldTransform() {
     Collider::onUpdateWorldTransform();
 
@@ -46,11 +38,20 @@ void SphereCollider::onUpdateWorldTransform() {
     auto maxScaleValue = Math::Max<float>(scale.x, Math::Max<float>(scale.y, scale.z));
     auto radius = mDefaultRadius * maxScaleValue;
 
-    mSphere.set(center, radius);
+    mSphere.center = center;
+    mSphere.radius = radius;
+}
+
+void SphereCollider::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    Collider::drawDebugInfo(inspect);
+
+    inspect->emplace_back("Center", mSphere.center);
+    inspect->emplace_back("Radius", mSphere.radius);
 }
 
 void SphereCollider::set(const Vector3& center, float radius) {
-    mSphere.set(center, radius);
+    mSphere.center = center;
+    mSphere.radius = radius;
     if (mIsAutoUpdate) {
         mIsAutoUpdate = false;
     }

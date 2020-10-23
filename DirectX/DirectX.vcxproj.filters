@@ -170,6 +170,7 @@
     <ClCompile Include="Collision\Intersect.cpp" />
     <ClCompile Include="Collision\Ray.cpp" />
     <ClCompile Include="Collision\Sphere.cpp" />
+    <ClCompile Include="Component\Collider\AABBCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -373,5 +374,6 @@
     <ClInclude Include="Collision\Intersect.h" />
     <ClInclude Include="Collision\Ray.h" />
     <ClInclude Include="Collision\Sphere.h" />
+    <ClInclude Include="Component\Collider\AABBCollider.h" />
   </ItemGroup>
 </Project>

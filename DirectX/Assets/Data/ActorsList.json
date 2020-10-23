@@ -132,11 +132,11 @@
         {
           "type": "MeshComponent",
           "properties": {
-            "fileName": "Shape/Sphere.obj"
+            "fileName": "Bird/tonbi4.fbx"
           }
         },
         {
-          "type": "SphereCollider",
+          "type": "AABBCollider",
           "properties": {
           }
         }
