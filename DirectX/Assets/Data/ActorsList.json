@@ -125,6 +125,12 @@
           "type": "RayMouse",
           "properties": {
           }
+        },
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "Shape/Sphere.obj"
+          }
         }
       ]
     }

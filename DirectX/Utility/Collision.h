@@ -48,6 +48,10 @@ bool intersect(const Circle& a, const Circle& b);
 
 bool intersect(const Sphere& a, const Sphere& b);
 
+bool intersectPlaneRay(const Ray& r, const Plane& p, Vector3& intersectPoint);
+
+bool intersectPolygonRay(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint);
+
 bool intersect(const Ray& r, const Sphere& s, float* outT);
 
 bool SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float* t);

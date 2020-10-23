@@ -5,7 +5,7 @@
 
 Ray::Ray(const Vector3& origin, const Vector3& direction, float maxDistance) :
     start(origin),
-    end(direction* maxDistance) {
+    end(direction * maxDistance) {
 }
 
 Vector3 Ray::pointOnSegment(float t) const {
@@ -163,6 +163,53 @@ bool intersect(const Sphere& a, const Sphere& b) {
     float distSq = dist.lengthSq();
     float sumRadii = a.radius + b.radius;
     return distSq <= (sumRadii * sumRadii);
+}
+
+bool intersectPlaneRay(const Ray& r, const Plane& p, Vector3& intersectPoint) {
+    //tの解決策があるかどうかの最初のテスト
+    float denom = Vector3::dot(r.end - r.start, p.normal());
+    if (Math::nearZero(denom)) {
+        //交差するのは、開始が平面上の点(P dot N) == dである場合だけ
+        return (Math::nearZero(Vector3::dot(r.start, p.normal()) - p.d));
+    }
+
+    float numer = -Vector3::dot(r.start, p.normal()) - p.d;
+    float t = numer / denom;
+    //tが線分の範囲内にあるか
+    if (t >= 0.f && t <= 1.f) {
+        //衝突点を取得する
+        intersectPoint = r.pointOnSegment(t);
+        return true;
+    }
+
+    //衝突していない
+    return false;
+}
+
+bool intersectPolygonRay(const Ray& r, const Vector3& p1, const Vector3& p2, const Vector3& p3, Vector3& intersectPoint) {
+    //まずは無限平面でテストする
+    Plane plane(p1, p2, p3);
+    if (!intersectPlaneRay(r, plane, intersectPoint)) {
+        return false;
+    }
+
+    //各辺ベクトルを求める
+    auto ab = p2 - p1;
+    auto bc = p3 - p2;
+    auto ca = p1 - p3;
+
+    //各辺ベクトルと各頂点から交点へ向かうベクトルの外積を求める
+    auto crossAB = Vector3::cross(ab, intersectPoint - p1);
+    auto crossBC = Vector3::cross(bc, intersectPoint - p2);
+    auto crossCA = Vector3::cross(ca, intersectPoint - p3);
+
+    //それぞれの外積ベクトルとの内積を計算する
+    auto dotAB = Vector3::dot(plane.normal(), crossAB);
+    auto dotBC = Vector3::dot(plane.normal(), crossBC);
+    auto dotCA = Vector3::dot(plane.normal(), crossCA);
+
+    //3つの内積結果のうち1つでもマイナス符号のものがあれば交点は外にある
+    return !(dotAB < 0.f || dotBC < 0.f || dotCA < 0.f);
 }
 
 bool intersect(const Ray& r, const Sphere& s, float* outT) {
