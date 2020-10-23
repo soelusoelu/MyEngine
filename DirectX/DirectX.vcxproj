@@ -161,7 +161,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collision\Intersect.cpp" />
+    <ClCompile Include="Collision\AABB.cpp" />
+    <ClCompile Include="Collision\Sphere.cpp" />
+    <ClCompile Include="Collision\Circle.cpp" />
     <ClCompile Include="Component\Sample\RayMouse.cpp" />
+    <ClCompile Include="Collision\Ray.cpp" />
     <ClCompile Include="System\Shader\InputElementManager.cpp" />
     <ClCompile Include="System\Shader\ConstantBufferManager.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer.cpp" />
@@ -298,7 +303,6 @@
     <ClCompile Include="Sprite\SpriteManager.cpp" />
     <ClCompile Include="DirectX\Buffer.cpp" />
     <ClCompile Include="DirectX\InputElement.cpp" />
-    <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
@@ -315,9 +319,14 @@
     <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision\Intersect.h" />
+    <ClInclude Include="Collision\AABB.h" />
+    <ClInclude Include="Collision\Sphere.h" />
+    <ClInclude Include="Collision\Circle.h" />
     <ClInclude Include="Mesh\IMesh.h" />
     <ClInclude Include="Mesh\Vertex.h" />
     <ClInclude Include="Component\Sample\RayMouse.h" />
+    <ClInclude Include="Collision\Ray.h" />
     <ClInclude Include="System\Shader\InputElementManager.h" />
     <ClInclude Include="System\Shader\ConstantBufferManager.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer.h" />
@@ -497,7 +506,7 @@
     <ClInclude Include="DirectX\InputElement.h" />
     <ClInclude Include="DirectX\InputElementDesc.h" />
     <ClInclude Include="DirectX\SubResourceDesc.h" />
-    <ClInclude Include="Utility\Collision.h" />
+    <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />

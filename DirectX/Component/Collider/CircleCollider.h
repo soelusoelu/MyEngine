@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "Collider.h"
+#include "../../Collision/Collision.h"
 #include "../../Math/Math.h"
-#include "../../Utility/Collision.h"
 #include <memory>
 
 class SpriteComponent;

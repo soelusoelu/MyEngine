@@ -22,7 +22,6 @@
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
-    <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
@@ -166,6 +165,11 @@
     <ClCompile Include="System\Texture\TextureFromFile.cpp" />
     <ClCompile Include="System\Texture\TextureFromMemory.cpp" />
     <ClCompile Include="Component\Sample\RayMouse.cpp" />
+    <ClCompile Include="Collision\AABB.cpp" />
+    <ClCompile Include="Collision\Circle.cpp" />
+    <ClCompile Include="Collision\Intersect.cpp" />
+    <ClCompile Include="Collision\Ray.cpp" />
+    <ClCompile Include="Collision\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -176,7 +180,6 @@
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />
-    <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
@@ -364,5 +367,11 @@
     <ClInclude Include="System\Texture\TextureFromMemory.h" />
     <ClInclude Include="Component\Sample\RayMouse.h" />
     <ClInclude Include="Mesh\IMesh.h" />
+    <ClInclude Include="Collision\AABB.h" />
+    <ClInclude Include="Collision\Circle.h" />
+    <ClInclude Include="Collision\Collision.h" />
+    <ClInclude Include="Collision\Intersect.h" />
+    <ClInclude Include="Collision\Ray.h" />
+    <ClInclude Include="Collision\Sphere.h" />
   </ItemGroup>
 </Project>

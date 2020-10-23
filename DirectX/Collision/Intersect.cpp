@@ -1,229 +1,10 @@
-﻿#include "Collision.h"
-#include "../Mesh/IMesh.h"
+﻿#include "Intersect.h"
+#include "AABB.h"
+#include "Circle.h"
+#include "Ray.h"
+#include "Sphere.h"
 #include "../Transform/Transform3D.h"
-#include <algorithm>
-#include <array>
 #include <vector>
-
-Ray::Ray(const Vector3& origin, const Vector3& direction, float maxDistance) :
-    start(origin),
-    end(direction * maxDistance) {
-}
-
-Vector3 Ray::pointOnSegment(float t) const {
-    return start + (end - start) * t;
-}
-
-float Ray::minDistanceSquare(const Vector3& point) const {
-    //ベクトルの準備
-    Vector3 ab = end - start;
-    Vector3 ba = -1.0f * ab;
-    Vector3 ac = point - start;
-    Vector3 bc = point - end;
-
-    // Case 1: Aの外側
-    if (Vector3::dot(ab, ac) < 0.0f) {
-        return ac.lengthSq();
-    }
-    // Case 2: Bの外側
-    else if (Vector3::dot(ba, bc) < 0.0f) {
-        return bc.lengthSq();
-    }
-    // Case 3:ABの間
-    else {
-        //pを計算
-        float scalar = Vector3::dot(ac, ab) / Vector3::dot(ab, ab);
-        Vector3 p = scalar * ab;
-        //ac - pの長さの2乗を計算
-        return (ac - p).lengthSq();
-    }
-}
-
-float Ray::minDistanceSquare(const Ray& s1, const Ray& s2) {
-    Vector3   u = s1.end - s1.start;
-    Vector3   v = s2.end - s2.start;
-    Vector3   w = s1.start - s2.start;
-    float    a = Vector3::dot(u, u);         // always >= 0
-    float    b = Vector3::dot(u, v);
-    float    c = Vector3::dot(v, v);         // always >= 0
-    float    d = Vector3::dot(u, w);
-    float    e = Vector3::dot(v, w);
-    float    D = a * c - b * b;        // always >= 0
-    float    sc, sN, sD = D;       // sc = sN / sD, default sD = D >= 0
-    float    tc, tN, tD = D;       // tc = tN / tD, default tD = D >= 0
-
-                                   // compute the line parameters of the two closest points
-    if (Math::nearZero(D)) { // the lines are almost parallel
-        sN = 0.0;         // force using point P0 on segment S1
-        sD = 1.0;         // to prevent possible division by 0.0 later
-        tN = e;
-        tD = c;
-    } else {                 // get the closest points on the infinite lines
-        sN = (b * e - c * d);
-        tN = (a * e - b * d);
-        if (sN < 0.0) {        // sc < 0 => the s=0 edge is visible
-            sN = 0.0;
-            tN = e;
-            tD = c;
-        } else if (sN > sD) {  // sc > 1  => the s=1 edge is visible
-            sN = sD;
-            tN = e + b;
-            tD = c;
-        }
-    }
-
-    if (tN < 0.0) {            // tc < 0 => the t=0 edge is visible
-        tN = 0.0;
-        // recompute sc for this edge
-        if (-d < 0.0)
-            sN = 0.0;
-        else if (-d > a)
-            sN = sD;
-        else {
-            sN = -d;
-            sD = a;
-        }
-    } else if (tN > tD) {      // tc > 1  => the t=1 edge is visible
-        tN = tD;
-        // recompute sc for this edge
-        if ((-d + b) < 0.0)
-            sN = 0;
-        else if ((-d + b) > a)
-            sN = sD;
-        else {
-            sN = (-d + b);
-            sD = a;
-        }
-    }
-    // finally do the division to get sc and tc
-    sc = (Math::nearZero(sN) ? 0.0f : sN / sD);
-    tc = (Math::nearZero(tN) ? 0.0f : tN / tD);
-
-    // get the difference of the two closest points
-    Vector3   dP = w + (sc * u) - (tc * v);  // =  S1(sc) - S2(tc)
-
-    return dP.lengthSq();   // return the closest distance squared
-}
-
-
-
-Circle::Circle() :
-    center(Vector2::zero),
-    radius(0.f) {
-}
-
-Circle::Circle(const Vector2& center, float radius) :
-    center(center),
-    radius(radius) {
-}
-
-void Circle::set(const Vector2& center, float radius) {
-    this->center = center;
-    this->radius = radius;
-}
-
-bool Circle::contains(const Vector2& point) const {
-    //中心と点との距離の2乗を求める
-    float distSq = (center - point).lengthSq();
-    return distSq <= (radius * radius);
-}
-
-
-
-Sphere::Sphere() :
-    center(Vector3::zero),
-    radius(0.f) {
-}
-
-Sphere::Sphere(const Vector3& center, float radius) :
-    center(center),
-    radius(radius) {
-}
-
-void Sphere::set(const Vector3& center, float radius) {
-    this->center = center;
-    this->radius = radius;
-}
-
-bool Sphere::contains(const Vector3& point) const {
-    //中心と点との距離の2乗を求める
-    float distSq = (center - point).lengthSq();
-    return distSq <= (radius * radius);
-}
-
-
-
-AABB::AABB() :
-    min(Vector3::zero),
-    max(Vector3::one) {
-}
-
-AABB::AABB(const Vector3& min, const Vector3& max) :
-    min(min),
-    max(max) {
-}
-
-void AABB::updateMinMax(const Vector3& point) {
-    min.x = Math::Min(min.x, point.x);
-    min.y = Math::Min(min.y, point.y);
-    min.z = Math::Min(min.z, point.z);
-
-    max.x = Math::Max(max.x, point.x);
-    max.y = Math::Max(max.y, point.y);
-    max.z = Math::Max(max.z, point.z);
-}
-
-void AABB::rotate(const Quaternion& q) {
-    //ボックスの角の8つの点を格納する
-    std::array<Vector3, 8> points;
-    //最小点からボックスの角の点を計算していく
-    points[0] = min;
-    points[1] = Vector3(max.x, min.y, min.z);
-    points[2] = Vector3(min.x, max.y, min.z);
-    points[3] = Vector3(min.x, min.y, max.z);
-    points[4] = Vector3(min.x, max.y, max.z);
-    points[5] = Vector3(max.x, min.y, max.z);
-    points[6] = Vector3(max.x, max.y, min.z);
-    points[7] = max;
-
-    //最初に最小の点を回転させる
-    auto p = Vector3::transform(points[0], q);
-    //最小、最大点を回転した点に設定
-    min = p;
-    max = p;
-    //回転した点に基づいて最小、最大点を更新する
-    for (size_t i = 1; i < points.size(); ++i) {
-        p = Vector3::transform(points[i], q);
-        updateMinMax(p);
-    }
-}
-
-bool AABB::contains(const Vector3& point) const {
-    bool outside = (
-        point.x < min.x ||
-        point.y < min.y ||
-        point.z < min.z ||
-        point.x > max.x ||
-        point.y > max.y ||
-        point.z > max.z
-    );
-    //いずれにも当てはまらなければ内側
-    return !outside;
-}
-
-float AABB::minDistanceSquare(const Vector3& point) const {
-    //各軸の差を計算する
-    float dx = Math::Max(min.x - point.x, 0.f);
-    dx = Math::Max(dx, point.x - max.x);
-    float dy = Math::Max(min.y - point.y, 0.f);
-    dy = Math::Max(dy, point.y - max.y);
-    float dz = Math::Max(min.z - point.z, 0.f);
-    dz = Math::Max(dy, point.z - max.z);
-    //距離の2乗
-    return (dx * dx + dy * dy + dz * dz);
-}
-
-
 
 bool Intersect::intersectCircle(const Circle& a, const Circle& b) {
     Vector2 dist = a.center - b.center;
@@ -247,7 +28,7 @@ bool Intersect::intersectAABB(const AABB& a, const AABB& b) {
         b.max.x < a.min.x ||
         b.max.y < a.min.y ||
         b.max.z < a.min.z
-    );
+        );
     //いずれにも当てはまらなければ衝突している
     return !no;
 }
@@ -340,7 +121,7 @@ bool testSidePlane(float start, float end, float negd, std::vector<float>& out) 
     if (t >= 0.f && t <= 1.f) {
         out.emplace_back(t);
         return true;
-    } 
+    }
 
     //範囲外
     return false;

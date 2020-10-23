@@ -1,8 +1,8 @@
 ﻿#include "Physics.h"
+#include "../Collision/Collision.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/Collider/Collider.h"
 #include "../Component/Collider/SphereCollider.h"
-#include "../Utility/Collision.h"
 #include <algorithm>
 
 Physics::Physics() {

@@ -1,8 +1,6 @@
 ﻿#pragma once
 
 #include "../Component.h"
-#include "../../Math/Math.h"
-#include "../../Utility/Collision.h"
 #include <memory>
 
 class Camera;
