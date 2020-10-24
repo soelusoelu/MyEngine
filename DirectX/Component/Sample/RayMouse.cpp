@@ -27,10 +27,6 @@ void RayMouse::start() {
 }
 
 void RayMouse::update() {
-    transform().rotate(Vector3::up, 1.f);
-    transform().rotate(Vector3::right, 1.f);
-    transform().rotate(Vector3::forward, 1.f);
-
     //マウスインターフェイスを取得
     const auto& mouse = Input::mouse();
 
@@ -42,11 +38,13 @@ void RayMouse::update() {
         //計算に必要な要素を用意しておく
         const auto& cameraPos = mCamera->getPosition();
         Vector3 dir = Vector3::normalize(clickPos - cameraPos);
-        Ray ray(cameraPos, dir, 10000.f);
+        Ray ray(cameraPos, dir);
         Vector3 out;
         //メッシュとレイの衝突判定
         //(Intersect::intersectRayMesh(ray, mMesh->getMesh(), transform())) ? Debug::log("hit") : Debug::log("not hit");
         //AABBとレイの衝突判定
-        (Intersect::intersectRayAABB(ray, mAABB->getAABB(), out)) ? Debug::log("hit") : Debug::log("not hit");
+        if (Intersect::intersectRayAABB(ray, mAABB->getAABB(), out)) {
+            //transform().translate(Vector3::right * 0.1f);
+        }
     }
 }

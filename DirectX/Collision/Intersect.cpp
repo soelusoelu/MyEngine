@@ -174,7 +174,7 @@ bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transf
             auto p3 = Vector3::transform(meshVertices[j * 3 + 2].pos, world);
 
             //同じ頂点が入っていることが有るから強制的に
-            if (Math::equal(p1.x, p2.x) || Math::equal(p2.x, p3.x) || Math::equal(p3.x, p1.x)) {
+            if (p1.equal(p2) || p2.equal(p3) || p3.equal(p1)) {
                 continue;
             }
 

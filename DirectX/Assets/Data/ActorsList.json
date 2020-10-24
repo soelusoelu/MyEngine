@@ -3,7 +3,7 @@
     {
       "type": "Camera",
       "properties": {
-        "position": [ 0.0, 3.0, -15.0 ]
+        "position": [ 0.0, 5.0, -20.0 ]
       },
       "components": [
         {
@@ -107,7 +107,7 @@
       "type": "ObjTest",
       "properties": {
         "rotation": [ -90.0, 0.0, 0.0 ],
-        "scale": [ 10.0, 10.0, 10.0 ]
+        "scale": [ 50.0, 50.0, 50.0 ]
       },
       "components": [
         {
@@ -121,7 +121,7 @@
     {
       "type": "RayTest",
       "properties": {
-        "scale": [ 0.25, 0.25, 0.25 ]
+        "scale": [ 20.0, 20.0, 20.0 ]
       },
       "components": [
         {
@@ -132,7 +132,7 @@
         {
           "type": "MeshComponent",
           "properties": {
-            "fileName": "Shape/box.fbx"
+            "fileName": "Bird/tonbi4.fbx"
           }
         },
         {
