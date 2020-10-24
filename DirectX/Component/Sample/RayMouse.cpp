@@ -27,6 +27,8 @@ void RayMouse::start() {
 }
 
 void RayMouse::update() {
+    transform().rotate(Vector3::up, 1.f);
+
     //マウスインターフェイスを取得
     const auto& mouse = Input::mouse();
 
