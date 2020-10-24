@@ -29,6 +29,7 @@ namespace Intersect {
     bool intersectRaySphere(const Ray& r, const Sphere& s, float* outT);
 
     //AABBとレイの衝突判定を行う
+    bool intersectRayAABB(const Ray& ray, const AABB& aabb);
     bool intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& intersectPoint);
 
     //メッシュとレイの衝突判定を行う

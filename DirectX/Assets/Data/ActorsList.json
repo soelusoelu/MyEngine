@@ -121,7 +121,6 @@
     {
       "type": "RayTest",
       "properties": {
-        "scale": [ 20.0, 20.0, 20.0 ]
       },
       "components": [
         {
@@ -132,7 +131,7 @@
         {
           "type": "MeshComponent",
           "properties": {
-            "fileName": "Bird/tonbi4.fbx"
+            "fileName": "Shape/box.fbx"
           }
         },
         {

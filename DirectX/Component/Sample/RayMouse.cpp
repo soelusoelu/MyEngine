@@ -24,11 +24,10 @@ void RayMouse::start() {
     mCamera = gameObject().getGameObjectManager().find("Camera")->componentManager().getComponent<Camera>();
     mMesh = getComponent<MeshComponent>();
     mAABB = getComponent<AABBCollider>();
+    transform().setPivot(Vector3::down);
 }
 
 void RayMouse::update() {
-    transform().rotate(Vector3::up, 1.f);
-
     //マウスインターフェイスを取得
     const auto& mouse = Input::mouse();
 
@@ -44,9 +43,13 @@ void RayMouse::update() {
         Vector3 out;
         //メッシュとレイの衝突判定
         //(Intersect::intersectRayMesh(ray, mMesh->getMesh(), transform())) ? Debug::log("hit") : Debug::log("not hit");
-        //AABBとレイの衝突判定
-        if (Intersect::intersectRayAABB(ray, mAABB->getAABB(), out)) {
-            //transform().translate(Vector3::right * 0.1f);
+        //無限平面とレイの衝突判定
+        Plane plane(Vector3::up, Vector3::zero);
+        if (Intersect::intersectRayPlane(ray, plane, out)) {
+            //AABBとレイの衝突判定
+            if (Intersect::intersectRayAABB(ray, mAABB->getAABB())) {
+                transform().setPosition(out);
+            }
         }
     }
 }

@@ -124,6 +124,11 @@ bool testSidePlane(float start, float end, float negd, std::vector<float>& out) 
     return false;
 }
 
+bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb) {
+    Vector3 temp;
+    return intersectRayAABB(ray, aabb, temp);
+}
+
 bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& intersectPoint) {
     //すべてのt値を格納する
     std::vector<float> tValues;

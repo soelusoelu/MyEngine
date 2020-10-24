@@ -130,8 +130,10 @@ void AABBCollider::updateAABB() {
     const auto& pos = t.getPosition();
     const auto& scale = t.getScale();
     //回転を適用するために一時的なAABBを作成する
-    AABB aabb(mDefaultMin * scale + pos, mDefaultMax * scale + pos);
+    AABB aabb(mDefaultMin - t.getPivot(), mDefaultMax - t.getPivot());
+    //回転を適用する
     aabb.rotate(t.getRotation());
     //既存のAABBを更新する
-    mAABB = aabb;
+    mAABB.min = aabb.min * scale + pos;
+    mAABB.max = aabb.max * scale + pos;
 }
