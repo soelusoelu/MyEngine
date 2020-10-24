@@ -7,7 +7,6 @@
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectManager.h"
 #include "../../Input/Input.h"
-#include "../../Math/Math.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/StringUtil.h"
 
@@ -15,7 +14,10 @@ RayMouse::RayMouse(GameObject& gameObject) :
     Component(gameObject),
     mCamera(nullptr),
     mMesh(nullptr),
-    mAABB(nullptr) {
+    mAABB(nullptr),
+    mIntersectPoint(Vector3::zero),
+    mSelectedMesh(false)
+{
 }
 
 RayMouse::~RayMouse() = default;
@@ -31,25 +33,33 @@ void RayMouse::update() {
     //マウスインターフェイスを取得
     const auto& mouse = Input::mouse();
 
-    //マウスの左ボタンが押されていたら
-    if (mouse.getMouseButton(MouseCode::LeftButton)) {
-        //ワールド座標におけるマウスの位置を取得
-        auto clickPos = mCamera->screenToWorldPoint(mouse.getMousePosition(), 1.f);
+    //ワールド座標におけるマウスの位置を取得
+    auto clickPos = mCamera->screenToWorldPoint(mouse.getMousePosition(), 1.f);
 
-        //計算に必要な要素を用意しておく
-        const auto& cameraPos = mCamera->getPosition();
-        Vector3 dir = Vector3::normalize(clickPos - cameraPos);
-        Ray ray(cameraPos, dir);
-        Vector3 out;
+    //計算に必要な要素を用意しておく
+    const auto& cameraPos = mCamera->getPosition();
+    Vector3 dir = Vector3::normalize(clickPos - cameraPos);
+    Ray ray(cameraPos, dir);
+    Plane plane(Vector3::up, Vector3::zero);
+
+    //マウスの左ボタンが押されたら
+    if (mouse.getMouseButtonDown(MouseCode::LeftButton)) {
         //メッシュとレイの衝突判定
         //(Intersect::intersectRayMesh(ray, mMesh->getMesh(), transform())) ? Debug::log("hit") : Debug::log("not hit");
         //無限平面とレイの衝突判定
-        Plane plane(Vector3::up, Vector3::zero);
-        if (Intersect::intersectRayPlane(ray, plane, out)) {
+        if (Intersect::intersectRayPlane(ray, plane, mIntersectPoint)) {
             //AABBとレイの衝突判定
             if (Intersect::intersectRayAABB(ray, mAABB->getAABB())) {
-                transform().setPosition(out);
+                mSelectedMesh = true;
             }
         }
+    } else if (mouse.getMouseButton(MouseCode::LeftButton)) {
+        Intersect::intersectRayPlane(ray, plane, mIntersectPoint);
+    } else if (mouse.getMouseButtonUp(MouseCode::LeftButton)) {
+        mSelectedMesh = false;
+    }
+
+    if (mSelectedMesh) {
+        transform().setPosition(mIntersectPoint);
     }
 }

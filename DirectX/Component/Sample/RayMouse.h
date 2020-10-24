@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Component.h"
+#include "../../Math/Math.h"
 #include <memory>
 
 class Camera;
@@ -18,4 +19,6 @@ private:
     std::shared_ptr<Camera> mCamera;
     std::shared_ptr<MeshComponent> mMesh;
     std::shared_ptr<AABBCollider> mAABB;
+    Vector3 mIntersectPoint;
+    bool mSelectedMesh;
 };

@@ -13,6 +13,7 @@ public:
     virtual bool getMouseButton(MouseCode button) const override;
     virtual bool getMouseButtonUp(MouseCode button) const override;
     virtual const Vector2& getMousePosition() const override;
+    virtual Vector2 getMouseMoveAmount() const override;
 
     bool initialize(HWND hWnd, IDirectInput8* directInput);
     void update();
@@ -30,5 +31,6 @@ private:
     DIMOUSESTATE2 mCurrentMouseState;
     DIMOUSESTATE2 mPreviousMouseState;
     HWND mhWnd;
-    Vector2 mMousePosition;
+    Vector2 mCurrentMousePosition;
+    Vector2 mPreviousMousePosition;
 };

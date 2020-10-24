@@ -24,4 +24,6 @@ public:
     virtual bool getMouseButtonUp(MouseCode button) const = 0;
     //マウスのウィンドウ位置
     virtual const Vector2& getMousePosition() const = 0;
+    //1フレームにおけるマウスの移動量
+    virtual Vector2 getMouseMoveAmount() const = 0;
 };

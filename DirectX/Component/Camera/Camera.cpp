@@ -103,10 +103,8 @@ void Camera::lookAt(const Vector3 & position) {
 
 Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
     //ビューポート、射影、ビュー、それぞれの逆行列を求める
-    auto invView = mView;
-    invView.inverse();
-    auto invProj = mProjection;
-    invProj.inverse();
+    auto invView = Matrix4::inverse(mView);
+    auto invProj = Matrix4::inverse(mProjection);
 
     auto invViewport = Matrix4::identity;
     invViewport.m[0][0] = Window::width() / 2.f;

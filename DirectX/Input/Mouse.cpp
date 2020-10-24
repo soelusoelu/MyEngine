@@ -8,7 +8,8 @@ Mouse::Mouse() :
     mCurrentMouseState(),
     mPreviousMouseState(),
     mhWnd(nullptr),
-    mMousePosition(Vector2::zero) {
+    mCurrentMousePosition(Vector2::zero),
+    mPreviousMousePosition(Vector2::zero) {
 }
 
 Mouse::~Mouse() {
@@ -28,7 +29,11 @@ bool Mouse::getMouseButtonUp(MouseCode button) const {
 }
 
 const Vector2& Mouse::getMousePosition() const {
-    return mMousePosition;
+    return mCurrentMousePosition;
+}
+
+Vector2 Mouse::getMouseMoveAmount() const {
+    return mCurrentMousePosition - mPreviousMousePosition;
 }
 
 bool Mouse::initialize(HWND hWnd, IDirectInput8* directInput) {
@@ -54,6 +59,7 @@ bool Mouse::initialize(HWND hWnd, IDirectInput8* directInput) {
 
 void Mouse::update() {
     mPreviousMouseState = mCurrentMouseState;
+    mPreviousMousePosition = mCurrentMousePosition;
 
     HRESULT hr = mMouseDevice->Acquire();
     if ((hr == DI_OK) || (hr == S_FALSE)) {
@@ -92,15 +98,15 @@ void Mouse::updateMousePosition() {
     GetCursorPos(&point);
     //ウィンドウ内の座標に変換
     ScreenToClient(mhWnd, &point);
-    mMousePosition.x = static_cast<float>(point.x);
-    mMousePosition.y = static_cast<float>(point.y);
-    mMousePosition.x *= Window::windowToClientSize().x;
-    mMousePosition.y *= Window::windowToClientSize().y;
+    mCurrentMousePosition.x = static_cast<float>(point.x);
+    mCurrentMousePosition.y = static_cast<float>(point.y);
+    mCurrentMousePosition.x *= Window::windowToClientSize().x;
+    mCurrentMousePosition.y *= Window::windowToClientSize().y;
 }
 
 void Mouse::clampMousePosition() {
 #ifdef _DEBUG
-    mMousePosition.clamp(
+    mCurrentMousePosition.clamp(
         Vector2::zero,
         Vector2(static_cast<float>(Window::debugWidth()), static_cast<float>(Window::debugHeight()))
     );
