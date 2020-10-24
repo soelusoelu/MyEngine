@@ -1,9 +1,6 @@
 ﻿#include "Intersect.h"
-#include "AABB.h"
-#include "Circle.h"
-#include "Ray.h"
-#include "Sphere.h"
 #include "../Transform/Transform3D.h"
+#include <algorithm>
 #include <vector>
 
 bool Intersect::intersectCircle(const Circle& a, const Circle& b) {
@@ -142,9 +139,10 @@ bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& inte
 
     //t値を昇順で並べ替える
     //std::sort(tValues.begin(), tValues.end(), [](
-    //    const std::pair<float, Vector3>& a,
-    //    const std::pair<float, Vector3>& b) {
-    //        return a.first < b.first;
+    //    float a,
+    //    float b
+    //    ) {
+    //        return a < b;
     //    });
 
     //ボックスに交点が含まれているか調べる

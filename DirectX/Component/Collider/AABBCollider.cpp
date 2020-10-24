@@ -1,7 +1,9 @@
 ﻿#include "AABBCollider.h"
 #include "../Mesh/MeshComponent.h"
+#include "../../DebugLayer/Debug.h"
 #include "../../Mesh/IMesh.h"
 #include "../../Transform/Transform3D.h"
+#include <array>
 
 AABBCollider::AABBCollider(GameObject& gameObject) :
     Collider(gameObject),
@@ -26,6 +28,38 @@ void AABBCollider::start() {
         //早速transformが変わっているかもしれないから更新する
         updateAABB();
     }
+}
+
+void AABBCollider::update() {
+#ifdef _DEBUG
+    //デバッグ時のみ当たり判定を表示
+    std::array<Vector3, 8> points;
+    const auto& min = mAABB.min;
+    const auto& max = mAABB.max;
+    points[0] = min;
+    points[1] = Vector3(max.x, min.y, min.z);
+    points[2] = Vector3(min.x, min.y, max.z);
+    points[3] = Vector3(max.x, min.y, max.z);
+    points[4] = Vector3(min.x, max.y, min.z);
+    points[5] = Vector3(max.x, max.y, min.z);
+    points[6] = Vector3(min.x, max.y, max.z);
+    points[7] = max;
+
+    Debug::renderLine(points[0], points[1], ColorPalette::lightGreen);
+    Debug::renderLine(points[0], points[2], ColorPalette::lightGreen);
+    Debug::renderLine(points[2], points[3], ColorPalette::lightGreen);
+    Debug::renderLine(points[1], points[3], ColorPalette::lightGreen);
+
+    Debug::renderLine(points[4], points[5], ColorPalette::lightGreen);
+    Debug::renderLine(points[4], points[6], ColorPalette::lightGreen);
+    Debug::renderLine(points[6], points[7], ColorPalette::lightGreen);
+    Debug::renderLine(points[5], points[7], ColorPalette::lightGreen);
+
+    Debug::renderLine(points[0], points[4], ColorPalette::lightGreen);
+    Debug::renderLine(points[1], points[5], ColorPalette::lightGreen);
+    Debug::renderLine(points[2], points[6], ColorPalette::lightGreen);
+    Debug::renderLine(points[3], points[7], ColorPalette::lightGreen);
+#endif // _DEBUG
 }
 
 void AABBCollider::onUpdateWorldTransform() {
@@ -95,7 +129,9 @@ void AABBCollider::updateAABB() {
     const auto& t = transform();
     const auto& pos = t.getPosition();
     const auto& scale = t.getScale();
-    mAABB.min = mDefaultMin * scale + pos;
-    mAABB.max = mDefaultMax * scale + pos;
-    mAABB.rotate(transform().getRotation());
+    //回転を適用するために一時的なAABBを作成する
+    AABB aabb(mDefaultMin * scale + pos, mDefaultMax * scale + pos);
+    aabb.rotate(t.getRotation());
+    //既存のAABBを更新する
+    mAABB = aabb;
 }

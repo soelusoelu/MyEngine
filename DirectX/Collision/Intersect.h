@@ -1,12 +1,12 @@
 ﻿#pragma once
 
+#include "AABB.h"
+#include "Circle.h"
+#include "Ray.h"
+#include "Sphere.h"
 #include "../Math/Math.h"
 #include "../Mesh/IMesh.h"
 
-class Ray;
-class Circle;
-class Sphere;
-class AABB;
 class Transform3D;
 
 namespace Intersect {

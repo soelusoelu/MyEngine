@@ -14,7 +14,8 @@
 RayMouse::RayMouse(GameObject& gameObject) :
     Component(gameObject),
     mCamera(nullptr),
-    mMesh(nullptr) {
+    mMesh(nullptr),
+    mAABB(nullptr) {
 }
 
 RayMouse::~RayMouse() = default;
@@ -22,10 +23,13 @@ RayMouse::~RayMouse() = default;
 void RayMouse::start() {
     mCamera = gameObject().getGameObjectManager().find("Camera")->componentManager().getComponent<Camera>();
     mMesh = getComponent<MeshComponent>();
+    mAABB = getComponent<AABBCollider>();
 }
 
 void RayMouse::update() {
     transform().rotate(Vector3::up, 1.f);
+    transform().rotate(Vector3::right, 1.f);
+    transform().rotate(Vector3::forward, 1.f);
 
     //マウスインターフェイスを取得
     const auto& mouse = Input::mouse();
@@ -39,14 +43,10 @@ void RayMouse::update() {
         const auto& cameraPos = mCamera->getPosition();
         Vector3 dir = Vector3::normalize(clickPos - cameraPos);
         Ray ray(cameraPos, dir, 10000.f);
+        Vector3 out;
         //メッシュとレイの衝突判定
-        if (Intersect::intersectRayMesh(ray, mMesh->getMesh(), transform())) {
-            Debug::log("hit");
-        } else {
-            Debug::log("not hit");
-        }
+        //(Intersect::intersectRayMesh(ray, mMesh->getMesh(), transform())) ? Debug::log("hit") : Debug::log("not hit");
+        //AABBとレイの衝突判定
+        (Intersect::intersectRayAABB(ray, mAABB->getAABB(), out)) ? Debug::log("hit") : Debug::log("not hit");
     }
-
-    auto aabb = getComponent<AABBCollider>();
-    Debug::renderLine(aabb->getAABB().min, aabb->getAABB().max, ColorPalette::green);
 }

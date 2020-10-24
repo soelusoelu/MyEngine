@@ -5,6 +5,7 @@
 
 class Camera;
 class MeshComponent;
+class AABBCollider;
 
 class RayMouse : public Component {
 public:
@@ -16,4 +17,5 @@ public:
 private:
     std::shared_ptr<Camera> mCamera;
     std::shared_ptr<MeshComponent> mMesh;
+    std::shared_ptr<AABBCollider> mAABB;
 };

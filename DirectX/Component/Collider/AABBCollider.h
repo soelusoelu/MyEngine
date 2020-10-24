@@ -10,6 +10,7 @@ public:
     AABBCollider(GameObject& gameObject);
     ~AABBCollider();
     virtual void start() override;
+    virtual void update() override;
     virtual void onUpdateWorldTransform() override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //ボックスの最小と最大点を直接設定する
