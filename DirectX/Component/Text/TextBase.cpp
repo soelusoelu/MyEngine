@@ -1,4 +1,6 @@
 ﻿#include "TextBase.h"
+#include "../../DebugLayer/ImGuiWrapper.h"
+#include "../../System/Window.h"
 #include "../../Utility/LevelLoader.h"
 
 TextBase::TextBase(GameObject& gameObject) :
@@ -12,12 +14,6 @@ TextBase::TextBase(GameObject& gameObject) :
 }
 
 TextBase::~TextBase() = default;
-
-void TextBase::lateUpdate() {
-    if (!mIsActive) {
-        return;
-    }
-}
 
 void TextBase::onEnable(bool value) {
     setActive(value);
@@ -35,12 +31,12 @@ void TextBase::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getBool(inObj, "isActive", &mIsActive);
 }
 
-void TextBase::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    inspect->emplace_back("Position", mPosition);
-    inspect->emplace_back("Scale", mScale);
-    inspect->emplace_back("Color", mColor);
-    inspect->emplace_back("Alpha", mAlpha);
-    inspect->emplace_back("IsActive", mIsActive);
+void TextBase::drawInspector() {
+    ImGuiWrapper::dragVector2("Position", mPosition, 0.1f);
+    ImGuiWrapper::dragVector2("Scale", mScale, 0.01f, 0.f, FLT_MAX);
+    ImGuiWrapper::colorEdit3("Color", mColor);
+    ImGuiWrapper::sliderFloat("Alpha", mAlpha, 0.f, 1.f);
+    ImGui::Checkbox("IsActive", &mIsActive);
 }
 
 void TextBase::setPosition(const Vector2& pos) {

@@ -2,8 +2,8 @@
 #include <array>
 
 AABB::AABB() :
-    min(Vector3::zero),
-    max(Vector3::one) {
+    min(Vector3::one * Math::infinity),
+    max(Vector3::one * Math::negInfinity) {
 }
 
 AABB::AABB(const Vector3& min, const Vector3& max) :
@@ -39,6 +39,7 @@ void AABB::rotate(const Quaternion& q) {
     //最小、最大点を回転した点に設定
     min = p;
     max = p;
+
     //回転した点に基づいて最小、最大点を更新する
     for (size_t i = 1; i < points.size(); ++i) {
         p = Vector3::transform(points[i], q);

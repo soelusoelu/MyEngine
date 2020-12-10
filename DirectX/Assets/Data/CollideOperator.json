@@ -1,0 +1,49 @@
+{
+    "tag": "None",
+    "transform": {
+        "position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "rotation": [
+            -0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ]
+    },
+    "components": [
+        {
+            "type": "CollideMouseOperator",
+            "properties": {}
+        },
+        {
+            "type": "AABBSelector",
+            "properties": {}
+        },
+        {
+            "type": "AABBMouseScaler",
+            "properties": {
+                "editPointRadius": 0.25,
+                "collisionExpantionAmount": 1.0
+            }
+        },
+        {
+            "type": "MeshAdder",
+            "properties": {}
+        },
+        {
+            "type": "CollideAdder",
+            "properties": {}
+        },
+        {
+            "type": "SaveThis",
+            "properties": {}
+        }
+    ]
+}

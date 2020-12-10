@@ -18,7 +18,7 @@ bool Keyboard::getKeyDown(KeyCode key) const {
 }
 
 bool Keyboard::getKey(KeyCode key) const {
-    return mCurrentKeys[static_cast<BYTE>(key)] & 0x80;
+    return (mCurrentKeys[static_cast<BYTE>(key)] & 0x80 && (mPreviousKeys[static_cast<BYTE>(key)] & 0x80));
 }
 
 bool Keyboard::getKeyUp(KeyCode key) const {
@@ -49,7 +49,7 @@ bool Keyboard::getEnter() const {
     return getKeyDown(mEnterKey);
 }
 
-bool Keyboard::initialize(HWND hWnd, IDirectInput8* directInput) {
+bool Keyboard::initialize(const HWND& hWnd, IDirectInput8* directInput) {
     //「DirectInputデバイス」オブジェクトの作成
     if (FAILED(directInput->CreateDevice(GUID_SysKeyboard, &mKeyDevice, NULL))) {
         return false;

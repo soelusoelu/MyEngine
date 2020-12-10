@@ -2,20 +2,25 @@
 #include "ConstantBuffers.h"
 #include "../../DebugLayer/Debug.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../System/World.h"
-#include "../../Utility/Directory.h"
 
 ConstantBufferManager::ConstantBufferManager() {
     mConstantBuffers.emplace("Texture.hlsl", BuffersSize{ sizeof(TextureConstantBuffer) });
-    mConstantBuffers.emplace("Mesh.hlsl", BuffersSize{ sizeof(TransparentConstantBuffer), sizeof(MaterialConstantBuffer) });
-    mConstantBuffers.emplace("MeshTexture.hlsl", BuffersSize{ sizeof(TransparentConstantBuffer), sizeof(MaterialConstantBuffer) });
-    mConstantBuffers.emplace("NormalMap.hlsl", BuffersSize{ sizeof(TransparentConstantBuffer), sizeof(MaterialConstantBuffer) });
+    mConstantBuffers.emplace("Texture3D.hlsl", BuffersSize{ sizeof(TextureConstantBuffer) });
+    mConstantBuffers.emplace("Mesh.hlsl", BuffersSize{ sizeof(MeshCommonConstantBuffer), sizeof(MaterialConstantBuffer) });
+    mConstantBuffers.emplace("NormalMap.hlsl", BuffersSize{ sizeof(MeshCommonConstantBuffer), sizeof(MaterialConstantBuffer) });
+    mConstantBuffers.emplace("SkinMesh.hlsl", BuffersSize{ sizeof(MeshCommonConstantBuffer), sizeof(MaterialConstantBuffer), sizeof(SkinMeshConstantBuffer) });
     mConstantBuffers.emplace("GBuffer.hlsl", BuffersSize{ sizeof(MeshConstantBuffer), sizeof(MaterialConstantBuffer) });
     mConstantBuffers.emplace("Deferred.hlsl", BuffersSize{ sizeof(GBufferShaderConstantBuffer) });
+    mConstantBuffers.emplace("Point3D.hlsl", BuffersSize{ sizeof(PointConstantBuffer) });
     mConstantBuffers.emplace("Line2D.hlsl", BuffersSize{ sizeof(LineConstantBuffer) });
     mConstantBuffers.emplace("Line3D.hlsl", BuffersSize{ sizeof(LineConstantBuffer) });
     mConstantBuffers.emplace("PointLight.hlsl", BuffersSize{ sizeof(PointLightConstantBuffer) });
     mConstantBuffers.emplace("SimpleMesh.hlsl", BuffersSize{ sizeof(SimpleMeshConstantBuffer) });
+    mConstantBuffers.emplace("OutLine.hlsl", BuffersSize{ sizeof(OutLineConstantBuffer) });
+    mConstantBuffers.emplace("SkinMeshOutLine.hlsl", BuffersSize{ sizeof(OutLineConstantBuffer), sizeof(SkinMeshConstantBuffer) });
+    mConstantBuffers.emplace("ShadowDepthTextureCreater.hlsl", BuffersSize{ sizeof(SimpleMeshConstantBuffer) });
+    mConstantBuffers.emplace("Shadow.hlsl", BuffersSize{ sizeof(MeshCommonConstantBuffer), sizeof(MaterialConstantBuffer), sizeof(ShadowConstantBuffer) });
+    mConstantBuffers.emplace("SkinMeshShadow.hlsl", BuffersSize{ sizeof(MeshCommonConstantBuffer), sizeof(MaterialConstantBuffer), sizeof(ShadowConstantBuffer), sizeof(SkinMeshConstantBuffer) });
 }
 
 ConstantBufferManager::~ConstantBufferManager() = default;
@@ -38,7 +43,7 @@ std::vector<std::unique_ptr<Buffer>> ConstantBufferManager::createConstantBuffer
 
         //バッファの数だけ生成する
         for (size_t i = 0; i < size; i++) {
-            cb.size = itr->second[i];
+            cb.size = ((itr->second[i] + 0xff) & ~0xff);
             buffers[i] = std::make_unique<Buffer>(cb);
         }
     } else {

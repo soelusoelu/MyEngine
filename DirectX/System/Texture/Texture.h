@@ -18,6 +18,7 @@ class Sampler;
 class Texture {
 public:
     Texture();
+    Texture(const std::shared_ptr<ShaderResourceView>& view, const Vector2& textureSize);
     virtual ~Texture();
     //終了処理
     static void finalize();
@@ -33,6 +34,9 @@ public:
     void setTextureInfo(unsigned start = 0, unsigned numSamplers = 1) const;
 
 private:
+    Texture(const Texture&) = delete;
+    Texture& operator=(const Texture&) = delete;
+
     void createVertexBuffer();
     void createIndexBuffer();
     void createSampler();
@@ -43,7 +47,7 @@ public:
     static inline IndexBuffer* indexBuffer = nullptr;
 
 protected:
-    std::unique_ptr<ShaderResourceView> mShaderResourceView;
+    std::shared_ptr<ShaderResourceView> mShaderResourceView;
     std::unique_ptr<Sampler> mSampler;
     Vector2 mTextureSize;
 };

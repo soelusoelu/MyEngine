@@ -34,7 +34,7 @@ Vector3& Vector3::operator=(const Vector3& vec) {
     return *this;
 }
 
-Vector3 Vector3::operator-() {
+Vector3 Vector3::operator-() const {
     return Vector3(-x, -y, -z);
 }
 
@@ -95,6 +95,10 @@ Vector3& Vector3::operator-=(const Vector3& right) {
 
 bool Vector3::equal(const Vector3& right) const {
     return (Math::equal(x, right.x) && Math::equal(y, right.y) && Math::equal(z, right.z));
+}
+
+bool Vector3::equal(const Vector3& left, const Vector3& right) {
+    return (Math::equal(left.x, right.x) && Math::equal(left.y, right.y) && Math::equal(left.z, right.z));
 }
 
 float Vector3::lengthSq() const {

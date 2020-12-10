@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <list>
+#include <rapidjson/document.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -9,7 +9,7 @@ class Component;
 
 class ComponentManager {
     using ComponentPtr = std::shared_ptr<Component>;
-    using ComponentPtrList = std::list<ComponentPtr>;
+    using ComponentPtrArray = std::vector<ComponentPtr>;
 
 public:
     ComponentManager();
@@ -25,24 +25,16 @@ public:
     //コンポーネントの追加
     void addComponent(const ComponentPtr& component);
 
-    //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
-    void onUpdateWorldTransform() const;
     //所有するすべてのコンポーネントのonSetActiveを実行
     void onEnable(bool value) const;
 
     //全コンポーネントの取得
-    const ComponentPtrList& getAllComponents() const;
+    const ComponentPtrArray& getAllComponents() const;
 
     //コンポーネントの取得
     template<typename T>
     std::shared_ptr<T> getComponent() const {
         std::shared_ptr<T> comp = nullptr;
-        for (const auto& c : mStartComponents) {
-            comp = std::dynamic_pointer_cast<T>(c);
-            if (comp) {
-                return comp;
-            }
-        }
         for (const auto& c : mComponents) {
             comp = std::dynamic_pointer_cast<T>(c);
             if (comp) {
@@ -57,12 +49,6 @@ public:
     template<typename T>
     std::vector<std::shared_ptr<T>> getComponents() const {
         std::vector<std::shared_ptr<T>> components;
-        for (const auto& c : mStartComponents) {
-            auto comp = std::dynamic_pointer_cast<T>(c);
-            if (comp) {
-                components.emplace_back(comp);
-            }
-        }
         for (const auto& c : mComponents) {
             auto comp = std::dynamic_pointer_cast<T>(c);
             if (comp) {
@@ -72,11 +58,16 @@ public:
         return components;
     }
 
+    //すべてのコンポーネントを保存する
+    void saveComponents(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
+
 private:
     ComponentManager(const ComponentManager&) = delete;
     ComponentManager& operator=(const ComponentManager&) = delete;
 
+    //各コンポーネントを保存する
+    void saveComponent(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* outArray, const Component& component) const;
+
 private:
-    ComponentPtrList mStartComponents;
-    ComponentPtrList mComponents;
+    ComponentPtrArray mComponents;
 };

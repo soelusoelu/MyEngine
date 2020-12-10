@@ -1,74 +1,141 @@
 ﻿#include "Mesh.h"
-#include "../Device/AssetsManager.h"
+#include "OBJ.h"
+#include "FBX/FBX.h"
+#include "../DebugLayer/Debug.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../System/World.h"
-#include "../System/Shader/Shader.h"
+#include "../System/Texture/TextureFromMemory.h"
+#include "../Utility/FileUtil.h"
+#include <cassert>
 
-Mesh::Mesh() :
-    mMesh(nullptr),
-    mShader(nullptr) {
+Mesh::Mesh()
+    : mMesh(nullptr)
+{
 }
 
 Mesh::~Mesh() = default;
 
 const Material& Mesh::getMaterial(unsigned index) const {
-    return mMesh->getMaterial(index);
+    assert(index < mMaterials.size());
+    return mMaterials[index];
 }
 
 unsigned Mesh::getMeshCount() const {
-    return mMesh->getMeshCount();
+    return mMeshesVertices.size();
 }
 
-const std::vector<MeshVertices>& Mesh::getMeshesVertices() const {
-    return mMeshesVertices;
+const MeshVertices& Mesh::getMeshVertices(unsigned index) const {
+    assert(index < mMeshesVertices.size());
+    return mMeshesVertices[index];
 }
 
-void Mesh::loadMesh(const std::string& fileName) {
-    //すでに生成済みなら終了する
-    if (mMesh) {
-        return;
-    }
-
-    initialize(fileName);
+const Indices& Mesh::getMeshIndices(unsigned index) const {
+    assert(index < mMeshesIndices.size());
+    return mMeshesIndices[index];
 }
 
-void Mesh::loadShader(const std::string& shaderName) {
-    createShader(shaderName);
+unsigned Mesh::getPolygonCount(unsigned index) const {
+    return getMeshIndices(index).size() / 3;
 }
 
-void Mesh::setShaderData(const void* data, unsigned size, unsigned index) const {
-    //シェーダーにデータを転送する
-    mShader->transferData(data, size, index);
+Triangle Mesh::getPolygon(unsigned meshIndex, unsigned polygonIndex) const {
+    const auto& meshVertices = getMeshVertices(meshIndex);
+    const auto& meshIndices = getMeshIndices(meshIndex);
+
+    Triangle polygon{};
+    polygon.p0 = meshVertices[meshIndices[polygonIndex * 3]].pos;
+    polygon.p1 = meshVertices[meshIndices[polygonIndex * 3 + 1]].pos;
+    polygon.p2 = meshVertices[meshIndices[polygonIndex * 3 + 2]].pos;
+
+    return polygon;
+}
+
+Triangle Mesh::getPolygon(unsigned meshIndex, unsigned polygonIndex, const Matrix4& world) const {
+    auto polygon = getPolygon(meshIndex, polygonIndex);
+
+    polygon.p0 = Vector3::transform(polygon.p0, world);
+    polygon.p1 = Vector3::transform(polygon.p1, world);
+    polygon.p2 = Vector3::transform(polygon.p2, world);
+
+    return polygon;
+}
+
+const Motion& Mesh::getMotion(unsigned index) const {
+    assert(index < mMotions.size());
+    return mMotions[index];
+}
+
+unsigned Mesh::getMotionCount() const {
+    return mMotions.size();
+}
+
+void Mesh::setMotionName(const std::string& name, unsigned index) {
+    assert(index < mMotions.size());
+    mMotions[index].name = name;
+}
+
+const Bone& Mesh::getBone(unsigned index) const {
+    return mBones[index];
+}
+
+unsigned Mesh::getBoneCount() const {
+    return mBones.size();
 }
 
 void Mesh::draw(unsigned meshIndex) const {
-    //使用するシェーダーの登録
-    mShader->setShaderInfo();
     //バーテックスバッファーをセット
     mVertexBuffers[meshIndex]->setVertexBuffer();
     //インデックスバッファーをセット
     mIndexBuffers[meshIndex]->setIndexBuffer();
 
     //プリミティブをレンダリング
-    DirectX::instance().drawIndexed(mMesh->getIndices(meshIndex).size());
+    MyDirectX::DirectX::instance().drawIndexed(mMeshesIndices[meshIndex].size());
 }
 
-void Mesh::initialize(const std::string& fileName) {
-    createMesh(fileName);
-    for (size_t i = 0; i < mMesh->getMeshCount(); i++) {
+void Mesh::loadMesh(const std::string& filePath) {
+    //すでに生成済みなら終了する
+    if (mMesh) {
+        return;
+    }
+
+    initialize(filePath);
+}
+
+void Mesh::initialize(const std::string& filePath) {
+    //ファイルパスからメッシュを作成
+    createMesh(filePath);
+
+    //それぞれは同じサイズのはず
+    assert(mMeshesVertices.size() == mMeshesIndices.size());
+    assert(mMeshesVertices.size() == mMaterials.size());
+
+    //メッシュの数だけバッファを作る
+    for (size_t i = 0; i < mMeshesVertices.size(); i++) {
         createVertexBuffer(i);
         createIndexBuffer(i);
     }
 }
 
-void Mesh::createMesh(const std::string& fileName) {
-    //アセットマネージャーからメッシュを作成する
-    mMesh = World::instance().assetsManager().createMeshLoader(fileName, mMeshesVertices);
-}
+void Mesh::createMesh(const std::string& filePath) {
+    //拡張子によって処理を分ける
+    auto ext = FileUtil::getFileExtension(filePath);
+    if (ext == ".obj") {
+        mMesh = std::make_unique<OBJ>();
+    } else if (ext == ".fbx") {
+        mMesh = std::make_unique<FBX>();
+    } else {
+        Debug::windowMessage(filePath + ": 対応していない拡張子です");
+        return;
+    }
 
-void Mesh::createShader(const std::string& fileName) {
-    //アセットマネージャーからシェーダーを作成する
-    mShader = World::instance().assetsManager().createShader(fileName);
+    //メッシュを解析する
+    mMesh->parse(filePath, mMeshesVertices, mMeshesIndices, mMaterials, mMotions, mBones);
+
+    //テクスチャがないマテリアルは白テクスチャを代替する
+    for (auto&& mat : mMaterials) {
+        if (!mat.texture) {
+            mat.texture = std::make_shared<TextureFromMemory>(1, 1);
+        }
+    }
 }
 
 void Mesh::createVertexBuffer(unsigned meshIndex) {
@@ -85,7 +152,7 @@ void Mesh::createVertexBuffer(unsigned meshIndex) {
 }
 
 void Mesh::createIndexBuffer(unsigned meshIndex) {
-    const auto& indices = mMesh->getIndices(meshIndex);
+    const auto& indices = mMeshesIndices[meshIndex];
     BufferDesc bd;
     bd.size = sizeof(indices[0]) * indices.size();
     bd.usage = Usage::USAGE_DEFAULT;

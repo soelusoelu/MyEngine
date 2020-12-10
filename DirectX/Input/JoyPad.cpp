@@ -17,7 +17,7 @@ JoyPad::~JoyPad() {
     safeRelease<IDirectInputDevice8>(mPadDevice);
 }
 
-bool JoyPad::initialize(HWND hWnd, IDirectInput8* directInput) {
+bool JoyPad::initialize(const HWND& hWnd, IDirectInput8* directInput) {
     //利用可能なゲームコントローラーの列挙関数を実行
     if (FAILED(directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, enumJoysticksCallback, NULL, DIEDFL_ATTACHEDONLY))) {
         return false;
@@ -92,7 +92,7 @@ bool JoyPad::getJoyDown(JoyCode joy) const {
 }
 
 bool JoyPad::getJoy(JoyCode joy) const {
-    return mCurrentJoyState.rgbButtons[static_cast<int>(joy)] & 0x80;
+    return (mCurrentJoyState.rgbButtons[static_cast<int>(joy)] & 0x80 && (mPreviousJoyState.rgbButtons[static_cast<int>(joy)] & 0x80));
 }
 
 bool JoyPad::getJoyUp(JoyCode joy) const {

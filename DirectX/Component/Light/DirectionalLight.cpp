@@ -1,4 +1,6 @@
 ﻿#include "DirectionalLight.h"
+#include "../../DebugLayer/ImGuiWrapper.h"
+#include "../../Imgui/imgui.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
 
@@ -10,8 +12,9 @@ DirectionalLight::DirectionalLight(GameObject& gameObject) :
 
 DirectionalLight::~DirectionalLight() = default;
 
-void DirectionalLight::onUpdateWorldTransform() {
-    mDirection = Vector3::transform(Vector3::up, transform().getRotation());
+void DirectionalLight::lateUpdate() {
+    //メッシュの向きと合わせる
+    mDirection = Vector3::transform(Vector3::down, transform().getRotation());
 }
 
 void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
@@ -21,8 +24,8 @@ void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector3(inObj, "color", &mLightColor);
 }
 
-void DirectionalLight::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    inspect->emplace_back("Color", mLightColor);
+void DirectionalLight::drawInspector() {
+    ImGuiWrapper::colorEdit3("Color", mLightColor);
 }
 
 void DirectionalLight::setDirection(const Vector3& dir) {

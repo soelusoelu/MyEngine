@@ -4,7 +4,8 @@
 
 Sampler::Sampler(const SamplerDesc& desc) :
     mDesc(desc) {
-    DirectX::instance().device()->CreateSamplerState(&toSamplerDesc(desc), &mSampler);
+    const auto& temp = toSamplerDesc(desc);
+    MyDirectX::DirectX::instance().device()->CreateSamplerState(&temp, &mSampler);
 }
 
 Sampler::~Sampler() {
@@ -12,11 +13,11 @@ Sampler::~Sampler() {
 }
 
 void Sampler::setVSSamplers(unsigned start, unsigned numSamplers) {
-    DirectX::instance().deviceContext()->VSSetSamplers(start, numSamplers, &mSampler);
+    MyDirectX::DirectX::instance().deviceContext()->VSSetSamplers(start, numSamplers, &mSampler);
 }
 
 void Sampler::setPSSamplers(unsigned start, unsigned numSamplers) {
-    DirectX::instance().deviceContext()->PSSetSamplers(start, numSamplers, &mSampler);
+    MyDirectX::DirectX::instance().deviceContext()->PSSetSamplers(start, numSamplers, &mSampler);
 }
 
 const SamplerDesc& Sampler::desc() const {
@@ -24,7 +25,7 @@ const SamplerDesc& Sampler::desc() const {
 }
 
 D3D11_SAMPLER_DESC Sampler::toSamplerDesc(const SamplerDesc& desc) const {
-    D3D11_SAMPLER_DESC sd;
+    D3D11_SAMPLER_DESC sd{};
     sd.Filter = toFilter(desc.filter);
     sd.AddressU = toAddress(desc.addressU);
     sd.AddressV = toAddress(desc.addressV);

@@ -1,8 +1,7 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
-#include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
-#include "../System/World.h"
+#include "../System/AssetsManager.h"
 #include "../System/shader/ConstantBuffers.h"
 #include "../System/shader/Shader.h"
 #include "../System/Texture/TextureFromFile.h"
@@ -13,8 +12,9 @@
 Sprite::Sprite() :
     mTransform(std::make_unique<Transform2D>()),
     mTexture(nullptr),
-    mShader(World::instance().assetsManager().createShader("Texture.hlsl")),
-    mColor(ColorPalette::white, 1.f),
+    mShader(AssetsManager::instance().createShader("Texture.hlsl")),
+    mColor(ColorPalette::white),
+    mAlpha(1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
     mFileName(),
     mIsActive(true) {
@@ -49,24 +49,22 @@ void Sprite::draw(const Matrix4& proj) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
     TextureConstantBuffer cb;
     cb.wp = mTransform->getWorldTransform() * proj;
-    cb.color = mColor;
+    cb.color = Vector4(mColor, mAlpha);
     cb.uv = mUV;
 
     //シェーダーにデータ転送
     mShader->transferData(&cb, sizeof(cb));
 
     //プリミティブをレンダリング
-    DirectX::instance().drawIndexed(6);
+    MyDirectX::DirectX::instance().drawIndexed(6);
 }
 
 Transform2D& Sprite::transform() const {
     return *mTransform;
 }
 
-void Sprite::setColor(const Vector3 & color) {
-    mColor.x = color.x;
-    mColor.y = color.y;
-    mColor.z = color.z;
+void Sprite::setColor(const Vector3& color) {
+    mColor = color;
 }
 
 void Sprite::setColor(float r, float g, float b) {
@@ -75,19 +73,23 @@ void Sprite::setColor(float r, float g, float b) {
     mColor.z = b;
 }
 
-void Sprite::setAlpha(float alpha) {
-    mColor.w = alpha;
-}
-
-const Vector4& Sprite::getColor() const {
+const Vector3& Sprite::getColor() const {
     return mColor;
 }
 
+void Sprite::setAlpha(float alpha) {
+    mAlpha = alpha;
+}
+
+float Sprite::getAlpha() const {
+    return mAlpha;
+}
+
 void Sprite::setUV(float l, float t, float r, float b) {
-    assert(0.f <= l || l <= 1.f);
-    assert(0.f <= t || t <= 1.f);
-    assert(l <= r || r <= 1.f);
-    assert(t <= b || b <= 1.f);
+    //assert(0.f <= l || l <= 1.f);
+    //assert(0.f <= t || t <= 1.f);
+    //assert(l <= r || r <= 1.f);
+    //assert(t <= b || b <= 1.f);
 
     mUV.x = l;
     mUV.y = t;
@@ -122,7 +124,7 @@ void Sprite::setTextureFromFileName(const std::string& fileName) {
     if (mTexture) {
         mTexture.reset();
     }
-    mTexture = World::instance().assetsManager().createTexture(fileName);
+    mTexture = AssetsManager::instance().createTexture(fileName);
 
     //Transformに通知
     mTransform->setSize(mTexture->getTextureSize());

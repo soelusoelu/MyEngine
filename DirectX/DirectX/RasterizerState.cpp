@@ -30,13 +30,14 @@ const RasterizerDesc& RasterizerState::desc() const {
 void RasterizerState::execute() {
     Microsoft::WRL::ComPtr<ID3D11RasterizerState> rasterizer;
 
-    auto& dx = DirectX::instance();
-    dx.device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
+    auto& dx = MyDirectX::DirectX::instance();
+    const auto& temp = toRasterizerDesc(mDesc);
+    dx.device()->CreateRasterizerState(&temp, &rasterizer);
     dx.deviceContext()->RSSetState(rasterizer.Get());
 }
 
 D3D11_RASTERIZER_DESC RasterizerState::toRasterizerDesc(const RasterizerDesc & desc) const {
-    D3D11_RASTERIZER_DESC rd;
+    D3D11_RASTERIZER_DESC rd{};
     rd.FillMode = toFillMode(desc.fillMode);
     rd.CullMode = toCullMode(desc.cullMode);
     rd.FrontCounterClockwise = desc.frontCounterClockwise;

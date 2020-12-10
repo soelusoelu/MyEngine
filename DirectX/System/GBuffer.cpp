@@ -1,29 +1,30 @@
 ﻿#include "GBuffer.h"
+#include "AssetsManager.h"
 #include "Window.h"
 #include "Shader/ConstantBuffers.h"
 #include "Shader/Shader.h"
 #include "../Component/Camera/Camera.h"
 #include "../Component/Light/DirectionalLight.h"
-#include "../Device/AssetsManager.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../Light/LightManager.h"
 #include "../Mesh/Vertex.h"
 #include "../System/SystemInclude.h"
-#include "../System/World.h"
 
-GBuffer::GBuffer() :
-    mSampler(nullptr),
-    mShader(nullptr),
-    mVertexBuffer(nullptr),
-    mIndexBuffer(nullptr) {
+GBuffer::GBuffer()
+    : mSampler(nullptr)
+    , mGBufferShader(nullptr)
+    , mDefferdShader(nullptr)
+    , mVertexBuffer(nullptr)
+    , mIndexBuffer(nullptr)
+{
 }
 
 GBuffer::~GBuffer() = default;
 
 void GBuffer::create() {
-    Texture2DDesc desc;
-    ShaderResourceViewDesc srvDesc;
-    RenderTargetViewDesc rtvDesc;
+    Texture2DDesc desc{};
+    ShaderResourceViewDesc srvDesc{};
+    RenderTargetViewDesc rtvDesc{};
 
     //カラー
     desc.width = Window::standardWidth();
@@ -39,7 +40,7 @@ void GBuffer::create() {
     mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture, srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture, &srvDesc));
 
     //ノーマル
     desc.format = Format::FORMAT_R10G10B10A2_UNORM;
@@ -49,7 +50,7 @@ void GBuffer::create() {
     mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture2, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture2, srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture2, &srvDesc));
 
     //ポジション
     desc.format = Format::FORMAT_RGBA16_FLOAT;
@@ -59,7 +60,7 @@ void GBuffer::create() {
     mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture3, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture3, srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture3, &srvDesc));
 
     //スペキュラ
     desc.format = Format::FORMAT_RGBA16_FLOAT;
@@ -69,7 +70,7 @@ void GBuffer::create() {
     mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(*texture4, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture4, srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(*texture4, &srvDesc));
 
     //各種生成
     createSampler();
@@ -79,21 +80,19 @@ void GBuffer::create() {
 }
 
 void GBuffer::renderToTexture() {
-    auto& dx = DirectX::instance();
+    auto& dx = MyDirectX::DirectX::instance();
+
+    //シェーダーをセット
+    mGBufferShader->setShaderInfo();
 
     //各テクスチャをレンダーターゲットに設定
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(Type::NUM_GBUFFER_TEXTURES);
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> views[numGBuffer];
-    for (size_t i = 0; i < numGBuffer; i++) {
-        views[i] = mRenderTargets[i]->getRenderTarget();
-    }
-    //dx.setRenderTargets(views->GetAddressOf(), numGBuffer);
+    RenderTargetView::setRenderTargets(mRenderTargets);
 
     //クリア
-    for (size_t i = 0; i < numGBuffer; i++) {
-        mRenderTargets[i]->clearRenderTarget();
+    for (const auto& rt : mRenderTargets) {
+        rt->clearRenderTarget();
     }
-    //dx.clearDepthStencilView();
+    dx.clearDepthStencilView();
 
     //デプステスト有効化
     dx.depthStencilState()->depthTest(true);
@@ -104,7 +103,7 @@ void GBuffer::renderToTexture() {
 }
 
 void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {
-    auto& dx = DirectX::instance();
+    auto& dx = MyDirectX::DirectX::instance();
 
     //レンダーターゲットを通常に戻す
     dx.setRenderTarget();
@@ -113,7 +112,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     dx.clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
-    mShader->setShaderInfo();
+    mDefferdShader->setShaderInfo();
     //1パス目で作成したテクスチャー3枚をセット
     setShaderResources();
     //サンプラーをセット
@@ -126,7 +125,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     cb.ambientLight = lightManager.getAmbientLight();
 
     //シェーダーにデータ転送
-    mShader->transferData(&cb, sizeof(cb));
+    mDefferdShader->transferData(&cb, sizeof(cb));
 
     //スクリーンサイズのポリゴンをレンダー
     dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
@@ -156,7 +155,8 @@ void GBuffer::createSampler() {
 
 void GBuffer::createShader() {
     //シェーダー生成
-    mShader = World::instance().assetsManager().createShader("Deferred.hlsl");
+    mGBufferShader = AssetsManager::instance().createShader("GBuffer.hlsl");
+    mDefferdShader = AssetsManager::instance().createShader("Deferred.hlsl");
 }
 
 void GBuffer::createVertexBuffer() {

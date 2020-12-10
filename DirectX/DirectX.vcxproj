@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -76,12 +76,12 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Download\Autodesk\FBX\FBX SDK\2019.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Download\Autodesk\FBX\FBX SDK\2019.0\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0\um;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0\shared;C:\K018A1813\rapidjson-master\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0\shared;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0\um;C:\K018A1813\Microsoft DirectX SDK %28June 2010%29\Include;C:\K018A1813\rapidjson-master\include\rapidjson;D:\Download\Autodesk\FBX\FBX SDK\2019.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.18362.0\ucrt\x64;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.18362.0\um\x64;C:\K018A1813\Microsoft DirectX SDK %28June 2010%29\Lib\x64;D:\Download\Autodesk\FBX\FBX SDK\2019.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include;D:\Download\rapidjson-master\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x86\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -93,16 +93,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(RAPID_JSON_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
@@ -119,11 +117,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;K_PLUGIN;K_FBXSDK;K_NODLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>LIBMCT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -135,6 +135,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(RAPID_JSON_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,6 +143,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libfbxsdk-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,15 +154,35 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\CharacterOperation\CharacterCreateSpriteOperation.cpp" />
+    <ClCompile Include="Component\AI\ASMap.cpp" />
+    <ClCompile Include="Component\Character\CharacterManager.cpp" />
+    <ClCompile Include="Component\Character\CharacterCommonComponents.cpp" />
+    <ClCompile Include="Component\Character\CharacterAction.cpp" />
+    <ClCompile Include="Component\CharacterOperation\CharacterSelector.cpp" />
+    <ClCompile Include="Component\CharacterOperation\CharacterOperation.cpp" />
+    <ClCompile Include="Component\CharacterOperation\CharacterDeleter.cpp" />
+    <ClCompile Include="Component\AI\ASAI.cpp" />
+    <ClCompile Include="Component\AI\ASCellManager.cpp" />
+    <ClCompile Include="Component\CharacterOperation\CharacterCost.cpp" />
+    <ClCompile Include="Component\CharacterOperation\CostRenderer.cpp" />
+    <ClCompile Include="Component\CollideOperation\AABBSelector.cpp" />
+    <ClCompile Include="Component\CollideOperation\AABBMouseScaler.cpp" />
+    <ClCompile Include="Component\CollideOperation\CollideAdder.cpp" />
+    <ClCompile Include="Component\CollideOperation\CollideMouseOperator.cpp" />
+    <ClCompile Include="Component\Camera\CameraMove.cpp" />
+    <ClCompile Include="Component\CharacterOperation\CharacterCreater.cpp" />
     <ClCompile Include="Component\Collider\AABBCollider.cpp" />
     <ClCompile Include="Collision\Intersect.cpp" />
     <ClCompile Include="Collision\AABB.cpp" />
@@ -168,6 +190,43 @@
     <ClCompile Include="Collision\Circle.cpp" />
     <ClCompile Include="Component\Sample\RayMouse.cpp" />
     <ClCompile Include="Collision\Ray.cpp" />
+    <ClCompile Include="Component\CharacterOperation\DragAndDropCharacter.cpp" />
+    <ClCompile Include="Collision\Square.cpp" />
+    <ClCompile Include="Component\CollideOperation\MeshAdder.cpp" />
+    <ClCompile Include="DebugLayer\ImGuiInspector.cpp" />
+    <ClCompile Include="DebugLayer\ImGuiWrapper.cpp" />
+    <ClCompile Include="Component\Other\GameObjectSaveAndLoader.cpp" />
+    <ClCompile Include="Component\GameState\GameStart.cpp" />
+    <ClCompile Include="Component\EnemyOperation\EnemyCreater.cpp" />
+    <ClCompile Include="Component\EnemyOperation\EnemyOperation.cpp" />
+    <ClCompile Include="Component\Mesh\MeshOutLine.cpp" />
+    <ClCompile Include="Component\Mesh\MeshShader.cpp" />
+    <ClCompile Include="Component\Map\Map.cpp" />
+    <ClCompile Include="Component\GameState\GameReset.cpp" />
+    <ClCompile Include="Component\Character\HitPointRenderer.cpp" />
+    <ClCompile Include="Component\Mesh\MeshRenderer.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxMotionParser.cpp" />
+    <ClCompile Include="Imgui\imgui.cpp" />
+    <ClCompile Include="Imgui\imgui_demo.cpp" />
+    <ClCompile Include="Imgui\imgui_draw.cpp" />
+    <ClCompile Include="Imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxAnimationTime.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxBoneParser.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxBoneWeightParser.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxMeshParser.cpp" />
+    <ClCompile Include="Mesh\Fbx\FbxMaterialParser.cpp" />
+    <ClCompile Include="Component\Mesh\SkinMeshComponent.cpp" />
+    <ClCompile Include="DebugLayer\PointRenderer.cpp" />
+    <ClCompile Include="Component\Other\SaveThis.cpp" />
+    <ClCompile Include="Component\Scene\StageSelect.cpp" />
+    <ClCompile Include="Component\Character\SimpleCharacter.cpp" />
+    <ClCompile Include="Component\Character\OverlapPrevention.cpp" />
+    <ClCompile Include="Component\Character\PhaseChangeSaver.cpp" />
+    <ClCompile Include="Component\Mesh\ShadowMap.cpp" />
+    <ClCompile Include="Sprite\SpriteUtility.cpp" />
     <ClCompile Include="System\Shader\InputElementManager.cpp" />
     <ClCompile Include="System\Shader\ConstantBufferManager.cpp" />
     <ClCompile Include="DebugLayer\LineRenderer\LineRenderer.cpp" />
@@ -196,7 +255,6 @@
     <ClCompile Include="Component\Collider\CircleCollider.cpp" />
     <ClCompile Include="Component\Scene\Scene.cpp" />
     <ClCompile Include="DebugLayer\Button.cpp" />
-    <ClCompile Include="Component\Other\Fade.cpp" />
     <ClCompile Include="Component\Text\Text.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Device\Flag.cpp" />
@@ -225,7 +283,7 @@
     <ClCompile Include="Component\Camera\Camera.cpp" />
     <ClCompile Include="Component\Other\HitPointComponent.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
-    <ClCompile Include="Device\AssetsManager.cpp" />
+    <ClCompile Include="System\AssetsManager.cpp" />
     <ClCompile Include="DebugLayer\FixedDebugInformation.cpp" />
     <ClCompile Include="DebugLayer\Log.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
@@ -256,12 +314,12 @@
     <ClCompile Include="Sound\Player\SoundPlayer.cpp" />
     <ClCompile Include="Sound\Volume\SoundVolume.cpp" />
     <ClCompile Include="Sound\Voice\SourceVoice\SourceVoice.cpp" />
-    <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
-    <ClCompile Include="Mesh\FBX.cpp" />
+    <ClCompile Include="Mesh\Fbx\FBX.cpp" />
     <ClCompile Include="DirectX\DirectX.cpp" />
     <ClCompile Include="DebugLayer\Debug.cpp" />
+    <ClCompile Include="Collision\Triangle.cpp" />
     <ClCompile Include="Utility\Easing.cpp" />
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
@@ -311,24 +369,93 @@
     <ClCompile Include="DirectX\VertexBuffer.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
-    <ClCompile Include="System\World.cpp" />
     <ClCompile Include="Sound\Loader\WAV.cpp" />
     <ClCompile Include="Sound\XAudio2\XAudio2.cpp" />
     <ClCompile Include="Sound\Effects\VolumeMeter\VolumeMeter.cpp" />
     <ClCompile Include="Sound\File\WaveformOutput.cpp" />
     <ClCompile Include="Sound\Effects\FourierTransform\WindowFunction.cpp" />
     <ClCompile Include="Component\Sound\WaveformRenderSample.cpp" />
+    <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\CharacterOperation\CharacterCreateSpriteOperation.h" />
+    <ClInclude Include="Component\AI\ASMap.h" />
+    <ClInclude Include="Component\CharacterOperation\ICharacterCreateInfo.h" />
+    <ClInclude Include="Component\Character\CharacterManager.h" />
+    <ClInclude Include="Component\Character\CharacterCommonComponents.h" />
+    <ClInclude Include="Component\Character\CharacterAction.h" />
+    <ClInclude Include="Component\CharacterOperation\CharacterSelector.h" />
+    <ClInclude Include="Component\CharacterOperation\CharacterOperation.h" />
+    <ClInclude Include="Component\CharacterOperation\CharacterDeleter.h" />
+    <ClInclude Include="Component\AI\ASAI.h" />
+    <ClInclude Include="Component\AI\ASCell.h" />
+    <ClInclude Include="Component\AI\ASCellManager.h" />
+    <ClInclude Include="Component\CharacterOperation\CharacterCost.h" />
+    <ClInclude Include="Component\CharacterOperation\CharacterCreateInfo.h" />
+    <ClInclude Include="Component\CharacterOperation\CostRenderer.h" />
+    <ClInclude Include="Component\Character\ICharacterManager.h" />
+    <ClInclude Include="Component\CollideOperation\AABBSelector.h" />
+    <ClInclude Include="Component\CollideOperation\AABBMouseScaler.h" />
+    <ClInclude Include="Component\CollideOperation\CollideAdder.h" />
+    <ClInclude Include="Component\CollideOperation\CollideMouseOperator.h" />
+    <ClInclude Include="Component\Camera\CameraMove.h" />
+    <ClInclude Include="Component\CharacterOperation\CharacterCreater.h" />
     <ClInclude Include="Component\Collider\AABBCollider.h" />
     <ClInclude Include="Collision\Intersect.h" />
     <ClInclude Include="Collision\AABB.h" />
     <ClInclude Include="Collision\Sphere.h" />
     <ClInclude Include="Collision\Circle.h" />
+    <ClInclude Include="Component\CharacterOperation\DragAndDropCharacter.h" />
+    <ClInclude Include="Component\CollideOperation\MeshAdder.h" />
+    <ClInclude Include="Component\GameState\GameState.h" />
+    <ClInclude Include="Component\Map\IMap.h" />
+    <ClInclude Include="Component\Mesh\IDrawBefore.h" />
+    <ClInclude Include="DebugLayer\ImGuiInspector.h" />
+    <ClInclude Include="DebugLayer\ImGuiWrapper.h" />
+    <ClInclude Include="Component\Other\GameObjectSaveAndLoader.h" />
+    <ClInclude Include="Component\GameState\GameStart.h" />
+    <ClInclude Include="Component\EnemyOperation\EnemyCreater.h" />
+    <ClInclude Include="Component\EnemyOperation\EnemyOperation.h" />
+    <ClInclude Include="Component\Mesh\MeshOutLine.h" />
+    <ClInclude Include="Component\Mesh\MeshShader.h" />
+    <ClInclude Include="Component\Map\Map.h" />
+    <ClInclude Include="Component\GameState\GameReset.h" />
+    <ClInclude Include="Component\Character\HitPointRenderer.h" />
+    <ClInclude Include="Component\Mesh\MeshRenderer.h" />
+    <ClInclude Include="Mesh\Fbx\FbxUtility.h" />
+    <ClInclude Include="Mesh\Fbx\FbxMotionParser.h" />
+    <ClInclude Include="Imgui\imconfig.h" />
+    <ClInclude Include="Imgui\imgui.h" />
+    <ClInclude Include="Imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="Imgui\imgui_impl_win32.h" />
+    <ClInclude Include="Imgui\imgui_internal.h" />
+    <ClInclude Include="Imgui\imstb_rectpack.h" />
+    <ClInclude Include="Imgui\imstb_textedit.h" />
+    <ClInclude Include="Imgui\imstb_truetype.h" />
+    <ClInclude Include="Mesh\Bone.h" />
+    <ClInclude Include="Mesh\Fbx\FbxAnimationTime.h" />
+    <ClInclude Include="Mesh\Fbx\FbxBoneParser.h" />
+    <ClInclude Include="Mesh\Fbx\FbxBoneWeightParser.h" />
+    <ClInclude Include="Mesh\Fbx\FbxMeshParser.h" />
+    <ClInclude Include="Mesh\Fbx\FbxMaterialParser.h" />
+    <ClInclude Include="Mesh\Fbx\FbxMotionTime.h" />
+    <ClInclude Include="Mesh\IAnimation.h" />
     <ClInclude Include="Mesh\IMesh.h" />
+    <ClInclude Include="Mesh\IMeshDrawer.h" />
+    <ClInclude Include="Mesh\Motion.h" />
     <ClInclude Include="Mesh\Vertex.h" />
     <ClInclude Include="Component\Sample\RayMouse.h" />
     <ClInclude Include="Collision\Ray.h" />
+    <ClInclude Include="Collision\Square.h" />
+    <ClInclude Include="Component\Mesh\SkinMeshComponent.h" />
+    <ClInclude Include="DebugLayer\PointRenderer.h" />
+    <ClInclude Include="Component\Other\SaveThis.h" />
+    <ClInclude Include="Component\Scene\StageSelect.h" />
+    <ClInclude Include="Component\Character\SimpleCharacter.h" />
+    <ClInclude Include="Component\Character\OverlapPrevention.h" />
+    <ClInclude Include="Component\Character\PhaseChangeSaver.h" />
+    <ClInclude Include="Component\Mesh\ShadowMap.h" />
+    <ClInclude Include="Sprite\SpriteUtility.h" />
     <ClInclude Include="System\Shader\InputElementManager.h" />
     <ClInclude Include="System\Shader\ConstantBufferManager.h" />
     <ClInclude Include="DebugLayer\LineRenderer\LineRenderer.h" />
@@ -365,7 +492,6 @@
     <ClInclude Include="Component\Collider\CircleCollider.h" />
     <ClInclude Include="Component\Scene\Scene.h" />
     <ClInclude Include="DebugLayer\Button.h" />
-    <ClInclude Include="Component\Other\Fade.h" />
     <ClInclude Include="Component\Text\Text.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="DebugLayer\IButton.h" />
@@ -411,7 +537,7 @@
     <ClInclude Include="Component\Camera\Camera.h" />
     <ClInclude Include="Component\Other\HitPointComponent.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
-    <ClInclude Include="Device\AssetsManager.h" />
+    <ClInclude Include="System\AssetsManager.h" />
     <ClInclude Include="DebugLayer\FixedDebugInformation.h" />
     <ClInclude Include="DebugLayer\Log.h" />
     <ClInclude Include="Device\FPSCounter.h" />
@@ -449,13 +575,13 @@
     <ClInclude Include="Component\Text\TextNumber.h" />
     <ClInclude Include="Component\Text\TextFloat.h" />
     <ClInclude Include="Component\Text\TextBase.h" />
-    <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="Input\JoyPad.h" />
     <ClInclude Include="Input\Keyboard.h" />
-    <ClInclude Include="Mesh\FBX.h" />
+    <ClInclude Include="Mesh\Fbx\FBX.h" />
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="DirectX\DirectX.h" />
     <ClInclude Include="DebugLayer\Debug.h" />
+    <ClInclude Include="Collision\Triangle.h" />
     <ClInclude Include="Utility\Easing.h" />
     <ClInclude Include="Utility\FileUtil.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
@@ -515,13 +641,13 @@
     <ClInclude Include="DirectX\VertexBuffer.h" />
     <ClInclude Include="Math\Vector3.h" />
     <ClInclude Include="Math\Vector4.h" />
-    <ClInclude Include="System\World.h" />
     <ClInclude Include="Sound\Loader\WAV.h" />
     <ClInclude Include="Sound\XAudio2\XAudio2.h" />
     <ClInclude Include="Sound\Effects\VolumeMeter\VolumeMeter.h" />
     <ClInclude Include="Sound\File\WaveformOutput.h" />
     <ClInclude Include="Sound\Effects\FourierTransform\WindowFunction.h" />
     <ClInclude Include="Component\Sound\WaveformRenderSample.h" />
+    <ClInclude Include="Mesh\VertexNormalSmoother.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">
@@ -529,6 +655,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\Deferred.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
@@ -537,6 +667,8 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\GBuffer.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
@@ -545,6 +677,8 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\Line2D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
@@ -565,14 +699,6 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\Mesh.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="Shader\MeshTexture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
@@ -592,6 +718,24 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shader\OutLine.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\Point3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\PointLight.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
@@ -599,8 +743,52 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\Shadow.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\ShadowDepthTextureCreater.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\SimpleMesh.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\SkinMesh.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\SkinMeshOutLine.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\SkinMeshShadow.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
@@ -616,7 +804,52 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shader\Texture3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Data\BoxTest.json" />
+    <None Include="Assets\Data\Camera.json" />
+    <None Include="Assets\Data\CharacterCommonComponents.json" />
+    <None Include="Assets\Data\CharacterOperation.json" />
+    <None Include="Assets\Data\Characters.json" />
+    <None Include="Assets\Data\CollideOperator.json" />
+    <None Include="Assets\Data\DirectionalLight.json" />
+    <None Include="Assets\Data\EnemyOperation.json" />
+    <None Include="Assets\Data\Enemys.json" />
+    <None Include="Assets\Data\GamePlay.json" />
+    <None Include="Assets\Data\GameReset.json" />
+    <None Include="Assets\Data\GameStart.json" />
+    <None Include="Assets\Data\Global.json" />
+    <None Include="Assets\Data\Plane.json" />
+    <None Include="Assets\Data\ShadowMap.json" />
+    <None Include="Assets\Data\SimpleCharacter.json" />
+    <None Include="Assets\Data\SkinMesh.json" />
+    <None Include="Assets\Data\SphereMap.json" />
+    <None Include="Assets\Data\SphereTest.json" />
+    <None Include="Assets\Data\Stage.json" />
+    <None Include="Assets\Data\StageSelect.json" />
+    <None Include="Assets\Data\Title.json" />
+    <None Include="Assets\Data\Waveform.json" />
+    <None Include="Shader\MeshCommonAndMaterialHeader.hlsli" />
+    <None Include="Shader\MeshCommonHeader.hlsli" />
+    <None Include="Shader\OutLineHeader.hlsli" />
+    <None Include="Shader\ShadowHeader.hlsli" />
+    <None Include="Shader\SimpleHeader.hlsli" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

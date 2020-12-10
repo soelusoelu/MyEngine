@@ -1,0 +1,17 @@
+{
+  "components": [
+    {
+      "type": "GamePlay",
+      "properties": {
+      }
+    },
+    {
+      "type": "Map",
+      "properties": {}
+    },
+    {
+      "type": "CharacterManager",
+      "properties": {}
+    }
+  ]
+}

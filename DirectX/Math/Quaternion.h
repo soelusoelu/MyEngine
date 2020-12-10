@@ -12,14 +12,9 @@ public:
 public:
     Quaternion();
 
-    // This directly sets the quaternion components --
-    // don't use for axis/angle
     explicit Quaternion(float inX, float inY, float inZ, float inW);
-
-    // Construct the quaternion from an axis and angle
-    // It is assumed that axis is already normalized,
-    // and the angle is in radians
     explicit Quaternion(const Vector3& axis, float angle);
+    explicit Quaternion(const Vector3& euler);
 
     // Directly set the internal components
     void set(float inX, float inY, float inZ, float inW);
@@ -32,6 +27,10 @@ public:
 
     void normalize();
 
+    //オイラー角をもとにクォータニオンを設定する
+    void setEuler(const Vector3& euler);
+
+    //クォータニオンからオイラー角を取得する
     Vector3 euler() const;
 
     // Normalize the provided quaternion

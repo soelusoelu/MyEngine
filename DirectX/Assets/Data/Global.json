@@ -1,5 +1,4 @@
 {
-  "version": 1,
   "globalProperties": {
     "window": {
       "title": "MyEngine",
@@ -13,9 +12,9 @@
       "windowDebugHeight": 1080
     },
     "fps": 60.0,
-    "beginScene": "Title",
+    "beginScene": "StageSelect",
+    "removeExclusionTag": [ "Camera", "Light", "Shadow" ],
     "light": {
-      "ambientLight": [ 0.1, 0.1, 0.1 ],
       "pointLightMeshFileName": "Shape/Sphere.obj"
     },
     "drawString": {
@@ -37,7 +36,7 @@
     },
     "inspector": {
       "inspectorPositionX": 1400.0,
-      "tagScale": [ 0.5, 0.5 ],
+      "nameScale": [ 0.5, 0.5 ],
       "elementScale": [ 0.3, 0.3 ],
       "offsetCharCountX": 2
     },

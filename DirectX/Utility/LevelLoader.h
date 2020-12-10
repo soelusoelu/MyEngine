@@ -14,24 +14,17 @@ class GameObject;
 class LevelLoader {
 public:
     //jsonファイルの読み込み
-    static bool loadJSON(const std::string& filePath, rapidjson::Document* outDoc);
+    static bool loadJSON(rapidjson::Document& outDoc, const std::string& fileName, const std::string& directoryPath = "Assets\\Data\\");
     //グローバルデータを読み込む
     static void loadGlobal(Game* root, const std::string& filePath);
-    //保存
-    static void saveLevel(const std::string& filePath);
-    //UI情報の保存
-    static void saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string& filePath);
+    //ゲームオブジェクトを保存する
+    static void saveGameObject(const GameObject& gameObject, const std::string& directoryPath = "Assets\\Data\\");
 
 private:
     LevelLoader() = delete;
     ~LevelLoader() = delete;
     LevelLoader(const LevelLoader&) = delete;
     LevelLoader& operator=(const LevelLoader&) = delete;
-
-    //アクターの保存
-    //void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
-    //コンポーネントの保存
-    //void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
 };
 
 class JsonHelper {
@@ -57,4 +50,5 @@ public:
     static void setVector3(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, const Vector3& value);
     static void setVector4(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, const Vector4& value);
     static void setQuaternion(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, const Quaternion& value);
+    static void setStringArray(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, const std::vector<std::string>& values);
 };

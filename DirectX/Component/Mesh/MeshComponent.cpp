@@ -1,29 +1,44 @@
 ﻿#include "MeshComponent.h"
+#include "MeshRenderer.h"
 #include "../Camera/Camera.h"
 #include "../Light/DirectionalLight.h"
-#include "../../DebugLayer/Debug.h"
-#include "../../Device/AssetsManager.h"
+#include "../../DebugLayer/ImGuiWrapper.h"
 #include "../../GameObject/GameObject.h"
+#include "../../Imgui/imgui.h"
 #include "../../Mesh/Mesh.h"
-#include "../../Mesh/MeshManager.h"
+#include "../../System/AssetsManager.h"
 #include "../../System/Shader/ConstantBuffers.h"
-#include "../../System/Texture/TextureFromFile.h"
+#include "../../System/Shader/Shader.h"
+#include "../../System/Texture/Texture.h"
 #include "../../Transform/Transform3D.h"
-#include "../../System/World.h"
 #include "../../Utility/LevelLoader.h"
 
-MeshComponent::MeshComponent(GameObject& gameObject) :
-    Component(gameObject),
-    mMesh(nullptr),
-    mFileName(),
-    mState(State::ACTIVE),
-    mAlpha(1.f) {
+MeshComponent::MeshComponent(GameObject& gameObject)
+    : Component(gameObject)
+    , mMesh(nullptr)
+    , mFileName()
+    , mDirectoryPath()
+    , mState(State::ACTIVE)
+    , mColor(ColorPalette::white)
+    , mAlpha(1.f)
+{
 }
 
 MeshComponent::~MeshComponent() = default;
 
 void MeshComponent::awake() {
     setActive(gameObject().getActive());
+}
+
+void MeshComponent::start() {
+    auto meshRenderer = getComponent<MeshRenderer>();
+    if (!meshRenderer) {
+        addComponent<MeshRenderer>("MeshRenderer");
+    }
+}
+
+void MeshComponent::finalize() {
+    destroy();
 }
 
 void MeshComponent::onEnable(bool value) {
@@ -33,68 +48,44 @@ void MeshComponent::onEnable(bool value) {
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     //ファイル名からメッシュを生成
     if (JsonHelper::getString(inObj, "fileName", &mFileName)) {
-        mMesh = World::instance().assetsManager().createMesh(mFileName);
-        addToManager();
+        if (!JsonHelper::getString(inObj, "directoryPath", &mDirectoryPath)) {
+            mDirectoryPath = "Assets\\Model\\";
+        }
+        createMesh(mFileName, mDirectoryPath);
     }
 
-    std::string shader;
-    //シェーダー名が取得できたら読み込む
-    if (!JsonHelper::getString(inObj, "shaderName", &shader)) {
-        //できなかったらデフォルトを使う
-        shader = "Mesh.hlsl";
-        //テクスチャが有るなら
-        if (mMesh->getMaterial(0).texture) {
-            shader = "MeshTexture.hlsl";
-        }
-        //ノーマルマップが有るなら
-        if (mMesh->getMaterial(0).mapTexture) {
-            shader = "NormalMap.hlsl";
-        }
-    }
-    //シェーダーを生成する
-    mMesh->loadShader(shader);
-
-    //アルファ値を取得する
+    JsonHelper::getVector3(inObj, "color", &mColor);
     JsonHelper::getFloat(inObj, "alpha", &mAlpha);
 }
 
-void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    inspect->emplace_back("FileName", mFileName);
-    inspect->emplace_back("Alpha", mAlpha);
+void MeshComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+    JsonHelper::setString(alloc, inObj, "fileName", mFileName);
+    JsonHelper::setString(alloc, inObj, "directoryPath", mDirectoryPath);
+    JsonHelper::setVector3(alloc, inObj, "color", mColor);
+    JsonHelper::setFloat(alloc, inObj, "alpha", mAlpha);
 }
 
-void MeshComponent::draw(const Camera& camera, const DirectionalLight& dirLight) const {
-    //シェーダーのコンスタントバッファーに各種データを渡す
-    TransparentConstantBuffer meshcb;
-    const auto& world = transform().getWorldTransform();
-    meshcb.world = world;
-    meshcb.wvp = world * camera.getViewProjection();
-    meshcb.lightDir = dirLight.getDirection();
-    meshcb.cameraPos = camera.getPosition();
-    mMesh->setShaderData(&meshcb, sizeof(meshcb), 0);
+void MeshComponent::drawInspector() {
+    ImGui::Text("FileName: %s", (mDirectoryPath + mFileName).c_str());
+    ImGuiWrapper::colorEdit3("Color", mColor);
+    ImGui::SliderFloat("Alpha", &mAlpha, 0.f, 1.f);
+}
 
-    for (size_t i = 0; i < mMesh->getMeshCount(); ++i) {
-        MaterialConstantBuffer matcb;
-        const auto& mat = mMesh->getMaterial(i);
-        matcb.ambient = mat.ambient;
-        //アルファ値は0のときが多いから
-        float alpha = mAlpha;
-        if (!Math::nearZero(mat.transparency)) {
-            alpha *= mat.transparency;
-        }
-        matcb.diffuse = Vector4(mat.diffuse, alpha);
-        matcb.specular = mat.specular;
-        //データ転送
-        mMesh->setShaderData(&matcb, sizeof(matcb), 1);
+void MeshComponent::createMesh(const std::string& fileName, const std::string& directoryPath) {
+    mMesh = AssetsManager::instance().createMesh(fileName, directoryPath);
+    mFileName = fileName;
+    mDirectoryPath = directoryPath;
+}
 
-        //テクスチャが有るなら登録
-        if (mat.texture) {
-            mat.texture->setTextureInfo();
-        }
-
-        //描画
-        mMesh->draw(i);
+bool MeshComponent::isDraw() const {
+    if (!mMesh) {
+        return false;
     }
+    if (!getActive()) {
+        return false;
+    }
+
+    return true;
 }
 
 void MeshComponent::destroy() {
@@ -113,8 +104,24 @@ bool MeshComponent::isDead() const {
     return mState == State::DEAD;
 }
 
-const IMesh& MeshComponent::getMesh() const {
-    return *mMesh;
+const IMesh* MeshComponent::getMesh() const {
+    return (mMesh) ? mMesh.get() : nullptr;
+}
+
+IAnimation* MeshComponent::getAnimation() const {
+    return (mMesh) ? mMesh.get() : nullptr;
+}
+
+const IMeshDrawer* MeshComponent::getDrawer() const {
+    return (mMesh) ? mMesh.get() : nullptr;
+}
+
+void MeshComponent::setColorRatio(const Vector3& color) {
+    mColor = color;
+}
+
+const Vector3& MeshComponent::getColorRatio() const {
+    return mColor;
 }
 
 void MeshComponent::setAlpha(float alpha) {
@@ -123,19 +130,4 @@ void MeshComponent::setAlpha(float alpha) {
 
 float MeshComponent::getAlpha() const {
     return mAlpha;
-}
-
-void MeshComponent::setMeshManager(MeshManager* manager) {
-    mMeshManager = manager;
-}
-
-void MeshComponent::addToManager() {
-    //マネージャーが登録されていなかったら終了する
-    if (!mMeshManager) {
-        Debug::logWarning("The mesh manager is not registered.");
-        return;
-    }
-
-    //マネージャーに自身を登録する
-    mMeshManager->add(shared_from_this());
 }

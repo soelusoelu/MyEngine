@@ -21,7 +21,7 @@ bool Mouse::getMouseButtonDown(MouseCode button) const {
 }
 
 bool Mouse::getMouseButton(MouseCode button) const {
-    return mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80;
+    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80 && (mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80));
 }
 
 bool Mouse::getMouseButtonUp(MouseCode button) const {
@@ -36,7 +36,7 @@ Vector2 Mouse::getMouseMoveAmount() const {
     return mCurrentMousePosition - mPreviousMousePosition;
 }
 
-bool Mouse::initialize(HWND hWnd, IDirectInput8* directInput) {
+bool Mouse::initialize(const HWND& hWnd, IDirectInput8* directInput) {
     mhWnd = hWnd;
 
     //「DirectInputデバイス」オブジェクトの作成
@@ -111,7 +111,7 @@ void Mouse::clampMousePosition() {
         Vector2(static_cast<float>(Window::debugWidth()), static_cast<float>(Window::debugHeight()))
     );
 #else
-    mMousePosition.clamp(
+    mCurrentMousePosition.clamp(
         Vector2::zero,
         Vector2(static_cast<float>(Window::width()), static_cast<float>(Window::height()))
     );

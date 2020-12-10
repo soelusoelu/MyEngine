@@ -1,7 +1,6 @@
 ﻿#include "LineRenderer2D.h"
-#include "../../Device/AssetsManager.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../System/World.h"
+#include "../../System/AssetsManager.h"
 #include "../../System/Shader/ConstantBuffers.h"
 #include "../../System/Shader/Shader.h"
 #include "../../Transform/Transform2D.h"
@@ -38,7 +37,7 @@ const void* LineRenderer2D::getVertexData() const {
 
 void LineRenderer2D::createShader() {
     //シェーダー作成
-    mShader = World::instance().assetsManager().createShader("Line2D.hlsl");
+    mShader = AssetsManager::instance().createShader("Line2D.hlsl");
 }
 
 void LineRenderer2D::drawLines(const Matrix4& proj) const {
@@ -65,5 +64,5 @@ void LineRenderer2D::drawLine(const Line2DParam& param, const Matrix4& proj) con
     mShader->transferData(&cb, sizeof(cb));
 
     //描画
-    DirectX::instance().drawIndexed(2);
+    MyDirectX::DirectX::instance().drawIndexed(2);
 }

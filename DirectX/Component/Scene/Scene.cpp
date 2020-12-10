@@ -1,17 +1,12 @@
 ﻿#include "Scene.h"
+#include "../../DebugLayer/Debug.h"
 
 Scene::Scene(GameObject& gameObject) :
     Component(gameObject),
-    mNext("") {
+    mNext() {
 }
 
 Scene::~Scene() = default;
-
-void Scene::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    for (const auto& tag : mTagsToNext) {
-        inspect->emplace_back("ExclusionList", tag);
-    }
-}
 
 void Scene::next(const std::string& next) {
     mNext = next;
@@ -21,10 +16,10 @@ const std::string& Scene::getNext() const {
     return mNext;
 }
 
-void Scene::addObjectToNext(const std::string& tag) {
-    mTagsToNext.emplace(tag);
+void Scene::addValuePassToNextScene(const std::string& valueName, const std::any& value) {
+    mValuesPassToNextScene.emplace(valueName, value);
 }
 
-std::unordered_set<std::string> Scene::getObjectToNext() const {
-    return mTagsToNext;
+const ValuePassMap& Scene::getValuePassToNextScene() const {
+    return mValuesPassToNextScene;
 }

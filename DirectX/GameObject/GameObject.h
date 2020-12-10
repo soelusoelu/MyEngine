@@ -28,7 +28,9 @@ public:
     //アクティブ状態の取得
     bool getActive() const;
 
-    //タグの設定
+    //名前の取得
+    const std::string& name() const;
+    //タグを設定する
     void setTag(const std::string& tag);
     //タグの取得
     const std::string& tag() const;
@@ -44,7 +46,7 @@ public:
     GameObjectManager& getGameObjectManager();
 
     //ゲームオブジェクトを生成
-    static std::shared_ptr<GameObject> create();
+    static std::shared_ptr<GameObject> create(const std::string& name, const std::string& tag);
 
 private:
     GameObject(const GameObject&) = delete;
@@ -52,12 +54,11 @@ private:
 
     //初期化
     void initialize();
-    //ワールド行列の更新
-    void computeWorldTransform();
 
 private:
     std::unique_ptr<Transform3D> mTransform;
     std::unique_ptr<ComponentManager> mComponentManager;
+    std::string mName;
     std::string mTag;
     bool mIsActive;
 

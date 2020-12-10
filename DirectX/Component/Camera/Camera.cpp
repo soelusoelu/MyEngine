@@ -1,6 +1,5 @@
 ﻿#include "Camera.h"
-#include "../../Device/Time.h"
-#include "../../Input/Input.h"
+#include "../../Imgui/imgui.h"
 #include "../../System/Window.h"
 #include "../../Transform/Transform3D.h"
 #include "../../Utility/LevelLoader.h"
@@ -18,51 +17,12 @@ Camera::Camera(GameObject& gameObject) :
 Camera::~Camera() = default;
 
 void Camera::awake() {
-    calcLookAt();
-    calcPerspectiveFOV(Window::width(), Window::height());
+    calcView();
+    calcProj();
 }
 
 void Camera::lateUpdate() {
-    constexpr float MOVE_SPEED = 5.f;
-    if (Input::keyboard().getKey(KeyCode::W)) {
-        transform().translate(transform().forward() * MOVE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::S)) {
-        transform().translate(-transform().forward() * MOVE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::D)) {
-        transform().translate(transform().right() * MOVE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::A)) {
-        transform().translate(-transform().right() * MOVE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::E)) {
-        transform().translate(transform().up() * MOVE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::Q)) {
-        transform().translate(-transform().up() * MOVE_SPEED * Time::deltaTime);
-    }
-
-    constexpr float ROTATE_SPEED = 40.f;
-    if (Input::keyboard().getKey(KeyCode::RightArrow)) {
-        transform().rotate(Vector3::up, ROTATE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::LeftArrow)) {
-        transform().rotate(Vector3::up, -ROTATE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::UpArrow)) {
-        transform().rotate(Vector3::right, -ROTATE_SPEED * Time::deltaTime);
-    }
-    if (Input::keyboard().getKey(KeyCode::DownArrow)) {
-        transform().rotate(Vector3::right, ROTATE_SPEED * Time::deltaTime);
-    }
-
-    lookAt({ transform().getPosition() + transform().forward() * 10.f });
-    calcLookAt();
-
-    if (Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
-        screenToWorldPoint(Input::mouse().getMousePosition(), 1.f);
-    }
+    calcView();
 }
 
 void Camera::loadProperties(const rapidjson::Value & inObj) {
@@ -71,10 +31,16 @@ void Camera::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "farClip", &mFarClip);
 }
 
-void Camera::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    inspect->emplace_back("FOV", mFOV);
-    inspect->emplace_back("NearClip", mNearClip);
-    inspect->emplace_back("FarClip", mFarClip);
+void Camera::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+    JsonHelper::setFloat(alloc, inObj, "fov", mFOV);
+    JsonHelper::setFloat(alloc, inObj, "nearClip", mNearClip);
+    JsonHelper::setFloat(alloc, inObj, "farClip", mFarClip);
+}
+
+void Camera::drawInspector() {
+    ImGui::SliderFloat("FOV", &mFOV, 45.f, 120.f);
+    ImGui::SliderFloat("NearClip", &mNearClip, 0.001f, 1.f);
+    ImGui::SliderFloat("FarClip", &mFarClip, 100.f, 1000.f);
 }
 
 const Matrix4& Camera::getView() const {
@@ -101,6 +67,37 @@ void Camera::lookAt(const Vector3 & position) {
     mLookAt = position;
 }
 
+const Vector3& Camera::getLookAt() const {
+    return mLookAt;
+}
+
+void Camera::setFov(float fov) {
+    mFOV = fov;
+    calcProj();
+}
+
+float Camera::getFov() const {
+    return mFOV;
+}
+
+void Camera::setNearClip(float nearClip) {
+    mNearClip = nearClip;
+    calcProj();
+}
+
+float Camera::getNearClip() const {
+    return mNearClip;
+}
+
+void Camera::setFarClip(float farClip) {
+    mFarClip = farClip;
+    calcProj();
+}
+
+float Camera::getFarClip() const {
+    return mFarClip;
+}
+
 Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
     //ビューポート、射影、ビュー、それぞれの逆行列を求める
     auto invView = Matrix4::inverse(mView);
@@ -118,6 +115,14 @@ Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
 
     //スクリーン座標をワールド座標に変換
     return Vector3::transformWithPerspDiv(Vector3(position, z), m);
+}
+
+Ray Camera::screenToRay(const Vector2& position, float z) {
+    Ray ray;
+    ray.start = getPosition();
+    ray.end = screenToWorldPoint(position, z);
+
+    return ray;
 }
 
 bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {
@@ -195,33 +200,10 @@ bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {
     return true;
 }
 
-void Camera::calcLookAt() {
-    auto pos = getPosition();
-    Vector3 zaxis = Vector3::normalize(mLookAt - pos);
-    Vector3 xaxis = Vector3::normalize(Vector3::cross(transform().up(), zaxis));
-    Vector3 yaxis = Vector3::normalize(Vector3::cross(zaxis, xaxis));
-    Vector3 trans;
-    trans.x = -Vector3::dot(xaxis, pos);
-    trans.y = -Vector3::dot(yaxis, pos);
-    trans.z = -Vector3::dot(zaxis, pos);
-
-    float temp[4][4] = {
-        { xaxis.x, yaxis.x, zaxis.x, 0.f },
-        { xaxis.y, yaxis.y, zaxis.y, 0.f },
-        { xaxis.z, yaxis.z, zaxis.z, 0.f },
-        { trans.x, trans.y, trans.z, 1.f }
-    };
-    mView = Matrix4(temp);
+void Camera::calcView() {
+    mView = Matrix4::createLookAt(getPosition(), mLookAt, transform().up());
 }
 
-void Camera::calcPerspectiveFOV(int width, int height) {
-    float yScale = Math::cot(mFOV / 2.f);
-    float xScale = yScale * static_cast<float>(height) / static_cast<float>(width);
-    float temp[4][4] = {
-        { xScale, 0.f, 0.f, 0.f },
-        { 0.f, yScale, 0.f, 0.f },
-        { 0.f, 0.f, mFarClip / (mFarClip - mNearClip), 1.f },
-        { 0.f, 0.f, -mNearClip * mFarClip / (mFarClip - mNearClip), 0.f }
-    };
-    mProjection = Matrix4(temp);
+void Camera::calcProj() {
+    mProjection = Matrix4::createPerspectiveFOV(Window::width(), Window::height(), mFOV, mNearClip, mFarClip);
 }

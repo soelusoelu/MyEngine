@@ -6,7 +6,8 @@
 #include "Texture2D.h"
 #include "../System/GlobalFunction.h"
 #include "../System/Window.h"
-#include <vector>
+
+namespace MyDirectX {
 
 DirectX::DirectX() :
     mDevice(nullptr),
@@ -55,6 +56,10 @@ ID3D11DeviceContext* DirectX::deviceContext() const {
     return mDeviceContext.Get();
 }
 
+ID3D11DepthStencilView* DirectX::depthStencilView() const {
+    return mDepthStencilView.Get();
+}
+
 const std::shared_ptr<BlendState>& DirectX::blendState() const {
     return mBlendState;
 }
@@ -80,17 +85,11 @@ void DirectX::setViewport(float width, float height, float x, float y) const {
 }
 
 void DirectX::setRenderTarget() const {
-    auto rt = mRenderTargetView->getRenderTarget();
-    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView.Get());
+    mRenderTargetView->setRenderTarget();
 }
 
 void DirectX::setDebugRenderTarget() const {
-    auto rt = mDebugRenderTargetView->getRenderTarget();
-    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView.Get());
-}
-
-void DirectX::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) const {
-    mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView.Get());
+    mDebugRenderTargetView->setRenderTarget();
 }
 
 void DirectX::setPrimitive(PrimitiveType primitive) const {
@@ -186,8 +185,8 @@ void DirectX::createSwapChain(const HWND& hWnd) {
     swapChainDesc.BufferDesc.Width = Window::debugWidth();
     swapChainDesc.BufferDesc.Height = Window::debugHeight();
 #else
-    sd.BufferDesc.Width = Window::width();
-    sd.BufferDesc.Height = Window::height();
+    swapChainDesc.BufferDesc.Width = Window::width();
+    swapChainDesc.BufferDesc.Height = Window::height();
 #endif // _DEBUG
     swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     swapChainDesc.BufferDesc.RefreshRate.Numerator = 0;
@@ -208,7 +207,7 @@ void DirectX::createSwapChain(const HWND& hWnd) {
 }
 
 void DirectX::createRenderTargetView() {
-    ID3D11Texture2D* backBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer = nullptr;
     mSwapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
     auto tex = std::make_unique<Texture2D>(backBuffer);
     mRenderTargetView = std::make_unique<RenderTargetView>(*tex);
@@ -241,4 +240,6 @@ D3D11_PRIMITIVE_TOPOLOGY DirectX::toPrimitiveMode(PrimitiveType primitive) const
         D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP //PRIMITIVE_TYPE_TRIANGLE_STRIP = 4
     };
     return primitiveModes[static_cast<int>(primitive)];
+}
+
 }
