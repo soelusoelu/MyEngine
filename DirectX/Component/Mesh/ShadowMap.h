@@ -1,16 +1,11 @@
 ﻿#pragma once
 
 #include "../Component.h"
-#include "../../DirectX/Texture2DDesc.h"
-#include "../../Math/Math.h"
 #include "../../System/Shader/ConstantBuffers.h"
 #include <memory>
 
 class Shader;
-class Texture2D;
-class RenderTargetView;
-class DepthStencilView;
-class ShaderResourceView;
+class RenderTexture;
 class MeshRenderer;
 class Camera;
 class DirectionalLight;
@@ -20,7 +15,6 @@ class ShadowMap : public Component {
 public:
     ShadowMap(GameObject& gameObject);
     ~ShadowMap();
-    virtual void awake() override;
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawInspector() override;
@@ -42,26 +36,10 @@ private:
     ShadowMap(const ShadowMap&) = delete;
     ShadowMap& operator=(const ShadowMap&) = delete;
 
-    //深度テクスチャ用ディスクリプタを作成する
-    void createDepthDesc(Texture2DDesc& desc) const;
-    //深度テクスチャを作成する
-    void createDepthTexture(const Texture2DDesc& desc);
-    //深度テクスチャ用レンダーターゲットビューを作成する
-    void createDepthRenderTargetView(Format format);
-    //深度テクスチャ用深度ステンシルビューを作成する
-    void createDepthStencilView(const Texture2DDesc& desc);
-    //深度テクスチャ用シェーダーリソースビューを作成する
-    void createDepthShaderResourceView(Format format);
-
 private:
     std::shared_ptr<Shader> mDepthTextureCreateShader;
-    std::unique_ptr<Texture2D> mDepthTexture;
-    std::unique_ptr<RenderTargetView> mDepthRenderTargetView;
-    std::unique_ptr<DepthStencilView> mDepthStencilView;
-    std::shared_ptr<ShaderResourceView> mDepthShaderResourceView;
+    std::unique_ptr<RenderTexture> mRenderTexture;
     ShadowConstantBuffer mShadowConstBuffer;
-    int mWidth;
-    int mHeight;
     float mLightDistance;
     float mNearClip;
     float mFarClip;

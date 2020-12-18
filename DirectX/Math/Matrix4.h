@@ -72,9 +72,11 @@ public:
 
     //透視投影行列を作成する
     static Matrix4 createPerspectiveFOV(int width, int height, float fov, float nearClip, float farClip);
+    static Matrix4 createPerspectiveFOV(float aspectYDivX, float fov, float nearClip, float farClip);
 
     //z値が線形な透視投影行列を作成する
     static Matrix4 createPerspectiveLinearFOV(int width, int height, float fov, float nearClip, float farClip);
+    static Matrix4 createPerspectiveLinearFOV(float aspectYDivX, float fov, float nearClip, float farClip);
 
     static Matrix4 createOrtho(int width, int height, float _near, float _far);
 

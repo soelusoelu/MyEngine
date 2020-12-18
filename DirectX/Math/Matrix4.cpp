@@ -361,8 +361,12 @@ Matrix4 Matrix4::createLookAt(const Vector3& pos, const Vector3& lookAt, const V
 }
 
 Matrix4 Matrix4::createPerspectiveFOV(int width, int height, float fov, float nearClip, float farClip) {
+    return createPerspectiveFOV(static_cast<float>(height) / static_cast<float>(width), fov, nearClip, farClip);
+}
+
+Matrix4 Matrix4::createPerspectiveFOV(float aspectYDivX, float fov, float nearClip, float farClip) {
     float yScale = Math::cot(fov / 2.f);
-    float xScale = yScale * static_cast<float>(height) / static_cast<float>(width);
+    float xScale = yScale * aspectYDivX;
     float temp[4][4] = {
         { xScale, 0.f, 0.f, 0.f },
         { 0.f, yScale, 0.f, 0.f },
@@ -374,8 +378,12 @@ Matrix4 Matrix4::createPerspectiveFOV(int width, int height, float fov, float ne
 }
 
 Matrix4 Matrix4::createPerspectiveLinearFOV(int width, int height, float fov, float nearClip, float farClip) {
+    return createPerspectiveLinearFOV(static_cast<float>(height) / static_cast<float>(width), fov, nearClip, farClip);
+}
+
+Matrix4 Matrix4::createPerspectiveLinearFOV(float aspectYDivX, float fov, float nearClip, float farClip) {
     float yScale = Math::cot(fov / 2.f);
-    float xScale = yScale * static_cast<float>(height) / static_cast<float>(width);
+    float xScale = yScale * aspectYDivX;
     float temp[4][4] = {
         { xScale, 0.f, 0.f, 0.f },
         { 0.f, yScale, 0.f, 0.f },

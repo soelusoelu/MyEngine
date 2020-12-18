@@ -251,6 +251,7 @@
     <ClCompile Include="Component\UI\Menu\MenuGameEnd.cpp" />
     <ClCompile Include="Component\UI\ClearToStageSelect.cpp" />
     <ClCompile Include="DirectX\DepthStencilView.cpp" />
+    <ClCompile Include="System\Texture\RenderTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -544,6 +545,7 @@
     <ClInclude Include="Component\UI\ClearToStageSelect.h" />
     <ClInclude Include="DirectX\DepthStencilView.h" />
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
+    <ClInclude Include="System\Texture\RenderTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

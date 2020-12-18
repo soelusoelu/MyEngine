@@ -242,6 +242,7 @@
     <ClCompile Include="Component\Character\PhaseChangeSaver.cpp" />
     <ClCompile Include="Component\Mesh\ShadowMap.cpp" />
     <ClCompile Include="Component\UI\NextStageSelect.cpp" />
+    <ClCompile Include="System\Texture\RenderTexture.cpp" />
     <ClCompile Include="Sprite\SpriteUtility.cpp" />
     <ClCompile Include="Component\GameState\StageClear.cpp" />
     <ClCompile Include="Component\GameState\StageFail.cpp" />
@@ -492,6 +493,7 @@
     <ClInclude Include="Component\Character\PhaseChangeSaver.h" />
     <ClInclude Include="Component\Mesh\ShadowMap.h" />
     <ClInclude Include="Component\UI\NextStageSelect.h" />
+    <ClInclude Include="System\Texture\RenderTexture.h" />
     <ClInclude Include="Sprite\SpriteUtility.h" />
     <ClInclude Include="Component\GameState\StageClear.h" />
     <ClInclude Include="Component\GameState\StageFail.h" />
