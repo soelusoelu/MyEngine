@@ -77,7 +77,7 @@ void MeshRenderer::drawMesh(const Camera& camera, const DirectionalLight& dirLig
     const auto loopCount = mMeshComponent->getMesh()->getMeshCount();
     for (size_t i = 0; i < loopCount; ++i) {
         //マテリアルを設定する
-        mMeshShader->setDefaultMaterial(*mMeshComponent, i);
+        mMeshShader->setDefaultMaterial(i);
 
         //描画
         mMeshComponent->getDrawer()->draw(i);
@@ -116,5 +116,5 @@ void MeshRenderer::addToManager() {
     }
 
     //マネージャーに自身を登録する
-    mMeshManager->add(shared_from_this());
+    mMeshManager->add(shared_from_this(), mMeshComponent->handleShadow());
 }

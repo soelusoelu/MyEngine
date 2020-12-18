@@ -16,7 +16,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
-#include "../Input/Input.h"
 #include "../Light/LightManager.h"
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
@@ -24,18 +23,18 @@
 #include "../Utility/LevelLoader.h"
 #include <vector>
 
-SceneManager::SceneManager() :
-    mRenderer(std::make_unique<Renderer>()),
-    mCurrentScene(nullptr),
-    mCamera(nullptr),
-    mGameObjectManager(std::make_unique<GameObjectManager>()),
-    mMeshManager(std::make_unique<MeshManager>()),
-    mSpriteManager(std::make_unique<SpriteManager>()),
-    mPhysics(std::make_unique<Physics>()),
-    mLightManager(std::make_unique<LightManager>()),
-    mTextDrawer(new DrawString()),
-    mBeginScene(),
-    mShouldDraw(false) {
+SceneManager::SceneManager()
+    : mRenderer(std::make_unique<Renderer>())
+    , mCurrentScene(nullptr)
+    , mCamera(nullptr)
+    , mGameObjectManager(std::make_unique<GameObjectManager>())
+    , mMeshManager(std::make_unique<MeshManager>())
+    , mSpriteManager(std::make_unique<SpriteManager>())
+    , mPhysics(std::make_unique<Physics>())
+    , mLightManager(std::make_unique<LightManager>())
+    , mTextDrawer(new DrawString())
+    , mBeginScene()
+{
 }
 
 SceneManager::~SceneManager() {
@@ -77,12 +76,6 @@ void SceneManager::initialize() {
 void SceneManager::update() {
     //アップデートの最初で文字列削除
     DebugUtility::drawStringClear();
-    mShouldDraw = true;
-
-    //Escでゲーム終了
-    if (Input::keyboard().getKeyDown(KeyCode::Escape)) {
-        Game::quit();
-    }
 
     //ポーズ中はデバッグだけアップデートを行う
     if (DebugUtility::pause().isPausing()) {
@@ -116,16 +109,10 @@ void SceneManager::update() {
         createScene(next);
         //新しいシーンに前のシーンの値を渡す
         mCurrentScene->getValueFromPreviousScene(toNextValues);
-        //このフレームは描画しない
-        mShouldDraw = false;
     }
 }
 
 void SceneManager::draw() const {
-    if (!mShouldDraw) {
-        return;
-    }
-
     //各テクスチャ上にレンダリング
     //mRenderer->renderToTexture();
     ////メッシュ描画準備

@@ -3,13 +3,13 @@
 #include "../Component.h"
 #include "../../DirectX/Texture2DDesc.h"
 #include "../../Math/Math.h"
-#include "../../System/SystemInclude.h"
 #include "../../System/Shader/ConstantBuffers.h"
 #include <memory>
 
 class Shader;
 class Texture2D;
 class RenderTargetView;
+class DepthStencilView;
 class ShaderResourceView;
 class MeshRenderer;
 class Camera;
@@ -26,9 +26,9 @@ public:
     virtual void drawInspector() override;
 
     //描画準備
-    void drawBegin(const DirectionalLight& dirLight);
+    void drawBegin(const Camera& camera, const DirectionalLight& dirLight);
     //描画
-    void draw(const MeshRenderer& renderer, const Camera& camera, const DirectionalLight& dirLight) const;
+    void draw(const MeshRenderer& renderer) const;
     //影描画に使用するコンスタントバッファを登録する
     void setShadowConstantBuffer(MeshRenderer& renderer);
     //描画終了処理
@@ -57,10 +57,12 @@ private:
     std::shared_ptr<Shader> mDepthTextureCreateShader;
     std::unique_ptr<Texture2D> mDepthTexture;
     std::unique_ptr<RenderTargetView> mDepthRenderTargetView;
+    std::unique_ptr<DepthStencilView> mDepthStencilView;
     std::shared_ptr<ShaderResourceView> mDepthShaderResourceView;
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView> mDepthStencilView;
     ShadowConstantBuffer mShadowConstBuffer;
     int mWidth;
     int mHeight;
     float mLightDistance;
+    float mNearClip;
+    float mFarClip;
 };

@@ -90,7 +90,7 @@ void GBuffer::renderToTexture() {
 
     //クリア
     for (const auto& rt : mRenderTargets) {
-        rt->clearRenderTarget();
+        rt->clear();
     }
     dx.clearDepthStencilView();
 
