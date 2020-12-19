@@ -1,6 +1,6 @@
 ﻿#include "SpriteUtility.h"
 #include "../Collision/Collision.h"
-#include "../Component/Sprite/SpriteComponent.h"
+#include "../Component/Engine/Sprite/SpriteComponent.h"
 #include "../Input/Input.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Window.h"
