@@ -30,11 +30,11 @@ ShadowMap::ShadowMap(GameObject& gameObject)
 ShadowMap::~ShadowMap() = default;
 
 void ShadowMap::start() {
-    //const auto& s = getComponent<SpriteComponent>();
-    //const auto& tex = std::make_shared<Texture>(mDepthShaderResourceView, Vector2(mWidth, mHeight));
-    //s->setTexture(tex);
-    //auto& t = s->transform();
-    //t.setScale(0.3f);
+    const auto& s = getComponent<SpriteComponent>();
+    const auto& tex = std::make_shared<Texture>(mRenderTexture->getShaderResourceView(), Vector2(Window::width(), Window::height()));
+    s->setTexture(tex);
+    auto& t = s->transform();
+    t.setScale(0.5f);
 }
 
 void ShadowMap::loadProperties(const rapidjson::Value& inObj) {
@@ -58,7 +58,7 @@ void ShadowMap::drawBegin(const Camera& camera, const DirectionalLight& dirLight
     //ライトビュー計算
     const auto& dir = dirLight.getDirection();
     mShadowConstBuffer.lightView = Matrix4::createLookAt(-dir * mLightDistance, dir, Vector3::up);
-    mShadowConstBuffer.lightProj = Matrix4::createPerspectiveFOV(Window::width(), Window::height(), camera.getFov(), mNearClip, mFarClip);
+    mShadowConstBuffer.lightProj = Matrix4::createOrtho(Window::width(), Window::height(), mNearClip, mFarClip);
 }
 
 void ShadowMap::draw(const MeshRenderer& renderer) const {
@@ -86,6 +86,6 @@ void ShadowMap::transferShadowTexture(unsigned constantBufferIndex) {
     mRenderTexture->transferShaderResourceView(constantBufferIndex);
 }
 
-void ShadowMap::drawEndShadowTexture(unsigned constantBufferIndex) {
-    mRenderTexture->drawEndTexture(constantBufferIndex);
+void ShadowMap::drawEndShadowTexture() {
+    mRenderTexture->drawEndTexture();
 }

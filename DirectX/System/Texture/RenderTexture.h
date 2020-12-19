@@ -22,7 +22,9 @@ public:
     //シェーダーリソースビューをGPUに送る
     void transferShaderResourceView(unsigned constantBufferIndex);
     //レンダーターゲットテクスチャの使用後処理
-    void drawEndTexture(unsigned constantBufferIndex);
+    void drawEndTexture();
+    //シェーダーリソースビューを取得する
+    const std::shared_ptr<ShaderResourceView>& getShaderResourceView() const;
 
 private:
     RenderTexture(const RenderTexture&) = delete;
@@ -44,4 +46,5 @@ private:
     std::unique_ptr<RenderTargetView> mRenderTargetView;
     std::unique_ptr<DepthStencilView> mDepthStencilView;
     std::shared_ptr<ShaderResourceView> mShaderResourceView;
+    unsigned mTextureConstBufferIndex;
 };

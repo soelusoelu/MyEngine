@@ -30,7 +30,7 @@ public:
     //深度を書き込んだテクスチャをGPUに送る
     void transferShadowTexture(unsigned constantBufferIndex = 1);
     //レンダーターゲットテクスチャの使用後処理
-    void drawEndShadowTexture(unsigned constantBufferIndex = 1);
+    void drawEndShadowTexture();
 
 private:
     ShadowMap(const ShadowMap&) = delete;

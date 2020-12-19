@@ -78,8 +78,8 @@ public:
     static Matrix4 createPerspectiveLinearFOV(int width, int height, float fov, float nearClip, float farClip);
     static Matrix4 createPerspectiveLinearFOV(float aspectYDivX, float fov, float nearClip, float farClip);
 
-    static Matrix4 createOrtho(int width, int height, float _near, float _far);
-
+    //正射影行列を作成する
+    static Matrix4 createOrtho(int width, int height, float nearClip, float farClip);
 
 private:
     //逆行列で使用する余因子を求める

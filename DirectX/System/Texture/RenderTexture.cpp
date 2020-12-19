@@ -8,6 +8,7 @@ RenderTexture::RenderTexture(int width, int height, Format depthFormat, Format t
     , mRenderTargetView(nullptr)
     , mDepthStencilView(nullptr)
     , mShaderResourceView(nullptr)
+    , mTextureConstBufferIndex(0)
 {
     Texture2DDesc desc{};
     createDepthDesc(desc, width, height, textureFormat);
@@ -44,11 +45,16 @@ void RenderTexture::drawEnd() const {
 
 void RenderTexture::transferShaderResourceView(unsigned constantBufferIndex) {
     mShaderResourceView->setPSShaderResources(constantBufferIndex);
+    mTextureConstBufferIndex = constantBufferIndex;
 }
 
-void RenderTexture::drawEndTexture(unsigned constantBufferIndex) {
+void RenderTexture::drawEndTexture() {
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> nullView = nullptr;
-    MyDirectX::DirectX::instance().deviceContext()->PSSetShaderResources(constantBufferIndex, 1, nullView.GetAddressOf());
+    MyDirectX::DirectX::instance().deviceContext()->PSSetShaderResources(mTextureConstBufferIndex, 1, nullView.GetAddressOf());
+}
+
+const std::shared_ptr<ShaderResourceView>& RenderTexture::getShaderResourceView() const {
+    return mShaderResourceView;
 }
 
 void RenderTexture::createDepthDesc(Texture2DDesc& desc, int width, int height, Format textureFormat) const {
