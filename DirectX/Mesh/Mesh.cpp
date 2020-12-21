@@ -117,7 +117,7 @@ void Mesh::initialize(const std::string& filePath) {
 
 void Mesh::createMesh(const std::string& filePath) {
     //拡張子によって処理を分ける
-    auto ext = FileUtil::getFileExtension(filePath);
+    const auto& ext = FileUtil::getFileExtension(filePath);
     if (ext == ".obj") {
         mMesh = std::make_unique<OBJ>();
     } else if (ext == ".fbx") {

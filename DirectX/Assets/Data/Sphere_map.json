@@ -1,0 +1,68 @@
+{
+    "tag": "Ground",
+    "transform": {
+        "position": [
+            0.0,
+            0.0,
+            0.0
+        ],
+        "rotation": [
+            -0.0,
+            0.0,
+            0.0
+        ],
+        "scale": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "pivot": [
+            0.0,
+            0.0,
+            0.0
+        ]
+    },
+    "components": [
+        {
+            "type": "MeshComponent",
+            "properties": {
+                "fileName": "Sphere.obj",
+                "directoryPath": "Assets\\Model\\Shape\\"
+            }
+        },
+        {
+            "type": "MeshRenderer",
+            "properties": {}
+        },
+        {
+            "type": "MeshShader",
+            "properties": {
+                "shaderName": "Shadow.hlsl"
+            }
+        },
+        {
+            "type": "MeshMaterial",
+            "properties": {}
+        },
+        {
+            "type": "AABBCollider",
+            "properties": {
+                "min": [
+                    -0.4915120005607605,
+                    -0.5,
+                    -0.4911229908466339
+                ],
+                "max": [
+                    0.4915120005607605,
+                    0.5,
+                    0.4911229908466339
+                ],
+                "isRenderCollision": false
+            }
+        },
+        {
+            "type": "SaveThis",
+            "properties": {}
+        }
+    ]
+}

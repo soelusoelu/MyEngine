@@ -135,8 +135,6 @@ void CollideMouseOperator::addMesh() {
         return;
     }
 
-    //メッシュにコライダーを追加する
-    addCollider(*newMesh);
     //保存機能を追加する
     newMesh->addComponent<SaveThis>("SaveThis");
     //このメッシュを選択対象にする

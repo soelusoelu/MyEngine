@@ -30,11 +30,11 @@ ShadowMap::ShadowMap(GameObject& gameObject)
 ShadowMap::~ShadowMap() = default;
 
 void ShadowMap::start() {
-    const auto& s = getComponent<SpriteComponent>();
-    const auto& tex = std::make_shared<Texture>(mRenderTexture->getShaderResourceView(), Vector2(Window::width(), Window::height()));
-    s->setTexture(tex);
-    auto& t = s->transform();
-    t.setScale(0.5f);
+    //const auto& s = getComponent<SpriteComponent>();
+    //const auto& tex = std::make_shared<Texture>(mRenderTexture->getShaderResourceView(), Vector2(Window::width(), Window::height()));
+    //s->setTexture(tex);
+    //auto& t = s->transform();
+    //t.setScale(0.5f);
 }
 
 void ShadowMap::loadProperties(const rapidjson::Value& inObj) {

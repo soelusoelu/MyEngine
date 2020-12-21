@@ -1,9 +1,9 @@
 {
-    "tag": "None",
+    "tag": "Ground",
     "transform": {
         "position": [
             0.0,
-            0.0,
+            4.920000076293945,
             0.0
         ],
         "rotation": [
@@ -24,26 +24,24 @@
     },
     "components": [
         {
-            "type": "CollideMouseOperator",
-            "properties": {}
-        },
-        {
-            "type": "AABBSelector",
-            "properties": {}
-        },
-        {
-            "type": "AABBMouseScaler",
+            "type": "MeshComponent",
             "properties": {
-                "editPointRadius": 0.25,
-                "collisionExpantionAmount": 1.0
+                "fileName": "box.fbx",
+                "directoryPath": "Assets\\Model\\Shape\\"
             }
         },
         {
-            "type": "MeshAdder",
+            "type": "MeshRenderer",
             "properties": {}
         },
         {
-            "type": "CollideAdder",
+            "type": "MeshShader",
+            "properties": {
+                "shaderName": "Shadow.hlsl"
+            }
+        },
+        {
+            "type": "MeshMaterial",
             "properties": {}
         },
         {

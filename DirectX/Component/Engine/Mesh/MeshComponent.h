@@ -47,10 +47,14 @@ private:
     MeshComponent(const MeshComponent&) = delete;
     MeshComponent& operator=(const MeshComponent&) = delete;
 
+    //MeshRendererをアタッチする
+    void attachMeshRenderer();
+
 protected:
     std::shared_ptr<Mesh> mMesh;
     std::string mFileName;
     std::string mDirectoryPath;
     bool mIsActive;
     bool mShadowHandle;
+    bool mStarted;
 };

@@ -131,6 +131,10 @@ void SceneManager::draw() const {
     //メッシュの描画
     mMeshManager->draw(*mCamera, mLightManager->getDirectionalLight());
 
+#ifdef _DEBUG
+    DebugUtility::draw3D();
+#endif // _DEBUG
+
     //スプライト描画準備
     mRenderer->renderSprite();
     //3Dスプライト

@@ -14,6 +14,7 @@ MeshComponent::MeshComponent(GameObject& gameObject)
     , mDirectoryPath()
     , mIsActive(true)
     , mShadowHandle(true)
+    , mStarted(false)
 {
 }
 
@@ -24,10 +25,15 @@ void MeshComponent::awake() {
 }
 
 void MeshComponent::start() {
-    auto meshRenderer = getComponent<MeshRenderer>();
-    if (!meshRenderer) {
-        addComponent<MeshRenderer>("MeshRenderer");
+    mStarted = true;
+
+    //メッシュが生成されてなければ終了
+    if (!mMesh) {
+        return;
     }
+
+    //メッシュ描画コンポーネントをアタッチする
+    attachMeshRenderer();
 }
 
 void MeshComponent::finalize() {
@@ -63,6 +69,11 @@ void MeshComponent::createMesh(const std::string& fileName, const std::string& d
     mMesh = AssetsManager::instance().createMesh(fileName, directoryPath);
     mFileName = fileName;
     mDirectoryPath = directoryPath;
+
+    //すでにstart関数が呼ばれていたらメッシュ描画コンポーネントをアタッチする
+    if (mStarted) {
+        attachMeshRenderer();
+    }
 }
 
 bool MeshComponent::isDraw() const {
@@ -98,4 +109,11 @@ const IMeshDrawer* MeshComponent::getDrawer() const {
 
 bool MeshComponent::handleShadow() const {
     return mShadowHandle;
+}
+
+void MeshComponent::attachMeshRenderer() {
+    const auto& meshRenderer = getComponent<MeshRenderer>();
+    if (!meshRenderer) {
+        addComponent<MeshRenderer>("MeshRenderer");
+    }
 }

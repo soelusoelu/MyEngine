@@ -24,6 +24,7 @@
 #include "../Component/Engine/Other/SaveThis.h"
 #include "../Component/Engine/Sample/RayMouse.h"
 #include "../Component/Engine/Sample/WaveformRenderSample.h"
+#include "../Component/Engine/Scene/MapEditor.h"
 #include "../Component/Engine/Sound/ListenerComponent.h"
 #include "../Component/Engine/Sound/SoundComponent.h"
 #include "../Component/Engine/Sprite/Sprite3D.h"
@@ -118,6 +119,8 @@ GameObjectFactory::GameObjectFactory() {
 
     ADD_COMPONENT(RayMouse);
     ADD_COMPONENT(WaveformRenderSample);
+
+    ADD_COMPONENT(MapEditor);
 
     ADD_COMPONENT(ListenerComponent);
     ADD_COMPONENT(SoundComponent);

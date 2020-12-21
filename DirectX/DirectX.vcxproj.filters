@@ -19,6 +19,7 @@
     <FxCompile Include="Shader\Shadow.hlsl" />
     <FxCompile Include="Shader\ShadowDepthTextureCreater.hlsl" />
     <FxCompile Include="Shader\SkinMeshShadow.hlsl" />
+    <FxCompile Include="Shader\SimpleMeshTexture.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\ComponentManager.cpp" />
@@ -252,6 +253,12 @@
     <ClCompile Include="Component\Game\Camera\CameraMove.cpp" />
     <ClCompile Include="Component\Engine\Sample\WaveformRenderSample.cpp" />
     <ClCompile Include="Component\Engine\Scene\Scene.cpp" />
+    <ClCompile Include="Component\Engine\Scene\MapEditor.cpp" />
+    <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
+    <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureList.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureAdder.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -546,6 +553,14 @@
     <ClInclude Include="Component\Game\Camera\CameraMove.h" />
     <ClInclude Include="Component\Engine\Sample\WaveformRenderSample.h" />
     <ClInclude Include="Component\Engine\Scene\Scene.h" />
+    <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
+    <ClInclude Include="Assets\Data\MapEditor.json" />
+    <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />
+    <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureList.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureAdder.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTextureList.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
@@ -591,5 +606,7 @@
     <None Include="Assets\Data\MenuToTitle.json" />
     <None Include="Assets\Data\MenuGameEnd.json" />
     <None Include="Assets\Data\ClearToStageSelect.json" />
+    <None Include="Assets\Data\Ground1.json" />
+    <None Include="Shader\MaterialHeader.hlsli" />
   </ItemGroup>
 </Project>

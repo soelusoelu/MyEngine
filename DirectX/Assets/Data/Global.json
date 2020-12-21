@@ -12,7 +12,7 @@
       "windowDebugHeight": 1080
     },
     "fps": 60.0,
-    "beginScene": "Title",
+    "beginScene": "MapEditor",
     "removeExclusionTag": [ "Camera", "Light", "Shadow" ],
     "light": {
       "pointLightMeshFileName": "Shape/Sphere.obj"
@@ -43,6 +43,14 @@
     "pause": {
       "fileName": "System/pause.png",
       "offset": [ 50.0, 15.0 ]
+    },
+    "assetsRenderTextureList": {
+      "textureSize": 64,
+      "textureDisplayInterval": 32
+    },
+    "assetsRenderTextureAdder": {
+      "renderPosition": [ 0.0, 1016.0 ],
+      "spriteButtonFilePath": "System/add_mesh.png"
     },
     "enterKey": "Space",
     "enterPad": "A"

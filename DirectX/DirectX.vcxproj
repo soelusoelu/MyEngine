@@ -165,6 +165,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureAdder.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureList.cpp" />
     <ClCompile Include="Component\Game\UI\ClearToStageSelect.cpp" />
     <ClCompile Include="Component\Game\UI\CharacterPlacementWarning.cpp" />
     <ClCompile Include="Component\Engine\Sprite\SpriteButtonComponent.cpp" />
@@ -220,6 +223,9 @@
     <ClCompile Include="Component\Game\UI\Menu\MenuToTitle.cpp" />
     <ClCompile Include="Component\Game\UI\Menu\MenuGameEnd.cpp" />
     <ClCompile Include="DirectX\DepthStencilView.cpp" />
+    <ClCompile Include="Component\Engine\Scene\MapEditor.cpp" />
+    <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
+    <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxMotionParser.cpp" />
     <ClCompile Include="Imgui\imgui.cpp" />
@@ -398,6 +404,10 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureAdder.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureList.h" />
+    <ClInclude Include="Assets\Data\MapEditor.json" />
     <ClInclude Include="Component\Game\UI\ClearToStageSelect.h" />
     <ClInclude Include="Component\Game\UI\CharacterPlacementWarning.h" />
     <ClInclude Include="Component\Engine\Sprite\SpriteButtonComponent.h" />
@@ -434,6 +444,7 @@
     <ClInclude Include="Component\Game\Map\IMap.h" />
     <ClInclude Include="Component\Engine\Mesh\IDrawBefore.h" />
     <ClInclude Include="Component\Game\UI\Menu\IMenuButton.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTextureList.h" />
     <ClInclude Include="DebugLayer\ImGuiInspector.h" />
     <ClInclude Include="DebugLayer\ImGuiWrapper.h" />
     <ClInclude Include="Component\Engine\Other\GameObjectSaveAndLoader.h" />
@@ -459,6 +470,9 @@
     <ClInclude Include="Component\Game\UI\Menu\MenuGameEnd.h" />
     <ClInclude Include="DirectX\DepthStencilView.h" />
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
+    <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
+    <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
+    <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />
     <ClInclude Include="Mesh\Fbx\FbxUtility.h" />
     <ClInclude Include="Mesh\Fbx\FbxMotionParser.h" />
     <ClInclude Include="Imgui\imconfig.h" />
@@ -813,6 +827,15 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shader\SimpleMeshTexture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\SkinMesh.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
@@ -882,6 +905,7 @@
     <None Include="Assets\Data\GameReset.json" />
     <None Include="Assets\Data\GameStart.json" />
     <None Include="Assets\Data\Global.json" />
+    <None Include="Assets\Data\Ground1.json" />
     <None Include="Assets\Data\Menu.json" />
     <None Include="Assets\Data\MenuClose.json" />
     <None Include="Assets\Data\MenuGameEnd.json" />
@@ -902,6 +926,7 @@
     <None Include="Assets\Data\StageSelect.json" />
     <None Include="Assets\Data\Title.json" />
     <None Include="Assets\Data\Waveform.json" />
+    <None Include="Shader\MaterialHeader.hlsli" />
     <None Include="Shader\MeshCommonAndMaterialHeader.hlsli" />
     <None Include="Shader\MeshCommonHeader.hlsli" />
     <None Include="Shader\OutLineHeader.hlsli" />

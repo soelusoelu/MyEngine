@@ -6,6 +6,7 @@
 #include "../../../DebugLayer/Debug.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Mesh/Material.h"
+#include "../../../Mesh/MeshCommonShaderSetter.h"
 #include "../../../System/AssetsManager.h"
 #include "../../../System/Shader/ConstantBuffers.h"
 #include "../../../System/Shader/Shader.h"
@@ -71,15 +72,8 @@ void MeshShader::transferData() {
 
 void MeshShader::setCommonValue(const Camera& camera, const DirectionalLight& dirLight) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
-    MeshCommonConstantBuffer meshcb;
-    const auto& world = transform().getWorldTransform();
-    meshcb.world = world;
-    meshcb.view = camera.getView();
-    meshcb.projection = camera.getProjection();
-    meshcb.wvp = world * camera.getViewProjection();
-    meshcb.lightDir = dirLight.getDirection();
-    meshcb.lightColor = dirLight.getLightColor();
-    meshcb.cameraPos = camera.getPosition();
+    MeshCommonConstantBuffer meshcb{};
+    MeshCommonShaderSetter::setCommon(meshcb, camera, dirLight, transform());
     mShader->transferData(&meshcb, sizeof(meshcb), 0);
 }
 
@@ -126,14 +120,6 @@ void MeshShader::setDefaultShader() {
 
 void MeshShader::setMaterial(const Material& material, unsigned constantBufferIndex) const {
     MaterialConstantBuffer matcb{};
-
-    matcb.ambient = material.ambient;
-    matcb.diffuse = Vector4(material.diffuse, material.transparency);
-    matcb.specular = material.specular;
-    matcb.shininess = material.shininess;
-    //テクスチャ登録
-    material.texture->setTextureInfo();
-
-    //データ転送
+    MeshCommonShaderSetter::setMaterial(matcb, material);
     mShader->transferData(&matcb, sizeof(matcb), constantBufferIndex);
 }

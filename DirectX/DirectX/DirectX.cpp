@@ -75,7 +75,7 @@ const std::shared_ptr<RasterizerState>& DirectX::rasterizerState() const {
 
 void DirectX::setViewport(float width, float height, float x, float y) const {
     //ビューポートの設定
-    D3D11_VIEWPORT vp;
+    D3D11_VIEWPORT vp{};
     vp.Width = width;
     vp.Height = height;
     vp.MinDepth = 0.f;

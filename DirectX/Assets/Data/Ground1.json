@@ -24,27 +24,15 @@
     },
     "components": [
         {
-            "type": "CollideMouseOperator",
-            "properties": {}
-        },
-        {
-            "type": "AABBSelector",
-            "properties": {}
-        },
-        {
-            "type": "AABBMouseScaler",
+            "type": "GameObjectSaveAndLoader",
             "properties": {
-                "editPointRadius": 0.25,
-                "collisionExpantionAmount": 1.0
+                "gameObjectNames": [
+                    "Sphere",
+                    "Plane_map",
+                    "Sphere_map",
+                    "box_map"
+                ]
             }
-        },
-        {
-            "type": "MeshAdder",
-            "properties": {}
-        },
-        {
-            "type": "CollideAdder",
-            "properties": {}
         },
         {
             "type": "SaveThis",

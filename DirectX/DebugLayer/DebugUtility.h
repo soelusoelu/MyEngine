@@ -14,6 +14,7 @@ class Pause;
 class PointRenderer;
 class LineRenderer2D;
 class LineRenderer3D;
+class AssetsRenderTextureManager;
 
 class DebugUtility {
     DebugUtility() = delete;
@@ -31,6 +32,7 @@ public:
     //重大なバグを表示する用
     static void windowMessage(const std::string& message);
     static void draw(const Matrix4& proj);
+    static void draw3D();
     //DrawStringが保持する文字列をすべて削除
     static void drawStringClear();
     static Log& log();
@@ -42,6 +44,7 @@ public:
     static PointRenderer& pointRenderer();
     static LineRenderer2D& lineRenderer2D();
     static LineRenderer3D& lineRenderer3D();
+    static AssetsRenderTextureManager& assetsRenderTextureManager();
 
 private:
     static inline DrawString* mDrawString = nullptr;
@@ -54,4 +57,5 @@ private:
     static inline PointRenderer* mPointRenderer = nullptr;
     static inline LineRenderer2D* mLineRenderer2D = nullptr;
     static inline LineRenderer3D* mLineRenderer3D = nullptr;
+    static inline AssetsRenderTextureManager* mAssetsRenderTextureManager = nullptr;
 };

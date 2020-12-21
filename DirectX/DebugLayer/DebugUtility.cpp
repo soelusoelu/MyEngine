@@ -6,6 +6,7 @@
 #include "Log.h"
 #include "Pause.h"
 #include "PointRenderer.h"
+#include "AssetsRenderer/AssetsRenderTextureManager.h"
 #include "LineRenderer/LineRenderer2D.h"
 #include "LineRenderer/LineRenderer3D.h"
 #include "../Device/DrawString.h"
@@ -23,6 +24,7 @@ void DebugUtility::create() {
     mPointRenderer = new PointRenderer();
     mLineRenderer2D = new LineRenderer2D();
     mLineRenderer3D = new LineRenderer3D();
+    mAssetsRenderTextureManager = new AssetsRenderTextureManager();
 }
 
 void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
@@ -32,6 +34,7 @@ void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
     mHierarchy->loadProperties(inObj);
     mInspector->loadProperties(inObj);
     mPause->loadProperties(inObj);
+    mAssetsRenderTextureManager->loadProperties(inObj);
 }
 
 void DebugUtility::initialize() {
@@ -43,9 +46,11 @@ void DebugUtility::initialize() {
     mPointRenderer->initialize();
     mLineRenderer2D->initialize();
     mLineRenderer3D->initialize();
+    mAssetsRenderTextureManager->initialize();
 }
 
 void DebugUtility::finalize() {
+    safeDelete(mAssetsRenderTextureManager);
     safeDelete(mLineRenderer3D);
     safeDelete(mLineRenderer2D);
     safeDelete(mPointRenderer);
@@ -60,6 +65,7 @@ void DebugUtility::finalize() {
 void DebugUtility::update() {
     mHierarchy->update();
     mPause->update();
+    mAssetsRenderTextureManager->update();
 }
 
 void DebugUtility::windowMessage(const std::string& message) {
@@ -73,6 +79,11 @@ void DebugUtility::draw(const Matrix4& proj) {
     mInspector->drawInspect();
     mPause->drawButton(proj);
     mDrawString->drawAll(proj);
+    mAssetsRenderTextureManager->drawTextures(proj);
+}
+
+void DebugUtility::draw3D() {
+    mAssetsRenderTextureManager->drawMeshes();
 }
 
 void DebugUtility::drawStringClear() {
@@ -113,4 +124,8 @@ LineRenderer2D& DebugUtility::lineRenderer2D() {
 
 LineRenderer3D& DebugUtility::lineRenderer3D() {
     return *mLineRenderer3D;
+}
+
+AssetsRenderTextureManager& DebugUtility::assetsRenderTextureManager() {
+    return *mAssetsRenderTextureManager;
 }
