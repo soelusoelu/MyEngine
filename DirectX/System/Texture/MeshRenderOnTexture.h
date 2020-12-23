@@ -20,6 +20,8 @@ public:
     void draw(const Matrix4& proj) const;
     //テクスチャの位置を設定する
     void setPositionForTexture(const Vector2& pos);
+    //スプライトをconst参照で取得する
+    const Sprite& getSprite() const;
 
 private:
     MeshRenderOnTexture(const MeshRenderOnTexture&) = delete;

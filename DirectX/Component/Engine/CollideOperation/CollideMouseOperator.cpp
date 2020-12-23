@@ -60,9 +60,9 @@ void CollideMouseOperator::update() {
     }
 
     //マウスの右ボタンを押した瞬間だったら
-    if (Input::mouse().getMouseButtonDown(MouseCode::RightButton)) {
-        addMesh();
-    }
+    //if (Input::mouse().getMouseButtonDown(MouseCode::RightButton)) {
+    //    addMesh();
+    //}
 }
 
 void CollideMouseOperator::setSaveAndLoader(const std::shared_ptr<GameObjectSaveAndLoader>& saveLoader) {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "IAssetsRenderTextureList.h"
+#include "IAddAssets.h"
 #include "../../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
@@ -14,7 +14,7 @@ public:
     AssetsRenderTextureAdder();
     ~AssetsRenderTextureAdder();
     void loadProperties(const rapidjson::Value& inObj);
-    void initialize(IAssetsRenderTextureList* textureList);
+    void initialize(IAddAssets* adder);
     void update();
     void draw(const Matrix4& proj);
 
@@ -26,7 +26,7 @@ private:
 
 private:
     std::unique_ptr<SpriteButton> mButton;
-    IAssetsRenderTextureList* mTextureList;
+    IAddAssets* mAssetsAdder;
     std::string mSpriteFilePath;
     Vector2 mRenderPosition;
 };

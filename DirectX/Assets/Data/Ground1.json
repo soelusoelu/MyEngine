@@ -27,10 +27,7 @@
             "type": "GameObjectSaveAndLoader",
             "properties": {
                 "gameObjectNames": [
-                    "Sphere",
-                    "Plane_map",
-                    "Sphere_map",
-                    "box_map"
+                    "Plane_map"
                 ]
             }
         },

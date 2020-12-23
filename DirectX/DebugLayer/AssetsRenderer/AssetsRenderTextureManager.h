@@ -6,6 +6,7 @@
 
 class AssetsRenderTextureList;
 class AssetsRenderTextureAdder;
+class AssetsPlacement;
 
 //メッシュ描画テクスチャ関連総管理クラス
 class AssetsRenderTextureManager {
@@ -25,4 +26,5 @@ private:
 private:
     std::unique_ptr<AssetsRenderTextureList> mTextureList;
     std::unique_ptr<AssetsRenderTextureAdder> mTextureAdder;
+    std::unique_ptr<AssetsPlacement> mPlanement;
 };

@@ -1,23 +1,20 @@
 ﻿#pragma once
 
-#include "IAssetsRenderTextureList.h"
+#include "IAddAssets.h"
+#include "IAssetsRenderTexturesGetter.h"
 #include "../../Math/Math.h"
 #include <rapidjson/document.h>
 #include <list>
 #include <memory>
 #include <string>
 
-class MeshRenderOnTexture;
-
 //メッシュを描画したテクスチャ管理クラス
-class AssetsRenderTextureList : public IAssetsRenderTextureList {
-    using MeshRenderOnTexturePtr = std::shared_ptr<MeshRenderOnTexture>;
-    using MeshRenderOnTexturePtrList = std::list<MeshRenderOnTexturePtr>;
-
+class AssetsRenderTextureList : public IAddAssets, public IAssetsRenderTexturesGetter {
 public:
     AssetsRenderTextureList();
     ~AssetsRenderTextureList();
     virtual void add(const std::string& fileName, const std::string& directoryPath) override;
+    virtual const MeshRenderOnTexturePtrList& getTextures() const override;
     void loadProperties(const rapidjson::Value& inObj);
     void update();
     //メッシュをテクスチャに描画する

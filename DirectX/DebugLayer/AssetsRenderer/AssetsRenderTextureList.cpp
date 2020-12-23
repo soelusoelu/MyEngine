@@ -29,7 +29,11 @@ void AssetsRenderTextureList::add(const std::string& fileName, const std::string
     mNonDrawTextures.emplace_back(newTex);
 }
 
-void AssetsRenderTextureList::loadProperties(const rapidjson::Value & inObj) {
+const MeshRenderOnTexturePtrList& AssetsRenderTextureList::getTextures() const {
+    return mTextures;
+}
+
+void AssetsRenderTextureList::loadProperties(const rapidjson::Value& inObj) {
     const auto& artlObj = inObj["assetsRenderTextureList"];
     if (artlObj.IsObject()) {
         JsonHelper::getInt(artlObj, "textureSize", &mTextureSize);

@@ -24,7 +24,7 @@ MeshRenderOnTexture::~MeshRenderOnTexture() = default;
 
 void MeshRenderOnTexture::drawMeshOnTexture(const Matrix4& viewProj) const {
     //レンダーテクスチャへの書き込み前処理
-    mRenderTexture->drawBegin();
+    mRenderTexture->drawBegin(0.1f, 0.1f, 0.1f);
 
     mMeshShader->setShaderInfo();
 
@@ -52,4 +52,8 @@ void MeshRenderOnTexture::draw(const Matrix4& proj) const {
 void MeshRenderOnTexture::setPositionForTexture(const Vector2& pos) {
     mSprite->transform().setPosition(pos);
     mSprite->computeWorldTransform();
+}
+
+const Sprite& MeshRenderOnTexture::getSprite() const {
+    return *mSprite;
 }

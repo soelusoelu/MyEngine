@@ -7,7 +7,7 @@
 
 AssetsRenderTextureAdder::AssetsRenderTextureAdder()
     : mButton(nullptr)
-    , mTextureList(nullptr)
+    , mAssetsAdder(nullptr)
     , mRenderPosition()
 {
 }
@@ -22,8 +22,8 @@ void AssetsRenderTextureAdder::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
-void AssetsRenderTextureAdder::initialize(IAssetsRenderTextureList* textureList) {
-    mTextureList = textureList;
+void AssetsRenderTextureAdder::initialize(IAddAssets* adder) {
+    mAssetsAdder = adder;
     mButton = std::make_unique<SpriteButton>([&] { onClickButton(); }, mSpriteFilePath, mRenderPosition);
 }
 
@@ -41,6 +41,6 @@ void AssetsRenderTextureAdder::onClickButton() {
         const auto& assetsDir = FileUtil::getAssetsFromAbsolutePath(outFilePath);
         //抜き出したアセットディレクトリからファイル名を抜いたディレクトリパスを取得する
         const auto& directoryPath = FileUtil::getDirectryFromFilePath(assetsDir);
-        mTextureList->add(outFileName, directoryPath);
+        mAssetsAdder->add(outFileName, directoryPath);
     }
 }

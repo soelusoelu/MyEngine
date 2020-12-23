@@ -1,10 +1,12 @@
 ﻿#include "AssetsRenderTextureManager.h"
+#include "AssetsPlacement.h"
 #include "AssetsRenderTextureAdder.h"
 #include "AssetsRenderTextureList.h"
 
 AssetsRenderTextureManager::AssetsRenderTextureManager()
     : mTextureList(std::make_unique<AssetsRenderTextureList>())
     , mTextureAdder(std::make_unique<AssetsRenderTextureAdder>())
+    , mPlanement(std::make_unique<AssetsPlacement>())
 {
 }
 
@@ -17,11 +19,13 @@ void AssetsRenderTextureManager::loadProperties(const rapidjson::Value& inObj) {
 
 void AssetsRenderTextureManager::initialize() {
     mTextureAdder->initialize(mTextureList.get());
+    mPlanement->initialize(mTextureList.get());
 }
 
 void AssetsRenderTextureManager::update() {
     mTextureList->update();
     mTextureAdder->update();
+    mPlanement->update();
 }
 
 void AssetsRenderTextureManager::drawMeshes() {

@@ -259,6 +259,8 @@
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureList.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureAdder.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsPlacement.cpp" />
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -560,7 +562,10 @@
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureList.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureAdder.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.h" />
-    <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTextureList.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsPlacement.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\IAddAssets.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTexturesGetter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
@@ -608,5 +613,6 @@
     <None Include="Assets\Data\ClearToStageSelect.json" />
     <None Include="Assets\Data\Ground1.json" />
     <None Include="Shader\MaterialHeader.hlsli" />
+    <None Include="Assets\Data\Plane_map.json" />
   </ItemGroup>
 </Project>
