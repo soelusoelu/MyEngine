@@ -261,6 +261,7 @@
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsPlacement.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.cpp" />
+    <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -566,6 +567,7 @@
     <ClInclude Include="DebugLayer\AssetsRenderer\IAddAssets.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTexturesGetter.h" />
+    <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

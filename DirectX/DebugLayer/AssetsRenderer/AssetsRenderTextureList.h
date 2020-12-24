@@ -14,6 +14,7 @@ class AssetsRenderTextureList : public IAddAssets, public IAssetsRenderTexturesG
 public:
     AssetsRenderTextureList();
     ~AssetsRenderTextureList();
+    virtual void add(const std::string& filePath) override;
     virtual void add(const std::string& fileName, const std::string& directoryPath) override;
     virtual const MeshRenderOnTexturePtrList& getTextures() const override;
     void initialize();

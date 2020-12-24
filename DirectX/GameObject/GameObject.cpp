@@ -78,8 +78,10 @@ GameObjectManager& GameObject::getGameObjectManager() {
 
 std::shared_ptr<GameObject> GameObject::create(const std::string& name, const std::string& tag) {
     auto obj = std::make_shared<GameObject>();
-    //名前とタグをそれぞれ設定
+    //名前を設定
     obj->mName = name;
+    mGameObjectManager->setNameNumber(obj->mName);
+    //タグを設定
     obj->mTag = tag;
     //初期化
     obj->initialize();

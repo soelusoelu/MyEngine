@@ -18,18 +18,20 @@ AssetsRenderTextureList::AssetsRenderTextureList()
 
 AssetsRenderTextureList::~AssetsRenderTextureList() = default;
 
-void AssetsRenderTextureList::add(const std::string& fileName, const std::string& directoryPath) {
-    const auto& filePath = directoryPath + fileName;
-
+void AssetsRenderTextureList::add(const std::string& filePath) {
     //パスが読み込み済みなら終了
     if (loadedFilePath(filePath)) {
         return;
     }
 
     //テクスチャを追加
-    createTexture(fileName, directoryPath);
+    createTexture(filePath);
     //パスを追加
     mTexturesFilePath.emplace(filePath);
+}
+
+void AssetsRenderTextureList::add(const std::string& fileName, const std::string& directoryPath) {
+    add(directoryPath + fileName);
 }
 
 const MeshRenderOnTexturePtrList& AssetsRenderTextureList::getTextures() const {
@@ -89,7 +91,11 @@ void AssetsRenderTextureList::drawTexture(const Matrix4& proj) const {
 }
 
 void AssetsRenderTextureList::createTexture(const std::string& fileName, const std::string& directoryPath) {
-    const auto& newTex = std::make_shared<MeshRenderOnTexture>(fileName, directoryPath, mTextureSize, mTextureSize);
+    createTexture(directoryPath + fileName);
+}
+
+void AssetsRenderTextureList::createTexture(const std::string& filePath) {
+    const auto& newTex = std::make_shared<MeshRenderOnTexture>(filePath, mTextureSize, mTextureSize);
 
     //テクスチャの位置調整
     const auto TEXTURE_COUNT = mTextures.size() + mNonDrawTextures.size();
@@ -100,12 +106,6 @@ void AssetsRenderTextureList::createTexture(const std::string& fileName, const s
 
     //テクスチャを追加
     mNonDrawTextures.emplace_back(newTex);
-}
-
-void AssetsRenderTextureList::createTexture(const std::string& filePath) {
-    const auto& fileName = FileUtil::getFileNameFromDirectry(filePath);
-    const auto& directoryPath = FileUtil::getDirectryFromFilePath(filePath);
-    createTexture(fileName, directoryPath);
 }
 
 bool AssetsRenderTextureList::loadedFilePath(const std::string& filePath) const {

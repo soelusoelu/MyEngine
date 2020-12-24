@@ -12,6 +12,7 @@ class Shader;
 //メッシュをテクスチャ上に描画する
 class MeshRenderOnTexture {
 public:
+    MeshRenderOnTexture(const std::string& filePath, int width, int height);
     MeshRenderOnTexture(const std::string& fileName, const std::string& directoryPath, int width, int height);
     ~MeshRenderOnTexture();
     //メッシュをテクスチャ上に描画する
@@ -22,6 +23,8 @@ public:
     void setPositionForTexture(const Vector2& pos);
     //スプライトをconst参照で取得する
     const Sprite& getSprite() const;
+    //ファイルパスを取得する
+    const std::string& getFilePath() const;
 
 private:
     MeshRenderOnTexture(const MeshRenderOnTexture&) = delete;
@@ -32,4 +35,5 @@ private:
     std::unique_ptr<Sprite> mSprite;
     std::shared_ptr<Mesh> mMesh;
     std::shared_ptr<Shader> mMeshShader;
+    std::string mFilePath;
 };

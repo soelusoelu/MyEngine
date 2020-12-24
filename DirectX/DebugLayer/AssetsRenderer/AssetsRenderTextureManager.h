@@ -8,6 +8,7 @@ class AssetsRenderTextureList;
 class AssetsRenderTextureAdder;
 class AssetsPlacement;
 
+
 //メッシュ描画テクスチャ関連総管理クラス
 class AssetsRenderTextureManager {
 public:

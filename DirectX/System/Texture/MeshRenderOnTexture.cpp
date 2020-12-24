@@ -10,14 +10,20 @@
 #include "../../Sprite/Sprite.h"
 #include "../../Transform/Transform2D.h"
 
-MeshRenderOnTexture::MeshRenderOnTexture(const std::string& fileName, const std::string& directoryPath, int width, int height)
+MeshRenderOnTexture::MeshRenderOnTexture(const std::string& filePath, int width, int height)
     : mRenderTexture(std::make_unique<RenderTexture>(width, height, Format::FORMAT_D16_UNORM, Format::FORMAT_RGBA8_UNORM))
     , mSprite(std::make_unique<Sprite>())
-    , mMesh(AssetsManager::instance().createMesh(fileName, directoryPath))
+    , mMesh(AssetsManager::instance().createMeshFromFilePath(filePath))
     , mMeshShader(AssetsManager::instance().createShader("SimpleMeshTexture.hlsl"))
+    , mFilePath(filePath)
 {
     const auto& tex = std::make_shared<Texture>(mRenderTexture->getShaderResourceView(), Vector2(width, height));
     mSprite->setTexture(tex);
+}
+
+MeshRenderOnTexture::MeshRenderOnTexture(const std::string& fileName, const std::string& directoryPath, int width, int height)
+    : MeshRenderOnTexture(directoryPath + fileName, width, height)
+{
 }
 
 MeshRenderOnTexture::~MeshRenderOnTexture() = default;
@@ -56,4 +62,8 @@ void MeshRenderOnTexture::setPositionForTexture(const Vector2& pos) {
 
 const Sprite& MeshRenderOnTexture::getSprite() const {
     return *mSprite;
+}
+
+const std::string& MeshRenderOnTexture::getFilePath() const {
+    return mFilePath;
 }

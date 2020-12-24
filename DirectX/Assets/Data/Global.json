@@ -52,6 +52,7 @@
             "texturesFilePath": [
                 "Assets\\Model\\Test\\test.obj",
                 "Assets\\Model\\Light\\DLight.obj",
+                "Assets\\Model\\Practice\\test.fbx",
                 "Assets\\Model\\Light\\PLight.obj",
                 "Assets\\Model\\Light\\SLight.obj"
             ]

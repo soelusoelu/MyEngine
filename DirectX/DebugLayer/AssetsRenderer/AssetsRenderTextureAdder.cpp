@@ -47,8 +47,6 @@ void AssetsRenderTextureAdder::onClickButton() {
     if (std::string outFilePath, outFileName; FileUtil::openFileDialog(outFilePath, outFileName)) {
         //絶対パスからアセットディレクトリ部分を抜き出す
         const auto& assetsDir = FileUtil::getAssetsFromAbsolutePath(outFilePath);
-        //抜き出したアセットディレクトリからファイル名を抜いたディレクトリパスを取得する
-        const auto& directoryPath = FileUtil::getDirectryFromFilePath(assetsDir);
-        mAssetsAdder->add(outFileName, directoryPath);
+        mAssetsAdder->add(assetsDir);
     }
 }

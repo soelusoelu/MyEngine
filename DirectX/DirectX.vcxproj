@@ -226,6 +226,7 @@
     <ClCompile Include="Component\Game\UI\Menu\MenuGameEnd.cpp" />
     <ClCompile Include="DirectX\DepthStencilView.cpp" />
     <ClCompile Include="Component\Engine\Scene\MapEditor.cpp" />
+    <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
@@ -476,6 +477,7 @@
     <ClInclude Include="DirectX\DepthStencilView.h" />
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
     <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
+    <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
     <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />
     <ClInclude Include="Mesh\Fbx\FbxUtility.h" />
