@@ -25,6 +25,8 @@ Game::Game() :
 }
 
 Game::~Game() {
+    LevelLoader::saveGlobal(this, GLOBAL_DATA_FILE_NAME);
+
     safeDelete(mSceneManager);
 
     //imguiの終了処理
@@ -66,6 +68,14 @@ void Game::loadProperties(const rapidjson::Value& inObj) {
     mSceneManager->loadProperties(inObj);
 }
 
+void Game::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    mWindow->saveProperties(alloc, inObj);
+    mFPSCounter->saveProperties(alloc, inObj);
+    DebugUtility::saveProperties(alloc, inObj);
+    InputUtility::saveProperties(alloc, inObj);
+    mSceneManager->saveProperties(alloc, inObj);
+}
+
 void Game::quit() {
     PostQuitMessage(0);
 }
@@ -79,7 +89,7 @@ void Game::initialize() {
     mSceneManager = new SceneManager();
 
     //ファイルから値を読み込む
-    LevelLoader::loadGlobal(this, "Global.json");
+    LevelLoader::loadGlobal(this, GLOBAL_DATA_FILE_NAME);
 
     mWindow->createWindow(mInstance);
     const auto& hwnd = mWindow->gethWnd();

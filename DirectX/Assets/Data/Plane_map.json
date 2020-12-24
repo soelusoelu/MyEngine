@@ -57,7 +57,7 @@
                     0.000011920928955078125,
                     99.99999237060547
                 ],
-                "isRenderCollision": false
+                "isRenderCollision": true
             }
         },
         {

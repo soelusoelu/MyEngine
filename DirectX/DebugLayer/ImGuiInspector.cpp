@@ -23,6 +23,13 @@ void ImGuiInspector::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
+void ImGuiInspector::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setFloat(alloc, &props, "inspectorPositionX", mInspectorPositionX);
+
+    inObj.AddMember("inspector", props, alloc);
+}
+
 void ImGuiInspector::setTarget(const std::shared_ptr<GameObject>& target) {
     mTarget = target;
 }

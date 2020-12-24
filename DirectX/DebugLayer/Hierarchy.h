@@ -18,6 +18,7 @@ public:
     Hierarchy(DrawString* drawString);
     ~Hierarchy();
     void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
     void update();
     void setGameObjectToButton(const GameObjectPtrList& gameObjects);

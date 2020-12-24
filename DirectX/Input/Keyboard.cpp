@@ -2,11 +2,13 @@
 #include "../System/GlobalFunction.h"
 #include "../Utility/LevelLoader.h"
 
-Keyboard::Keyboard() :
-    mKeyDevice(nullptr),
-    mCurrentKeys(),
-    mPreviousKeys(),
-    mEnterKey(KeyCode::None) {
+Keyboard::Keyboard()
+    : mKeyDevice(nullptr)
+    , mCurrentKeys()
+    , mPreviousKeys()
+    , mEnterKey(KeyCode::None)
+    , mEnterKeyStr()
+{
 }
 
 Keyboard::~Keyboard() {
@@ -69,10 +71,19 @@ bool Keyboard::initialize(const HWND& hWnd, IDirectInput8* directInput) {
 }
 
 void Keyboard::loadProperties(const rapidjson::Value& inObj) {
-    std::string src;
-    if (JsonHelper::getString(inObj, "enterKey", &src)) {
-        stringToKeyCode(src, &mEnterKey);
+    const auto& keyObj = inObj["keyboard"];
+    if (keyObj.IsObject()) {
+        if (JsonHelper::getString(keyObj, "enterKey", &mEnterKeyStr)) {
+            stringToKeyCode(mEnterKeyStr, &mEnterKey);
+        }
     }
+}
+
+void Keyboard::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setString(alloc, &props, "enterKey", mEnterKeyStr);
+
+    inObj.AddMember("keyboard", props, alloc);
 }
 
 void Keyboard::update() {

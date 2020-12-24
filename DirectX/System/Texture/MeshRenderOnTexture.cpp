@@ -24,7 +24,7 @@ MeshRenderOnTexture::~MeshRenderOnTexture() = default;
 
 void MeshRenderOnTexture::drawMeshOnTexture(const Matrix4& viewProj) const {
     //レンダーテクスチャへの書き込み前処理
-    mRenderTexture->drawBegin(0.1f, 0.1f, 0.1f);
+    mRenderTexture->drawBegin();
 
     mMeshShader->setShaderInfo();
 

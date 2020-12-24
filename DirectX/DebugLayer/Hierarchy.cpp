@@ -40,6 +40,17 @@ void Hierarchy::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
+void Hierarchy::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setVector2(alloc, &props, "scale", mScale);
+    JsonHelper::setInt(alloc, &props, "offsetCharCountX", mOffsetCharCountX);
+    JsonHelper::setInt(alloc, &props, "offsetCharCountY", mOffsetCharCountY);
+    JsonHelper::setFloat(alloc, &props, "lineSpace", mLineSpace);
+    JsonHelper::setFloat(alloc, &props, "nonActiveAlpha", mNonActiveAlpha);
+
+    inObj.AddMember("hierarchy", props, alloc);
+}
+
 void Hierarchy::initialize() {
     mCharWidth = DrawString::WIDTH * mScale.x;
     mCharHeight = DrawString::HEIGHT * mScale.y;

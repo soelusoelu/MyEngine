@@ -20,6 +20,13 @@ void FixedDebugInformation::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
+void FixedDebugInformation::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setVector2(alloc, &props, "scale", mScale);
+
+    inObj.AddMember("fixedDebugInfo", props, alloc);
+}
+
 void FixedDebugInformation::initialize() {
     mFPSPos = Vector2(Window::width() / 2.f, Window::height());
 }

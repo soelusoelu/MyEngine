@@ -13,6 +13,7 @@ public:
     Log();
     ~Log();
     void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
     void log(const std::string& message);
     void logError(const std::string& message);

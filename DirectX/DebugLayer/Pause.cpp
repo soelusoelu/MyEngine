@@ -21,6 +21,14 @@ void Pause::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
+void Pause::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setString(alloc, &props, "fileName", mFileName);
+    JsonHelper::setVector2(alloc, &props, "offset", mOffset);
+
+    inObj.AddMember("pause", props, alloc);
+}
+
 void Pause::initialize() {
     auto pos = mOffset;
     pos.x += Window::width();

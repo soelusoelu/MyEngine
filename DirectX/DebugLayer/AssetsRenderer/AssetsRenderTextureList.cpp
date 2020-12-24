@@ -1,6 +1,7 @@
 ﻿#include "AssetsRenderTextureList.h"
 #include "../../System/Window.h"
 #include "../../System/Texture/MeshRenderOnTexture.h"
+#include "../../Utility/FileUtil.h"
 #include "../../Utility/LevelLoader.h"
 #include <algorithm>
 #include <iterator>
@@ -18,19 +19,30 @@ AssetsRenderTextureList::AssetsRenderTextureList()
 AssetsRenderTextureList::~AssetsRenderTextureList() = default;
 
 void AssetsRenderTextureList::add(const std::string& fileName, const std::string& directoryPath) {
-    const auto& newTex = std::make_shared<MeshRenderOnTexture>(fileName, directoryPath, mTextureSize, mTextureSize);
-    //テクスチャの位置調整
-    const auto TEXTURE_COUNT = mTextures.size();
-    newTex->setPositionForTexture(Vector2(
-        (mTextureSize + mTextureDisplayInterval) * (TEXTURE_COUNT % mColumnDisplayLimit) + mTextureDisplayInterval,
-        (mTextureSize + mTextureDisplayInterval) * (TEXTURE_COUNT / mColumnDisplayLimit) + Window::height() + mTextureDisplayInterval
-    ));
+    const auto& filePath = directoryPath + fileName;
+
+    //パスが読み込み済みなら終了
+    if (loadedFilePath(filePath)) {
+        return;
+    }
+
     //テクスチャを追加
-    mNonDrawTextures.emplace_back(newTex);
+    createTexture(fileName, directoryPath);
+    //パスを追加
+    mTexturesFilePath.emplace(filePath);
 }
 
 const MeshRenderOnTexturePtrList& AssetsRenderTextureList::getTextures() const {
     return mTextures;
+}
+
+void AssetsRenderTextureList::initialize() {
+    //ファイルから読み込んだパスでテクスチャを作成する
+    for (const auto& path : mTexturesFilePath) {
+        createTexture(path);
+    }
+    //メッシュをテクスチャに描画する
+    drawMeshOnTexture();
 }
 
 void AssetsRenderTextureList::loadProperties(const rapidjson::Value& inObj) {
@@ -39,7 +51,17 @@ void AssetsRenderTextureList::loadProperties(const rapidjson::Value& inObj) {
         JsonHelper::getInt(artlObj, "textureSize", &mTextureSize);
         JsonHelper::getInt(artlObj, "textureDisplayInterval", &mTextureDisplayInterval);
         mColumnDisplayLimit = Window::width() / (mTextureSize + mTextureDisplayInterval);
+        JsonHelper::getStringArray(artlObj, "texturesFilePath", &mTexturesFilePath);
     }
+}
+
+void AssetsRenderTextureList::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setInt(alloc, &props, "textureSize", mTextureSize);
+    JsonHelper::setInt(alloc, &props, "textureDisplayInterval", mTextureDisplayInterval);
+    JsonHelper::setStringArray(alloc, &props, "texturesFilePath", mTexturesFilePath);
+
+    inObj.AddMember("assetsRenderTextureList", props, alloc);
 }
 
 void AssetsRenderTextureList::update() {
@@ -64,4 +86,28 @@ void AssetsRenderTextureList::drawTexture(const Matrix4& proj) const {
     for (const auto& tex : mTextures) {
         tex->draw(proj);
     }
+}
+
+void AssetsRenderTextureList::createTexture(const std::string& fileName, const std::string& directoryPath) {
+    const auto& newTex = std::make_shared<MeshRenderOnTexture>(fileName, directoryPath, mTextureSize, mTextureSize);
+
+    //テクスチャの位置調整
+    const auto TEXTURE_COUNT = mTextures.size() + mNonDrawTextures.size();
+    newTex->setPositionForTexture(Vector2(
+        (mTextureSize + mTextureDisplayInterval) * (TEXTURE_COUNT % mColumnDisplayLimit) + mTextureDisplayInterval,
+        (mTextureSize + mTextureDisplayInterval) * (TEXTURE_COUNT / mColumnDisplayLimit) + Window::height() + mTextureDisplayInterval
+    ));
+
+    //テクスチャを追加
+    mNonDrawTextures.emplace_back(newTex);
+}
+
+void AssetsRenderTextureList::createTexture(const std::string& filePath) {
+    const auto& fileName = FileUtil::getFileNameFromDirectry(filePath);
+    const auto& directoryPath = FileUtil::getDirectryFromFilePath(filePath);
+    createTexture(fileName, directoryPath);
+}
+
+bool AssetsRenderTextureList::loadedFilePath(const std::string& filePath) const {
+    return (mTexturesFilePath.find(filePath) != mTexturesFilePath.end());
 }

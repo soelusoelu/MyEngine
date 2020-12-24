@@ -22,6 +22,14 @@ void AssetsRenderTextureAdder::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
+void AssetsRenderTextureAdder::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setVector2(alloc, &props, "renderPosition", mRenderPosition);
+    JsonHelper::setString(alloc, &props, "spriteButtonFilePath", mSpriteFilePath);
+
+    inObj.AddMember("assetsRenderTextureAdder", props, alloc);
+}
+
 void AssetsRenderTextureAdder::initialize(IAddAssets* adder) {
     mAssetsAdder = adder;
     mButton = std::make_unique<SpriteButton>([&] { onClickButton(); }, mSpriteFilePath, mRenderPosition);

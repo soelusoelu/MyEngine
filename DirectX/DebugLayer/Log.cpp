@@ -17,6 +17,13 @@ void Log::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
+void Log::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setVector2(alloc, &props, "scale", mScale);
+
+    inObj.AddMember("log", props, alloc);
+}
+
 void Log::initialize() {
     mNumRowsToDisplay = (Window::debugHeight() - Window::height()) / (DrawString::HEIGHT * mScale.y);
 }

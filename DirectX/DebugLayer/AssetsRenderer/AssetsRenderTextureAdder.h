@@ -14,6 +14,7 @@ public:
     AssetsRenderTextureAdder();
     ~AssetsRenderTextureAdder();
     void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize(IAddAssets* adder);
     void update();
     void draw(const Matrix4& proj);

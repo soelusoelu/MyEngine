@@ -16,6 +16,7 @@ public:
     ImGuiInspector();
     ~ImGuiInspector();
     void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void setTarget(const std::shared_ptr<GameObject>& target);
     void drawInspect() const;
 

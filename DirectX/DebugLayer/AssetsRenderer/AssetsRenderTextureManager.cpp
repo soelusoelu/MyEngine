@@ -17,7 +17,13 @@ void AssetsRenderTextureManager::loadProperties(const rapidjson::Value& inObj) {
     mTextureAdder->loadProperties(inObj);
 }
 
+void AssetsRenderTextureManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    mTextureList->saveProperties(alloc, inObj);
+    mTextureAdder->saveProperties(alloc, inObj);
+}
+
 void AssetsRenderTextureManager::initialize() {
+    mTextureList->initialize();
     mTextureAdder->initialize(mTextureList.get());
     mPlanement->initialize(mTextureList.get());
 }

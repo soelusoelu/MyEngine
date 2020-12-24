@@ -14,8 +14,18 @@ FPSCounter::FPSCounter() :
 
 FPSCounter::~FPSCounter() = default;
 
-void FPSCounter::loadProperties(const rapidjson::Value & inObj) {
-    JsonHelper::getFloat(inObj, "fps", &mFixedFrame);
+void FPSCounter::loadProperties(const rapidjson::Value& inObj) {
+    const auto& fpsObj = inObj["fpsCounter"];
+    if (fpsObj.IsObject()) {
+        JsonHelper::getFloat(fpsObj, "fps", &mFixedFrame);
+    }
+}
+
+void FPSCounter::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setFloat(alloc, &props, "fps", mFixedFrame);
+
+    inObj.AddMember("fpsCounter", props, alloc);
 }
 
 void FPSCounter::fixedFrame() {

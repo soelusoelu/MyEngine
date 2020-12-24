@@ -13,6 +13,7 @@ public:
     FixedDebugInformation(DrawString* drawString);
     ~FixedDebugInformation();
     void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
     void draw() const;
     //フレームレート表示

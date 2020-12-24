@@ -37,6 +37,15 @@ void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
     mAssetsRenderTextureManager->loadProperties(inObj);
 }
 
+void DebugUtility::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
+    mLog->saveProperties(alloc, inObj);
+    mFixedDebugInfo->saveProperties(alloc, inObj);
+    mHierarchy->saveProperties(alloc, inObj);
+    mInspector->saveProperties(alloc, inObj);
+    mPause->saveProperties(alloc, inObj);
+    mAssetsRenderTextureManager->saveProperties(alloc, inObj);
+}
+
 void DebugUtility::initialize() {
     mDrawString->initialize();
     mLog->initialize();

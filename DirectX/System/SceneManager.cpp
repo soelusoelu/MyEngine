@@ -44,15 +44,24 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getString(inObj, "beginScene", &mBeginScene);
+    const auto& sceneObj = inObj["sceneManager"];
+    if (sceneObj.IsObject()) {
+        JsonHelper::getString(sceneObj, "beginScene", &mBeginScene);
+        JsonHelper::getStringArray(sceneObj, "removeExclusionTag", &mRemoveExclusionTags);
+    }
+
     mLightManager->loadProperties(inObj);
     mTextDrawer->loadProperties(inObj);
+}
 
-    std::vector<std::string> tags;
-    JsonHelper::getStringArray(inObj, "removeExclusionTag", &tags);
-    for (const auto& tag : tags) {
-        mRemoveExclusionTags.emplace(tag);
-    }
+void SceneManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setString(alloc, &props, "beginScene", mBeginScene);
+    JsonHelper::setStringArray(alloc, &props, "removeExclusionTag", mRemoveExclusionTags);
+    inObj.AddMember("sceneManager", props, alloc);
+
+    mLightManager->saveProperties(alloc, inObj);
+    mTextDrawer->saveProperties(alloc, inObj);
 }
 
 void SceneManager::initialize() {

@@ -25,6 +25,7 @@ class DebugUtility {
 public:
     static void create();
     static void loadProperties(const rapidjson::Value& inObj);
+    static void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
     static void initialize();
     static void finalize();
     static void update();
