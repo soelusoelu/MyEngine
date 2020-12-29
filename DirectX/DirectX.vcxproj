@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureDeleter.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsPlacement.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.cpp" />
@@ -408,6 +409,7 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureDeleter.h" />
     <ClInclude Include="Collision\RaycastHit.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsPlacement.h" />
@@ -452,7 +454,9 @@
     <ClInclude Include="Component\Engine\Mesh\IDrawBefore.h" />
     <ClInclude Include="Component\Game\UI\Menu\IMenuButton.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\IAddAssets.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTextureDeleter.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTexturesGetter.h" />
+    <ClInclude Include="DebugLayer\AssetsRenderer\ICurrentSelectTextureGetter.h" />
     <ClInclude Include="DebugLayer\ImGuiInspector.h" />
     <ClInclude Include="DebugLayer\ImGuiWrapper.h" />
     <ClInclude Include="Component\Engine\Other\GameObjectSaveAndLoader.h" />

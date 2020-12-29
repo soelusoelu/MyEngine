@@ -34,7 +34,23 @@ void AssetsRenderTextureList::add(const std::string& fileName, const std::string
     add(directoryPath + fileName);
 }
 
-const MeshRenderOnTexturePtrList& AssetsRenderTextureList::getTextures() const {
+void AssetsRenderTextureList::deleteTexture(const std::string& filePath) {
+    auto itr = mTextures.begin();
+    while (itr != mTextures.end()) {
+        if (filePath == (*itr)->getFilePath()) {
+            itr = mTextures.erase(itr);
+            mTexturesFilePath.erase(filePath);
+            break;
+        } else {
+            ++itr;
+        }
+    }
+
+    //テクスチャを並び替える
+    rearrangeTextures();
+}
+
+const MeshRenderOnTexturePtrArray& AssetsRenderTextureList::getTextures() const {
     return mTextures;
 }
 
@@ -98,14 +114,23 @@ void AssetsRenderTextureList::createTexture(const std::string& filePath) {
     const auto& newTex = std::make_shared<MeshRenderOnTexture>(filePath, mTextureSize, mTextureSize);
 
     //テクスチャの位置調整
-    const auto TEXTURE_COUNT = mTextures.size() + mNonDrawTextures.size();
-    newTex->setPositionForTexture(Vector2(
-        (mTextureSize + mTextureDisplayInterval) * (TEXTURE_COUNT % mColumnDisplayLimit) + mTextureDisplayInterval,
-        (mTextureSize + mTextureDisplayInterval) * (TEXTURE_COUNT / mColumnDisplayLimit) + Window::height() + mTextureDisplayInterval
-    ));
+    setTexturePosition(*newTex, mTextures.size() + mNonDrawTextures.size());
 
     //テクスチャを追加
     mNonDrawTextures.emplace_back(newTex);
+}
+
+void AssetsRenderTextureList::rearrangeTextures() {
+    for (size_t i = 0; i < mTextures.size(); ++i) {
+        setTexturePosition(*mTextures[i], i);
+    }
+}
+
+void AssetsRenderTextureList::setTexturePosition(MeshRenderOnTexture& target, int textureNo) {
+    target.setPositionForTexture(Vector2(
+        (mTextureSize + mTextureDisplayInterval) * (textureNo % mColumnDisplayLimit) + mTextureDisplayInterval,
+        (mTextureSize + mTextureDisplayInterval) * (textureNo / mColumnDisplayLimit) + Window::height() + mTextureDisplayInterval
+    ));
 }
 
 bool AssetsRenderTextureList::loadedFilePath(const std::string& filePath) const {

@@ -1,5 +1,4 @@
 ﻿#include "AssetsPlacement.h"
-#include "AssetsTexturesSelector.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/Camera.h"
 #include "../../Component/Engine/Mesh/MeshComponent.h"
@@ -13,17 +12,16 @@
 #include "../../Utility/FileUtil.h"
 
 AssetsPlacement::AssetsPlacement()
-    : mCamera(nullptr)
+    : mTextureGetter(nullptr)
+    , mCamera(nullptr)
     , mMeshesGetter(nullptr)
-    , mSelector(std::make_unique<AssetsTexturesSelector>())
-    , mCurrentSelectTexture(nullptr)
 {
 }
 
 AssetsPlacement::~AssetsPlacement() = default;
 
-void AssetsPlacement::initialize(const IAssetsRenderTexturesGetter* getter) {
-    mSelector->initialize(getter);
+void AssetsPlacement::initialize(const ICurrentSelectTextureGetter* getter) {
+    mTextureGetter = getter;
 }
 
 void AssetsPlacement::afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter) {
@@ -32,7 +30,6 @@ void AssetsPlacement::afterInitialize(const std::shared_ptr<Camera>& camera, con
 }
 
 void AssetsPlacement::update() {
-    mSelector->selectTexture(mCurrentSelectTexture);
     placeAsset();
 }
 
@@ -41,7 +38,7 @@ void AssetsPlacement::placeAsset() {
         return;
     }
 
-    const auto& filePath = mCurrentSelectTexture->getFilePath();
+    const auto& filePath = mTextureGetter->getCurrentSelectTexture().getFilePath();
     //ファイルパスからファイル名を抜き出す
     const auto& fileName = FileUtil::getFileNameFromDirectry(filePath);
     //ファイル名から拡張子を取り出す
@@ -72,7 +69,7 @@ void AssetsPlacement::decideAssetPlacePosition(GameObject& asset) const {
 
 bool AssetsPlacement::placeConditions() const {
     //テクスチャが選択されていなければ終了
-    if (!mCurrentSelectTexture) {
+    if (!mTextureGetter->selectedTexture()) {
         return false;
     }
 

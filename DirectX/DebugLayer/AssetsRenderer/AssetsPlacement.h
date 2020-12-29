@@ -1,21 +1,19 @@
 ﻿#pragma once
 
-#include "IAssetsRenderTexturesGetter.h"
+#include "ICurrentSelectTextureGetter.h"
 #include "../../Math/Math.h"
 #include "../../Mesh/IMeshesGetter.h"
 #include <memory>
 
 class Camera;
 class GameObject;
-class AssetsTexturesSelector;
-class MeshRenderOnTexture;
 
 //ゲーム画面にアセットを配置するクラス
 class AssetsPlacement {
 public:
     AssetsPlacement();
     ~AssetsPlacement();
-    void initialize(const IAssetsRenderTexturesGetter* getter);
+    void initialize(const ICurrentSelectTextureGetter* getter);
     void afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter);
     void update();
 
@@ -31,8 +29,7 @@ private:
     bool placeConditions() const;
 
 private:
+    const ICurrentSelectTextureGetter* mTextureGetter;
     std::shared_ptr<Camera> mCamera;
     const IMeshesGetter* mMeshesGetter;
-    std::unique_ptr<AssetsTexturesSelector> mSelector;
-    std::shared_ptr<MeshRenderOnTexture> mCurrentSelectTexture;
 };

@@ -23,9 +23,9 @@ bool AssetsTexturesSelector::selectTexture(MeshRenderOnTexturePtr& out) {
     }
 
     //全テクスチャからマウス座標が含まれているのを探す
-    const auto& list = mTexturesGetter->getTextures();
+    const auto& textures = mTexturesGetter->getTextures();
     const auto& mousePos = Input::mouse().getMousePosition();
-    for (const auto& tex : list) {
+    for (const auto& tex : textures) {
         if (SpriteUtility::containsDebug(tex->getSprite(), mousePos)) {
             out = tex;
             return true;

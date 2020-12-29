@@ -1,16 +1,29 @@
 ﻿#include "AssetsRenderTextureManager.h"
 #include "AssetsPlacement.h"
 #include "AssetsRenderTextureAdder.h"
+#include "AssetsRenderTextureDeleter.h"
 #include "AssetsRenderTextureList.h"
+#include "AssetsTexturesSelector.h"
 
 AssetsRenderTextureManager::AssetsRenderTextureManager()
     : mTextureList(std::make_unique<AssetsRenderTextureList>())
     , mTextureAdder(std::make_unique<AssetsRenderTextureAdder>())
+    , mDeleter(std::make_unique<AssetsRenderTextureDeleter>())
+    , mSelector(std::make_unique<AssetsTexturesSelector>())
     , mPlacement(std::make_unique<AssetsPlacement>())
+    , mCurrentSelectTexture(nullptr)
 {
 }
 
 AssetsRenderTextureManager::~AssetsRenderTextureManager() = default;
+
+const MeshRenderOnTexture& AssetsRenderTextureManager::getCurrentSelectTexture() const {
+    return *mCurrentSelectTexture;
+}
+
+bool AssetsRenderTextureManager::selectedTexture() const {
+    return (mCurrentSelectTexture) ? true : false;
+}
 
 void AssetsRenderTextureManager::loadProperties(const rapidjson::Value& inObj) {
     mTextureList->loadProperties(inObj);
@@ -25,12 +38,16 @@ void AssetsRenderTextureManager::saveProperties(rapidjson::Document::AllocatorTy
 void AssetsRenderTextureManager::initialize() {
     mTextureList->initialize();
     mTextureAdder->initialize(mTextureList.get());
-    mPlacement->initialize(mTextureList.get());
+    mDeleter->initialize(mTextureList.get(), this);
+    mSelector->initialize(mTextureList.get());
+    mPlacement->initialize(this);
 }
 
 void AssetsRenderTextureManager::update() {
+    mSelector->selectTexture(mCurrentSelectTexture);
     mTextureList->update();
     mTextureAdder->update();
+    mDeleter->update();
     mPlacement->update();
 }
 

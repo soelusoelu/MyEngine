@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "IAddAssets.h"
+#include "IAssetsRenderTextureDeleter.h"
 #include "IAssetsRenderTexturesGetter.h"
 #include "../../Math/Math.h"
 #include <rapidjson/document.h>
@@ -10,13 +11,14 @@
 #include <unordered_set>
 
 //メッシュを描画したテクスチャ管理クラス
-class AssetsRenderTextureList : public IAddAssets, public IAssetsRenderTexturesGetter {
+class AssetsRenderTextureList : public IAddAssets, public IAssetsRenderTextureDeleter, public IAssetsRenderTexturesGetter {
 public:
     AssetsRenderTextureList();
     ~AssetsRenderTextureList();
     virtual void add(const std::string& filePath) override;
     virtual void add(const std::string& fileName, const std::string& directoryPath) override;
-    virtual const MeshRenderOnTexturePtrList& getTextures() const override;
+    virtual void deleteTexture(const std::string& filePath) override;
+    virtual const MeshRenderOnTexturePtrArray& getTextures() const override;
     void initialize();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
@@ -33,12 +35,16 @@ private:
     //テクスチャを作成し格納する
     void createTexture(const std::string& fileName, const std::string& directoryPath);
     void createTexture(const std::string& filePath);
+    //テクスチャを並び替える
+    void rearrangeTextures();
+    //テクスチャ位置を設定する
+    void setTexturePosition(MeshRenderOnTexture& target, int textureNo);
     //ファイルパスが読み込み済みか
     bool loadedFilePath(const std::string& filePath) const;
 
 private:
-    MeshRenderOnTexturePtrList mTextures;
-    MeshRenderOnTexturePtrList mNonDrawTextures;
+    MeshRenderOnTexturePtrArray mTextures;
+    MeshRenderOnTexturePtrArray mNonDrawTextures;
     std::unordered_set<std::string> mTexturesFilePath;
     Matrix4 mViewProj;
 
