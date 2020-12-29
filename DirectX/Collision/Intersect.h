@@ -8,6 +8,7 @@ struct Circle;
 struct Sphere;
 struct Triangle;
 struct Ray;
+struct RaycastHit;
 class Transform3D;
 class IMesh;
 
@@ -37,6 +38,6 @@ bool intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& intersectPoint)
 
 //メッシュとレイの衝突判定を行う
 //めちゃめちゃ重い
-bool intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform, Vector3* intersectPoint = nullptr, Triangle* intersectPolygon = nullptr);
-bool intersectRayMeshes(const Ray& ray, const IMeshesGetter& meshesGetter, Vector3* intersectPoint = nullptr, Triangle* intersectPolygon = nullptr);
+bool intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform, RaycastHit* raycastHit = nullptr);
+bool intersectRayMeshes(const Ray& ray, const IMeshesGetter& meshesGetter, RaycastHit* raycastHit = nullptr);
 };

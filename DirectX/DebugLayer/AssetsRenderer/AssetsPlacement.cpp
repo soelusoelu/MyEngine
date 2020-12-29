@@ -57,13 +57,11 @@ void AssetsPlacement::decideAssetPlacePosition(GameObject& asset) const {
     const auto& meshes = mMeshesGetter->getMeshes();
     const auto& ray = mCamera->screenToRay(Input::mouse().getMousePosition());
     //すべてのメッシュトレイの衝突判定
-    Vector3 intersectPos;
-    Triangle intersectPoly;
-    if (Intersect::intersectRayMeshes(ray, *mMeshesGetter, &intersectPos, &intersectPoly)) {
+    if (RaycastHit raycastHit; Intersect::intersectRayMeshes(ray, *mMeshesGetter, &raycastHit)) {
         //衝突した位置に移動
-        asset.transform().setPosition(intersectPos);
+        asset.transform().setPosition(raycastHit.point);
         //法線から角度を計算する
-        const auto& rot = Vector3::cross(Vector3::up, intersectPoly.normal()) * 90.f;
+        const auto& rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;
         asset.transform().setRotation(rot);
         return;
     }

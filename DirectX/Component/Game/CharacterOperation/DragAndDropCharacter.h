@@ -27,7 +27,7 @@ private:
     DragAndDropCharacter& operator=(const DragAndDropCharacter&) = delete;
 
     //すべての地形メッシュとレイの衝突判定を行う
-    bool intersectRayGroundMeshes(const Ray& ray, Vector3& intersectPoint, Triangle& intersectPolygon) const;
+    bool intersectRayGroundMeshes(const Ray& ray, RaycastHit& raycastHit) const;
     //衝突した地形のポリゴンと法線による判定を行う
     bool comparePolygonNormal(const Triangle& intersectPolygon) const;
     //キャラクターを移動させる

@@ -227,6 +227,7 @@
     <ClCompile Include="DirectX\DepthStencilView.cpp" />
     <ClCompile Include="Component\Engine\Scene\MapEditor.cpp" />
     <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
+    <ClCompile Include="Collision\IntersectHelper.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
@@ -407,6 +408,7 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision\RaycastHit.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsPlacement.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureManager.h" />
@@ -478,6 +480,7 @@
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
     <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
     <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
+    <ClInclude Include="Collision\IntersectHelper.h" />
     <ClInclude Include="Mesh\IMeshesGetter.h" />
     <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />

@@ -1,7 +1,9 @@
 ﻿#include "Intersect.h"
 #include "AABB.h"
 #include "Circle.h"
+#include "IntersectHelper.h"
 #include "Ray.h"
+#include "RaycastHit.h"
 #include "Sphere.h"
 #include "Square.h"
 #include "Triangle.h"
@@ -186,16 +188,9 @@ bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& inte
     return false;
 }
 
-bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform, Vector3* intersectPoint, Triangle* intersectPolygon) {
+bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transform3D& transform, RaycastHit* raycastHit) {
     //ワールド行列を先に取得しておく
     const auto& world = transform.getWorldTransform();
-
-    //衝突した点との最小距離、点
-    float minDistance = FLT_MAX;
-    Vector3 minPoint{};
-    Triangle minPoly{};
-    //一回でも衝突したか
-    bool isIntersect = false;
 
     //すべてのメッシュとレイによる判定を行う
     for (unsigned i = 0; i < mesh.getMeshCount(); ++i) {
@@ -206,77 +201,45 @@ bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transf
             //ワールド行列乗算済みポリゴンを取得する
             const auto& polygon = mesh.getPolygon(i, j, world);
 
-            //ポリゴンとレイの衝突判定
-            if (Vector3 interPoint{}; Intersect::intersectRayPolygon(ray, polygon, &interPoint)) {
-                float dist = (interPoint - ray.start).lengthSq();
-                //既存の距離より近いなら
-                if (dist < minDistance) {
-                    //最小記録を更新
-                    minDistance = dist;
-                    minPoint = interPoint;
-                    minPoly = polygon;
-                }
+            Vector3 interPoint{};
+            //ポリゴンとレイが衝突していないなら次へ
+            if (!Intersect::intersectRayPolygon(ray, polygon, &interPoint)) {
+                continue;
+            }
 
-                isIntersect = true;
+            if (raycastHit) {
+                //衝突情報を記録する
+                float dist = (interPoint - ray.start).lengthSq();
+                IntersectHelper::updateRaycastHit(*raycastHit, dist, interPoint, polygon);
+            } else {
+                //衝突情報を記録する必要がなければ即終了
+                return true;
             }
         }
     }
 
-    //一回でも衝突してたら最小距離の点を設定し終了
-    if (isIntersect) {
-        if (intersectPoint) {
-            *intersectPoint = minPoint;
-        }
-        if (intersectPolygon) {
-            *intersectPolygon = minPoly;
-        }
-    }
-
-    return isIntersect;
+    return (raycastHit) ? raycastHit->isHit : false;
 }
 
-bool Intersect::intersectRayMeshes(const Ray& ray, const IMeshesGetter& meshesGetter, Vector3* intersectPoint, Triangle* intersectPolygon) {
+bool Intersect::intersectRayMeshes(const Ray& ray, const IMeshesGetter& meshesGetter, RaycastHit* raycastHit) {
     const auto& meshes = meshesGetter.getMeshes();
-    //衝突した点との最小距離、点
-    float minDistance = FLT_MAX;
-    Vector3 minPoint{};
-    Triangle minPoly{};
-    //一回でも衝突したか
-    bool isIntersect = false;
-
     for (const auto& mesh : meshes) {
-        Vector3 interPoint{};
-        Triangle interPoly{};
-
-        if (intersectRayMesh(
+        if (RaycastHit hit{}; intersectRayMesh(
             ray,
             *mesh->getMeshComponent().getMesh(),
             mesh->transform(),
-            &interPoint,
-            &interPoly
+            &hit
         )) {
-            float dist = (interPoint - ray.start).lengthSq();
-            //既存の距離より近いなら
-            if (dist < minDistance) {
-                //最小記録を更新
-                minDistance = dist;
-                minPoint = interPoint;
-                minPoly = interPoly;
+            if (raycastHit) {
+                //衝突情報を記録する
+                float dist = (hit.point - ray.start).lengthSq();
+                IntersectHelper::updateRaycastHit(*raycastHit, hit);
+            } else {
+                //衝突情報を記録する必要がなければ即終了
+                return true;
             }
-
-            isIntersect = true;
         }
     }
 
-    //一回でも衝突してたら最小距離の点を設定し終了
-    if (isIntersect) {
-        if (intersectPoint) {
-            *intersectPoint = minPoint;
-        }
-        if (intersectPolygon) {
-            *intersectPolygon = minPoly;
-        }
-    }
-
-    return isIntersect;
+    return (raycastHit) ? raycastHit->isHit : false;
 }

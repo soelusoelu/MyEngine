@@ -39,33 +39,31 @@ void DragAndDropCharacter::dragMove(const CharacterCommonComponents& target) con
         return;
     }
 
-    //衝突点
-    Vector3 intersectPoint{};
-    //衝突ポリゴン
-    Triangle intersectPolygon{};
+    //衝突情報
+    RaycastHit raycastHit{};
 
     //地形とレイが衝突していなかったら終了
-    if (!intersectRayGroundMeshes(mCamera->screenToRay(mousePos), intersectPoint, intersectPolygon)) {
+    if (!intersectRayGroundMeshes(mCamera->screenToRay(mousePos), raycastHit)) {
         return;
     }
 
     //衝突したポリゴンの法線
-    if (!comparePolygonNormal(intersectPolygon)) {
+    if (!comparePolygonNormal(raycastHit.polygon)) {
         return;
     }
 
     //キャラクター移動処理
-    moveCharacter(target, intersectPoint);
+    moveCharacter(target, raycastHit.point);
 }
 
 void DragAndDropCharacter::setManager(const ICharacterManager* manager) {
     mManager = manager;
 }
 
-bool DragAndDropCharacter::intersectRayGroundMeshes(const Ray& ray, Vector3& intersectPoint, Triangle& intersectPolygon) const {
+bool DragAndDropCharacter::intersectRayGroundMeshes(const Ray& ray, RaycastHit& raycastHit) const {
     //地形メッシュとレイの衝突判定
     const auto map = mManager->getMap();
-    return Intersect::intersectRayMesh(ray, map->getMeshData(), map->getTransform(), &intersectPoint, &intersectPolygon);
+    return Intersect::intersectRayMesh(ray, map->getMeshData(), map->getTransform(), &raycastHit);
 }
 
 bool DragAndDropCharacter::comparePolygonNormal(const Triangle& intersectPolygon) const {
