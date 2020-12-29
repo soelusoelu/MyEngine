@@ -8,7 +8,6 @@ class AssetsRenderTextureList;
 class AssetsRenderTextureAdder;
 class AssetsPlacement;
 
-
 //メッシュ描画テクスチャ関連総管理クラス
 class AssetsRenderTextureManager {
 public:
@@ -20,6 +19,7 @@ public:
     void update();
     void drawMeshes();
     void drawTextures(const Matrix4& proj);
+    AssetsPlacement& getAssetsPlacement() const;
 
 private:
     AssetsRenderTextureManager(const AssetsRenderTextureManager&) = delete;
@@ -28,5 +28,5 @@ private:
 private:
     std::unique_ptr<AssetsRenderTextureList> mTextureList;
     std::unique_ptr<AssetsRenderTextureAdder> mTextureAdder;
-    std::unique_ptr<AssetsPlacement> mPlanement;
+    std::unique_ptr<AssetsPlacement> mPlacement;
 };

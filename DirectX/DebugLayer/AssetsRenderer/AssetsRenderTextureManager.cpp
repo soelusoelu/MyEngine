@@ -6,7 +6,7 @@
 AssetsRenderTextureManager::AssetsRenderTextureManager()
     : mTextureList(std::make_unique<AssetsRenderTextureList>())
     , mTextureAdder(std::make_unique<AssetsRenderTextureAdder>())
-    , mPlanement(std::make_unique<AssetsPlacement>())
+    , mPlacement(std::make_unique<AssetsPlacement>())
 {
 }
 
@@ -25,13 +25,13 @@ void AssetsRenderTextureManager::saveProperties(rapidjson::Document::AllocatorTy
 void AssetsRenderTextureManager::initialize() {
     mTextureList->initialize();
     mTextureAdder->initialize(mTextureList.get());
-    mPlanement->initialize(mTextureList.get());
+    mPlacement->initialize(mTextureList.get());
 }
 
 void AssetsRenderTextureManager::update() {
     mTextureList->update();
     mTextureAdder->update();
-    mPlanement->update();
+    mPlacement->update();
 }
 
 void AssetsRenderTextureManager::drawMeshes() {
@@ -41,4 +41,8 @@ void AssetsRenderTextureManager::drawMeshes() {
 void AssetsRenderTextureManager::drawTextures(const Matrix4& proj) {
     mTextureList->drawTexture(proj);
     mTextureAdder->draw(proj);
+}
+
+AssetsPlacement& AssetsRenderTextureManager::getAssetsPlacement() const {
+    return *mPlacement;
 }

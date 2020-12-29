@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IMeshesGetter.h"
 #include <list>
 #include <memory>
 
@@ -8,13 +9,11 @@ class ShadowMap;
 class Camera;
 class DirectionalLight;
 
-class MeshManager {
-    using MeshPtr = std::shared_ptr<MeshRenderer>;
-    using MeshPtrList = std::list<MeshPtr>;
-
+class MeshManager : public IMeshesGetter {
 public:
     MeshManager();
     ~MeshManager();
+    virtual const MeshPtrList& getMeshes() const override;
     void createShadowMap();
     void update();
     void draw(const Camera& camera, const DirectionalLight& dirLight) const;

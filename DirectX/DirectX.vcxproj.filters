@@ -568,6 +568,7 @@
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsTexturesSelector.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTexturesGetter.h" />
     <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
+    <ClInclude Include="Mesh\IMeshesGetter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

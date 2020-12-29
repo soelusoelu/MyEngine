@@ -478,6 +478,7 @@
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
     <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
     <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
+    <ClInclude Include="Mesh\IMeshesGetter.h" />
     <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />
     <ClInclude Include="Mesh\Fbx\FbxUtility.h" />

@@ -5,6 +5,8 @@
 #include "Sphere.h"
 #include "Square.h"
 #include "Triangle.h"
+#include "../Component/Engine/Mesh/MeshComponent.h"
+#include "../Component/Engine/Mesh/MeshRenderer.h"
 #include "../Mesh/IMesh.h"
 #include "../Transform/Transform3D.h"
 #include <algorithm>
@@ -127,28 +129,6 @@ bool Intersect::intersectRaySphere(const Ray& ray, const Sphere& sphere, Vector3
     return false;
 }
 
-bool Intersect::intersectRaySphere(const Ray& ray, const Sphere& sphere, int numDivision) {
-    Vector3 intersectPoint;
-
-    //分割数が0以下なら1回で終了
-    if (numDivision <= 0) {
-        return intersectRaySphere(ray, sphere, intersectPoint);
-    }
-
-    Ray r;
-    //レイを分割する
-    auto rayDiv = (ray.end - ray.start) / numDivision;
-    for (int i = 0; i < numDivision; ++i) {
-        r.start = ray.start + rayDiv * i;
-        r.end = r.start + rayDiv;
-        if (intersectRaySphere(r, sphere, intersectPoint)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 bool testSidePlane(float start, float end, float negd, std::vector<float>& out) {
     float denom = end - start;
     if (Math::nearZero(denom)) {
@@ -243,7 +223,53 @@ bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transf
     }
 
     //一回でも衝突してたら最小距離の点を設定し終了
-    if (!Math::equal(minDistance, FLT_MAX)) {
+    if (isIntersect) {
+        if (intersectPoint) {
+            *intersectPoint = minPoint;
+        }
+        if (intersectPolygon) {
+            *intersectPolygon = minPoly;
+        }
+    }
+
+    return isIntersect;
+}
+
+bool Intersect::intersectRayMeshes(const Ray& ray, const IMeshesGetter& meshesGetter, Vector3* intersectPoint, Triangle* intersectPolygon) {
+    const auto& meshes = meshesGetter.getMeshes();
+    //衝突した点との最小距離、点
+    float minDistance = FLT_MAX;
+    Vector3 minPoint{};
+    Triangle minPoly{};
+    //一回でも衝突したか
+    bool isIntersect = false;
+
+    for (const auto& mesh : meshes) {
+        Vector3 interPoint{};
+        Triangle interPoly{};
+
+        if (intersectRayMesh(
+            ray,
+            *mesh->getMeshComponent().getMesh(),
+            mesh->transform(),
+            &interPoint,
+            &interPoly
+        )) {
+            float dist = (interPoint - ray.start).lengthSq();
+            //既存の距離より近いなら
+            if (dist < minDistance) {
+                //最小記録を更新
+                minDistance = dist;
+                minPoint = interPoint;
+                minPoly = interPoly;
+            }
+
+            isIntersect = true;
+        }
+    }
+
+    //一回でも衝突してたら最小距離の点を設定し終了
+    if (isIntersect) {
         if (intersectPoint) {
             *intersectPoint = minPoint;
         }

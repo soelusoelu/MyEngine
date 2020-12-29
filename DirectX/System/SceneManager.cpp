@@ -10,6 +10,8 @@
 #include "../DebugLayer/LineRenderer/LineRenderer3D.h"
 #include "../DebugLayer/Pause.h"
 #include "../DebugLayer/PointRenderer.h"
+#include "../DebugLayer/AssetsRenderer/AssetsPlacement.h"
+#include "../DebugLayer/AssetsRenderer/AssetsRenderTextureManager.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
@@ -77,6 +79,8 @@ void SceneManager::initialize() {
     mMeshManager->createShadowMap();
 
     mLightManager->createDirectionalLight();
+
+    DebugUtility::assetsRenderTextureManager().getAssetsPlacement().afterInitialize(mCamera, mMeshManager.get());
 
     //初期シーンの設定
     createScene(mBeginScene);

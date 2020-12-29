@@ -98,7 +98,7 @@ float Camera::getFarClip() const {
     return mFarClip;
 }
 
-Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
+Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) const {
     //ビューポート、射影、ビュー、それぞれの逆行列を求める
     auto invView = Matrix4::inverse(mView);
     auto invProj = Matrix4::inverse(mProjection);
@@ -117,7 +117,7 @@ Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
     return Vector3::transformWithPerspDiv(Vector3(position, z), m);
 }
 
-Ray Camera::screenToRay(const Vector2& position, float z) {
+Ray Camera::screenToRay(const Vector2& position, float z) const {
     Ray ray;
     ray.start = getPosition();
     ray.end = screenToWorldPoint(position, z);

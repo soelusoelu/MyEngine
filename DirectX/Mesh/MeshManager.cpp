@@ -18,6 +18,10 @@ MeshManager::~MeshManager() {
     MeshRenderer::setMeshManager(nullptr);
 }
 
+const MeshPtrList& MeshManager::getMeshes() const {
+    return mShadowMeshes;
+}
+
 void MeshManager::createShadowMap() {
     auto sm = GameObjectCreater::create("ShadowMap");
     mShadowMap = sm->componentManager().getComponent<ShadowMap>();

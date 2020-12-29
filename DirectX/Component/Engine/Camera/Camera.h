@@ -43,10 +43,10 @@ public:
 
     //スクリーン座標をワールド座標に変換する
     //zが0のときカメラから最も近い点、1のとき最も遠い点を計算する z[0, 1]
-    Vector3 screenToWorldPoint(const Vector2& position, float z = 1.f);
+    Vector3 screenToWorldPoint(const Vector2& position, float z = 1.f) const;
     //カメラ位置からスクリーン座標からワールド座標に変換した点へのレイを取得する
     //zが0のときカメラから最も近い点、1のとき最も遠い点を計算する z[0, 1]
-    Ray screenToRay(const Vector2& position, float z = 1.f);
+    Ray screenToRay(const Vector2& position, float z = 1.f) const;
     //視錐台カリング
     //true : 視錐台の内側
     //false : 視錐台の外側
