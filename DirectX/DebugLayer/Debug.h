@@ -10,6 +10,8 @@ class Debug {
     Debug& operator=(const Debug&) = delete;
 
 public:
+    //messageを新規ウィンドウに表示
+    //重大なバグを表示する用
     static void windowMessage(const std::string& message);
     static void log(const std::string& message);
     static void logError(const std::string& message);

@@ -9,8 +9,7 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
-Hierarchy::Hierarchy(DrawString* drawString) :
-    mDrawString(drawString),
+Hierarchy::Hierarchy() :
     mNumRowsToDisplay(0),
     mLineSpace(0.f),
     mInspectorPositionX(0.f),
@@ -95,14 +94,14 @@ void Hierarchy::update() {
                 continue;
             }
             if (b.second) {
-                DebugUtility::inspector().setTarget(b.second);
+                DebugUtility::instance().inspector().setTarget(b.second);
                 break;
             }
         }
     }
 }
 
-void Hierarchy::drawGameObjects() const {
+void Hierarchy::drawGameObjects(DrawString& drawString) const {
     for (const auto& b : mButtons) {
         auto obj = b.second;
         //オブジェクトが登録されてなかったら終了
@@ -114,6 +113,6 @@ void Hierarchy::drawGameObjects() const {
         if (!obj->getActive()) {
             alpha = mNonActiveAlpha;
         }
-        mDrawString->drawString(obj->name(), b.first->getPosition(), mScale, ColorPalette::white, alpha);
+        drawString.drawString(obj->name(), b.first->getPosition(), mScale, ColorPalette::white, alpha);
     }
 }

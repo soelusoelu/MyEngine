@@ -24,17 +24,17 @@ public:
     //3Dポイント処理
     void renderPoint3D() const;
     //2Dライン処理
-    void renderLine2D(Matrix4* proj) const;
+    void renderLine2D(Matrix4& proj) const;
     //3Dライン処理
     void renderLine3D() const;
     //スプライト描画共通処理
     void renderSprite() const;
     //2Dスプライト処理
-    void renderSprite2D(Matrix4* proj) const;
+    void renderSprite2D(Matrix4& proj) const;
     //3Dスプライト処理
     void renderSprite3D() const;
     //デバッグ画面処理
-    void renderToDebug(Matrix4* proj) const;
+    void renderToDebug(Matrix4& proj) const;
     //ポイントライト処理
     void renderPointLight() const;
 

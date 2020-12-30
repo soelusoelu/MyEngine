@@ -23,7 +23,7 @@ void GameObjectManager::update() {
 
     remove();
 
-    DebugUtility::hierarchy().setGameObjectToButton(mGameObjects);
+    DebugUtility::instance().hierarchy().setGameObjectToButton(mGameObjects);
 }
 
 void GameObjectManager::add(const GameObjectPtr& add) {

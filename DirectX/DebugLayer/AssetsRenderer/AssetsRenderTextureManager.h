@@ -23,8 +23,8 @@ public:
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
     void update();
-    void drawMeshes();
-    void drawTextures(const Matrix4& proj);
+    void drawMeshes() const;
+    void drawTextures(const Matrix4& proj) const;
     AssetsPlacement& getAssetsPlacement() const;
 
 private:

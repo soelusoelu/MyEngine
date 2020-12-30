@@ -44,11 +44,11 @@ void Log::clear() {
     mLogs.clear();
 }
 
-void Log::drawLogs(DrawString* drawString) const {
+void Log::drawLogs(DrawString& drawString) const {
     const float height = DrawString::HEIGHT * mScale.y;
     auto pos = Vector2(0.f, Window::debugHeight() - height);
     for (const auto& log : mLogs) {
-        drawString->drawString(log.first, pos, mScale, log.second);
+        drawString.drawString(log.first, pos, mScale, log.second);
         pos.y -= height;
     }
 }

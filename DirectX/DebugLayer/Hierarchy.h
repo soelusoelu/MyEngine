@@ -15,7 +15,7 @@ class Hierarchy {
     using GameObjectPtrList = std::list<GameObjectPtr>;
 
 public:
-    Hierarchy(DrawString* drawString);
+    Hierarchy();
     ~Hierarchy();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
@@ -23,10 +23,9 @@ public:
     void update();
     void setGameObjectToButton(const GameObjectPtrList& gameObjects);
     //マネージャーに登録されてる全ゲームオブジェクトを表示
-    void drawGameObjects() const;
+    void drawGameObjects(DrawString& drawString) const;
 
 private:
-    DrawString* mDrawString;
     std::list<std::pair<std::unique_ptr<Button>, GameObjectPtr>> mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;

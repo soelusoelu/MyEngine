@@ -80,7 +80,7 @@ void SceneManager::initialize() {
 
     mLightManager->createDirectionalLight();
 
-    DebugUtility::assetsRenderTextureManager().getAssetsPlacement().afterInitialize(mCamera, mMeshManager.get());
+    DebugUtility::instance().assetsRenderTextureManager().getAssetsPlacement().afterInitialize(mCamera, mMeshManager.get());
 
     //初期シーンの設定
     createScene(mBeginScene);
@@ -88,18 +88,18 @@ void SceneManager::initialize() {
 
 void SceneManager::update() {
     //アップデートの最初で文字列削除
-    DebugUtility::drawStringClear();
+    DebugUtility::instance().drawStringClear();
 
     //ポーズ中はデバッグだけアップデートを行う
-    if (DebugUtility::pause().isPausing()) {
-        DebugUtility::update();
+    if (DebugUtility::instance().pause().isPausing()) {
+        DebugUtility::instance().update();
         return;
     }
 
     //描画情報を削除
-    DebugUtility::pointRenderer().clear();
-    DebugUtility::lineRenderer2D().clear();
-    DebugUtility::lineRenderer3D().clear();
+    DebugUtility::instance().pointRenderer().clear();
+    DebugUtility::instance().lineRenderer2D().clear();
+    DebugUtility::instance().lineRenderer3D().clear();
     //保有しているテキストを全削除
     mTextDrawer->clear();
     //全ゲームオブジェクトの更新
@@ -110,7 +110,7 @@ void SceneManager::update() {
     mMeshManager->update();
     mSpriteManager->update();
     //デバッグ
-    DebugUtility::update();
+    DebugUtility::instance().update();
 
     //シーン移行
     const auto& next = mCurrentScene->getNext();
@@ -145,7 +145,13 @@ void SceneManager::draw() const {
     mMeshManager->draw(*mCamera, mLightManager->getDirectionalLight());
 
 #ifdef _DEBUG
-    DebugUtility::draw3D();
+    DebugUtility::instance().draw3D();
+    //3Dポイント
+    mRenderer->renderPoint3D();
+    DebugUtility::instance().pointRenderer().draw(mCamera->getViewProjection());
+    //3Dライン
+    mRenderer->renderLine3D();
+    DebugUtility::instance().lineRenderer3D().draw(mCamera->getViewProjection());
 #endif // _DEBUG
 
     //スプライト描画準備
@@ -155,7 +161,7 @@ void SceneManager::draw() const {
     mSpriteManager->draw3Ds(mCamera->getView(), mCamera->getProjection());
     //2Dスプライト
     auto proj = Matrix4::identity;
-    mRenderer->renderSprite2D(&proj);
+    mRenderer->renderSprite2D(proj);
     mSpriteManager->drawComponents(proj);
 
     //テキスト一括描画
@@ -163,20 +169,14 @@ void SceneManager::draw() const {
 
 #ifdef _DEBUG
     //レンダリング領域をデバッグに変更
-    mRenderer->renderToDebug(&proj);
+    mRenderer->renderToDebug(proj);
     //デバッグ表示
-    DebugUtility::draw(proj);
-#endif // _DEBUG
+    DebugUtility::instance().draw(proj);
 
-    //3Dポイント
-    mRenderer->renderPoint3D();
-    DebugUtility::pointRenderer().draw(mCamera->getViewProjection());
-    //3Dライン
-    mRenderer->renderLine3D();
-    DebugUtility::lineRenderer3D().draw(mCamera->getViewProjection());
     //2Dライン
-    mRenderer->renderLine2D(&proj);
-    DebugUtility::lineRenderer2D().draw(proj);
+    mRenderer->renderLine2D(proj);
+    DebugUtility::instance().lineRenderer2D().draw(proj);
+#endif // _DEBUG
 }
 
 void SceneManager::change() {

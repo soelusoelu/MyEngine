@@ -2,25 +2,21 @@
 
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
-#include <list>
-#include <memory>
-#include <string>
 
 class DrawString;
 
 class FixedDebugInformation {
 public:
-    FixedDebugInformation(DrawString* drawString);
+    FixedDebugInformation();
     ~FixedDebugInformation();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
-    void draw() const;
+    void draw(DrawString& drawString) const;
     //フレームレート表示
     void drawFPS(float fps);
 
 private:
-    DrawString* mDrawString;
     //文字のスケール
     Vector2 mScale;
     //FPSを表示する位置 固定

@@ -61,5 +61,5 @@ void FPSCounter::drawFPS(float time) {
         mDrawUpdateTimer->reset();
         mCurrentFPS = 1000.f / time;
     }
-    DebugUtility::fixedDebugInfo()->drawFPS(mCurrentFPS);
+    DebugUtility::instance().fixedDebugInfo().drawFPS(mCurrentFPS);
 }

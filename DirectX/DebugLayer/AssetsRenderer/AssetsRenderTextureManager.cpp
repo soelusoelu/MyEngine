@@ -51,11 +51,11 @@ void AssetsRenderTextureManager::update() {
     mPlacement->update();
 }
 
-void AssetsRenderTextureManager::drawMeshes() {
+void AssetsRenderTextureManager::drawMeshes() const {
     mTextureList->drawMeshOnTexture();
 }
 
-void AssetsRenderTextureManager::drawTextures(const Matrix4& proj) {
+void AssetsRenderTextureManager::drawTextures(const Matrix4& proj) const {
     mTextureList->drawTexture(proj);
     mTextureAdder->draw(proj);
 }

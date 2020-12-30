@@ -11,20 +11,28 @@
 #include "LineRenderer/LineRenderer3D.h"
 #include "../Device/DrawString.h"
 #include "../System/GlobalFunction.h"
-#include "../System/SystemInclude.h"
 
-void DebugUtility::create() {
-    mDrawString = new DrawString();
-    mLog = new Log();
-    mFixedDebugInfo = new FixedDebugInformation(mDrawString);
-    mHierarchy = new Hierarchy(mDrawString);
-    //mInspector = new Inspector(mDrawString);
-    mInspector = new ImGuiInspector();
-    mPause = new Pause();
-    mPointRenderer = new PointRenderer();
-    mLineRenderer2D = new LineRenderer2D();
-    mLineRenderer3D = new LineRenderer3D();
-    mAssetsRenderTextureManager = new AssetsRenderTextureManager();
+DebugUtility::DebugUtility()
+    : mDrawString(std::make_unique<DrawString>())
+    , mLog(std::make_unique<Log>())
+    , mFixedDebugInfo(std::make_unique<FixedDebugInformation>())
+    , mHierarchy(std::make_unique<Hierarchy>())
+    , mInspector(std::make_unique<ImGuiInspector>())
+    , mPause(std::make_unique<Pause>())
+    , mPointRenderer(std::make_unique<PointRenderer>())
+    , mLineRenderer2D(std::make_unique<LineRenderer2D>())
+    , mLineRenderer3D(std::make_unique<LineRenderer3D>())
+    , mAssetsRenderTextureManager(std::make_unique<AssetsRenderTextureManager>())
+{
+}
+
+DebugUtility::~DebugUtility() = default;
+
+DebugUtility& DebugUtility::instance() {
+    if (!mInstance) {
+        mInstance = new DebugUtility();
+    }
+    return *mInstance;
 }
 
 void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
@@ -59,16 +67,7 @@ void DebugUtility::initialize() {
 }
 
 void DebugUtility::finalize() {
-    safeDelete(mAssetsRenderTextureManager);
-    safeDelete(mLineRenderer3D);
-    safeDelete(mLineRenderer2D);
-    safeDelete(mPointRenderer);
-    safeDelete(mPause);
-    safeDelete(mInspector);
-    safeDelete(mHierarchy);
-    safeDelete(mFixedDebugInfo);
-    safeDelete(mLog);
-    safeDelete(mDrawString);
+    safeDelete(mInstance);
 }
 
 void DebugUtility::update() {
@@ -77,21 +76,17 @@ void DebugUtility::update() {
     mAssetsRenderTextureManager->update();
 }
 
-void DebugUtility::windowMessage(const std::string& message) {
-    MessageBoxA(0, message.c_str(), 0, MB_OK);
-}
-
-void DebugUtility::draw(const Matrix4& proj) {
-    mLog->drawLogs(mDrawString);
-    mFixedDebugInfo->draw();
-    mHierarchy->drawGameObjects();
+void DebugUtility::draw(const Matrix4& proj) const {
+    mLog->drawLogs(*mDrawString);
+    mFixedDebugInfo->draw(*mDrawString);
+    mHierarchy->drawGameObjects(*mDrawString);
     mInspector->drawInspect();
     mPause->drawButton(proj);
     mDrawString->drawAll(proj);
     mAssetsRenderTextureManager->drawTextures(proj);
 }
 
-void DebugUtility::draw3D() {
+void DebugUtility::draw3D() const {
     mAssetsRenderTextureManager->drawMeshes();
 }
 
@@ -99,15 +94,15 @@ void DebugUtility::drawStringClear() {
     mDrawString->clear();
 }
 
-Log& DebugUtility::log() {
+Log& DebugUtility::log() const {
     return *mLog;
 }
 
-FixedDebugInformation* DebugUtility::fixedDebugInfo() {
-    return mFixedDebugInfo;
+FixedDebugInformation& DebugUtility::fixedDebugInfo() const {
+    return *mFixedDebugInfo;
 }
 
-Hierarchy& DebugUtility::hierarchy() {
+Hierarchy& DebugUtility::hierarchy() const {
     return *mHierarchy;
 }
 
@@ -115,26 +110,26 @@ Hierarchy& DebugUtility::hierarchy() {
 //    return *mInspector;
 //}
 
-ImGuiInspector& DebugUtility::inspector() {
+ImGuiInspector& DebugUtility::inspector() const {
     return *mInspector;
 }
 
-Pause& DebugUtility::pause() {
+Pause& DebugUtility::pause() const {
     return *mPause;
 }
 
-PointRenderer& DebugUtility::pointRenderer() {
+PointRenderer& DebugUtility::pointRenderer() const {
     return *mPointRenderer;
 }
 
-LineRenderer2D& DebugUtility::lineRenderer2D() {
+LineRenderer2D& DebugUtility::lineRenderer2D() const {
     return *mLineRenderer2D;
 }
 
-LineRenderer3D& DebugUtility::lineRenderer3D() {
+LineRenderer3D& DebugUtility::lineRenderer3D() const {
     return *mLineRenderer3D;
 }
 
-AssetsRenderTextureManager& DebugUtility::assetsRenderTextureManager() {
+AssetsRenderTextureManager& DebugUtility::assetsRenderTextureManager() const {
     return *mAssetsRenderTextureManager;
 }

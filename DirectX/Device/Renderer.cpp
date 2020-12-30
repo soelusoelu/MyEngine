@@ -52,13 +52,13 @@ void Renderer::renderPoint3D() const {
     dx.depthStencilState()->depthMask(true);
 }
 
-void Renderer::renderLine2D(Matrix4* proj) const {
+void Renderer::renderLine2D(Matrix4& proj) const {
     //原点をスクリーン左上にするために平行移動
-    proj->m[3][0] = -1.f;
-    proj->m[3][1] = 1.f;
+    proj.m[3][0] = -1.f;
+    proj.m[3][1] = 1.f;
     //ピクセル単位で扱うために
-    proj->m[0][0] = 2.f / Window::width();
-    proj->m[1][1] = -2.f / Window::height();
+    proj.m[0][0] = 2.f / Window::width();
+    proj.m[1][1] = -2.f / Window::height();
 
     //デプステスト無効化
     MyDirectX::DirectX::instance().depthStencilState()->depthTest(false);
@@ -92,13 +92,13 @@ void Renderer::renderSprite() const {
     dx.rasterizerState()->setCulling(CullMode::NONE);
 }
 
-void Renderer::renderSprite2D(Matrix4* proj) const {
+void Renderer::renderSprite2D(Matrix4& proj) const {
     //原点をスクリーン左上にするために平行移動
-    proj->m[3][0] = -1.f;
-    proj->m[3][1] = 1.f;
+    proj.m[3][0] = -1.f;
+    proj.m[3][1] = 1.f;
     //ピクセル単位で扱うために
-    proj->m[0][0] = 2.f / Window::width();
-    proj->m[1][1] = -2.f / Window::height();
+    proj.m[0][0] = 2.f / Window::width();
+    proj.m[1][1] = -2.f / Window::height();
 
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
@@ -115,18 +115,18 @@ void Renderer::renderSprite3D() const {
     dx.depthStencilState()->depthMask(true);
 }
 
-void Renderer::renderToDebug(Matrix4* proj) const {
+void Renderer::renderToDebug(Matrix4& proj) const {
     auto& dx = MyDirectX::DirectX::instance();
 
     dx.setDebugRenderTarget();
     dx.setViewport(Window::debugWidth(), Window::debugHeight());
 
     //原点をスクリーン左上にするために平行移動
-    proj->m[3][0] = -1.f;
-    proj->m[3][1] = 1.f;
+    proj.m[3][0] = -1.f;
+    proj.m[3][1] = 1.f;
     //ピクセル単位で扱うために
-    proj->m[0][0] = 2.f / Window::width();
-    proj->m[1][1] = -2.f / Window::height();
+    proj.m[0][0] = 2.f / Window::width();
+    proj.m[1][1] = -2.f / Window::height();
 
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
