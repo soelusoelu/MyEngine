@@ -230,6 +230,7 @@
     <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
     <ClCompile Include="Collision\IntersectHelper.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
+    <ClCompile Include="Transform\ParentChildRelationship.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxMotionParser.cpp" />
@@ -457,6 +458,7 @@
     <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTextureDeleter.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTexturesGetter.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\ICurrentSelectTextureGetter.h" />
+    <ClInclude Include="DebugLayer\DebugMode.h" />
     <ClInclude Include="DebugLayer\ImGuiInspector.h" />
     <ClInclude Include="DebugLayer\ImGuiWrapper.h" />
     <ClInclude Include="Component\Engine\Other\GameObjectSaveAndLoader.h" />
@@ -487,6 +489,7 @@
     <ClInclude Include="Collision\IntersectHelper.h" />
     <ClInclude Include="Mesh\IMeshesGetter.h" />
     <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
+    <ClInclude Include="Transform\ParentChildRelationship.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />
     <ClInclude Include="Mesh\Fbx\FbxUtility.h" />
     <ClInclude Include="Mesh\Fbx\FbxMotionParser.h" />

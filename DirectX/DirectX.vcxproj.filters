@@ -264,6 +264,7 @@
     <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
     <ClCompile Include="Collision\IntersectHelper.cpp" />
     <ClCompile Include="DebugLayer\AssetsRenderer\AssetsRenderTextureDeleter.cpp" />
+    <ClCompile Include="Transform\ParentChildRelationship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -576,6 +577,8 @@
     <ClInclude Include="DebugLayer\AssetsRenderer\ICurrentSelectTextureGetter.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\AssetsRenderTextureDeleter.h" />
     <ClInclude Include="DebugLayer\AssetsRenderer\IAssetsRenderTextureDeleter.h" />
+    <ClInclude Include="DebugLayer\DebugMode.h" />
+    <ClInclude Include="Transform\ParentChildRelationship.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

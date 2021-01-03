@@ -210,7 +210,7 @@ bool Intersect::intersectRayMesh(const Ray& ray, const IMesh& mesh, const Transf
             if (raycastHit) {
                 //衝突情報を記録する
                 float dist = (interPoint - ray.start).lengthSq();
-                IntersectHelper::updateRaycastHit(*raycastHit, dist, interPoint, polygon);
+                IntersectHelper::updateRaycastHit(*raycastHit, &transform.gameObject(), dist, interPoint, polygon);
             } else {
                 //衝突情報を記録する必要がなければ即終了
                 return true;

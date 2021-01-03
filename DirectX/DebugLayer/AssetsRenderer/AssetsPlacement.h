@@ -24,7 +24,7 @@ private:
     //アセットを配置する
     void placeAsset();
     //アセットを配置する場所を決める
-    void decideAssetPlacePosition(GameObject& asset) const;
+    void decideAssetPlacePosition(const std::shared_ptr<GameObject>& asset) const;
     //アセットを配置する条件が整っているか
     bool placeConditions() const;
 

@@ -13,6 +13,8 @@ class Button;
 class Hierarchy {
     using GameObjectPtr = std::shared_ptr<GameObject>;
     using GameObjectPtrList = std::list<GameObjectPtr>;
+    using ButtonGameObjectPair = std::pair<std::unique_ptr<Button>, GameObjectPtr>;
+    using ButtonGameObjectPairList = std::list<ButtonGameObjectPair>;
 
 public:
     Hierarchy();
@@ -26,7 +28,23 @@ public:
     void drawGameObjects(DrawString& drawString) const;
 
 private:
-    std::list<std::pair<std::unique_ptr<Button>, GameObjectPtr>> mButtons;
+    //ボタンにゲームオブジェクトを登録する
+    void entryToButton(ButtonGameObjectPairList::iterator& itr, const GameObjectPtr& target);
+    //すべての子をボタン登録する
+    void setGameObjectToButtonChildren(ButtonGameObjectPairList::iterator& itr, const GameObjectPtr& parent);
+    //文字列を描画する
+    void draw(DrawString& drawString, const GameObject& target, const Vector2& position, int childHierarchy = 0) const;
+    //すべての子を描画する
+    void drawChildren(DrawString& drawString, const GameObject& parent, Vector2& position, int childHierarchy = 1) const;
+    //描画位置を1行分下げる
+    void downDrawPositionOneLine(Vector2& position) const;
+    //1行の高さを取得する
+    float getOneLineHeight() const;
+    //ゲームオブジェクトに親がいるか
+    bool haveParent(const GameObject& gameObject) const;
+
+private:
+    ButtonGameObjectPairList mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;
     //行間

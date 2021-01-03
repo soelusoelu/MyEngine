@@ -1,8 +1,10 @@
 ﻿#pragma once
 
+#include "DebugMode.h"
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
+#include <string>
 
 class DrawString;
 class FixedDebugInformation;
@@ -28,6 +30,8 @@ public:
     void update();
     void draw(const Matrix4& proj) const;
     void draw3D() const;
+    //シーン遷移時
+    void changeScene(const std::string& scene);
     //DrawStringが保持する文字列をすべて削除
     void drawStringClear();
     Log& log() const;
@@ -59,4 +63,5 @@ private:
     std::unique_ptr<LineRenderer2D> mLineRenderer2D;
     std::unique_ptr<LineRenderer3D> mLineRenderer3D;
     std::unique_ptr<AssetsRenderTextureManager> mAssetsRenderTextureManager;
+    DebugMode mMode;
 };

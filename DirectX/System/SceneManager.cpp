@@ -190,4 +190,7 @@ void SceneManager::createScene(const std::string& name) {
     auto scene = GameObjectCreater::create(name);
     //シーンコンポーネント取得
     mCurrentScene = scene->componentManager().getComponent<Scene>();
+
+    //デバッグモード変更
+    DebugUtility::instance().changeScene(name);
 }

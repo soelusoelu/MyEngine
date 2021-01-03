@@ -23,6 +23,7 @@ DebugUtility::DebugUtility()
     , mLineRenderer2D(std::make_unique<LineRenderer2D>())
     , mLineRenderer3D(std::make_unique<LineRenderer3D>())
     , mAssetsRenderTextureManager(std::make_unique<AssetsRenderTextureManager>())
+    , mMode(DebugMode::LOG)
 {
 }
 
@@ -77,17 +78,29 @@ void DebugUtility::update() {
 }
 
 void DebugUtility::draw(const Matrix4& proj) const {
-    mLog->drawLogs(*mDrawString);
-    mFixedDebugInfo->draw(*mDrawString);
+    if (mMode == DebugMode::LOG) {
+        mLog->drawLogs(*mDrawString);
+        mFixedDebugInfo->draw(*mDrawString);
+    } else if (mMode == DebugMode::MESH_TEXTURES) {
+        mAssetsRenderTextureManager->drawTextures(proj);
+    }
+
     mHierarchy->drawGameObjects(*mDrawString);
     mInspector->drawInspect();
     mPause->drawButton(proj);
     mDrawString->drawAll(proj);
-    mAssetsRenderTextureManager->drawTextures(proj);
 }
 
 void DebugUtility::draw3D() const {
     mAssetsRenderTextureManager->drawMeshes();
+}
+
+void DebugUtility::changeScene(const std::string& scene) {
+    if (scene == DebugSceneName::MAP_EDITOR) {
+        mMode = DebugMode::MESH_TEXTURES;
+    } else {
+        mMode = DebugMode::LOG;
+    }
 }
 
 void DebugUtility::drawStringClear() {

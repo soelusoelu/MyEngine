@@ -7,7 +7,10 @@
 #include "../GameObject/GameObject.h"
 #include "../Input/Input.h"
 #include "../System/Window.h"
+#include "../Transform/ParentChildRelationship.h"
+#include "../Transform/Transform3D.h"
 #include "../Utility/LevelLoader.h"
+#include <string>
 
 Hierarchy::Hierarchy() :
     mNumRowsToDisplay(0),
@@ -58,7 +61,7 @@ void Hierarchy::initialize() {
     mPosition += Vector2(mOffsetCharCountX * mCharWidth, mOffsetCharCountY * mCharHeight);
 
     //画面内に収まる行数
-    mNumRowsToDisplay = (Window::debugHeight() - mPosition.y) / (mCharHeight + mLineSpace);
+    mNumRowsToDisplay = (Window::debugHeight() - mPosition.y) / getOneLineHeight();
 
     mButtons.resize(mNumRowsToDisplay);
     auto pos = mPosition;
@@ -66,7 +69,7 @@ void Hierarchy::initialize() {
         //全ボタンに当たり判定をつける
         b.first = std::make_unique<Button>(nullptr, pos, Vector2(mInspectorPositionX - pos.x, mCharHeight));
         b.second = nullptr;
-        pos.y += mCharHeight + mLineSpace;
+        downDrawPositionOneLine(pos);
     }
 }
 
@@ -77,42 +80,96 @@ void Hierarchy::setGameObjectToButton(const GameObjectPtrList& gameObjects) {
 
     auto itr = mButtons.begin();
     for (const auto& obj : gameObjects) {
-        //オブジェクトの数がボタンの数より多いときは無視
-        if (itr == mButtons.end()) {
-            return;
+        //親がいる場合は親に任せる
+        if (haveParent(*obj)) {
+            continue;
         }
-        itr->second = obj;
-        ++itr;
+        entryToButton(itr, obj);
+        setGameObjectToButtonChildren(itr, obj);
     }
 }
 
 void Hierarchy::update() {
+    if (!Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
+        return;
+    }
+
     const auto& mousePos = Input::mouse().getMousePosition();
-    if (Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
-        for (const auto& b : mButtons) {
-            if (!b.first->containsPoint(mousePos)) {
-                continue;
-            }
-            if (b.second) {
-                DebugUtility::instance().inspector().setTarget(b.second);
-                break;
-            }
+    for (const auto& b : mButtons) {
+        if (!b.first->containsPoint(mousePos)) {
+            continue;
+        }
+        if (b.second) {
+            DebugUtility::instance().inspector().setTarget(b.second);
+            break;
         }
     }
 }
 
 void Hierarchy::drawGameObjects(DrawString& drawString) const {
+    auto pos = mPosition;
     for (const auto& b : mButtons) {
-        auto obj = b.second;
+        const auto& obj = b.second;
         //オブジェクトが登録されてなかったら終了
         if (!obj) {
             break;
         }
-
-        float alpha = 1.f;
-        if (!obj->getActive()) {
-            alpha = mNonActiveAlpha;
+        //親がいる場合は親に任せる
+        if (haveParent(*obj)) {
+            continue;
         }
-        drawString.drawString(obj->name(), b.first->getPosition(), mScale, ColorPalette::white, alpha);
+
+        draw(drawString, *obj, pos);
+        downDrawPositionOneLine(pos);
+
+        drawChildren(drawString, *obj, pos);
     }
+}
+
+void Hierarchy::entryToButton(ButtonGameObjectPairList::iterator& itr, const GameObjectPtr& target) {
+    //オブジェクトの数がボタンの数より多いときは無視
+    if (itr == mButtons.end()) {
+        return;
+    }
+    itr->second = target;
+    ++itr;
+}
+
+void Hierarchy::setGameObjectToButtonChildren(ButtonGameObjectPairList::iterator& itr, const GameObjectPtr& parent) {
+    const auto& children = parent->transform().getParentChildRelation().getChildren();
+    for (const auto& child : children) {
+        entryToButton(itr, child);
+        setGameObjectToButtonChildren(itr, child);
+    }
+}
+
+void Hierarchy::draw(DrawString& drawString, const GameObject& target, const Vector2& position, int childHierarchy) const {
+    //アクティブ状態によって透明度を下げる
+    float alpha = (target.getActive()) ? 1.f : mNonActiveAlpha;
+
+    constexpr char CHILD_SPACE[] = " ";
+    std::string space(CHILD_SPACE, childHierarchy * 2);
+    drawString.drawString(space + target.name(), position, mScale, ColorPalette::white, alpha);
+}
+
+void Hierarchy::drawChildren(DrawString& drawString, const GameObject& parent, Vector2& position, int childHierarchy) const {
+    const auto& children = parent.transform().getParentChildRelation().getChildren();
+    for (const auto& child : children) {
+        draw(drawString, *child, position, childHierarchy);
+        downDrawPositionOneLine(position);
+
+        drawChildren(drawString, *child, position, childHierarchy + 1);
+    }
+}
+
+void Hierarchy::downDrawPositionOneLine(Vector2& position) const {
+    position.y += getOneLineHeight();
+}
+
+float Hierarchy::getOneLineHeight() const {
+    return (mCharHeight + mLineSpace);
+}
+
+bool Hierarchy::haveParent(const GameObject& gameObject) const {
+    return (gameObject.transform().getParentChildRelation().parent());
 }
