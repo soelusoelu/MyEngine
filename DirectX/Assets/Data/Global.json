@@ -52,8 +52,8 @@
             "texturesFilePath": [
                 "Assets\\Model\\Test\\test.obj",
                 "Assets\\Model\\Light\\DLight.obj",
-                "Assets\\Model\\Shape\\Sphere.obj",
-                "Assets\\Model\\Shape\\box.fbx"
+                "Assets\\Model\\Shape\\box.fbx",
+                "Assets\\Model\\Shape\\Sphere.obj"
             ]
         },
         "assetsRenderTextureAdder": {

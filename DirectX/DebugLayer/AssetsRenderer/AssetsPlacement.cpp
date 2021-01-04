@@ -1,4 +1,6 @@
 ﻿#include "AssetsPlacement.h"
+#include "../DebugUtility.h"
+#include "../ImGuiInspector.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/Camera.h"
 #include "../../Component/Engine/Mesh/MeshComponent.h"
@@ -49,6 +51,9 @@ void AssetsPlacement::placeAsset() {
 
     const auto& newObj = MeshGameObjectCreater::createMeshGameObject(filePath, name);
     decideAssetPlacePosition(newObj);
+
+    //インスペクターの対象に設定する
+    DebugUtility::instance().inspector().setTarget(newObj);
 }
 
 void AssetsPlacement::decideAssetPlacePosition(const std::shared_ptr<GameObject>& asset) const {
@@ -62,7 +67,7 @@ void AssetsPlacement::decideAssetPlacePosition(const std::shared_ptr<GameObject>
         hitObj.getParentChildRelation().addChild(asset);
 
         //衝突した位置に移動
-        asset->transform().setPosition(raycastHit.point - Vector3::transform(hitObj.getPosition(), hitObj.getRotation()));
+        asset->transform().setPosition(-hitObj.getPosition() + Vector3::transform(raycastHit.point - hitObj.getPosition(), hitObj.getWorldTransform()));
         //法線から角度を計算する
         //const auto& rot = Vector3::cross(Vector3::up, Vector3::transform(raycastHit.polygon.normal(), raycastHit.hitObject->transform().getRotation())) * 90.f;
         //const auto& rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;

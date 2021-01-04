@@ -197,11 +197,6 @@ void Transform3D::drawInspector() {
 }
 
 void Transform3D::computeWorld() {
-    //mWorldTransform = Matrix4::createTranslation(-mPivot); //ピボットを原点に
-    //mWorldTransform *= Matrix4::createScale(getScale());
-    //mWorldTransform *= Matrix4::createFromQuaternion(getRotation());
-    //mWorldTransform *= Matrix4::createTranslation(getPosition());
-
     mWorldTransform = Matrix4::createTranslation(-mPivot); //ピボットを原点に
     mWorldTransform *= Matrix4::createScale(getLocalScale());
     mWorldTransform *= Matrix4::createFromQuaternion(getLocalRotation());
@@ -209,12 +204,11 @@ void Transform3D::computeWorld() {
 }
 
 void Transform3D::multiplyParentWorldTransform() {
-    //auto parent = mParentChildRelation->parent();
-    //while (parent) {
-    //    mWorldTransform *= parent->transform().mWorldTransform;
-    //    parent = parent->parent();
-    //}
-    mWorldTransform *= mParentChildRelation->parent()->transform().mWorldTransform;
+    auto parent = mParentChildRelation->parent();
+    while (parent) {
+        mWorldTransform *= parent->transform().mWorldTransform;
+        parent = parent->parent();
+    }
 }
 
 void Transform3D::computeChildrenTransform() {
@@ -223,10 +217,11 @@ void Transform3D::computeChildrenTransform() {
         auto& childTransform = child->transform();
         //子のワールド行列を計算する
         childTransform.computeWorld();
-        //子のワールド行列に親のワールド行列を掛け合わせる
-        childTransform.multiplyParentWorldTransform();
 
         //さらに子へ降りていく
         child->transform().computeChildrenTransform();
     }
+
+    //子のワールド行列に親のワールド行列を掛け合わせる
+    multiplyParentWorldTransform();
 }

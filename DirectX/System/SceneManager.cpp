@@ -6,12 +6,13 @@
 #include "../Component/Engine/Scene/Scene.h"
 #include "../Component/Engine/Text/TextBase.h"
 #include "../DebugLayer/DebugUtility.h"
-#include "../DebugLayer/LineRenderer/LineRenderer2D.h"
-#include "../DebugLayer/LineRenderer/LineRenderer3D.h"
+#include "../DebugLayer/ImGuiInspector.h"
 #include "../DebugLayer/Pause.h"
 #include "../DebugLayer/PointRenderer.h"
 #include "../DebugLayer/AssetsRenderer/AssetsPlacement.h"
 #include "../DebugLayer/AssetsRenderer/AssetsRenderTextureManager.h"
+#include "../DebugLayer/LineRenderer/LineRenderer2D.h"
+#include "../DebugLayer/LineRenderer/LineRenderer3D.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
@@ -75,6 +76,8 @@ void SceneManager::initialize() {
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager().getComponent<Camera>();
+    //デフォルトのインスペクターの対象に設定する
+    DebugUtility::instance().inspector().setTarget(cam);
 
     mMeshManager->createShadowMap();
 
