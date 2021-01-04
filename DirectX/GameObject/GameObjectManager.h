@@ -1,21 +1,20 @@
 ﻿#pragma once
 
+#include "IGameObjectsGetter.h"
 #include <list>
 #include <memory>
 #include <string>
 #include <unordered_set>
 #include <vector>
 
-class GameObject;
-
-class GameObjectManager {
-    using GameObjectPtr = std::shared_ptr<GameObject>;
-    using GameObjectPtrList = std::list<GameObjectPtr>;
+class GameObjectManager : public IGameObjectsGetter {
     using GameObjectPtrArray = std::vector<GameObjectPtr>;
 
 public:
     GameObjectManager();
     ~GameObjectManager();
+    //全ゲームオブジェクトを取得する
+    virtual const GameObjectPtrList& getGameObjects() const override;
     //登録済みの全ゲームオブジェクトの更新
     void update();
     //ゲームオブジェクトの登録

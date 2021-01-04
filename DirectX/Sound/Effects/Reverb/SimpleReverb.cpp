@@ -1,5 +1,5 @@
 #include "SimpleReverb.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 
 SimpleReverb::SimpleReverb() :
     mXAPO(nullptr) {

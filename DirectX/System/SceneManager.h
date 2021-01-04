@@ -8,6 +8,7 @@
 class Scene;
 class Renderer;
 class Camera;
+class EngineFunctionManager;
 class GameObjectManager;
 class MeshManager;
 class Physics;
@@ -33,6 +34,7 @@ private:
     std::unique_ptr<Renderer> mRenderer;
     std::shared_ptr<Scene> mCurrentScene;
     std::shared_ptr<Camera> mCamera;
+    std::unique_ptr<EngineFunctionManager> mEngineManager;
     std::unique_ptr<GameObjectManager> mGameObjectManager;
     std::unique_ptr<MeshManager> mMeshManager;
     std::unique_ptr<SpriteManager> mSpriteManager;

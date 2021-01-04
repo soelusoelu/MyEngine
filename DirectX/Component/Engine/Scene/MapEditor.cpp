@@ -1,7 +1,7 @@
 ﻿#include "MapEditor.h"
 #include "../CollideOperation/CollideMouseOperator.h"
 #include "../Other/GameObjectSaveAndLoader.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectFactory.h"
 

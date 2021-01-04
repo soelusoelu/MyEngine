@@ -3,7 +3,7 @@
 #include "FbxMeshParser.h"
 #include "FbxMotionParser.h"
 #include "../Material.h"
-#include "../../DebugLayer/Debug.h"
+#include "../../Engine/Debug/Debug.h"
 #include "../../Utility/FileUtil.h"
 
 FBX::FBX()

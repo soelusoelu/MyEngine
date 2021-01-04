@@ -1,7 +1,5 @@
 ﻿#include "GameObjectManager.h"
 #include "GameObject.h"
-#include "../DebugLayer/DebugUtility.h"
-#include "../DebugLayer/Hierarchy.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
@@ -13,6 +11,10 @@ GameObjectManager::~GameObjectManager() {
     GameObject::setGameObjectManager(nullptr);
 }
 
+const GameObjectPtrList& GameObjectManager::getGameObjects() const {
+    return mGameObjects;
+}
+
 void GameObjectManager::update() {
     for (const auto& gameObject : mGameObjects) {
         gameObject->update();
@@ -22,8 +24,6 @@ void GameObjectManager::update() {
     }
 
     remove();
-
-    DebugUtility::instance().hierarchy().setGameObjectToButton(mGameObjects);
 }
 
 void GameObjectManager::add(const GameObjectPtr& add) {

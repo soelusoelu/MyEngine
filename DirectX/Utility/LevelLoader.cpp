@@ -1,7 +1,7 @@
 ﻿#include "LevelLoader.h"
 #include "FileUtil.h"
 #include "../Component/ComponentManager.h"
-#include "../DebugLayer/Debug.h"
+#include "../Engine/Debug/Debug.h"
 #include "../GameObject/GameObject.h"
 #include "../System/Game.h"
 #include <rapidjson/stringbuffer.h>

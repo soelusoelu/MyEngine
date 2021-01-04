@@ -1,6 +1,6 @@
 ﻿#include "Transform3D.h"
 #include "ParentChildRelationship.h"
-#include "../DebugLayer/ImGuiWrapper.h"
+#include "../Engine/Debug/ImGuiWrapper.h"
 #include "../GameObject/GameObject.h"
 #include "../Imgui/imgui.h"
 #include "../Utility/LevelLoader.h"

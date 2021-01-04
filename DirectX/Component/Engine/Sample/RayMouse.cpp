@@ -3,7 +3,7 @@
 #include "../Collider/AABBCollider.h"
 #include "../Mesh/MeshComponent.h"
 #include "../../../Collision/Collision.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
 #include "../../../Input/Input.h"

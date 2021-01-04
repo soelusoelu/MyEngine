@@ -5,7 +5,6 @@
 #include "Window.h"
 #include "Shader/Shader.h"
 #include "Texture/Texture.h"
-#include "../DebugLayer/DebugUtility.h"
 #include "../Device/FPSCounter.h"
 #include "../DirectX/DirectX.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -38,7 +37,6 @@ Game::~Game() {
     Texture::finalize();
     GameObjectCreater::finalize();
     InputUtility::finalize();
-    DebugUtility::instance().finalize();
     SoundEngine::instance().finalize();
     AssetsManager::instance().finalize();
     MyDirectX::DirectX::instance().finalize();
@@ -63,7 +61,6 @@ void Game::run(HINSTANCE hInstance) {
 void Game::loadProperties(const rapidjson::Value& inObj) {
     mWindow->loadProperties(inObj);
     mFPSCounter->loadProperties(inObj);
-    DebugUtility::instance().loadProperties(inObj);
     InputUtility::loadProperties(inObj);
     mSceneManager->loadProperties(inObj);
 }
@@ -71,7 +68,6 @@ void Game::loadProperties(const rapidjson::Value& inObj) {
 void Game::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
     mWindow->saveProperties(alloc, inObj);
     mFPSCounter->saveProperties(alloc, inObj);
-    DebugUtility::instance().saveProperties(alloc, inObj);
     InputUtility::saveProperties(alloc, inObj);
     mSceneManager->saveProperties(alloc, inObj);
 }
@@ -101,7 +97,6 @@ void Game::initialize() {
     ImGui_ImplDX11_Init(MyDirectX::DirectX::instance().device(), MyDirectX::DirectX::instance().deviceContext());
 
     Random::initialize();
-    DebugUtility::instance().initialize();
     InputUtility::initialize(hwnd);
     GameObjectCreater::initialize();
     mSceneManager->initialize();

@@ -1,5 +1,5 @@
 ﻿#include "OBJ.h"
-#include "../DebugLayer/Debug.h"
+#include "../Engine/Debug/Debug.h"
 #include "../System/AssetsManager.h"
 #include "../System/Texture/TextureFromFile.h"
 #include "../Utility/FileUtil.h"

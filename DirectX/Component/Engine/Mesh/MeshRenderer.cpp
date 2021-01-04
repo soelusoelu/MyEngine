@@ -2,7 +2,7 @@
 #include "MeshComponent.h"
 #include "MeshShader.h"
 #include "SkinMeshComponent.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 #include "../../../Mesh/MeshManager.h"
 
 MeshRenderer::MeshRenderer(GameObject& gameObject)

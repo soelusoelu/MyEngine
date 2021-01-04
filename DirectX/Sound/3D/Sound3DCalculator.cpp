@@ -2,7 +2,7 @@
 #include "Emitter/Sound3DEmitter.h"
 #include "Emitter/DspSetter.h"
 #include "../Voice/MasteringVoice/MasteringVoice.h"
-#include "../../DebugLayer/Debug.h"
+#include "../../Engine/Debug/Debug.h"
 #include "../../Math/Math.h"
 
 //事前チェック

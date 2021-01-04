@@ -57,7 +57,6 @@ void AssetsPlacement::placeAsset() {
 }
 
 void AssetsPlacement::decideAssetPlacePosition(const std::shared_ptr<GameObject>& asset) const {
-    const auto& meshes = mMeshesGetter->getMeshes();
     const auto& ray = mCamera->screenToRay(Input::mouse().getMousePosition());
     //すべてのメッシュトレイの衝突判定
     if (RaycastHit raycastHit; Intersect::intersectRayMeshes(ray, *mMeshesGetter, &raycastHit)) {
@@ -87,7 +86,7 @@ bool AssetsPlacement::placeConditions() const {
 
     const auto& mouse = Input::mouse();
     //マウスの左ボタンを押していなければ終了
-    if (!mouse.getMouseButtonDown(MouseCode::LeftButton)) {
+    if (!mouse.getMouseButtonDown(MouseCode::CenterButton)) {
         return false;
     }
 

@@ -43,6 +43,10 @@ void AssetsRenderTextureManager::initialize() {
     mPlacement->initialize(this);
 }
 
+void AssetsRenderTextureManager::afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter) {
+    mPlacement->afterInitialize(camera, getter);
+}
+
 void AssetsRenderTextureManager::update() {
     mSelector->selectTexture(mCurrentSelectTexture);
     mTextureList->update();
@@ -58,8 +62,4 @@ void AssetsRenderTextureManager::drawMeshes() const {
 void AssetsRenderTextureManager::drawTextures(const Matrix4& proj) const {
     mTextureList->drawTexture(proj);
     mTextureAdder->draw(proj);
-}
-
-AssetsPlacement& AssetsRenderTextureManager::getAssetsPlacement() const {
-    return *mPlacement;
 }

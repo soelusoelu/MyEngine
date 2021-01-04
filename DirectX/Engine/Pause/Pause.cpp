@@ -1,8 +1,8 @@
 ﻿#include "Pause.h"
-#include "../Device/Button.h"
-#include "../Input/Input.h"
-#include "../System/Window.h"
-#include "../Utility/LevelLoader.h"
+#include "../../Device/Button.h"
+#include "../../Input/Input.h"
+#include "../../System/Window.h"
+#include "../../Utility/LevelLoader.h"
 
 Pause::Pause() :
     mButton(nullptr),
@@ -12,6 +12,10 @@ Pause::Pause() :
 }
 
 Pause::~Pause() = default;
+
+bool Pause::isPausing() const {
+    return mIsPausing;
+}
 
 void Pause::loadProperties(const rapidjson::Value & inObj) {
     const auto& obj = inObj["pause"];
@@ -47,10 +51,6 @@ void Pause::update() {
 
     //ボタンがクリックされた
     mIsPausing = !mIsPausing;
-}
-
-bool Pause::isPausing() const {
-    return mIsPausing;
 }
 
 void Pause::drawButton(const Matrix4& proj) const {

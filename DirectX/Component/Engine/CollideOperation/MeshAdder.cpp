@@ -1,6 +1,6 @@
 ﻿#include "MeshAdder.h"
 #include "../Mesh/MeshComponent.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
 #include "../../../Utility/FileUtil.h"

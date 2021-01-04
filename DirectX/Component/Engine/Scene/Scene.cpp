@@ -1,5 +1,5 @@
 ﻿#include "Scene.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 
 Scene::Scene(GameObject& gameObject) :
     Component(gameObject),

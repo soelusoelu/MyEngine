@@ -1,21 +1,22 @@
 ﻿#pragma once
 
-#include "../Math/Math.h"
+#include "IPause.h"
+#include "../../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
 
 class SpriteButton;
 
-class Pause {
+class Pause : public IPause {
 public:
     Pause();
     ~Pause();
+    virtual bool isPausing() const override;
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
     void update();
-    bool isPausing() const;
     void drawButton(const Matrix4& proj) const;
 
 private:

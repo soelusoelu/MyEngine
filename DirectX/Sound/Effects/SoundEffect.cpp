@@ -1,7 +1,7 @@
 ﻿#include "SoundEffect.h"
 #include "SoundEffectCollection.h"
 #include "../Voice/VoiceDetails.h"
-#include "../../DebugLayer/Debug.h"
+#include "../../Engine/Debug/Debug.h"
 #include <cassert>
 
 SoundEffect::SoundEffect(IVoice& voice) :

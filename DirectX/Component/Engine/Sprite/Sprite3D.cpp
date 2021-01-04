@@ -1,6 +1,6 @@
 ﻿#include "Sprite3D.h"
-#include "../../../DebugLayer/ImGuiWrapper.h"
 #include "../../../DirectX/DirectX.h"
+#include "../../../Engine/Debug/ImGuiWrapper.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Sprite/SpriteManager.h"

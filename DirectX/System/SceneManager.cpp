@@ -5,17 +5,13 @@
 #include "../Component/Engine/Camera/Camera.h"
 #include "../Component/Engine/Scene/Scene.h"
 #include "../Component/Engine/Text/TextBase.h"
-#include "../DebugLayer/DebugUtility.h"
-#include "../DebugLayer/ImGuiInspector.h"
-#include "../DebugLayer/Pause.h"
-#include "../DebugLayer/PointRenderer.h"
-#include "../DebugLayer/AssetsRenderer/AssetsPlacement.h"
-#include "../DebugLayer/AssetsRenderer/AssetsRenderTextureManager.h"
-#include "../DebugLayer/LineRenderer/LineRenderer2D.h"
-#include "../DebugLayer/LineRenderer/LineRenderer3D.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
+#include "../Engine/EngineFunctionManager.h"
+#include "../Engine/Debug/DebugUtility.h"
+#include "../Engine/Debug/ImGuiInspector.h"
+#include "../Engine/Pause/Pause.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
@@ -30,6 +26,7 @@ SceneManager::SceneManager()
     : mRenderer(std::make_unique<Renderer>())
     , mCurrentScene(nullptr)
     , mCamera(nullptr)
+    , mEngineManager(std::make_unique<EngineFunctionManager>())
     , mGameObjectManager(std::make_unique<GameObjectManager>())
     , mMeshManager(std::make_unique<MeshManager>())
     , mSpriteManager(std::make_unique<SpriteManager>())
@@ -53,6 +50,7 @@ void SceneManager::loadProperties(const rapidjson::Value& inObj) {
         JsonHelper::getStringArray(sceneObj, "removeExclusionTag", &mRemoveExclusionTags);
     }
 
+    mEngineManager->loadProperties(inObj);
     mLightManager->loadProperties(inObj);
     mTextDrawer->loadProperties(inObj);
 }
@@ -63,12 +61,14 @@ void SceneManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rap
     JsonHelper::setStringArray(alloc, &props, "removeExclusionTag", mRemoveExclusionTags);
     inObj.AddMember("sceneManager", props, alloc);
 
+    mEngineManager->saveProperties(alloc, inObj);
     mLightManager->saveProperties(alloc, inObj);
     mTextDrawer->saveProperties(alloc, inObj);
 }
 
 void SceneManager::initialize() {
     mRenderer->initialize();
+    mEngineManager->initialize(mGameObjectManager.get());
     mLightManager->initialize();
     mTextDrawer->initialize();
 
@@ -77,32 +77,29 @@ void SceneManager::initialize() {
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager().getComponent<Camera>();
     //デフォルトのインスペクターの対象に設定する
-    DebugUtility::instance().inspector().setTarget(cam);
+    mEngineManager->debug().inspector().setTarget(cam);
 
     mMeshManager->createShadowMap();
 
     mLightManager->createDirectionalLight();
 
-    DebugUtility::instance().assetsRenderTextureManager().getAssetsPlacement().afterInitialize(mCamera, mMeshManager.get());
+    mEngineManager->afterInitialize(mCamera, mMeshManager.get());
 
     //初期シーンの設定
     createScene(mBeginScene);
 }
 
 void SceneManager::update() {
-    //アップデートの最初で文字列削除
-    DebugUtility::instance().drawStringClear();
+    //アップデート前処理
+    mEngineManager->preUpdateProcess();
+    //デバッグ
+    mEngineManager->update();
 
     //ポーズ中はデバッグだけアップデートを行う
-    if (DebugUtility::instance().pause().isPausing()) {
-        DebugUtility::instance().update();
+    if (mEngineManager->pause().isPausing()) {
         return;
     }
 
-    //描画情報を削除
-    DebugUtility::instance().pointRenderer().clear();
-    DebugUtility::instance().lineRenderer2D().clear();
-    DebugUtility::instance().lineRenderer3D().clear();
     //保有しているテキストを全削除
     mTextDrawer->clear();
     //全ゲームオブジェクトの更新
@@ -112,8 +109,6 @@ void SceneManager::update() {
     //各マネージャークラスを更新
     mMeshManager->update();
     mSpriteManager->update();
-    //デバッグ
-    DebugUtility::instance().update();
 
     //シーン移行
     const auto& next = mCurrentScene->getNext();
@@ -129,6 +124,7 @@ void SceneManager::update() {
 }
 
 void SceneManager::draw() const {
+#pragma region 遅延シェーディング
     //各テクスチャ上にレンダリング
     //mRenderer->renderToTexture();
     ////メッシュ描画準備
@@ -141,6 +137,7 @@ void SceneManager::draw() const {
     //mRenderer->renderPointLight();
     ////ポイントライトの一括描画
     //mLightManager->drawPointLights(*mCamera);
+#pragma endregion
 
     //メッシュ描画準備
     mRenderer->renderMesh();
@@ -148,13 +145,7 @@ void SceneManager::draw() const {
     mMeshManager->draw(*mCamera, mLightManager->getDirectionalLight());
 
 #ifdef _DEBUG
-    DebugUtility::instance().draw3D();
-    //3Dポイント
-    mRenderer->renderPoint3D();
-    DebugUtility::instance().pointRenderer().draw(mCamera->getViewProjection());
-    //3Dライン
-    mRenderer->renderLine3D();
-    DebugUtility::instance().lineRenderer3D().draw(mCamera->getViewProjection());
+    mEngineManager->draw3D(*mRenderer, mCamera->getViewProjection());
 #endif // _DEBUG
 
     //スプライト描画準備
@@ -171,14 +162,7 @@ void SceneManager::draw() const {
     mTextDrawer->drawAll(proj);
 
 #ifdef _DEBUG
-    //レンダリング領域をデバッグに変更
-    mRenderer->renderToDebug(proj);
-    //デバッグ表示
-    DebugUtility::instance().draw(proj);
-
-    //2Dライン
-    mRenderer->renderLine2D(proj);
-    DebugUtility::instance().lineRenderer2D().draw(proj);
+    mEngineManager->draw(*mRenderer, proj);
 #endif // _DEBUG
 }
 
@@ -195,5 +179,5 @@ void SceneManager::createScene(const std::string& name) {
     mCurrentScene = scene->componentManager().getComponent<Scene>();
 
     //デバッグモード変更
-    DebugUtility::instance().changeScene(name);
+    mEngineManager->changeScene(name);
 }

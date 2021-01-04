@@ -1,5 +1,5 @@
 ﻿#include "Equalizer.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/Debug/Debug.h"
 
 Equalizer::Equalizer() :
     mXAPO(nullptr) {

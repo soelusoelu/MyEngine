@@ -1,5 +1,5 @@
 ﻿#include "WaveformOutput.h"
-#include "../../DebugLayer/Debug.h"
+#include "../../Engine/Debug/Debug.h"
 #include <fstream>
 
 void WaveformOutput::outputWaveform(const std::string& filePath, const float* waveform, unsigned size) {

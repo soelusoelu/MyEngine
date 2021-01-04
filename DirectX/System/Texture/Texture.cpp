@@ -1,8 +1,8 @@
 ﻿#include "Texture.h"
 #include "../GlobalFunction.h"
 #include "../Shader/Shader.h"
-#include "../../DebugLayer/Debug.h"
 #include "../../DirectX/DirectXInclude.h"
+#include "../../Engine/Debug/Debug.h"
 
 Texture::Texture() :
     mShaderResourceView(nullptr),

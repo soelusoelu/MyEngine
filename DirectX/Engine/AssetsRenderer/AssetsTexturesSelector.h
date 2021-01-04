@@ -8,7 +8,7 @@ public:
     AssetsTexturesSelector();
     ~AssetsTexturesSelector();
     void initialize(const IAssetsRenderTexturesGetter* getter);
-    //マウスで選択したテクスチャのファイルパスを返す
+    //マウスでテクスチャを選択する
     bool selectTexture(MeshRenderOnTexturePtr& out);
 
 private:
