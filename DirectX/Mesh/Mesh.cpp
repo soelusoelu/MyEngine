@@ -1,8 +1,8 @@
 ﻿#include "Mesh.h"
 #include "OBJ.h"
 #include "FBX/FBX.h"
-#include "../DebugLayer/Debug.h"
 #include "../DirectX/DirectXInclude.h"
+#include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/Texture/TextureFromMemory.h"
 #include "../Utility/FileUtil.h"
 #include <cassert>

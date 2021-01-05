@@ -1,15 +1,15 @@
 ﻿#pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
-class MeshRenderOnTexture;
+class AssetsRenderTexture;
 
-using MeshRenderOnTexturePtr = std::shared_ptr<MeshRenderOnTexture>;
-using MeshRenderOnTexturePtrArray = std::vector<MeshRenderOnTexturePtr>;
+using AssetsRenderTexturePtr = std::shared_ptr<AssetsRenderTexture>;
+using AssetsRenderTexturePtrArray = std::vector<AssetsRenderTexturePtr>;
 
 class IAssetsRenderTexturesGetter {
 public:
     virtual ~IAssetsRenderTexturesGetter() = default;
-    virtual const MeshRenderOnTexturePtrArray& getTextures() const = 0;
+    virtual const AssetsRenderTexturePtrArray& getTextures() const = 0;
 };

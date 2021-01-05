@@ -271,6 +271,10 @@
     <ClCompile Include="Engine\DebugManager\DebugUtility\PointRenderer.cpp" />
     <ClCompile Include="Engine\DebugManager\DebugManager.cpp" />
     <ClCompile Include="System\FpsCounter\FPSCounter.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ModelViewer.cpp" />
+    <ClCompile Include="Component\Engine\Camera\CameraHelper.cpp" />
+    <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTexture.cpp" />
+    <ClCompile Include="Collision\SphereHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -596,6 +600,10 @@
     <ClInclude Include="Engine\DebugManager\DebugManager.h" />
     <ClInclude Include="System\FpsCounter\FPSCounter.h" />
     <ClInclude Include="System\FpsCounter\IFpsGetter.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewer.h" />
+    <ClInclude Include="Component\Engine\Camera\CameraHelper.h" />
+    <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTexture.h" />
+    <ClInclude Include="Collision\SphereHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

@@ -1,7 +1,7 @@
 ﻿#include "ConstantBufferManager.h"
 #include "ConstantBuffers.h"
-#include "../../DebugLayer/Debug.h"
 #include "../../DirectX/DirectXInclude.h"
+#include "../../Engine/DebugManager/DebugUtility/Debug.h"
 
 ConstantBufferManager::ConstantBufferManager() {
     mConstantBuffers.emplace("Texture.hlsl", BuffersSize{ sizeof(TextureConstantBuffer) });

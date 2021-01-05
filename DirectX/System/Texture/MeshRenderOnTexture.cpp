@@ -60,6 +60,10 @@ void MeshRenderOnTexture::setPositionForTexture(const Vector2& pos) {
     mSprite->computeWorldTransform();
 }
 
+const IMesh& MeshRenderOnTexture::getMesh() const {
+    return *mMesh;
+}
+
 const Sprite& MeshRenderOnTexture::getSprite() const {
     return *mSprite;
 }

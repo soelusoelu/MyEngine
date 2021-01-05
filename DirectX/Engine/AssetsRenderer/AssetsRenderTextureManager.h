@@ -13,14 +13,14 @@ class AssetsRenderTextureAdder;
 class AssetsRenderTextureDeleter;
 class AssetsTexturesSelector;
 class AssetsPlacement;
-class MeshRenderOnTexture;
+class AssetsRenderTexture;
 
 //メッシュ描画テクスチャ関連総管理クラス
 class AssetsRenderTextureManager : public ICurrentSelectTextureGetter {
 public:
     AssetsRenderTextureManager();
     ~AssetsRenderTextureManager();
-    virtual const MeshRenderOnTexture& getCurrentSelectTexture() const override;
+    virtual const AssetsRenderTexture& getCurrentSelectTexture() const override;
     virtual bool selectedTexture() const override;
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
@@ -43,5 +43,5 @@ private:
     std::unique_ptr<AssetsRenderTextureDeleter> mDeleter;
     std::unique_ptr<AssetsTexturesSelector> mSelector;
     std::unique_ptr<AssetsPlacement> mPlacement;
-    std::shared_ptr<MeshRenderOnTexture> mCurrentSelectTexture;
+    std::shared_ptr<AssetsRenderTexture> mCurrentSelectTexture;
 };

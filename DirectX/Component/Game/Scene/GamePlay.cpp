@@ -10,7 +10,7 @@
 #include "../GameState/StageFailArrow.h"
 #include "../Map/Map.h"
 #include "../UI/Menu/Menu.h"
-#include "../../../Engine/Debug/Debug.h"
+#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectFactory.h"
 #include "../../../Input/Input.h"

@@ -1,4 +1,6 @@
 ﻿#include "AssetsRenderTextureList.h"
+#include "AssetsRenderTexture.h"
+#include "../../Component/Engine/Camera/CameraHelper.h"
 #include "../../System/Window.h"
 #include "../../System/Texture/MeshRenderOnTexture.h"
 #include "../../Utility/FileUtil.h"
@@ -7,13 +9,10 @@
 #include <iterator>
 
 AssetsRenderTextureList::AssetsRenderTextureList()
-    : mViewProj(Matrix4::identity)
-    , mTextureSize(0)
+    : mTextureSize(0)
     , mColumnDisplayLimit(0)
     , mTextureDisplayInterval(0)
 {
-    mViewProj = Matrix4::createLookAt(Vector3(0.f, 5.f, -5.f), Vector3::zero, Vector3::up)
-        * Matrix4::createPerspectiveFOV(1.f, 45.f, 0.1f, 1000.f);
 }
 
 AssetsRenderTextureList::~AssetsRenderTextureList() = default;
@@ -37,7 +36,7 @@ void AssetsRenderTextureList::add(const std::string& fileName, const std::string
 void AssetsRenderTextureList::deleteTexture(const std::string& filePath) {
     auto itr = mTextures.begin();
     while (itr != mTextures.end()) {
-        if (filePath == (*itr)->getFilePath()) {
+        if (filePath == (*itr)->getTexture().getFilePath()) {
             itr = mTextures.erase(itr);
             mTexturesFilePath.erase(filePath);
             break;
@@ -50,7 +49,7 @@ void AssetsRenderTextureList::deleteTexture(const std::string& filePath) {
     rearrangeTextures();
 }
 
-const MeshRenderOnTexturePtrArray& AssetsRenderTextureList::getTextures() const {
+const AssetsRenderTexturePtrArray& AssetsRenderTextureList::getTextures() const {
     return mTextures;
 }
 
@@ -96,13 +95,13 @@ void AssetsRenderTextureList::update() {
 void AssetsRenderTextureList::drawMeshOnTexture() const {
     //まだ描画していないメッシュをテクスチャに描画する
     for (const auto& tex : mNonDrawTextures) {
-        tex->drawMeshOnTexture(mViewProj);
+        tex->drawMesh();
     }
 }
 
 void AssetsRenderTextureList::drawTexture(const Matrix4& proj) const {
     for (const auto& tex : mTextures) {
-        tex->draw(proj);
+        tex->getTexture().draw(proj);
     }
 }
 
@@ -111,7 +110,7 @@ void AssetsRenderTextureList::createTexture(const std::string& fileName, const s
 }
 
 void AssetsRenderTextureList::createTexture(const std::string& filePath) {
-    const auto& newTex = std::make_shared<MeshRenderOnTexture>(filePath, mTextureSize, mTextureSize);
+    const auto& newTex = std::make_shared<AssetsRenderTexture>(filePath, mTextureSize);
 
     //テクスチャの位置調整
     setTexturePosition(*newTex, mTextures.size() + mNonDrawTextures.size());
@@ -126,8 +125,8 @@ void AssetsRenderTextureList::rearrangeTextures() {
     }
 }
 
-void AssetsRenderTextureList::setTexturePosition(MeshRenderOnTexture& target, int textureNo) {
-    target.setPositionForTexture(Vector2(
+void AssetsRenderTextureList::setTexturePosition(AssetsRenderTexture& target, int textureNo) {
+    target.getTexture().setPositionForTexture(Vector2(
         (mTextureSize + mTextureDisplayInterval) * (textureNo % mColumnDisplayLimit) + mTextureDisplayInterval,
         (mTextureSize + mTextureDisplayInterval) * (textureNo / mColumnDisplayLimit) + Window::height() + mTextureDisplayInterval
     ));

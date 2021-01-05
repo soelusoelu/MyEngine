@@ -3,7 +3,7 @@
 #include "../Collider/AABBCollider.h"
 #include "../../../Collision/Collision.h"
 #include "../../../Device/Time.h"
-#include "../../../Engine/Debug/Debug.h"
+#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
 #include "../../../Imgui/imgui.h"

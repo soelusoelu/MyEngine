@@ -1,4 +1,5 @@
 ﻿#include "AssetsRenderTextureDeleter.h"
+#include "AssetsRenderTexture.h"
 #include "../../System/Texture/MeshRenderOnTexture.h"
 #include "../../Input/Input.h"
 
@@ -17,6 +18,6 @@ void AssetsRenderTextureDeleter::initialize(IAssetsRenderTextureDeleter* deleter
 
 void AssetsRenderTextureDeleter::update() {
     if (Input::keyboard().getKeyDown(KeyCode::Delete)) {
-        mDeleter->deleteTexture(mCurrnetTextureGetter->getCurrentSelectTexture().getFilePath());
+        mDeleter->deleteTexture(mCurrnetTextureGetter->getCurrentSelectTexture().getTexture().getFilePath());
     }
 }

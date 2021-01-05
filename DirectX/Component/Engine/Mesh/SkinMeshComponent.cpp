@@ -1,7 +1,7 @@
 ﻿#include "SkinMeshComponent.h"
 #include "MeshComponent.h"
 #include "MeshShader.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../System/Shader/ConstantBuffers.h"
 #include <cassert>
 

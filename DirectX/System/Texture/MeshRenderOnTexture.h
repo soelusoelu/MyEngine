@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../../Math/Math.h"
+#include "../../Mesh/IMesh.h"
 #include <memory>
 #include <string>
 
@@ -21,7 +22,9 @@ public:
     void draw(const Matrix4& proj) const;
     //テクスチャの位置を設定する
     void setPositionForTexture(const Vector2& pos);
-    //スプライトをconst参照で取得する
+    //メッシュを取得する
+    const IMesh& getMesh() const;
+    //スプライトを取得する
     const Sprite& getSprite() const;
     //ファイルパスを取得する
     const std::string& getFilePath() const;

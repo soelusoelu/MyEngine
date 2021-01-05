@@ -10,7 +10,7 @@
 #include "../../Engine/Mesh/MeshComponent.h"
 #include "../../Engine/Mesh/MeshMaterial.h"
 #include "../../Engine/Mesh/MeshOutLine.h"
-#include "../../../DebugLayer/Debug.h"
+#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectFactory.h"
 #include "../../../Input/Input.h"

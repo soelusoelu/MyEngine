@@ -1,4 +1,5 @@
 ﻿#include "AssetsPlacement.h"
+#include "AssetsRenderTexture.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/Camera.h"
 #include "../../Component/Engine/Mesh/MeshComponent.h"
@@ -43,7 +44,7 @@ void AssetsPlacement::placeAsset() {
         return;
     }
 
-    const auto& filePath = mTextureGetter->getCurrentSelectTexture().getFilePath();
+    const auto& filePath = mTextureGetter->getCurrentSelectTexture().getTexture().getFilePath();
     //ファイルパスからファイル名を抜き出す
     const auto& fileName = FileUtil::getFileNameFromDirectry(filePath);
     //ファイル名から拡張子を取り出す

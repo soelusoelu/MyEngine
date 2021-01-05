@@ -20,12 +20,6 @@ public:
     const Sphere& getSphere() const;
 
 private:
-    //メッシュから球を作る
-    void createSphere(const IMesh& mesh);
-    //メッシュから最小、最大点を割り出す
-    void computeCenterRadius(Vector3& outMin, Vector3& outMax, const MeshVertices& meshVertices);
-
-private:
     Sphere mSphere;
     Vector3 mDefaultCenter;
     float mDefaultRadius;

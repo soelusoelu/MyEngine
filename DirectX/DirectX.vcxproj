@@ -165,6 +165,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTexture.cpp" />
+    <ClCompile Include="Component\Engine\Camera\CameraHelper.cpp" />
     <ClCompile Include="Engine\DebugManager\DebugManager.cpp" />
     <ClCompile Include="Engine\DebugManager\DebugLayer\DebugLayer.cpp" />
     <ClCompile Include="Engine\EngineFunctionManager.cpp" />
@@ -236,6 +238,8 @@
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshOperator.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshDeleter.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ModelViewer.cpp" />
+    <ClCompile Include="Collision\SphereHelper.cpp" />
     <ClCompile Include="Transform\ParentChildRelationship.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
@@ -416,6 +420,8 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTexture.h" />
+    <ClInclude Include="Component\Engine\Camera\CameraHelper.h" />
     <ClInclude Include="Engine\DebugManager\DebugManager.h" />
     <ClInclude Include="Engine\DebugManager\DebugLayer\DebugLayer.h" />
     <ClInclude Include="Engine\DebugManager\DebugLayer\Inspector\IInspectorTargetSetter.h" />
@@ -505,6 +511,8 @@
     <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
     <ClInclude Include="Engine\SceneMesh\SceneMeshOperator.h" />
     <ClInclude Include="Engine\SceneMesh\SceneMeshDeleter.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewer.h" />
+    <ClInclude Include="Collision\SphereHelper.h" />
     <ClInclude Include="System\FpsCounter\IFpsGetter.h" />
     <ClInclude Include="Transform\ParentChildRelationship.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />

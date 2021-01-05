@@ -17,7 +17,7 @@ AssetsRenderTextureManager::AssetsRenderTextureManager()
 
 AssetsRenderTextureManager::~AssetsRenderTextureManager() = default;
 
-const MeshRenderOnTexture& AssetsRenderTextureManager::getCurrentSelectTexture() const {
+const AssetsRenderTexture& AssetsRenderTextureManager::getCurrentSelectTexture() const {
     return *mCurrentSelectTexture;
 }
 

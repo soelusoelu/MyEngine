@@ -18,7 +18,7 @@ public:
     virtual void add(const std::string& filePath) override;
     virtual void add(const std::string& fileName, const std::string& directoryPath) override;
     virtual void deleteTexture(const std::string& filePath) override;
-    virtual const MeshRenderOnTexturePtrArray& getTextures() const override;
+    virtual const AssetsRenderTexturePtrArray& getTextures() const override;
     void initialize();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
@@ -38,15 +38,14 @@ private:
     //テクスチャを並び替える
     void rearrangeTextures();
     //テクスチャ位置を設定する
-    void setTexturePosition(MeshRenderOnTexture& target, int textureNo);
+    void setTexturePosition(AssetsRenderTexture& target, int textureNo);
     //ファイルパスが読み込み済みか
     bool loadedFilePath(const std::string& filePath) const;
 
 private:
-    MeshRenderOnTexturePtrArray mTextures;
-    MeshRenderOnTexturePtrArray mNonDrawTextures;
+    AssetsRenderTexturePtrArray mTextures;
+    AssetsRenderTexturePtrArray mNonDrawTextures;
     std::unordered_set<std::string> mTexturesFilePath;
-    Matrix4 mViewProj;
 
     //縦横共通サイズ
     int mTextureSize;

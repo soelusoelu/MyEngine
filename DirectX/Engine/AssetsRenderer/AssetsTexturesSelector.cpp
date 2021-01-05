@@ -1,4 +1,5 @@
 ﻿#include "AssetsTexturesSelector.h"
+#include "AssetsRenderTexture.h"
 #include "../../Input/Input.h"
 #include "../../Sprite/SpriteUtility.h"
 #include "../../System/Texture/MeshRenderOnTexture.h"
@@ -14,7 +15,7 @@ void AssetsTexturesSelector::initialize(const IAssetsRenderTexturesGetter* gette
     mTexturesGetter = getter;
 }
 
-bool AssetsTexturesSelector::selectTexture(MeshRenderOnTexturePtr& out) {
+bool AssetsTexturesSelector::selectTexture(AssetsRenderTexturePtr& out) {
     const auto& mouse = Input::mouse();
 
     //マウスの左ボタンを押していなければ終了
@@ -26,7 +27,7 @@ bool AssetsTexturesSelector::selectTexture(MeshRenderOnTexturePtr& out) {
     const auto& textures = mTexturesGetter->getTextures();
     const auto& mousePos = Input::mouse().getMousePosition();
     for (const auto& tex : textures) {
-        if (SpriteUtility::containsDebug(tex->getSprite(), mousePos)) {
+        if (SpriteUtility::containsDebug(tex->getTexture().getSprite(), mousePos)) {
             out = tex;
             return true;
         }

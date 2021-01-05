@@ -1,5 +1,6 @@
 ﻿#include "SphereCollider.h"
 #include "../Mesh/MeshComponent.h"
+#include "../../../Collision/Collision.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Transform/Transform3D.h"
 
@@ -17,9 +18,11 @@ void SphereCollider::start() {
 
     auto meshComponent = getComponent<MeshComponent>();
     if (meshComponent) {
-        const auto mesh = meshComponent->getMesh();
+        auto mesh = meshComponent->getMesh();
         //メッシュ情報から球を作成する
-        createSphere(*mesh);
+        SphereHelper::create(mSphere, *mesh);
+        mDefaultCenter = mSphere.center;
+        mDefaultRadius = mSphere.radius;
     }
 }
 
@@ -58,50 +61,4 @@ void SphereCollider::set(const Vector3& center, float radius) {
 
 const Sphere& SphereCollider::getSphere() const {
     return mSphere;
-}
-
-void SphereCollider::createSphere(const IMesh& mesh) {
-    //すべてのメッシュから球を作成する
-    auto min = Vector3::one * Math::infinity;
-    auto max = Vector3::one * Math::negInfinity;
-    for (size_t i = 0; i < mesh.getMeshCount(); i++) {
-        computeCenterRadius(min, max, mesh.getMeshVertices(i));
-    }
-    mDefaultCenter = (min + max) / 2.f;
-    mDefaultRadius = (max - min).length() / 2.f;
-    mSphere.center = mDefaultCenter;
-    mSphere.radius = mDefaultRadius;
-}
-
-void SphereCollider::computeCenterRadius(Vector3& outMin, Vector3& outMax, const MeshVertices& meshVertices) {
-    //中心位置計算のための最小、最大位置
-    auto min = outMin;
-    auto max = outMax;
-
-    //メッシュ情報から最小、最大点を割り出す
-    for (size_t i = 0; i < meshVertices.size(); ++i) {
-        const auto& vertices = meshVertices[i];
-        const auto& p = vertices.pos;
-        if (p.x < min.x) {
-            min.x = p.x;
-        }
-        if (p.x > max.x) {
-            max.x = p.x;
-        }
-        if (p.y < min.y) {
-            min.y = p.y;
-        }
-        if (p.y > max.y) {
-            max.y = p.y;
-        }
-        if (p.z < min.z) {
-            min.z = p.z;
-        }
-        if (p.z > max.z) {
-            max.z = p.z;
-        }
-    }
-
-    outMin = min;
-    outMax = max;
 }

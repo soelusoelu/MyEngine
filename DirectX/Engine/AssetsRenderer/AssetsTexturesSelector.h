@@ -9,7 +9,7 @@ public:
     ~AssetsTexturesSelector();
     void initialize(const IAssetsRenderTexturesGetter* getter);
     //マウスでテクスチャを選択する
-    bool selectTexture(MeshRenderOnTexturePtr& out);
+    bool selectTexture(AssetsRenderTexturePtr& out);
 
 private:
     AssetsTexturesSelector(const AssetsTexturesSelector&) = delete;
