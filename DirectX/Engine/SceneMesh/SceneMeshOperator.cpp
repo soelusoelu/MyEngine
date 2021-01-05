@@ -19,6 +19,10 @@ bool SceneMeshOperator::selectedMesh() const {
     return (mCurrentSelectMesh) ? true : false;
 }
 
+void SceneMeshOperator::initialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter) {
+    mSelector->initialize(camera, getter);
+}
+
 void SceneMeshOperator::update() {
     mSelector->selectMesh(mCurrentSelectMesh);
     mDeleter->deleteMesh(mCurrentSelectMesh);

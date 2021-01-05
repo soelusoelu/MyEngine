@@ -3,9 +3,9 @@
 #include "GlobalFunction.h"
 #include "SceneManager.h"
 #include "Window.h"
+#include "FpsCounter/FPSCounter.h"
 #include "Shader/Shader.h"
 #include "Texture/Texture.h"
-#include "../Device/FPSCounter.h"
 #include "../DirectX/DirectX.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Imgui/imgui.h"
@@ -99,7 +99,7 @@ void Game::initialize() {
     Random::initialize();
     InputUtility::initialize(hwnd);
     GameObjectCreater::initialize();
-    mSceneManager->initialize();
+    mSceneManager->initialize(mFPSCounter.get());
 }
 
 void Game::mainLoop() {

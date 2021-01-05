@@ -2,7 +2,7 @@
 #include "../GlobalFunction.h"
 #include "../Shader/Shader.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../Engine/Debug/Debug.h"
+#include "../../Engine/DebugManager/DebugUtility/Debug.h"
 
 Texture::Texture() :
     mShaderResourceView(nullptr),

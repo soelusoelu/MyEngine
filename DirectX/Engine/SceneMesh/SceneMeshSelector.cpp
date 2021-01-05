@@ -4,6 +4,7 @@
 #include "../../Component/Engine/Mesh/MeshComponent.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Input/Input.h"
+#include "../../System/Window.h"
 
 SceneMeshSelector::SceneMeshSelector()
     : mCamera(nullptr)
@@ -19,11 +20,29 @@ void SceneMeshSelector::initialize(const std::shared_ptr<Camera>& camera, const 
 }
 
 bool SceneMeshSelector::selectMesh(std::shared_ptr<MeshComponent>& out) {
-    const auto& ray = mCamera->screenToRay(Input::mouse().getMousePosition());
-    if (RaycastHit raycastHit{}; Intersect::intersectRayMeshes(ray, *mMeshesGetter, &raycastHit)) {
-        out = raycastHit.hitObject->componentManager().getComponent<MeshComponent>();
-        return true;
+    if (!selectConditions()) {
+        return false;
     }
 
-    return false;
+    RaycastHit raycastHit{};
+    if (!Intersect::intersectRayMeshes(mCamera->screenToRay(Input::mouse().getMousePosition()), *mMeshesGetter, &raycastHit)) {
+        return false;
+    }
+
+    out = raycastHit.hitObject->componentManager().getComponent<MeshComponent>();
+
+    return true;
+}
+
+bool SceneMeshSelector::selectConditions() const {
+    const auto& mouse = Input::mouse();
+    if (!mouse.getMouseButtonDown(MouseCode::LeftButton)) {
+        return false;
+    }
+    const auto& mousePos = mouse.getMousePosition();
+    if (mousePos.x > Window::width() || mousePos.y > Window::height()) {
+        return false;
+    }
+
+    return true;
 }

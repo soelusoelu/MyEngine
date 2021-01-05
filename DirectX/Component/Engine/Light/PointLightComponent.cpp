@@ -1,7 +1,7 @@
 ﻿#include "PointLightComponent.h"
 #include "../Camera/Camera.h"
 #include "../../../DirectX/DirectXInclude.h"
-#include "../../../Engine/Debug/ImGuiWrapper.h"
+#include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Light/LightManager.h"
 #include "../../../Light/PointLight.h"

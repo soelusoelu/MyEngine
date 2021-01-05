@@ -1,5 +1,5 @@
 ﻿#include "StringUtil.h"
-#include "../Engine/Debug/Debug.h"
+#include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/SystemInclude.h"
 #include <cassert>
 #include <locale.h>

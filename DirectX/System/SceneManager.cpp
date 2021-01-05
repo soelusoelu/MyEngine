@@ -9,8 +9,9 @@
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
 #include "../Engine/EngineFunctionManager.h"
-#include "../Engine/Debug/DebugUtility.h"
-#include "../Engine/Debug/ImGuiInspector.h"
+#include "../Engine/DebugManager/DebugManager.h"
+#include "../Engine/DebugManager/DebugLayer/DebugLayer.h"
+#include "../Engine/DebugManager/DebugLayer/Inspector/ImGuiInspector.h"
 #include "../Engine/Pause/Pause.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -66,24 +67,24 @@ void SceneManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rap
     mTextDrawer->saveProperties(alloc, inObj);
 }
 
-void SceneManager::initialize() {
+void SceneManager::initialize(const IFpsGetter* fpsGetter) {
+    //デフォルトカメラを作成する
+    auto cam = GameObjectCreater::create("Camera");
+    mCamera = cam->componentManager().getComponent<Camera>();
+
     mRenderer->initialize();
-    mEngineManager->initialize(mGameObjectManager.get());
+    mEngineManager->initialize(mCamera, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
     mLightManager->initialize();
     mTextDrawer->initialize();
 
     TextBase::setDrawString(mTextDrawer);
 
-    auto cam = GameObjectCreater::create("Camera");
-    mCamera = cam->componentManager().getComponent<Camera>();
     //デフォルトのインスペクターの対象に設定する
-    mEngineManager->debug().inspector().setTarget(cam);
+    mEngineManager->debug().getDebugLayer().inspector()->setTarget(cam);
 
     mMeshManager->createShadowMap();
 
     mLightManager->createDirectionalLight();
-
-    mEngineManager->afterInitialize(mCamera, mMeshManager.get());
 
     //初期シーンの設定
     createScene(mBeginScene);

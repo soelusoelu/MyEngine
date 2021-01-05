@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "ICurrentSelectTextureGetter.h"
+#include "../DebugManager/DebugLayer/Inspector/IInspectorTargetSetter.h"
 #include "../../Math/Math.h"
 #include "../../Mesh/IMeshesGetter.h"
 #include <memory>
@@ -13,8 +14,12 @@ class AssetsPlacement {
 public:
     AssetsPlacement();
     ~AssetsPlacement();
-    void initialize(const ICurrentSelectTextureGetter* getter);
-    void afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter);
+    void initialize(
+        const std::shared_ptr<Camera>& camera,
+        IInspectorTargetSetter* inspector,
+        const IMeshesGetter* meshesGetter,
+        const ICurrentSelectTextureGetter* textureGetter
+    );
     void update();
 
 private:
@@ -29,7 +34,8 @@ private:
     bool placeConditions() const;
 
 private:
+    IInspectorTargetSetter* mInspector;
+    const IMeshesGetter* mMeshesGetter;
     const ICurrentSelectTextureGetter* mTextureGetter;
     std::shared_ptr<Camera> mCamera;
-    const IMeshesGetter* mMeshesGetter;
 };

@@ -1,6 +1,6 @@
 ﻿#include "WaveformRenderSample.h"
 #include "../Sound/SoundComponent.h"
-#include "../../../Engine/Debug/Debug.h"
+#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../Input/Input.h"
 #include "../../../Transform/Transform2D.h"
 #include "../../../Sound/Effects/SoundEffect.h"

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "FpsCounter/IFpsGetter.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -22,7 +23,7 @@ public:
     ~SceneManager();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
-    void initialize();
+    void initialize(const IFpsGetter* fpsGetter);
     void update();
     void draw() const;
 

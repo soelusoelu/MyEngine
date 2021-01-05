@@ -1,8 +1,6 @@
 ﻿#include "FPSCounter.h"
-#include "Time.h"
-#include "../DebugLayer/DebugUtility.h"
-#include "../DebugLayer/FixedDebugInformation.h"
-#include "../Utility/LevelLoader.h"
+#include "../../Device/Time.h"
+#include "../../Utility/LevelLoader.h"
 
 FPSCounter::FPSCounter() :
     mDrawUpdateTimer(std::make_unique<Time>(0.5f)),
@@ -13,6 +11,10 @@ FPSCounter::FPSCounter() :
 }
 
 FPSCounter::~FPSCounter() = default;
+
+float FPSCounter::getFps() const {
+    return mCurrentFPS;
+}
 
 void FPSCounter::loadProperties(const rapidjson::Value& inObj) {
     const auto& fpsObj = inObj["fpsCounter"];
@@ -47,7 +49,7 @@ void FPSCounter::fixedFrame() {
     Time::deltaTime = deltaTime;
 
 #ifdef _DEBUG
-    drawFPS(time);
+    computeFps(time);
 #endif // _DEBUG
 }
 
@@ -55,11 +57,10 @@ void FPSCounter::setFixedFrame(float fixedFrame) {
     mFixedFrame = fixedFrame;
 }
 
-void FPSCounter::drawFPS(float time) {
+void FPSCounter::computeFps(float time) {
     mDrawUpdateTimer->update();
     if (mDrawUpdateTimer->isTime()) {
         mDrawUpdateTimer->reset();
         mCurrentFPS = 1000.f / time;
     }
-    DebugUtility::instance().fixedDebugInfo().drawFPS(mCurrentFPS);
 }

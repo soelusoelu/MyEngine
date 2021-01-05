@@ -35,16 +35,12 @@ void AssetsRenderTextureManager::saveProperties(rapidjson::Document::AllocatorTy
     mTextureAdder->saveProperties(alloc, inObj);
 }
 
-void AssetsRenderTextureManager::initialize() {
+void AssetsRenderTextureManager::initialize(const std::shared_ptr<Camera>& camera, IInspectorTargetSetter* inspector, const IMeshesGetter* getter) {
     mTextureList->initialize();
     mTextureAdder->initialize(mTextureList.get());
     mDeleter->initialize(mTextureList.get(), this);
     mSelector->initialize(mTextureList.get());
-    mPlacement->initialize(this);
-}
-
-void AssetsRenderTextureManager::afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter) {
-    mPlacement->afterInitialize(camera, getter);
+    mPlacement->initialize(camera, inspector, getter, this);
 }
 
 void AssetsRenderTextureManager::update() {

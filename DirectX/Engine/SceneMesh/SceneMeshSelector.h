@@ -18,6 +18,9 @@ private:
     SceneMeshSelector(const SceneMeshSelector&) = delete;
     SceneMeshSelector& operator=(const SceneMeshSelector&) = delete;
 
+    //メッシュを選択する条件が整っているか
+    bool selectConditions() const;
+
 private:
     std::shared_ptr<Camera> mCamera;
     const IMeshesGetter* mMeshesGetter;

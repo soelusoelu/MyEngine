@@ -1,6 +1,4 @@
 ﻿#include "AssetsPlacement.h"
-#include "../DebugUtility.h"
-#include "../ImGuiInspector.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/Camera.h"
 #include "../../Component/Engine/Mesh/MeshComponent.h"
@@ -15,21 +13,25 @@
 #include "../../Utility/FileUtil.h"
 
 AssetsPlacement::AssetsPlacement()
-    : mTextureGetter(nullptr)
-    , mCamera(nullptr)
+    : mInspector(nullptr)
     , mMeshesGetter(nullptr)
+    , mTextureGetter(nullptr)
+    , mCamera(nullptr)
 {
 }
 
 AssetsPlacement::~AssetsPlacement() = default;
 
-void AssetsPlacement::initialize(const ICurrentSelectTextureGetter* getter) {
-    mTextureGetter = getter;
-}
-
-void AssetsPlacement::afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter) {
+void AssetsPlacement::initialize(
+    const std::shared_ptr<Camera>& camera,
+    IInspectorTargetSetter* inspector,
+    const IMeshesGetter* meshesGetter,
+    const ICurrentSelectTextureGetter* textureGetter
+) {
     mCamera = camera;
-    mMeshesGetter = getter;
+    mInspector = inspector;
+    mMeshesGetter = meshesGetter;
+    mTextureGetter = textureGetter;
 }
 
 void AssetsPlacement::update() {
@@ -53,7 +55,7 @@ void AssetsPlacement::placeAsset() {
     decideAssetPlacePosition(newObj);
 
     //インスペクターの対象に設定する
-    DebugUtility::instance().inspector().setTarget(newObj);
+    mInspector->setTarget(newObj);
 }
 
 void AssetsPlacement::decideAssetPlacePosition(const std::shared_ptr<GameObject>& asset) const {

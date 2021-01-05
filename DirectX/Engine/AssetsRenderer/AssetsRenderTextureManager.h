@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "ICurrentSelectTextureGetter.h"
+#include "../DebugManager/DebugLayer/Inspector/IInspectorTargetSetter.h"
 #include "../../Math/Math.h"
 #include "../../Mesh/IMeshesGetter.h"
 #include <rapidjson/document.h>
@@ -24,9 +25,7 @@ public:
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     //初期化
-    void initialize();
-    //一通りの初期化後の初期化処理
-    void afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter);
+    void initialize(const std::shared_ptr<Camera>& camera, IInspectorTargetSetter* inspector, const IMeshesGetter* getter);
     //毎フレーム更新
     void update();
     //メッシュを描画する

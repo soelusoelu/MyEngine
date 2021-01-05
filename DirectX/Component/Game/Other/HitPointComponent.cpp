@@ -1,6 +1,6 @@
 ﻿#include "HitPointComponent.h"
 #include "../../../Device/Subject.h"
-#include "../../../Engine/Debug/ImGuiWrapper.h"
+#include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
 #include "../../../Utility/LevelLoader.h"
 
 HitPointComponent::HitPointComponent(GameObject& gameObject)

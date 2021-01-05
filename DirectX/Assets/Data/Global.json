@@ -14,10 +14,18 @@
         "fpsCounter": {
             "fps": 60.0
         },
-        "log": {
-            "scale": [
-                0.3125,
-                0.3125
+        "keyboard": {
+            "enterKey": "Space"
+        },
+        "joyPad": {
+            "enterPad": "A"
+        },
+        "sceneManager": {
+            "beginScene": "MapEditor",
+            "removeExclusionTag": [
+                "Camera",
+                "Light",
+                "Shadow"
             ]
         },
         "fixedDebugInfo": {
@@ -38,6 +46,12 @@
         },
         "inspector": {
             "inspectorPositionX": 1400.0
+        },
+        "log": {
+            "scale": [
+                0.3125,
+                0.3125
+            ]
         },
         "pause": {
             "fileName": "System/pause.png",
@@ -62,20 +76,6 @@
                 1016.0
             ],
             "spriteButtonFilePath": "System/add_mesh.png"
-        },
-        "keyboard": {
-            "enterKey": "Space"
-        },
-        "joyPad": {
-            "enterPad": "A"
-        },
-        "sceneManager": {
-            "beginScene": "MapEditor",
-            "removeExclusionTag": [
-                "Camera",
-                "Light",
-                "Shadow"
-            ]
         },
         "lightManager": {
             "ambientLight": [

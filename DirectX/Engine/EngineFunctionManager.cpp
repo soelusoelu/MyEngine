@@ -1,12 +1,13 @@
 ﻿#include "EngineFunctionManager.h"
 #include "AssetsRenderer/AssetsRenderTextureManager.h"
-#include "Debug/DebugUtility.h"
+#include "DebugManager/DebugManager.h"
+#include "DebugManager/DebugLayer/DebugLayer.h"
 #include "Pause/Pause.h"
 #include "SceneMesh/SceneMeshOperator.h"
 #include "../Device/Renderer.h"
 
 EngineFunctionManager::EngineFunctionManager()
-    : mDebug(std::make_unique<DebugUtility>())
+    : mDebugManager(std::make_unique<DebugManager>())
     , mPause(std::make_unique<Pause>())
     , mAssetsRenderTextureManager(std::make_unique<AssetsRenderTextureManager>())
     , mSceneMeshOperator(std::make_unique<SceneMeshOperator>())
@@ -17,31 +18,30 @@ EngineFunctionManager::EngineFunctionManager()
 EngineFunctionManager::~EngineFunctionManager() = default;
 
 void EngineFunctionManager::loadProperties(const rapidjson::Value& inObj) {
+    mDebugManager->loadProperties(inObj);
     mPause->loadProperties(inObj);
     mAssetsRenderTextureManager->loadProperties(inObj);
 }
 
 void EngineFunctionManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
+    mDebugManager->saveProperties(alloc, inObj);
     mPause->saveProperties(alloc, inObj);
     mAssetsRenderTextureManager->saveProperties(alloc, inObj);
 }
 
-void EngineFunctionManager::initialize(const IGameObjectsGetter* getter) {
-    mDebug->initialize(getter, mPause.get());
+void EngineFunctionManager::initialize(const std::shared_ptr<Camera>& camera, const IGameObjectsGetter* gameObjctsGetter, const IMeshesGetter* meshesGetter, const IFpsGetter* fpsGetter) {
+    mDebugManager->initialize(gameObjctsGetter, fpsGetter, mPause.get());
     mPause->initialize();
-    mAssetsRenderTextureManager->initialize();
-}
-
-void EngineFunctionManager::afterInitialize(const std::shared_ptr<Camera>& camera, const IMeshesGetter* getter) {
-    mAssetsRenderTextureManager->afterInitialize(camera, getter);
+    mAssetsRenderTextureManager->initialize(camera, mDebugManager->getDebugLayer().inspector(), meshesGetter);
+    mSceneMeshOperator->initialize(camera, meshesGetter);
 }
 
 void EngineFunctionManager::preUpdateProcess() {
-    mDebug->preUpdateProcess();
+    mDebugManager->preUpdateProcess();
 }
 
 void EngineFunctionManager::update() {
-    mDebug->update();
+    mDebugManager->update();
     mPause->update();
     mAssetsRenderTextureManager->update();
     mSceneMeshOperator->update();
@@ -64,16 +64,16 @@ void EngineFunctionManager::draw(const Renderer& renderer, Matrix4& proj) const 
     }
 
     mPause->drawButton(proj);
-    mDebug->draw(mMode, renderer, proj);
+    mDebugManager->draw(mMode, renderer, proj);
 }
 
 void EngineFunctionManager::draw3D(const Renderer& renderer, const Matrix4& viewProj) const {
     mAssetsRenderTextureManager->drawMeshes();
-    mDebug->draw3D(renderer, viewProj);
+    mDebugManager->draw3D(renderer, viewProj);
 }
 
-DebugUtility& EngineFunctionManager::debug() const {
-    return *mDebug;
+DebugManager& EngineFunctionManager::debug() const {
+    return *mDebugManager;
 }
 
 IPause& EngineFunctionManager::pause() const {

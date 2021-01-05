@@ -78,7 +78,7 @@
 #include "../Component/Game/UI/Menu/MenuToTitle.h"
 #include "../Component/Game/UI/Menu/MenuWindow.h"
 #include "../Component/Game/UI/Menu/MenuWindowInitializer.h"
-#include "../Engine/Debug/Debug.h"
+#include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/GlobalFunction.h"
 #include "../Utility/LevelLoader.h"
 #include <cassert>
