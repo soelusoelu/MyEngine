@@ -9,7 +9,7 @@ class ComponentManager;
 class GameObjectManager;
 class Transform3D;
 
-class GameObject final : public Object, public std::enable_shared_from_this<GameObject> {
+class GameObject final : public Object {
 public:
     GameObject();
     ~GameObject();
@@ -51,9 +51,6 @@ public:
 private:
     GameObject(const GameObject&) = delete;
     GameObject& operator=(const GameObject&) = delete;
-
-    //初期化
-    void initialize();
 
 private:
     std::unique_ptr<Transform3D> mTransform;

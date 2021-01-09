@@ -24,7 +24,11 @@ void DebugManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rap
     DebugUtility::instance().saveProperties(alloc, inObj);
 }
 
-void DebugManager::initialize(const IGameObjectsGetter* gameObjectsGetter, const IFpsGetter* fpsGetter, const IPause* pause) {
+void DebugManager::initialize(
+    const IGameObjectsGetter* gameObjectsGetter,
+    const IFpsGetter* fpsGetter,
+    const IPause* pause
+) {
     mStringDrawer->initialize();
     mDebugLayer->initialize(gameObjectsGetter, fpsGetter);
     DebugUtility::instance().initialize(pause);
@@ -40,15 +44,23 @@ void DebugManager::update() {
     mDebugLayer->update();
 }
 
-void DebugManager::draw(DebugMode mode, const Renderer& renderer, Matrix4& proj) const {
+void DebugManager::draw(
+    EngineMode mode,
+    const Renderer& renderer,
+    Matrix4& proj
+) const {
     mDebugLayer->draw(mode, *mStringDrawer, proj);
     DebugUtility::instance().draw(mode, *mStringDrawer);
     mStringDrawer->drawAll(proj);
-    DebugUtility::instance().drawLine2D(renderer, proj);
+    DebugUtility::instance().drawLine2D(mode, renderer, proj);
 }
 
-void DebugManager::draw3D(const Renderer& renderer, const Matrix4& viewProj) const {
-    DebugUtility::instance().draw3D(renderer, viewProj);
+void DebugManager::draw3D(
+    EngineMode mode,
+    const Renderer& renderer,
+    const Matrix4& viewProj
+) const {
+    DebugUtility::instance().draw3D(mode, renderer, viewProj);
 }
 
 DebugLayer& DebugManager::getDebugLayer() const {

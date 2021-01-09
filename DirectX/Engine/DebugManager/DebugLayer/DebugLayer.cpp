@@ -33,8 +33,8 @@ void DebugLayer::update() {
     mHierarchy->update();
 }
 
-void DebugLayer::draw(DebugMode mode, DrawString& drawer, Matrix4& proj) const {
-    if (mode == DebugMode::LOG) {
+void DebugLayer::draw(EngineMode mode, DrawString& drawer, Matrix4& proj) const {
+    if (mode == EngineMode::GAME) {
         mFixedDebugInfo->draw(drawer);
     }
 

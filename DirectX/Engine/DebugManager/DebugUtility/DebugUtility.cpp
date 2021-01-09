@@ -57,21 +57,25 @@ void DebugUtility::preUpdateProcess() {
     mLineRenderer3D->clear();
 }
 
-void DebugUtility::draw(DebugMode mode, DrawString& drawer) const {
-    if (mode == DebugMode::LOG) {
+void DebugUtility::draw(EngineMode mode, DrawString& drawer) const {
+    if (mode == EngineMode::GAME) {
         mLog->drawLogs(drawer);
     }
 }
 
-void DebugUtility::drawLine2D(const Renderer& renderer, Matrix4& proj) const {
-    renderer.renderLine2D(proj);
-    mLineRenderer2D->draw(proj);
+void DebugUtility::drawLine2D(EngineMode mode, const Renderer& renderer, Matrix4& proj) const {
+    if (mode == EngineMode::GAME) {
+        renderer.renderLine2D(proj);
+        mLineRenderer2D->draw(proj);
+    }
 }
 
-void DebugUtility::draw3D(const Renderer& renderer, const Matrix4& viewProj) const {
-    renderer.renderPointLine3D();
-    mPointRenderer->draw(viewProj);
-    mLineRenderer3D->draw(viewProj);
+void DebugUtility::draw3D(EngineMode mode, const Renderer& renderer, const Matrix4& viewProj) const {
+    if (mode == EngineMode::GAME) {
+        renderer.renderPointLine3D();
+        mPointRenderer->draw(viewProj);
+        mLineRenderer3D->draw(viewProj);
+    }
 }
 
 Log& DebugUtility::log() const {

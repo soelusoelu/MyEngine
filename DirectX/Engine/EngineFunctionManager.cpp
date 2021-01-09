@@ -2,8 +2,10 @@
 #include "AssetsRenderer/AssetsRenderTextureManager.h"
 #include "DebugManager/DebugManager.h"
 #include "DebugManager/DebugLayer/DebugLayer.h"
+#include "ModelViewer/ModelViewer.h"
 #include "Pause/Pause.h"
 #include "SceneMesh/SceneMeshOperator.h"
+#include "../Component/Engine/Camera/Camera.h"
 #include "../Device/Renderer.h"
 
 EngineFunctionManager::EngineFunctionManager()
@@ -11,7 +13,7 @@ EngineFunctionManager::EngineFunctionManager()
     , mPause(std::make_unique<Pause>())
     , mAssetsRenderTextureManager(std::make_unique<AssetsRenderTextureManager>())
     , mSceneMeshOperator(std::make_unique<SceneMeshOperator>())
-    , mMode(DebugMode::LOG)
+    , mModelViewer(std::make_unique<ModelViewer>())
 {
 }
 
@@ -29,47 +31,62 @@ void EngineFunctionManager::saveProperties(rapidjson::Document::AllocatorType& a
     mAssetsRenderTextureManager->saveProperties(alloc, inObj);
 }
 
-void EngineFunctionManager::initialize(const std::shared_ptr<Camera>& camera, const IGameObjectsGetter* gameObjctsGetter, const IMeshesGetter* meshesGetter, const IFpsGetter* fpsGetter) {
+void EngineFunctionManager::initialize(
+    const std::shared_ptr<Camera>& camera,
+    const IGameObjectsGetter* gameObjctsGetter,
+    const IMeshesGetter* meshesGetter,
+    const IFpsGetter* fpsGetter
+) {
     mDebugManager->initialize(gameObjctsGetter, fpsGetter, mPause.get());
     mPause->initialize();
     mAssetsRenderTextureManager->initialize(camera, mDebugManager->getDebugLayer().inspector(), meshesGetter);
     mSceneMeshOperator->initialize(camera, meshesGetter);
+    mModelViewer->initialize();
 }
 
 void EngineFunctionManager::preUpdateProcess() {
     mDebugManager->preUpdateProcess();
 }
 
-void EngineFunctionManager::update() {
+void EngineFunctionManager::update(EngineMode mode) {
+    if (mode == EngineMode::MAP_EDITOR) {
+        mAssetsRenderTextureManager->update();
+    } else if (mode == EngineMode::MODEL_VIEWER) {
+
+    }
+
     mDebugManager->update();
     mPause->update();
-    mAssetsRenderTextureManager->update();
     mSceneMeshOperator->update();
 }
 
-void EngineFunctionManager::changeScene(const std::string& scene) {
-    if (scene == DebugSceneName::MAP_EDITOR) {
-        mMode = DebugMode::MESH_TEXTURES;
-    } else {
-        mMode = DebugMode::LOG;
-    }
-}
-
-void EngineFunctionManager::draw(const Renderer& renderer, Matrix4& proj) const {
+void EngineFunctionManager::draw(EngineMode mode, const Renderer& renderer, Matrix4& proj) const {
     //レンダリング領域をデバッグに変更
     renderer.renderToDebug(proj);
 
-    if (mMode == DebugMode::MESH_TEXTURES) {
+    if (mode == EngineMode::GAME) {
+
+    } else if (mode == EngineMode::MAP_EDITOR) {
         mAssetsRenderTextureManager->drawTextures(proj);
     }
 
     mPause->drawButton(proj);
-    mDebugManager->draw(mMode, renderer, proj);
+    mDebugManager->draw(mode, renderer, proj);
 }
 
-void EngineFunctionManager::draw3D(const Renderer& renderer, const Matrix4& viewProj) const {
-    mAssetsRenderTextureManager->drawMeshes();
-    mDebugManager->draw3D(renderer, viewProj);
+void EngineFunctionManager::draw3D(
+    EngineMode mode,
+    const Renderer& renderer,
+    const Camera& camera,
+    const DirectionalLight& dirLight
+) const {
+    if (mode == EngineMode::MAP_EDITOR) {
+        mAssetsRenderTextureManager->drawMeshes();
+    } else if (mode == EngineMode::MODEL_VIEWER) {
+        mModelViewer->draw(camera, dirLight);
+    }
+
+    mDebugManager->draw3D(mode, renderer, camera.getViewProjection());
 }
 
 DebugManager& EngineFunctionManager::debug() const {

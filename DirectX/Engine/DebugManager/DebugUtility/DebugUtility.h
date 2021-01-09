@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../DebugMode.h"
+#include "../../EngineMode.h"
 #include "../../Pause/IPause.h"
 #include "../../../Math/Math.h"
 #include <rapidjson/document.h>
@@ -25,9 +25,9 @@ public:
     void initialize(const IPause* pause);
     void finalize();
     void preUpdateProcess();
-    void draw(DebugMode mode, DrawString& drawer) const;
-    void drawLine2D(const Renderer& renderer, Matrix4& proj) const;
-    void draw3D(const Renderer& renderer, const Matrix4& viewProj) const;
+    void draw(EngineMode mode, DrawString& drawer) const;
+    void drawLine2D(EngineMode mode, const Renderer& renderer, Matrix4& proj) const;
+    void draw3D(EngineMode mode, const Renderer& renderer, const Matrix4& viewProj) const;
     Log& log() const;
     PointRenderer& pointRenderer() const;
     LineRenderer2D& lineRenderer2D() const;

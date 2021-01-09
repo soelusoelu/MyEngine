@@ -11,7 +11,7 @@ class DirectionalLight;
 
 class MeshManager : public IMeshesGetter {
 public:
-    MeshManager();
+    MeshManager(bool forGame = true);
     ~MeshManager();
     virtual const MeshPtrList& getMeshes() const override;
     void createShadowMap();
@@ -19,6 +19,7 @@ public:
     void draw(const Camera& camera, const DirectionalLight& dirLight) const;
     void add(const MeshPtr& mesh, bool handleShadow);
     void clear();
+    void erase(const MeshPtr& mesh);
 
 private:
     MeshManager(const MeshManager&) = delete;
@@ -38,5 +39,8 @@ private:
     MeshPtrList mShadowMeshes;
     //影の影響を受けないメッシュリスト
     MeshPtrList mMeshes;
+    //シャドーマップ
     std::shared_ptr<ShadowMap> mShadowMap;
+    //ゲームシーン用のマネージャーか
+    bool mForGame;
 };

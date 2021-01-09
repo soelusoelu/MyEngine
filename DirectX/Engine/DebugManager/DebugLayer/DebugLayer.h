@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Inspector/IInspectorTargetSetter.h"
-#include "../../DebugMode.h"
+#include "../../EngineMode.h"
 #include "../../../GameObject/IGameObjectsGetter.h"
 #include "../../../Math/Math.h"
 #include "../../../System/FpsCounter/IFpsGetter.h"
@@ -22,7 +22,7 @@ public:
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
     void initialize(const IGameObjectsGetter* gameObjectsGetter, const IFpsGetter* fpsGetter);
     void update();
-    void draw(DebugMode mode, DrawString& drawer, Matrix4& proj) const;
+    void draw(EngineMode mode, DrawString& drawer, Matrix4& proj) const;
     FixedDebugInformation& fixedDebugInfo() const;
     Hierarchy& hierarchy() const;
     IInspectorTargetSetter* inspector() const;

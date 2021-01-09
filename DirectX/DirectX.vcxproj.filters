@@ -275,6 +275,8 @@
     <ClCompile Include="Component\Engine\Camera\CameraHelper.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTexture.cpp" />
     <ClCompile Include="Collision\SphereHelper.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ModelViewCamera.cpp" />
+    <ClCompile Include="Engine\ModelViewer\AnimationViewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -580,7 +582,6 @@
     <ClInclude Include="Engine\SceneMesh\SceneMeshSelector.h" />
     <ClInclude Include="Engine\EngineFunctionManager.h" />
     <ClInclude Include="Engine\Pause\Pause.h" />
-    <ClInclude Include="Engine\DebugMode.h" />
     <ClInclude Include="Engine\Pause\IPause.h" />
     <ClInclude Include="GameObject\IGameObjectsGetter.h" />
     <ClInclude Include="Engine\DebugManager\DebugLayer\Inspector\IInspectorTargetSetter.h" />
@@ -604,6 +605,9 @@
     <ClInclude Include="Component\Engine\Camera\CameraHelper.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTexture.h" />
     <ClInclude Include="Collision\SphereHelper.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewCamera.h" />
+    <ClInclude Include="Engine\ModelViewer\AnimationViewer.h" />
+    <ClInclude Include="Engine\EngineMode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
@@ -652,5 +656,6 @@
     <None Include="Assets\Data\Ground1.json" />
     <None Include="Shader\MaterialHeader.hlsli" />
     <None Include="Assets\Data\Plane_map.json" />
+    <None Include="Assets\Data\ModelViewer.json" />
   </ItemGroup>
 </Project>

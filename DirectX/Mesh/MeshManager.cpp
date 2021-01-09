@@ -8,14 +8,20 @@
 #include "../GameObject/GameObjectFactory.h"
 #include "../Transform/Transform3D.h"
 
-MeshManager::MeshManager()
+MeshManager::MeshManager(bool forGame)
     : mShadowMap(nullptr)
+    , mForGame(forGame)
 {
-    MeshRenderer::setMeshManager(this);
+    //ゲームシーン用のマネージャーなら
+    if (forGame) {
+        MeshRenderer::setMeshManager(this);
+    }
 }
 
 MeshManager::~MeshManager() {
-    MeshRenderer::setMeshManager(nullptr);
+    if (mForGame) {
+        MeshRenderer::setMeshManager(nullptr);
+    }
 }
 
 const MeshPtrList& MeshManager::getMeshes() const {
@@ -32,7 +38,7 @@ void MeshManager::update() {
 }
 
 void MeshManager::draw(const Camera& camera, const DirectionalLight& dirLight) const {
-    if (mShadowMeshes.empty()) {
+    if (mShadowMeshes.empty() && mMeshes.empty()) {
         return;
     }
 
@@ -55,6 +61,11 @@ void MeshManager::add(const MeshPtr& mesh, bool handleShadow) {
 
 void MeshManager::clear() {
     remove();
+}
+
+void MeshManager::erase(const MeshPtr& mesh) {
+    mShadowMeshes.remove(mesh);
+    mMeshes.remove(mesh);
 }
 
 void MeshManager::remove() {

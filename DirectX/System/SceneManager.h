@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "FpsCounter/IFpsGetter.h"
+#include "../Engine/EngineMode.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -30,6 +31,10 @@ public:
 private:
     void change();
     void createScene(const std::string& name);
+    //最初のシーンを選択する
+    void choiceBeginScene();
+    //ゲーム中か
+    bool isGameMode() const;
 
 private:
     std::unique_ptr<Renderer> mRenderer;
@@ -43,5 +48,7 @@ private:
     std::unique_ptr<LightManager> mLightManager;
     DrawString* mTextDrawer;
     std::string mBeginScene;
+    std::string mReleaseScene;
     std::unordered_set<std::string> mRemoveExclusionTags;
+    EngineMode mMode;
 };

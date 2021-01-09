@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DebugMode.h"
+#include "EngineMode.h"
 #include "Pause/IPause.h"
 #include "../GameObject/IGameObjectsGetter.h"
 #include "../Math/Math.h"
@@ -11,11 +11,13 @@
 #include <rapidjson/document.h>
 
 class Camera;
+class DirectionalLight;
 class Renderer;
 class DebugManager;
 class Pause;
 class AssetsRenderTextureManager;
 class SceneMeshOperator;
+class ModelViewer;
 
 //エンジン機能統括クラス
 class EngineFunctionManager {
@@ -25,17 +27,32 @@ public:
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
     //初期化
-    void initialize(const std::shared_ptr<Camera>& camera, const IGameObjectsGetter* gameObjctsGetter, const IMeshesGetter* meshesGetter, const IFpsGetter* fpsGetter);
+    void initialize(
+        const std::shared_ptr<Camera>& camera,
+        const IGameObjectsGetter* gameObjctsGetter,
+        const IMeshesGetter* meshesGetter,
+        const IFpsGetter* fpsGetter
+    );
     //アップデート前処理
     void preUpdateProcess();
     //毎フレーム更新
-    void update();
-    //シーン遷移時
-    void changeScene(const std::string& scene);
+    void update(EngineMode mode);
+
     //2D関連の描画
-    void draw(const Renderer& renderer, Matrix4& proj) const;
+    void draw(
+        EngineMode mode,
+        const Renderer& renderer,
+        Matrix4& proj
+    ) const;
+
     //3D関連の描画
-    void draw3D(const Renderer& renderer, const Matrix4& viewProj) const;
+    void draw3D(
+        EngineMode mode,
+        const Renderer& renderer,
+        const Camera& camera,
+        const DirectionalLight& dirLight
+    ) const;
+
     //デバッグ機能へのアクセス
     DebugManager& debug() const;
     //ポーズ機能へのアクセス
@@ -52,5 +69,5 @@ private:
     std::unique_ptr<Pause> mPause;
     std::unique_ptr<AssetsRenderTextureManager> mAssetsRenderTextureManager;
     std::unique_ptr<SceneMeshOperator> mSceneMeshOperator;
-    DebugMode mMode;
+    std::unique_ptr<ModelViewer> mModelViewer;
 };
