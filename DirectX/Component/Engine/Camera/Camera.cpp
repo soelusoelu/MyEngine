@@ -25,7 +25,7 @@ void Camera::lateUpdate() {
     calcView();
 }
 
-void Camera::loadProperties(const rapidjson::Value & inObj) {
+void Camera::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getFloat(inObj, "fov", &mFOV);
     JsonHelper::getFloat(inObj, "nearClip", &mNearClip);
     JsonHelper::getFloat(inObj, "farClip", &mFarClip);
@@ -63,7 +63,7 @@ Vector3 Camera::getPosition() const {
     return transform().getPosition();
 }
 
-void Camera::lookAt(const Vector3 & position) {
+void Camera::lookAt(const Vector3& position) {
     mLookAt = position;
 }
 

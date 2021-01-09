@@ -1,7 +1,5 @@
 ﻿#include "MeshShader.h"
 #include "MeshMaterial.h"
-#include "../Camera/Camera.h"
-#include "../Light/DirectionalLight.h"
 #include "../Mesh/MeshComponent.h"
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../Imgui/imgui.h"
@@ -70,10 +68,16 @@ void MeshShader::transferData() {
     }
 }
 
-void MeshShader::setCommonValue(const Camera& camera, const DirectionalLight& dirLight) const {
+void MeshShader::setCommonValue(
+    const Matrix4& view,
+    const Matrix4& projection,
+    const Vector3& cameraPosition,
+    const Vector3& dirLightDirection,
+    const Vector3& dirLightColor
+) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
     MeshCommonConstantBuffer meshcb{};
-    MeshCommonShaderSetter::setCommon(meshcb, camera, dirLight, transform());
+    MeshCommonShaderSetter::setCommon(meshcb, transform().getWorldTransform(), view, projection, cameraPosition, dirLightDirection, dirLightColor);
     mShader->transferData(&meshcb, sizeof(meshcb), 0);
 }
 

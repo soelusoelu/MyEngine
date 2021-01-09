@@ -277,6 +277,7 @@
     <ClCompile Include="Collision\SphereHelper.cpp" />
     <ClCompile Include="Engine\ModelViewer\ModelViewCamera.cpp" />
     <ClCompile Include="Engine\ModelViewer\AnimationViewer.cpp" />
+    <ClCompile Include="Engine\Camera\SimpleCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -608,6 +609,8 @@
     <ClInclude Include="Engine\ModelViewer\ModelViewCamera.h" />
     <ClInclude Include="Engine\ModelViewer\AnimationViewer.h" />
     <ClInclude Include="Engine\EngineMode.h" />
+    <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
+    <ClInclude Include="Engine\Camera\SimpleCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

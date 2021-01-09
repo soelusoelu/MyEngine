@@ -33,7 +33,13 @@ void MeshRenderer::start() {
     addToManager();
 }
 
-void MeshRenderer::draw(const Camera& camera, const DirectionalLight& dirLight) const {
+void MeshRenderer::draw(
+    const Matrix4& view,
+    const Matrix4& projection,
+    const Vector3& cameraPosition,
+    const Vector3& dirLightDirection,
+    const Vector3& dirLightColor
+) const {
     //描画できない状態なら終了
     if (!mMeshComponent->isDraw()) {
         return;
@@ -41,11 +47,11 @@ void MeshRenderer::draw(const Camera& camera, const DirectionalLight& dirLight) 
 
     //描画前描画インターフェースがセットされてたら描画
     if (mBeforeDrawer) {
-        mBeforeDrawer->drawBefore(camera, dirLight);
+        mBeforeDrawer->drawBefore(view, projection, cameraPosition, dirLightDirection, dirLightColor);
     }
 
     //メッシュ描画
-    drawMesh(camera, dirLight);
+    drawMesh(view, projection, cameraPosition, dirLightDirection, dirLightColor);
 }
 
 void MeshRenderer::setDrawBefore(const IDrawBefore* drawer) {
@@ -64,12 +70,18 @@ void MeshRenderer::setMeshManager(MeshManager* manager) {
     mMeshManager = manager;
 }
 
-void MeshRenderer::drawMesh(const Camera& camera, const DirectionalLight& dirLight) const {
+void MeshRenderer::drawMesh(
+    const Matrix4& view,
+    const Matrix4& projection,
+    const Vector3& cameraPosition,
+    const Vector3& dirLightDirection,
+    const Vector3& dirLightColor
+) const {
     //描画前準備
     mMeshShader->preSet();
 
     //メッシュ共通の値を設定する
-    mMeshShader->setCommonValue(camera, dirLight);
+    mMeshShader->setCommonValue(view, projection, cameraPosition, dirLightDirection, dirLightColor);
 
     //コンスタントバッファに転送する
     mMeshShader->transferData();

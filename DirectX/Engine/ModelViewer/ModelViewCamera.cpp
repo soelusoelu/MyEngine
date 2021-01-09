@@ -1,16 +1,23 @@
 ﻿#include "ModelViewCamera.h"
+#include "../Camera/SimpleCamera.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/CameraHelper.h"
+#include "../../Input/Input.h"
 #include "../../System/Window.h"
 
 ModelViewCamera::ModelViewCamera()
-    : mModelCenterView()
-    , mView()
-    , mProjection()
+    : mCamera(std::make_unique<SimpleCamera>())
+    , mModelCenterView()
 {
 }
 
 ModelViewCamera::~ModelViewCamera() = default;
+
+void ModelViewCamera::update() {
+    if (Input::keyboard().getKeyDown(KeyCode::F)) {
+        setModelCenterPosition();
+    }
+}
 
 void ModelViewCamera::changeModel(const IMesh& mesh) {
     //モデルを包む球を求める
@@ -18,7 +25,7 @@ void ModelViewCamera::changeModel(const IMesh& mesh) {
     SphereHelper::create(sphere, mesh);
 
     //モデル全体を映すビュー行列を求める
-    mView = CameraHelper::getViewMatrixTakingSphereInCamera(
+    const auto& view = CameraHelper::getViewMatrixTakingSphereInCamera(
         sphere,
         Window::width(),
         Window::height(),
@@ -26,23 +33,27 @@ void ModelViewCamera::changeModel(const IMesh& mesh) {
         Vector3::forward,
         Vector3::up
     );
+    //カメラにビュー行列を設定する
+    mCamera->setView(view);
     //モデル全体を映すビュー行列を保存する
-    mModelCenterView = mView;
+    mModelCenterView = view;
 
     //射影行列を求める
-    mProjection = Matrix4::createPerspectiveFOV(
+    const auto& proj = Matrix4::createPerspectiveFOV(
         Window::width(),
         Window::height(),
         FOV,
         NEAR_CLIP,
         FAR_CLIP
     );
+    //カメラに射影行列を設定する
+    mCamera->setProjection(proj);
 }
 
 void ModelViewCamera::setModelCenterPosition() {
-    mView = mModelCenterView;
+    mCamera->setView(mModelCenterView);
 }
 
-Matrix4 ModelViewCamera::getViewProjection() const {
-    return mView * mProjection;
+const SimpleCamera& ModelViewCamera::getCamera() const {
+    return *mCamera;
 }

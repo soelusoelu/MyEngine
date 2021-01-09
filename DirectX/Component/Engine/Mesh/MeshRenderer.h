@@ -2,12 +2,11 @@
 
 #include "IDrawBefore.h"
 #include "../../Component.h"
+#include "../../../Math/Math.h"
 #include <memory>
 
 class MeshComponent;
 class MeshShader;
-class Camera;
-class DirectionalLight;
 class MeshManager;
 
 //メッシュ描画専用クラス
@@ -18,7 +17,13 @@ public:
     virtual void start() override;
 
     //描画
-    void draw(const Camera& camera, const DirectionalLight& dirLight) const;
+    void draw(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const;
     //描画前描画をしたいクラスを登録する
     void setDrawBefore(const IDrawBefore* drawer);
     //メッシュコンポーネントを取得する
@@ -34,7 +39,13 @@ private:
     MeshRenderer& operator=(const MeshRenderer&) = delete;
 
     //メインメッシュ描画
-    void drawMesh(const Camera& camera, const DirectionalLight& dirLight) const;
+    void drawMesh(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const;
     //スキンメッシュコンポーネントを条件に合えば作る
     void createSkinMeshComponent();
     //マネージャーに登録する

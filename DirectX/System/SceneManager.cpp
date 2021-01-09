@@ -3,6 +3,7 @@
 #include "GlobalFunction.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/Engine/Camera/Camera.h"
+#include "../Component/Engine/Light/DirectionalLight.h"
 #include "../Component/Engine/Scene/Scene.h"
 #include "../Component/Engine/Text/TextBase.h"
 #include "../Device/DrawString.h"
@@ -108,12 +109,6 @@ void SceneManager::update() {
     if (mEngineManager->pause().isPausing()) {
         return;
     }
-    //マップエディタ中は下記
-    if (mMode == EngineMode::MAP_EDITOR) {
-        mGameObjectManager->update();
-        mMeshManager->update();
-        return;
-    }
 
     //保有しているテキストを全削除
     mTextDrawer->clear();
@@ -125,6 +120,10 @@ void SceneManager::update() {
     mMeshManager->update();
     mSpriteManager->update();
 
+    //ゲーム中じゃなければ終了
+    if (mMode != EngineMode::GAME) {
+        return;
+    }
     //シーン移行
     const auto& next = mCurrentScene->getNext();
     if (!next.empty()) {
@@ -159,7 +158,8 @@ void SceneManager::draw() const {
 
     if (isGameMode() || mMode == EngineMode::MAP_EDITOR) {
         //メッシュの描画
-        mMeshManager->draw(*mCamera, mLightManager->getDirectionalLight());
+        const auto& dirLight = mLightManager->getDirectionalLight();
+        mMeshManager->draw(mCamera->getView(), mCamera->getProjection(), mCamera->getPosition(), dirLight.getDirection(), dirLight.getLightColor());
     }
 
 #ifdef _DEBUG
@@ -211,8 +211,8 @@ void SceneManager::choiceBeginScene() {
         mMode = EngineMode::MODEL_VIEWER;
     } else {
         mMode = EngineMode::GAME;
+        createScene(mReleaseScene);
     }
-    createScene(mReleaseScene);
 }
 
 bool SceneManager::isGameMode() const {

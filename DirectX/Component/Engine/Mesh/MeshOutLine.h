@@ -22,7 +22,13 @@ public:
     virtual void drawInspector() override;
 
     //メッシュ描画前描画
-    virtual void drawBefore(const Camera& camera, const DirectionalLight& dirLight) const override;
+    virtual void drawBefore(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const override;
 
     //アウトラインの色を設定する
     void setOutLineColor(const Vector3& color);
@@ -42,7 +48,7 @@ private:
     MeshOutLine& operator=(const MeshOutLine&) = delete;
 
     //アウトラインを描画する
-    void drawOutLine(const Camera& camera, const DirectionalLight& dirLight) const;
+    void drawOutLine(const Matrix4& view, const Matrix4& projection) const;
 
 protected:
     const IMesh* mMesh;

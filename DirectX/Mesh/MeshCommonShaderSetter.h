@@ -1,20 +1,20 @@
 ﻿#pragma once
 
 #include "Material.h"
+#include "../Math/Math.h"
 #include "../System/Shader/ConstantBuffers.h"
-
-class Camera;
-class DirectionalLight;
-class Transform3D;
 
 //メッシュ共通定数バッファを設定するクラス
 class MeshCommonShaderSetter {
 public:
     static void setCommon(
         MeshCommonConstantBuffer& out,
-        const Camera& camera,
-        const DirectionalLight& dirLight,
-        const Transform3D& transform
+        const Matrix4& world,
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
     );
 
     static void setMaterial(

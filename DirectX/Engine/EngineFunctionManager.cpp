@@ -6,6 +6,7 @@
 #include "Pause/Pause.h"
 #include "SceneMesh/SceneMeshOperator.h"
 #include "../Component/Engine/Camera/Camera.h"
+#include "../Component/Engine/Light/DirectionalLight.h"
 #include "../Device/Renderer.h"
 
 EngineFunctionManager::EngineFunctionManager()
@@ -41,7 +42,7 @@ void EngineFunctionManager::initialize(
     mPause->initialize();
     mAssetsRenderTextureManager->initialize(camera, mDebugManager->getDebugLayer().inspector(), meshesGetter);
     mSceneMeshOperator->initialize(camera, meshesGetter);
-    mModelViewer->initialize();
+    mModelViewer->initialize(mAssetsRenderTextureManager.get(), mAssetsRenderTextureManager->getCallbackSelectAssetsTexture());
 }
 
 void EngineFunctionManager::preUpdateProcess() {
@@ -49,12 +50,8 @@ void EngineFunctionManager::preUpdateProcess() {
 }
 
 void EngineFunctionManager::update(EngineMode mode) {
-    if (mode == EngineMode::MAP_EDITOR) {
-        mAssetsRenderTextureManager->update();
-    } else if (mode == EngineMode::MODEL_VIEWER) {
-
-    }
-
+    mAssetsRenderTextureManager->update(mode);
+    mModelViewer->update(mode);
     mDebugManager->update();
     mPause->update();
     mSceneMeshOperator->update();
@@ -64,12 +61,7 @@ void EngineFunctionManager::draw(EngineMode mode, const Renderer& renderer, Matr
     //レンダリング領域をデバッグに変更
     renderer.renderToDebug(proj);
 
-    if (mode == EngineMode::GAME) {
-
-    } else if (mode == EngineMode::MAP_EDITOR) {
-        mAssetsRenderTextureManager->drawTextures(proj);
-    }
-
+    mAssetsRenderTextureManager->drawTextures(mode, proj);
     mPause->drawButton(proj);
     mDebugManager->draw(mode, renderer, proj);
 }
@@ -80,12 +72,8 @@ void EngineFunctionManager::draw3D(
     const Camera& camera,
     const DirectionalLight& dirLight
 ) const {
-    if (mode == EngineMode::MAP_EDITOR) {
-        mAssetsRenderTextureManager->drawMeshes();
-    } else if (mode == EngineMode::MODEL_VIEWER) {
-        mModelViewer->draw(camera, dirLight);
-    }
-
+    mAssetsRenderTextureManager->drawMeshes(mode);
+    mModelViewer->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mDebugManager->draw3D(mode, renderer, camera.getViewProjection());
 }
 

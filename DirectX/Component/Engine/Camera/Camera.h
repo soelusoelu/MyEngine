@@ -53,6 +53,9 @@ public:
     bool viewFrustumCulling(const Vector3& pos, float radius) const;
 
 private:
+    Camera(const Camera&) = delete;
+    Camera& operator=(const Camera&) = delete;
+
     void calcView();
     void calcProj();
 
@@ -66,4 +69,3 @@ private:
     Matrix4 mView;
     Matrix4 mProjection;
 };
-

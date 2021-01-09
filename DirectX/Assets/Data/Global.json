@@ -21,7 +21,7 @@
             "enterPad": "A"
         },
         "sceneManager": {
-            "beginScene": "MapEditor",
+            "beginScene": "ModelViewer",
             "releaseScene": "Title",
             "removeExclusionTag": [
                 "Camera",

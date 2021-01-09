@@ -6,6 +6,7 @@
 #include "../../../Mesh/Mesh.h"
 #include "../../../System/AssetsManager.h"
 #include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/FileUtil.h"
 
 MeshComponent::MeshComponent(GameObject& gameObject)
     : Component(gameObject)
@@ -63,6 +64,10 @@ void MeshComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, ra
 
 void MeshComponent::drawInspector() {
     ImGui::Text("FileName: %s", (mDirectoryPath + mFileName).c_str());
+}
+
+void MeshComponent::createMesh(const std::string& filePath) {
+    createMesh(FileUtil::getFileNameFromDirectry(filePath), FileUtil::getDirectryFromFilePath(filePath));
 }
 
 void MeshComponent::createMesh(const std::string& fileName, const std::string& directoryPath) {

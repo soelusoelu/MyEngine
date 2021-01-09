@@ -7,8 +7,6 @@
 class Shader;
 class RenderTexture;
 class MeshRenderer;
-class Camera;
-class DirectionalLight;
 
 //モデルの影を落とすクラス
 class ShadowMap : public Component {
@@ -20,7 +18,7 @@ public:
     virtual void drawInspector() override;
 
     //描画準備
-    void drawBegin(const Camera& camera, const DirectionalLight& dirLight);
+    void drawBegin(const Vector3& dirLightDirection);
     //描画
     void draw(const MeshRenderer& renderer) const;
     //影描画に使用するコンスタントバッファを登録する

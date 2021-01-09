@@ -29,7 +29,9 @@ public:
     void draw() const;
 
 private:
+    //シーン変更時
     void change();
+    //シーン生成
     void createScene(const std::string& name);
     //最初のシーンを選択する
     void choiceBeginScene();

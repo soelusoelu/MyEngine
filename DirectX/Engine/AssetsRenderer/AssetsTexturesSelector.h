@@ -1,12 +1,19 @@
 ﻿#pragma once
 
 #include "IAssetsRenderTexturesGetter.h"
+#include "ICallbackSelectAssetsTexture.h"
+#include <functional>
+#include <memory>
+
+class Subject;
 
 //アセットテクスチャ選択クラス
-class AssetsTexturesSelector {
+class AssetsTexturesSelector : public ICallbackSelectAssetsTexture {
 public:
     AssetsTexturesSelector();
     ~AssetsTexturesSelector();
+    virtual void callbackSelectTexture(const std::function<void()>& callback) override;
+
     void initialize(const IAssetsRenderTexturesGetter* getter);
     //マウスでテクスチャを選択する
     bool selectTexture(AssetsRenderTexturePtr& out);
@@ -17,4 +24,5 @@ private:
 
 private:
     const IAssetsRenderTexturesGetter* mTexturesGetter;
+    std::unique_ptr<Subject> mCallbackSelectTexture;
 };

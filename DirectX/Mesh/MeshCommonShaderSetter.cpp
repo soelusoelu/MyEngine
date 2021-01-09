@@ -1,23 +1,22 @@
 ﻿#include "MeshCommonShaderSetter.h"
-#include "../Component/Engine/Camera/Camera.h"
-#include "../Component/Engine/Light/DirectionalLight.h"
 #include "../System/Texture/Texture.h"
-#include "../Transform/Transform3D.h"
 
 void MeshCommonShaderSetter::setCommon(
     MeshCommonConstantBuffer& out,
-    const Camera& camera,
-    const DirectionalLight& dirLight,
-    const Transform3D& transform
+    const Matrix4& world,
+    const Matrix4& view,
+    const Matrix4& projection,
+    const Vector3& cameraPosition,
+    const Vector3& dirLightDirection,
+    const Vector3& dirLightColor
 ) {
-    const auto& world = transform.getWorldTransform();
     out.world = world;
-    out.view = camera.getView();
-    out.projection = camera.getProjection();
-    out.wvp = world * camera.getViewProjection();
-    out.lightDir = dirLight.getDirection();
-    out.lightColor = dirLight.getLightColor();
-    out.cameraPos = camera.getPosition();
+    out.view = view;
+    out.projection = projection;
+    out.wvp = world * view * projection;
+    out.lightDir = dirLightDirection;
+    out.lightColor = dirLightColor;
+    out.cameraPos = cameraPosition;
 }
 
 void MeshCommonShaderSetter::setMaterial(

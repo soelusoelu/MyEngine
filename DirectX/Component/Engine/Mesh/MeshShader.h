@@ -8,8 +8,6 @@
 #include <utility>
 
 class Shader;
-class Camera;
-class DirectionalLight;
 class MeshMaterial;
 
 //メッシュのシェーダーを扱うクラス
@@ -28,7 +26,13 @@ public:
     void transferData();
 
     //メッシュ共通の値を設定する
-    void setCommonValue(const Camera& camera, const DirectionalLight& dirLight) const;
+    void setCommonValue(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const;
     //デフォルトのマテリアルデータを設定する
     void setDefaultMaterial(unsigned materialIndex, unsigned constantBufferIndex = 1) const;
     //全メッシュに共通する値を設定する

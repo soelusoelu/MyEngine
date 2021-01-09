@@ -76,13 +76,19 @@ void MeshOutLine::drawInspector() {
     ImGuiWrapper::dragFloat("Offset", mOffset, 0.01f);
 }
 
-void MeshOutLine::drawBefore(const Camera& camera, const DirectionalLight& dirLight) const {
+void MeshOutLine::drawBefore(
+    const Matrix4& view,
+    const Matrix4& projection,
+    const Vector3& cameraPosition,
+    const Vector3& dirLightDirection,
+    const Vector3& dirLightColor
+) const {
     if (mIsDrawOutLine) {
         //裏面のみ描画したいから
         MyDirectX::DirectX::instance().rasterizerState()->setCulling(CullMode::FRONT);
 
         //アウトライン描画
-        drawOutLine(camera, dirLight);
+        drawOutLine(view, projection);
 
         //設定を戻す
         MyDirectX::DirectX::instance().rasterizerState()->setCulling(CullMode::BACK);
@@ -113,7 +119,7 @@ bool MeshOutLine::getActiveOutLine() const {
     return mIsDrawOutLine;
 }
 
-void MeshOutLine::drawOutLine(const Camera& camera, const DirectionalLight& dirLight) const {
+void MeshOutLine::drawOutLine(const Matrix4& view, const Matrix4& projection) const {
     //アウトラインシェーダーの登録
     mOutLineShader->setShaderInfo();
 
@@ -128,7 +134,7 @@ void MeshOutLine::drawOutLine(const Camera& camera, const DirectionalLight& dirL
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     OutLineConstantBuffer outlinecb;
-    outlinecb.wvp = world * camera.getViewProjection();
+    outlinecb.wvp = world * view * projection;
     outlinecb.outlineColor = Vector4(mOutLineColor, 1.f);
     mOutLineShader->transferData(&outlinecb, sizeof(outlinecb), 0);
 

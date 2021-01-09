@@ -43,19 +43,33 @@ void AssetsRenderTextureManager::initialize(const std::shared_ptr<Camera>& camer
     mPlacement->initialize(camera, inspector, getter, this);
 }
 
-void AssetsRenderTextureManager::update() {
-    mSelector->selectTexture(mCurrentSelectTexture);
-    mTextureList->update();
-    mTextureAdder->update();
-    mDeleter->update();
-    mPlacement->update();
+void AssetsRenderTextureManager::update(EngineMode mode) {
+    if (mode == EngineMode::MAP_EDITOR || mode == EngineMode::MODEL_VIEWER) {
+        mSelector->selectTexture(mCurrentSelectTexture);
+        mTextureList->update();
+        mTextureAdder->update();
+        mDeleter->update();
+    }
+
+    //マップエディタ時のみ配置可能
+    if (mode == EngineMode::MAP_EDITOR) {
+        mPlacement->update();
+    }
 }
 
-void AssetsRenderTextureManager::drawMeshes() const {
-    mTextureList->drawMeshOnTexture();
+void AssetsRenderTextureManager::drawMeshes(EngineMode mode) const {
+    if (mode == EngineMode::MAP_EDITOR || mode == EngineMode::MODEL_VIEWER) {
+        mTextureList->drawMeshOnTexture();
+    }
 }
 
-void AssetsRenderTextureManager::drawTextures(const Matrix4& proj) const {
-    mTextureList->drawTexture(proj);
-    mTextureAdder->draw(proj);
+void AssetsRenderTextureManager::drawTextures(EngineMode mode, const Matrix4& proj) const {
+    if (mode == EngineMode::MAP_EDITOR || mode == EngineMode::MODEL_VIEWER) {
+        mTextureList->drawTexture(proj);
+        mTextureAdder->draw(proj);
+    }
+}
+
+ICallbackSelectAssetsTexture* AssetsRenderTextureManager::getCallbackSelectAssetsTexture() const {
+    return mSelector.get();
 }

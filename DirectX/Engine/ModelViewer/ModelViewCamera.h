@@ -3,25 +3,27 @@
 #include "../../Math/Math.h"
 #include "../../Mesh/IMesh.h"
 
+class SimpleCamera;
+
 class ModelViewCamera {
 public:
     ModelViewCamera();
     ~ModelViewCamera();
+    void update();
     //モデル変更時
     void changeModel(const IMesh& mesh);
     //カメラをモデル全体が映る位置(初期位置)に移動する
     void setModelCenterPosition();
-    // View * Projection
-    Matrix4 getViewProjection() const;
+    //カメラを取得する
+    const SimpleCamera& getCamera() const;
 
 private:
     ModelViewCamera(const ModelViewCamera&) = delete;
     ModelViewCamera& operator=(const ModelViewCamera&) = delete;
 
 private:
+    std::unique_ptr<SimpleCamera> mCamera;
     Matrix4 mModelCenterView;
-    Matrix4 mView;
-    Matrix4 mProjection;
 
     static constexpr inline float FOV = 45.f;
     static constexpr inline float NEAR_CLIP = 0.1f;

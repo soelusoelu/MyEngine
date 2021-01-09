@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "ICallbackSelectAssetsTexture.h"
 #include "ICurrentSelectTextureGetter.h"
+#include "../EngineMode.h"
 #include "../DebugManager/DebugLayer/Inspector/IInspectorTargetSetter.h"
 #include "../../Math/Math.h"
 #include "../../Mesh/IMeshesGetter.h"
@@ -27,11 +29,13 @@ public:
     //初期化
     void initialize(const std::shared_ptr<Camera>& camera, IInspectorTargetSetter* inspector, const IMeshesGetter* getter);
     //毎フレーム更新
-    void update();
+    void update(EngineMode mode);
     //メッシュを描画する
-    void drawMeshes() const;
+    void drawMeshes(EngineMode mode) const;
     //テクスチャを描画する
-    void drawTextures(const Matrix4& proj) const;
+    void drawTextures(EngineMode mode, const Matrix4& proj) const;
+    //アセットテクスチャ選択コールバックを取得する
+    ICallbackSelectAssetsTexture* getCallbackSelectAssetsTexture() const;
 
 private:
     AssetsRenderTextureManager(const AssetsRenderTextureManager&) = delete;

@@ -1,13 +1,12 @@
 ﻿#pragma once
 
 #include "IMeshesGetter.h"
+#include "../Math/Math.h"
 #include <list>
 #include <memory>
 
 class MeshRenderer;
 class ShadowMap;
-class Camera;
-class DirectionalLight;
 
 class MeshManager : public IMeshesGetter {
 public:
@@ -16,7 +15,13 @@ public:
     virtual const MeshPtrList& getMeshes() const override;
     void createShadowMap();
     void update();
-    void draw(const Camera& camera, const DirectionalLight& dirLight) const;
+    void draw(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const;
     void add(const MeshPtr& mesh, bool handleShadow);
     void clear();
     void erase(const MeshPtr& mesh);
@@ -28,11 +33,23 @@ private:
     //不要なメッシュを削除する
     void remove();
     //描画するか
-    bool isDraw(const MeshRenderer& mesh, const Camera& camera) const;
+    bool isDraw(const MeshRenderer& mesh) const;
     //メッシュの描画をする
-    void drawMeshes(const Camera& camera, const DirectionalLight& dirLight) const;
+    void drawMeshes(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const;
     //テクスチャに影を描画する
-    void drawShadow(const Camera& camera, const DirectionalLight& dirLight) const;
+    void drawShadow(
+        const Matrix4& view,
+        const Matrix4& projection,
+        const Vector3& cameraPosition,
+        const Vector3& dirLightDirection,
+        const Vector3& dirLightColor
+    ) const;
 
 private:
     //影の影響を受けるメッシュリスト

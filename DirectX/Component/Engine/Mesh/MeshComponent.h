@@ -24,6 +24,7 @@ public:
     virtual void drawInspector() override;
 
     //メッシュを作成する
+    void createMesh(const std::string& filePath);
     void createMesh(const std::string& fileName, const std::string& directoryPath);
 
     //描画できる状態か

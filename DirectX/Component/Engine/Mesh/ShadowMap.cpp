@@ -2,8 +2,6 @@
 #include "MeshComponent.h"
 #include "MeshRenderer.h"
 #include "MeshShader.h"
-#include "../Camera/Camera.h"
-#include "../Light/DirectionalLight.h"
 #include "../Sprite/SpriteComponent.h"
 #include "../../../DirectX/DirectXInclude.h"
 #include "../../../Imgui/imgui.h"
@@ -49,15 +47,14 @@ void ShadowMap::drawInspector() {
     ImGui::DragFloat("FarClip", &mFarClip, 0.1f, mNearClip, 10000.f);
 }
 
-void ShadowMap::drawBegin(const Camera& camera, const DirectionalLight& dirLight) {
+void ShadowMap::drawBegin(const Vector3& dirLightDirection) {
     mRenderTexture->drawBegin(1.f, 1.f, 1.f, 1.f, true, false);
 
     //シェーダー登録
     mDepthTextureCreateShader->setShaderInfo();
 
     //ライトビュー計算
-    const auto& dir = dirLight.getDirection();
-    mShadowConstBuffer.lightView = Matrix4::createLookAt(-dir * mLightDistance, dir, Vector3::up);
+    mShadowConstBuffer.lightView = Matrix4::createLookAt(-dirLightDirection * mLightDistance, dirLightDirection, Vector3::up);
     mShadowConstBuffer.lightProj = Matrix4::createOrtho(Window::width(), Window::height(), mNearClip, mFarClip);
 }
 
