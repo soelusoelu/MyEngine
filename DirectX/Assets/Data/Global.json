@@ -70,7 +70,8 @@
                 "System/Game.png",
                 "System/MapEditor.png",
                 "System/ModelViewer.png"
-            ]
+            ],
+            "spriteSpace": 16.0
         },
         "assetsRenderTextureList": {
             "textureSize": 64,

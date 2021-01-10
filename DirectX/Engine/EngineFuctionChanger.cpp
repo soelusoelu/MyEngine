@@ -6,6 +6,7 @@
 EngineFuctionChanger::EngineFuctionChanger()
     : mModeChanger(nullptr)
     , mStartRenderPosition()
+    , mSpriteSpace(0.f)
 {
 }
 
@@ -16,6 +17,7 @@ void EngineFuctionChanger::loadProperties(const rapidjson::Value& inObj) {
     if (efcObj.IsObject()) {
         JsonHelper::getVector2(efcObj, "startRenderPosition", &mStartRenderPosition);
         JsonHelper::getStringArray(efcObj, "spritesFilePath", &mSpritesFilePath);
+        JsonHelper::getFloat(efcObj, "spriteSpace", &mSpriteSpace);
     }
 }
 
@@ -23,6 +25,7 @@ void EngineFuctionChanger::saveProperties(rapidjson::Document::AllocatorType& al
     rapidjson::Value props(rapidjson::kObjectType);
     JsonHelper::setVector2(alloc, &props, "startRenderPosition", mStartRenderPosition);
     JsonHelper::setStringArray(alloc, &props, "spritesFilePath", mSpritesFilePath);
+    JsonHelper::setFloat(alloc, &props, "spriteSpace", mSpriteSpace);
 
     inObj.AddMember("engineFuctionChanger", props, alloc);
 }
@@ -31,7 +34,7 @@ void EngineFuctionChanger::initialize(IEngineModeChanger* changer) {
     mModeChanger = changer;
 
     for (size_t i = 0; i < mSpritesFilePath.size(); ++i) {
-        mSpritesButton.emplace_back(std::make_unique<SpriteButton>(nullptr, mSpritesFilePath[i], mStartRenderPosition + Vector2::right * 64.f * i + Vector2::right * 16.f * i));
+        mSpritesButton.emplace_back(std::make_unique<SpriteButton>(nullptr, mSpritesFilePath[i], mStartRenderPosition + Vector2::right * (SPRITE_WIDTH + mSpriteSpace) * i));
     }
     mSpritesButton[0]->setClickFunc([&] { onClickGameButton(); });
     mSpritesButton[1]->setClickFunc([&] { onClickMapEditorButton(); });

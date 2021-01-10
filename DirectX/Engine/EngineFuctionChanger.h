@@ -36,4 +36,7 @@ private:
     SpriteButtonPtrArray mSpritesButton;
     SpriteFilePathArray mSpritesFilePath;
     Vector2 mStartRenderPosition;
+    float mSpriteSpace;
+
+    static constexpr float SPRITE_WIDTH = 64.f;
 };
