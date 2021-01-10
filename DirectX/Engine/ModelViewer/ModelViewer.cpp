@@ -73,12 +73,10 @@ void ModelViewer::draw(
     const Vector3& dirLightDirection,
     const Vector3& dirLightColor
 ) const {
-    if (mode != EngineMode::MODEL_VIEWER) {
-        return;
+    if (mode == EngineMode::MODEL_VIEWER) {
+        const auto& camera = mModelViewCamera->getCamera();
+        mMeshManager->draw(camera.getView(), camera.getProjection(), camera.getPosition(), dirLightDirection, dirLightColor);
     }
-
-    const auto& camera = mModelViewCamera->getCamera();
-    mMeshManager->draw(camera.getView(), camera.getProjection(), camera.getPosition(), dirLightDirection, dirLightColor);
 }
 
 void ModelViewer::onSelectAssetsTexture() {

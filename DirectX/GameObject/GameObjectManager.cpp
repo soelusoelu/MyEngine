@@ -3,16 +3,27 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-GameObjectManager::GameObjectManager() {
-    GameObject::setGameObjectManager(this);
+GameObjectManager::GameObjectManager(bool forGame)
+    : mForGame(forGame)
+{
+    //ゲームシーン用のマネージャーなら
+    if (forGame) {
+        GameObject::setGameObjectManager(this);
+    }
 }
 
 GameObjectManager::~GameObjectManager() {
-    GameObject::setGameObjectManager(nullptr);
+    if (mForGame) {
+        GameObject::setGameObjectManager(nullptr);
+    }
 }
 
 const GameObjectPtrList& GameObjectManager::getGameObjects() const {
     return mGameObjects;
+}
+
+void GameObjectManager::add(const GameObjectPtr& newGameObject) {
+    mGameObjects.emplace_back(newGameObject);
 }
 
 void GameObjectManager::update() {
@@ -24,10 +35,6 @@ void GameObjectManager::update() {
     }
 
     remove();
-}
-
-void GameObjectManager::add(const GameObjectPtr& add) {
-    mGameObjects.emplace_back(add);
 }
 
 void GameObjectManager::clear(const std::unordered_set<std::string>& tags) {

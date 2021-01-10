@@ -1,4 +1,5 @@
 ﻿#include "SimpleCamera.h"
+#include "../../Collision/Collision.h"
 #include "../../System/Window.h"
 
 SimpleCamera::SimpleCamera()
@@ -78,6 +79,33 @@ void SimpleCamera::setFarClip(float farClip) {
 
 float SimpleCamera::getFarClip() const {
     return mFarClip;
+}
+
+Vector3 SimpleCamera::screenToWorldPoint(const Vector2& position, float z) const {
+    //ビューポート、射影、ビュー、それぞれの逆行列を求める
+    auto invView = Matrix4::inverse(mView);
+    auto invProj = Matrix4::inverse(mProjection);
+
+    auto invViewport = Matrix4::identity;
+    invViewport.m[0][0] = Window::width() / 2.f;
+    invViewport.m[1][1] = -Window::height() / 2.f;
+    invViewport.m[3][0] = Window::width() / 2.f;
+    invViewport.m[3][1] = Window::height() / 2.f;
+    invViewport.inverse();
+
+    //ビューポート、射影、ビュー、それぞれの逆行列を掛ける
+    auto m = invViewport * invProj * invView;
+
+    //スクリーン座標をワールド座標に変換
+    return Vector3::transformWithPerspDiv(Vector3(position, z), m);
+}
+
+Ray SimpleCamera::screenToRay(const Vector2& position, float z) const {
+    Ray ray;
+    ray.start = mPosition;
+    ray.end = screenToWorldPoint(position, z);
+
+    return ray;
 }
 
 void SimpleCamera::calcView() {

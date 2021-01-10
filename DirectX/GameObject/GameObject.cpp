@@ -48,6 +48,11 @@ bool GameObject::getActive() const {
     return mIsActive;
 }
 
+void GameObject::setName(const std::string& name) {
+    mName = name;
+    mGameObjectManager->setNameNumber(mName);
+}
+
 const std::string& GameObject::name() const {
     return mName;
 }

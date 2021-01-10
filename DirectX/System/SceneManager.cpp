@@ -114,30 +114,29 @@ void SceneManager::update() {
         return;
     }
 
-    //保有しているテキストを全削除
-    mTextDrawer->clear();
-    //全ゲームオブジェクトの更新
-    mGameObjectManager->update();
-    //総当たり判定
-    mPhysics->sweepAndPrune();
-    //各マネージャークラスを更新
-    mMeshManager->update();
-    mSpriteManager->update();
+    //ゲーム中なら
+    if (isGameMode()) {
+        //保有しているテキストを全削除
+        mTextDrawer->clear();
+        //全ゲームオブジェクトの更新
+        mGameObjectManager->update();
+        //総当たり判定
+        mPhysics->sweepAndPrune();
+        //各マネージャークラスを更新
+        mMeshManager->update();
+        mSpriteManager->update();
 
-    //ゲーム中じゃなければ終了
-    if (!isGameMode()) {
-        return;
-    }
-    //シーン移行
-    const auto& next = mCurrentScene->getNext();
-    if (!next.empty()) {
-        change();
-        //次のシーンに渡す値を避難させとく
-        const auto& toNextValues = mCurrentScene->getValuePassToNextScene();
-        //シーン遷移
-        createScene(next);
-        //新しいシーンに前のシーンの値を渡す
-        mCurrentScene->getValueFromPreviousScene(toNextValues);
+        //シーン移行
+        const auto& next = mCurrentScene->getNext();
+        if (!next.empty()) {
+            change();
+            //次のシーンに渡す値を避難させとく
+            const auto& toNextValues = mCurrentScene->getValuePassToNextScene();
+            //シーン遷移
+            createScene(next);
+            //新しいシーンに前のシーンの値を渡す
+            mCurrentScene->getValueFromPreviousScene(toNextValues);
+        }
     }
 }
 
@@ -160,7 +159,7 @@ void SceneManager::draw() const {
     //メッシュ描画準備
     mRenderer->renderMesh();
 
-    if (isGameMode() || mMode == EngineMode::MAP_EDITOR) {
+    if (isGameMode()) {
         //メッシュの描画
         const auto& dirLight = mLightManager->getDirectionalLight();
         mMeshManager->draw(mCamera->getView(), mCamera->getProjection(), mCamera->getPosition(), dirLight.getDirection(), dirLight.getLightColor());

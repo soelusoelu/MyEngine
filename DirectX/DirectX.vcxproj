@@ -174,7 +174,7 @@
     <ClCompile Include="Engine\EngineFunctionManager.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTextureDeleter.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsTexturesSelector.cpp" />
-    <ClCompile Include="Engine\AssetsRenderer\AssetsPlacement.cpp" />
+    <ClCompile Include="Engine\MapEditor\AssetsPlacement.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTextureManager.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTextureAdder.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTextureList.cpp" />
@@ -237,6 +237,7 @@
     <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
     <ClCompile Include="Collision\IntersectHelper.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshSelector.cpp" />
+    <ClCompile Include="Engine\MapEditor\MapEditorMeshManager.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshOperator.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshDeleter.cpp" />
@@ -438,7 +439,7 @@
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTextureDeleter.h" />
     <ClInclude Include="Collision\RaycastHit.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsTexturesSelector.h" />
-    <ClInclude Include="Engine\AssetsRenderer\AssetsPlacement.h" />
+    <ClInclude Include="Engine\MapEditor\AssetsPlacement.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTextureManager.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTextureAdder.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTextureList.h" />
@@ -511,10 +512,13 @@
     <ClInclude Include="DirectX\DepthStencilView.h" />
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
     <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
+    <ClInclude Include="GameObject\IGameObjectAdder.h" />
     <ClInclude Include="GameObject\IGameObjectsGetter.h" />
     <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
     <ClInclude Include="Collision\IntersectHelper.h" />
     <ClInclude Include="Engine\SceneMesh\SceneMeshSelector.h" />
+    <ClInclude Include="Engine\MapEditor\MapEditorMeshManager.h" />
+    <ClInclude Include="Mesh\IMeshAdder.h" />
     <ClInclude Include="Mesh\IMeshesGetter.h" />
     <ClInclude Include="Mesh\MeshCommonShaderSetter.h" />
     <ClInclude Include="Engine\SceneMesh\SceneMeshOperator.h" />

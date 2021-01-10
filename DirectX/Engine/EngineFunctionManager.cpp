@@ -3,6 +3,7 @@
 #include "AssetsRenderer/AssetsRenderTextureManager.h"
 #include "DebugManager/DebugManager.h"
 #include "DebugManager/DebugLayer/DebugLayer.h"
+#include "MapEditor/MapEditorMeshManager.h"
 #include "ModelViewer/ModelViewer.h"
 #include "Pause/Pause.h"
 #include "SceneMesh/SceneMeshOperator.h"
@@ -14,6 +15,7 @@ EngineFunctionManager::EngineFunctionManager()
     : mDebugManager(std::make_unique<DebugManager>())
     , mPause(std::make_unique<Pause>())
     , mFunctionChanger(std::make_unique<EngineFuctionChanger>())
+    , mMapEditor(std::make_unique<MapEditorMeshManager>())
     , mAssetsRenderTextureManager(std::make_unique<AssetsRenderTextureManager>())
     , mSceneMeshOperator(std::make_unique<SceneMeshOperator>())
     , mModelViewer(std::make_unique<ModelViewer>())
@@ -46,7 +48,8 @@ void EngineFunctionManager::initialize(
     mDebugManager->initialize(gameObjctsGetter, fpsGetter, mPause.get());
     mPause->initialize();
     mFunctionChanger->initialize(modeChanger);
-    mAssetsRenderTextureManager->initialize(camera, mDebugManager->getDebugLayer().inspector(), meshesGetter);
+    mMapEditor->initialize(mDebugManager->getDebugLayer().inspector(), mAssetsRenderTextureManager.get());
+    mAssetsRenderTextureManager->initialize();
     mSceneMeshOperator->initialize(camera, meshesGetter);
     mModelViewer->initialize(mAssetsRenderTextureManager.get(), mAssetsRenderTextureManager->getCallbackSelectAssetsTexture());
 }
@@ -57,6 +60,7 @@ void EngineFunctionManager::preUpdateProcess() {
 
 void EngineFunctionManager::update(EngineMode mode) {
     mAssetsRenderTextureManager->update(mode);
+    mMapEditor->update(mode);
     mModelViewer->update(mode);
     mDebugManager->update();
     mPause->update();
@@ -81,6 +85,7 @@ void EngineFunctionManager::draw3D(
     const DirectionalLight& dirLight
 ) const {
     mAssetsRenderTextureManager->drawMeshes(mode);
+    mMapEditor->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mModelViewer->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mDebugManager->draw3D(mode, renderer, camera.getViewProjection());
 }

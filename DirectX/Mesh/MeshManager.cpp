@@ -27,6 +27,14 @@ const MeshPtrList& MeshManager::getMeshes() const {
     return mShadowMeshes;
 }
 
+void MeshManager::add(const MeshPtr& mesh, bool handleShadow) {
+    if (handleShadow) {
+        mShadowMeshes.emplace_back(mesh);
+    } else {
+        mMeshes.emplace_back(mesh);
+    }
+}
+
 void MeshManager::createShadowMap() {
     auto sm = GameObjectCreater::create("ShadowMap");
     mShadowMap = sm->componentManager().getComponent<ShadowMap>();
@@ -54,14 +62,6 @@ void MeshManager::draw(
     }
 
     drawMeshes(view, projection, cameraPosition, dirLightDirection, dirLightColor);
-}
-
-void MeshManager::add(const MeshPtr& mesh, bool handleShadow) {
-    if (handleShadow) {
-        mShadowMeshes.emplace_back(mesh);
-    } else {
-        mMeshes.emplace_back(mesh);
-    }
 }
 
 void MeshManager::clear() {

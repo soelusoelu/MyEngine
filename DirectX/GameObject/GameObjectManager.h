@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IGameObjectAdder.h"
 #include "IGameObjectsGetter.h"
 #include <list>
 #include <memory>
@@ -7,18 +8,18 @@
 #include <unordered_set>
 #include <vector>
 
-class GameObjectManager : public IGameObjectsGetter {
+class GameObjectManager : public IGameObjectsGetter, public IGameObjectAdder {
     using GameObjectPtrArray = std::vector<GameObjectPtr>;
 
 public:
-    GameObjectManager();
+    GameObjectManager(bool forGame = true);
     ~GameObjectManager();
     //全ゲームオブジェクトを取得する
     virtual const GameObjectPtrList& getGameObjects() const override;
+    //ゲームオブジェクトの登録
+    virtual void add(const GameObjectPtr& newGameObject) override;
     //登録済みの全ゲームオブジェクトの更新
     void update();
-    //ゲームオブジェクトの登録
-    void add(const GameObjectPtr& add);
     //登録済みの全ゲームオブジェクトの削除
     void clear(const std::unordered_set<std::string>& tags);
     //tagに一致するアクティブなゲームオブジェクトの検索
@@ -41,4 +42,6 @@ private:
 private:
     //ゲームオブジェクトリスト
     GameObjectPtrList mGameObjects;
+    //ゲームシーン用のマネージャーか
+    bool mForGame;
 };

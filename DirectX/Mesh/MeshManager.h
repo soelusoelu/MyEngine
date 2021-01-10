@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IMeshAdder.h"
 #include "IMeshesGetter.h"
 #include "../Math/Math.h"
 #include <list>
@@ -8,11 +9,13 @@
 class MeshRenderer;
 class ShadowMap;
 
-class MeshManager : public IMeshesGetter {
+class MeshManager : public IMeshesGetter, public IMeshAdder {
 public:
     MeshManager(bool forGame = true);
     ~MeshManager();
     virtual const MeshPtrList& getMeshes() const override;
+    virtual void add(const MeshPtr& mesh, bool handleShadow) override;
+
     void createShadowMap();
     void update();
     void draw(
@@ -22,7 +25,6 @@ public:
         const Vector3& dirLightDirection,
         const Vector3& dirLightColor
     ) const;
-    void add(const MeshPtr& mesh, bool handleShadow);
     void clear();
     void erase(const MeshPtr& mesh);
 

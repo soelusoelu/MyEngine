@@ -1,5 +1,6 @@
 ﻿#include "AssetsPlacement.h"
-#include "AssetsRenderTexture.h"
+#include "../AssetsRenderer/AssetsRenderTexture.h"
+#include "../Camera/SimpleCamera.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/Camera.h"
 #include "../../Component/Engine/Mesh/MeshComponent.h"
@@ -14,32 +15,31 @@
 #include "../../Utility/FileUtil.h"
 
 AssetsPlacement::AssetsPlacement()
-    : mInspector(nullptr)
-    , mMeshesGetter(nullptr)
+    : mGameObjectAdder(nullptr)
+    , mMeshAdder(nullptr)
+    , mInspector(nullptr)
     , mTextureGetter(nullptr)
-    , mCamera(nullptr)
 {
 }
 
 AssetsPlacement::~AssetsPlacement() = default;
 
 void AssetsPlacement::initialize(
-    const std::shared_ptr<Camera>& camera,
+    IGameObjectAdder* gameObjectAdder,
+    IMeshAdder* meshAdder,
     IInspectorTargetSetter* inspector,
-    const IMeshesGetter* meshesGetter,
     const ICurrentSelectTextureGetter* textureGetter
 ) {
-    mCamera = camera;
+    mGameObjectAdder = gameObjectAdder;
+    mMeshAdder = meshAdder;
     mInspector = inspector;
-    mMeshesGetter = meshesGetter;
     mTextureGetter = textureGetter;
 }
 
-void AssetsPlacement::update() {
-    placeAsset();
-}
-
-void AssetsPlacement::placeAsset() {
+void AssetsPlacement::placeAsset(
+    const SimpleCamera& camera,
+    const IMeshesGetter* meshesGetter
+) {
     if (!placeConditions()) {
         return;
     }
@@ -52,17 +52,21 @@ void AssetsPlacement::placeAsset() {
     //ファイル名から拡張子を抜いた部分 + _mapをゲームオブジェクトの名前とする
     auto name = fileName.substr(0, fileName.length() - ext.length()) + "_map";
 
-    const auto& newObj = MeshGameObjectCreater::createMeshGameObject(filePath, name);
-    decideAssetPlacePosition(newObj);
+    const auto& newObj = MeshGameObjectCreater::createMeshGameObject(mGameObjectAdder, mMeshAdder, true, filePath, name);
+    decideAssetPlacePosition(camera, meshesGetter, newObj);
 
     //インスペクターの対象に設定する
     mInspector->setTarget(newObj);
 }
 
-void AssetsPlacement::decideAssetPlacePosition(const std::shared_ptr<GameObject>& asset) const {
-    const auto& ray = mCamera->screenToRay(Input::mouse().getMousePosition());
+void AssetsPlacement::decideAssetPlacePosition(
+    const SimpleCamera& camera,
+    const IMeshesGetter* meshesGetter,
+    const std::shared_ptr<GameObject>& asset
+) const {
+    const auto& ray = camera.screenToRay(Input::mouse().getMousePosition());
     //すべてのメッシュトレイの衝突判定
-    if (RaycastHit raycastHit; Intersect::intersectRayMeshes(ray, *mMeshesGetter, &raycastHit)) {
+    if (RaycastHit raycastHit; Intersect::intersectRayMeshes(ray, *meshesGetter, &raycastHit)) {
         auto& hitObj = raycastHit.hitObject->transform();
 
         //ヒットしたオブジェクトの子に設定する

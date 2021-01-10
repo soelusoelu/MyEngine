@@ -17,6 +17,7 @@ class Renderer;
 class DebugManager;
 class Pause;
 class EngineFuctionChanger;
+class MapEditorMeshManager;
 class AssetsRenderTextureManager;
 class SceneMeshOperator;
 class ModelViewer;
@@ -73,6 +74,7 @@ private:
     std::unique_ptr<DebugManager> mDebugManager;
     std::unique_ptr<Pause> mPause;
     std::unique_ptr<EngineFuctionChanger> mFunctionChanger;
+    std::unique_ptr<MapEditorMeshManager> mMapEditor;
     std::unique_ptr<AssetsRenderTextureManager> mAssetsRenderTextureManager;
     std::unique_ptr<SceneMeshOperator> mSceneMeshOperator;
     std::unique_ptr<ModelViewer> mModelViewer;

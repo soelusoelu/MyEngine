@@ -28,6 +28,8 @@ public:
     //アクティブ状態の取得
     bool getActive() const;
 
+    //名前を設定する
+    void setName(const std::string& name);
     //名前の取得
     const std::string& name() const;
     //タグを設定する

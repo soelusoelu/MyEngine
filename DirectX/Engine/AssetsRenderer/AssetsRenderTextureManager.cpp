@@ -1,5 +1,4 @@
 ﻿#include "AssetsRenderTextureManager.h"
-#include "AssetsPlacement.h"
 #include "AssetsRenderTextureAdder.h"
 #include "AssetsRenderTextureDeleter.h"
 #include "AssetsRenderTextureList.h"
@@ -10,7 +9,6 @@ AssetsRenderTextureManager::AssetsRenderTextureManager()
     , mTextureAdder(std::make_unique<AssetsRenderTextureAdder>())
     , mDeleter(std::make_unique<AssetsRenderTextureDeleter>())
     , mSelector(std::make_unique<AssetsTexturesSelector>())
-    , mPlacement(std::make_unique<AssetsPlacement>())
     , mCurrentSelectTexture(nullptr)
 {
 }
@@ -35,36 +33,30 @@ void AssetsRenderTextureManager::saveProperties(rapidjson::Document::AllocatorTy
     mTextureAdder->saveProperties(alloc, inObj);
 }
 
-void AssetsRenderTextureManager::initialize(const std::shared_ptr<Camera>& camera, IInspectorTargetSetter* inspector, const IMeshesGetter* getter) {
+void AssetsRenderTextureManager::initialize() {
     mTextureList->initialize();
     mTextureAdder->initialize(mTextureList.get());
     mDeleter->initialize(mTextureList.get(), this);
     mSelector->initialize(mTextureList.get());
-    mPlacement->initialize(camera, inspector, getter, this);
 }
 
 void AssetsRenderTextureManager::update(EngineMode mode) {
-    if (mode == EngineMode::MAP_EDITOR || mode == EngineMode::MODEL_VIEWER) {
+    if (isProcessMode(mode)) {
         mSelector->selectTexture(mCurrentSelectTexture);
         mTextureList->update();
         mTextureAdder->update();
         mDeleter->update();
     }
-
-    //マップエディタ時のみ配置可能
-    if (mode == EngineMode::MAP_EDITOR) {
-        mPlacement->update();
-    }
 }
 
 void AssetsRenderTextureManager::drawMeshes(EngineMode mode) const {
-    if (mode == EngineMode::MAP_EDITOR || mode == EngineMode::MODEL_VIEWER) {
+    if (isProcessMode(mode)) {
         mTextureList->drawMeshOnTexture();
     }
 }
 
 void AssetsRenderTextureManager::drawTextures(EngineMode mode, const Matrix4& proj) const {
-    if (mode == EngineMode::MAP_EDITOR || mode == EngineMode::MODEL_VIEWER) {
+    if (isProcessMode(mode)) {
         mTextureList->drawTexture(proj);
         mTextureAdder->draw(proj);
     }
@@ -72,4 +64,15 @@ void AssetsRenderTextureManager::drawTextures(EngineMode mode, const Matrix4& pr
 
 ICallbackSelectAssetsTexture* AssetsRenderTextureManager::getCallbackSelectAssetsTexture() const {
     return mSelector.get();
+}
+
+bool AssetsRenderTextureManager::isProcessMode(EngineMode mode) const {
+    if (mode == EngineMode::MAP_EDITOR) {
+        return true;
+    }
+    if (mode == EngineMode::MODEL_VIEWER) {
+        return true;
+    }
+
+    return false;
 }
