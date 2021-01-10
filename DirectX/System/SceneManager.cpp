@@ -12,7 +12,9 @@
 #include "../Engine/EngineFunctionManager.h"
 #include "../Engine/DebugManager/DebugManager.h"
 #include "../Engine/DebugManager/DebugLayer/DebugLayer.h"
+#include "../Engine/DebugManager/DebugLayer/Hierarchy.h"
 #include "../Engine/DebugManager/DebugLayer/Inspector/ImGuiInspector.h"
+#include "../Engine/MapEditor/MapEditorMeshManager.h"
 #include "../Engine/Pause/Pause.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -194,11 +196,13 @@ void SceneManager::draw() const {
 void SceneManager::onChangeGameMode() {
     mMode = EngineMode::GAME;
     mMeshManager->registerThisToMeshRenderer();
+    mEngineManager->debug().getDebugLayer().hierarchy().setGameObjectsGetter(mGameObjectManager.get());
 }
 
 void SceneManager::onChangeMapEditorMode() {
     mMode = EngineMode::MAP_EDITOR;
     mEngineManager->onChangeMapEditorMode();
+    mEngineManager->debug().getDebugLayer().hierarchy().setGameObjectsGetter(mEngineManager->getMapEditorMeshManager().getGameObjects());
 }
 
 void SceneManager::onChangeModelViewerMode() {

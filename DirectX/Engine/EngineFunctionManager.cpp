@@ -110,3 +110,7 @@ IPause& EngineFunctionManager::pause() const {
 AssetsRenderTextureManager& EngineFunctionManager::getAssetsRenderTextureManager() const {
     return *mAssetsRenderTextureManager;
 }
+
+MapEditorMeshManager& EngineFunctionManager::getMapEditorMeshManager() const {
+    return *mMapEditor;
+}

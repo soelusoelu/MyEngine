@@ -60,3 +60,7 @@ void MapEditorMeshManager::draw(
 void MapEditorMeshManager::onChangeMapEditorMode() {
     mMeshManager->registerThisToMeshRenderer();
 }
+
+const IGameObjectsGetter* MapEditorMeshManager::getGameObjects() const {
+    return mGameObjectManager.get();
+}

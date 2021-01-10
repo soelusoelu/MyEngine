@@ -3,6 +3,7 @@
 #include "../EngineMode.h"
 #include "../AssetsRenderer/ICurrentSelectTextureGetter.h"
 #include "../DebugManager/DebugLayer/Inspector/IInspectorTargetSetter.h"
+#include "../../GameObject/IGameObjectsGetter.h"
 #include "../../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
@@ -36,6 +37,8 @@ public:
 
     //エンジン機能がマップエディタに変更されたとき
     void onChangeMapEditorMode();
+    //IGameObjectsGetterを取得する
+    const IGameObjectsGetter* getGameObjects() const;
 
 private:
     MapEditorMeshManager(const MapEditorMeshManager&) = delete;

@@ -114,6 +114,10 @@ void Hierarchy::drawGameObjects(DrawString& drawString) const {
     }
 }
 
+void Hierarchy::setGameObjectsGetter(const IGameObjectsGetter* getter) {
+    mGameObjectsGetter = getter;
+}
+
 void Hierarchy::setGameObjectToButton() {
     for (auto&& b : mButtons) {
         b.second.reset();

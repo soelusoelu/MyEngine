@@ -26,6 +26,8 @@ public:
     void update();
     //マネージャーに登録されてる全ゲームオブジェクトを表示
     void drawGameObjects(DrawString& drawString) const;
+    //IGameObjectsGetterを新たに設定する
+    void setGameObjectsGetter(const IGameObjectsGetter* getter);
 
 private:
     //全ゲームオブジェクトをボタン登録する

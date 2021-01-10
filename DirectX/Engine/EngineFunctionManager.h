@@ -70,6 +70,8 @@ public:
     IPause& pause() const;
     //アセットテクスチャ管理者を取得する
     AssetsRenderTextureManager& getAssetsRenderTextureManager() const;
+    //マップエディタ管理者を取得する
+    MapEditorMeshManager& getMapEditorMeshManager() const;
 
 private:
     EngineFunctionManager(const EngineFunctionManager&) = delete;
