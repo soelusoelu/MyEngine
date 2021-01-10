@@ -2,7 +2,8 @@
 
 #include "FpsCounter/IFpsGetter.h"
 #include "../Engine/EngineMode.h"
-#include "../Engine/IEngineModeChanger.h"
+#include "../Engine/ICallbackChangeEngineMode.h"
+#include "../Engine/IEngineModeGetter.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -19,11 +20,10 @@ class SpriteManager;
 class LightManager;
 class DrawString;
 
-class SceneManager : public IEngineModeChanger {
+class SceneManager : public ICallbackChangeEngineMode, public IEngineModeGetter {
 public:
     SceneManager();
     ~SceneManager();
-    virtual void change(EngineMode mode) override;
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize(const IFpsGetter* fpsGetter);
@@ -31,6 +31,12 @@ public:
     void draw() const;
 
 private:
+    virtual void onChangeGameMode() override;
+    virtual void onChangeMapEditorMode() override;
+    virtual void onChangeModelViewerMode() override;
+
+    virtual EngineMode getMode() const override;
+
     //シーン変更時
     void change();
     //シーン生成

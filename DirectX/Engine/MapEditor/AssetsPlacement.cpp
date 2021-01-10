@@ -56,13 +56,13 @@ void AssetsPlacement::placeAsset(
     auto newGameObject = std::make_shared<GameObject>();
     newGameObject->setName(name);
     mGameObjectAdder->add(newGameObject);
-    //ゲームオブジェクトにメッシュをアタッチする
-    auto newMesh = Component::addComponent<MeshComponent>(*newGameObject, "MeshComponent");
-    newMesh->createMesh(filePath);
 
     //位置を決定する
     decideAssetPlacePosition(camera, meshesGetter, newGameObject);
 
+    //ゲームオブジェクトにメッシュをアタッチする
+    auto newMesh = Component::addComponent<MeshComponent>(*newGameObject, "MeshComponent");
+    newMesh->createMesh(filePath);
     //メッシュマネージャーに登録する
     mMeshAdder->add(newMesh->getComponent<MeshRenderer>(), true);
 

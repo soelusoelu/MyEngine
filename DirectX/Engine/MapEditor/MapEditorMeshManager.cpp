@@ -6,7 +6,7 @@
 
 MapEditorMeshManager::MapEditorMeshManager()
     : mGameObjectManager(std::make_unique<GameObjectManager>(false))
-    , mMeshManager(std::make_unique<MeshManager>(false))
+    , mMeshManager(std::make_unique<MeshManager>())
     , mCamera(std::make_unique<SimpleCamera>())
     , mPlace(std::make_unique<AssetsPlacement>())
 {
@@ -55,4 +55,8 @@ void MapEditorMeshManager::draw(
             dirLightColor
         );
     }
+}
+
+void MapEditorMeshManager::onChangeMapEditorMode() {
+    mMeshManager->registerThisToMeshRenderer();
 }

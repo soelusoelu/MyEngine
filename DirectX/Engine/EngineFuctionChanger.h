@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "IEngineModeChanger.h"
+#include "ICallbackChangeEngineMode.h"
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
@@ -19,7 +19,7 @@ public:
     ~EngineFuctionChanger();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
-    void initialize(IEngineModeChanger* changer);
+    void initialize(ICallbackChangeEngineMode* callback);
     void update();
     void draw(const Matrix4& proj) const;
 
@@ -27,12 +27,8 @@ private:
     EngineFuctionChanger(const EngineFuctionChanger&) = delete;
     EngineFuctionChanger& operator=(const EngineFuctionChanger&) = delete;
 
-    void onClickGameButton();
-    void onClickMapEditorButton();
-    void onClickModelViewerButton();
-
 private:
-    IEngineModeChanger* mModeChanger;
+    ICallbackChangeEngineMode* mCallbackChangeEngineMode;
     SpriteButtonPtrArray mSpritesButton;
     SpriteFilePathArray mSpritesFilePath;
     Vector2 mStartRenderPosition;

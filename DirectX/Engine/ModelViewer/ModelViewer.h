@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../EngineMode.h"
+#include "../IEngineModeGetter.h"
 #include "../AssetsRenderer/ICallbackSelectAssetsTexture.h"
 #include "../AssetsRenderer/ICurrentSelectTextureGetter.h"
 #include "../../Math/Math.h"
@@ -27,6 +28,7 @@ public:
 
     //初期化
     void initialize(
+        const IEngineModeGetter* engineModeGetter,
         const ICurrentSelectTextureGetter* assetsTextureGetter,
         ICallbackSelectAssetsTexture* callbackSelectAssetsTexture
     );
@@ -50,11 +52,16 @@ public:
     //アセットテクスチャが選択されたとき
     void onSelectAssetsTexture();
 
+    //エンジン機能がモデルビューアに変更されたとき
+    void onChangeModelViewerMode();
+
+
 private:
     ModelViewer(const ModelViewer&) = delete;
     ModelViewer& operator=(const ModelViewer&) = delete;
 
 private:
+    const IEngineModeGetter* mEngineModeGetter;
     const ICurrentSelectTextureGetter* mAssetsTextureGetter;
     GameObjectMeshRendererPair mPlane;
     GameObjectMeshRendererPair mTarget;

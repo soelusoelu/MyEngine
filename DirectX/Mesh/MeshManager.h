@@ -12,7 +12,7 @@ class ShadowMap;
 
 class MeshManager : public IMeshesGetter, public IMeshAdder {
 public:
-    MeshManager(bool forGame = true);
+    MeshManager();
     ~MeshManager();
     virtual const MeshPtrList& getMeshes() const override;
     virtual void add(const MeshPtr& mesh, bool handleShadow) override;
@@ -21,6 +21,7 @@ public:
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
     void initialize();
     void update();
+    //描画
     void draw(
         const Matrix4& view,
         const Matrix4& projection,
@@ -28,8 +29,12 @@ public:
         const Vector3& dirLightDirection,
         const Vector3& dirLightColor
     ) const;
+    //保持してる全メッシュを削除する
     void clear();
+    //指定のメッシュを削除する
     void erase(const MeshPtr& mesh);
+    //MeshRendererに自身をマネージャー登録する
+    void registerThisToMeshRenderer();
 
 private:
     MeshManager(const MeshManager&) = delete;
@@ -63,6 +68,4 @@ private:
     MeshPtrList mMeshes;
     //シャドーマップ
     std::unique_ptr<ShadowMap> mShadowMap;
-    //ゲームシーン用のマネージャーか
-    bool mForGame;
 };

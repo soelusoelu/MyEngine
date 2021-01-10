@@ -613,11 +613,12 @@
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
     <ClInclude Include="Engine\Camera\SimpleCamera.h" />
     <ClInclude Include="Engine\EngineFuctionChanger.h" />
-    <ClInclude Include="Engine\IEngineModeChanger.h" />
     <ClInclude Include="Engine\MapEditor\MapEditorMeshManager.h" />
     <ClInclude Include="Engine\MapEditor\AssetsPlacement.h" />
     <ClInclude Include="Mesh\IMeshAdder.h" />
     <ClInclude Include="GameObject\IGameObjectAdder.h" />
+    <ClInclude Include="Engine\ICallbackChangeEngineMode.h" />
+    <ClInclude Include="Engine\IEngineModeGetter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

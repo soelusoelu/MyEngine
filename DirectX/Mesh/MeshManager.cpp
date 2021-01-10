@@ -7,20 +7,14 @@
 #include "../GameObject/GameObjectFactory.h"
 #include "../Transform/Transform3D.h"
 
-MeshManager::MeshManager(bool forGame)
+MeshManager::MeshManager()
     : mShadowMap(std::make_unique<ShadowMap>())
-    , mForGame(forGame)
 {
-    //ゲームシーン用のマネージャーなら
-    if (forGame) {
-        MeshRenderer::setMeshManager(this);
-    }
+    MeshRenderer::setMeshManager(this);
 }
 
 MeshManager::~MeshManager() {
-    if (mForGame) {
-        MeshRenderer::setMeshManager(nullptr);
-    }
+    MeshRenderer::setMeshManager(nullptr);
 }
 
 const MeshPtrList& MeshManager::getMeshes() const {
@@ -78,6 +72,10 @@ void MeshManager::clear() {
 void MeshManager::erase(const MeshPtr& mesh) {
     mShadowMeshes.remove(mesh);
     mMeshes.remove(mesh);
+}
+
+void MeshManager::registerThisToMeshRenderer() {
+    MeshRenderer::setMeshManager(this);
 }
 
 void MeshManager::remove() {

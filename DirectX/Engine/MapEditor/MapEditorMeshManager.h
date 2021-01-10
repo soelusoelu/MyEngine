@@ -34,6 +34,9 @@ public:
         const Vector3& dirLightColor
     ) const;
 
+    //エンジン機能がマップエディタに変更されたとき
+    void onChangeMapEditorMode();
+
 private:
     MapEditorMeshManager(const MapEditorMeshManager&) = delete;
     MapEditorMeshManager& operator=(const MapEditorMeshManager&) = delete;

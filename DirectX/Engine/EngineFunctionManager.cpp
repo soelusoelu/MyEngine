@@ -40,18 +40,19 @@ void EngineFunctionManager::saveProperties(rapidjson::Document::AllocatorType& a
 
 void EngineFunctionManager::initialize(
     const std::shared_ptr<Camera>& camera,
-    IEngineModeChanger* modeChanger,
+    ICallbackChangeEngineMode* callback,
+    const IEngineModeGetter* engineModeGetter,
     const IGameObjectsGetter* gameObjctsGetter,
     const IMeshesGetter* meshesGetter,
     const IFpsGetter* fpsGetter
 ) {
     mDebugManager->initialize(gameObjctsGetter, fpsGetter, mPause.get());
     mPause->initialize();
-    mFunctionChanger->initialize(modeChanger);
+    mFunctionChanger->initialize(callback);
     mMapEditor->initialize(mDebugManager->getDebugLayer().inspector(), mAssetsRenderTextureManager.get());
     mAssetsRenderTextureManager->initialize();
     mSceneMeshOperator->initialize(camera, meshesGetter);
-    mModelViewer->initialize(mAssetsRenderTextureManager.get(), mAssetsRenderTextureManager->getCallbackSelectAssetsTexture());
+    mModelViewer->initialize(engineModeGetter, mAssetsRenderTextureManager.get(), mAssetsRenderTextureManager->getCallbackSelectAssetsTexture());
 }
 
 void EngineFunctionManager::preUpdateProcess() {
@@ -88,6 +89,14 @@ void EngineFunctionManager::draw3D(
     mMapEditor->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mModelViewer->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mDebugManager->draw3D(mode, renderer, camera.getViewProjection());
+}
+
+void EngineFunctionManager::onChangeMapEditorMode() {
+    mMapEditor->onChangeMapEditorMode();
+}
+
+void EngineFunctionManager::onChangeModelViewerMode() {
+    mModelViewer->onChangeModelViewerMode();
 }
 
 DebugManager& EngineFunctionManager::debug() const {

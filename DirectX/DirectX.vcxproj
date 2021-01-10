@@ -428,7 +428,8 @@
     <ClInclude Include="Engine\EngineFuctionChanger.h" />
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
     <ClInclude Include="Engine\EngineMode.h" />
-    <ClInclude Include="Engine\IEngineModeChanger.h" />
+    <ClInclude Include="Engine\ICallbackChangeEngineMode.h" />
+    <ClInclude Include="Engine\IEngineModeGetter.h" />
     <ClInclude Include="Engine\ModelViewer\AnimationViewer.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTexture.h" />
     <ClInclude Include="Component\Engine\Camera\CameraHelper.h" />

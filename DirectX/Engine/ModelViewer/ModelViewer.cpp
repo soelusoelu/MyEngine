@@ -11,8 +11,9 @@
 #include "../../Transform/Transform3D.h"
 
 ModelViewer::ModelViewer()
-    : mAssetsTextureGetter(nullptr)
-    , mMeshManager(std::make_unique<MeshManager>(false))
+    : mEngineModeGetter(nullptr)
+    , mAssetsTextureGetter(nullptr)
+    , mMeshManager(std::make_unique<MeshManager>())
     , mModelViewCamera(std::make_unique<ModelViewCamera>())
     , mAnimationViewer(std::make_unique<AnimationViewer>())
 {
@@ -29,9 +30,11 @@ void ModelViewer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapi
 }
 
 void ModelViewer::initialize(
+    const IEngineModeGetter* engineModeGetter,
     const ICurrentSelectTextureGetter* assetsTextureGetter,
     ICallbackSelectAssetsTexture* callbackSelectAssetsTexture
 ) {
+    mEngineModeGetter = engineModeGetter;
     mAssetsTextureGetter = assetsTextureGetter;
 
     mMeshManager->initialize();
@@ -89,6 +92,9 @@ void ModelViewer::draw(
 }
 
 void ModelViewer::onSelectAssetsTexture() {
+    if (mEngineModeGetter->getMode() != EngineMode::MODEL_VIEWER) {
+        return;
+    }
     if (!mAssetsTextureGetter->selectedTexture()) {
         return;
     }
@@ -99,4 +105,8 @@ void ModelViewer::onSelectAssetsTexture() {
     const auto& meshRenderer = newMesh->getComponent<MeshRenderer>();
 
     setTarget(newTarget, meshRenderer);
+}
+
+void ModelViewer::onChangeModelViewerMode() {
+    mMeshManager->registerThisToMeshRenderer();
 }

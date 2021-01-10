@@ -47,10 +47,6 @@ SceneManager::~SceneManager() {
     TextBase::setDrawString(nullptr);
 }
 
-void SceneManager::change(EngineMode mode) {
-    mMode = mode;
-}
-
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
     const auto& sceneObj = inObj["sceneManager"];
     if (sceneObj.IsObject()) {
@@ -84,7 +80,7 @@ void SceneManager::initialize(const IFpsGetter* fpsGetter) {
     mCamera = cam->componentManager().getComponent<Camera>();
 
     mRenderer->initialize();
-    mEngineManager->initialize(mCamera, this, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
+    mEngineManager->initialize(mCamera, this, this, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
     mMeshManager->initialize();
     mLightManager->initialize();
     mTextDrawer->initialize();
@@ -195,6 +191,25 @@ void SceneManager::draw() const {
 #endif // _DEBUG
 }
 
+void SceneManager::onChangeGameMode() {
+    mMode = EngineMode::GAME;
+    mMeshManager->registerThisToMeshRenderer();
+}
+
+void SceneManager::onChangeMapEditorMode() {
+    mMode = EngineMode::MAP_EDITOR;
+    mEngineManager->onChangeMapEditorMode();
+}
+
+void SceneManager::onChangeModelViewerMode() {
+    mMode = EngineMode::MODEL_VIEWER;
+    mEngineManager->onChangeModelViewerMode();
+}
+
+EngineMode SceneManager::getMode() const {
+    return mMode;
+}
+
 void SceneManager::change() {
     mGameObjectManager->clear(mRemoveExclusionTags);
     mMeshManager->clear();
@@ -210,11 +225,11 @@ void SceneManager::createScene(const std::string& name) {
 
 void SceneManager::choiceBeginScene() {
     if (mBeginScene == EngineModeName::MAP_EDITOR) {
-        mMode = EngineMode::MAP_EDITOR;
+        onChangeMapEditorMode();
     } else if (mBeginScene == EngineModeName::MODEL_VIEWER) {
-        mMode = EngineMode::MODEL_VIEWER;
+        onChangeModelViewerMode();
     } else {
-        mMode = EngineMode::GAME;
+        onChangeGameMode();
     }
     createScene(mReleaseScene);
 }
