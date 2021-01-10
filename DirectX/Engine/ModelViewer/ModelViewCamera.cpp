@@ -19,7 +19,7 @@ void ModelViewCamera::update() {
     }
 }
 
-void ModelViewCamera::changeModel(const IMesh& mesh) {
+void ModelViewCamera::onChangeModel(const IMesh& mesh) {
     //モデルを包む球を求める
     Sphere sphere;
     SphereHelper::create(sphere, mesh);

@@ -21,8 +21,14 @@ public:
     void changeMotion(unsigned motionNo);
     //モーション名からモーションを変更する
     void changeMotion(const std::string& motionName);
+    //姿勢をTポーズにする
+    void tPose();
+    //モーション数を取得する
+    int getMotionCount() const;
     //現在のモーションを取得する
     const Motion& getCurrentMotion() const;
+    //現在のモーション番号を取得する
+    int getCurrentMotionNumber() const;
     //現在のモーションのフレーム数を取得する
     int getCurrentMotionFrame() const;
     //現在のボーン姿勢行列を取得する
@@ -36,4 +42,5 @@ private:
     std::vector<Matrix4> mCurrentBones;
     int mCurrentMotionNo;
     int mCurrentFrame;
+    bool mIsTPose;
 };

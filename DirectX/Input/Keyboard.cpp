@@ -47,6 +47,32 @@ int Keyboard::vertical() const {
     }
 }
 
+int Keyboard::getNumber() const {
+    if (getKeyDown(KeyCode::Alpha0)) {
+        return 0;
+    } else if (getKeyDown(KeyCode::Alpha1)) {
+        return 1;
+    } else if (getKeyDown(KeyCode::Alpha2)) {
+        return 2;
+    } else if (getKeyDown(KeyCode::Alpha3)) {
+        return 3;
+    } else if (getKeyDown(KeyCode::Alpha4)) {
+        return 4;
+    } else if (getKeyDown(KeyCode::Alpha5)) {
+        return 5;
+    } else if (getKeyDown(KeyCode::Alpha6)) {
+        return 6;
+    } else if (getKeyDown(KeyCode::Alpha7)) {
+        return 7;
+    } else if (getKeyDown(KeyCode::Alpha8)) {
+        return 8;
+    } else if (getKeyDown(KeyCode::Alpha9)) {
+        return 9;
+    }
+
+    return -1;
+}
+
 bool Keyboard::getEnter() const {
     return getKeyDown(mEnterKey);
 }

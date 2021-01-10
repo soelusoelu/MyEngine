@@ -11,22 +11,28 @@ SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
     , mMeshShader(nullptr)
     , mCurrentMotionNo(0)
     , mCurrentFrame(0)
+    , mIsTPose(false)
 {
 }
 
 SkinMeshComponent::~SkinMeshComponent() = default;
 
 void SkinMeshComponent::update() {
-    const auto& motion = mAnimation->getMotion(mCurrentMotionNo);
-    ++mCurrentFrame;
-    if (mCurrentFrame >= motion.numFrame) {
-        mCurrentFrame = 0;
+    if (mIsTPose) {
+        mCurrentBones.assign(mCurrentBones.size(), Matrix4::identity);
+    } else {
+        const auto& motion = mAnimation->getMotion(mCurrentMotionNo);
+        ++mCurrentFrame;
+        if (mCurrentFrame >= motion.numFrame) {
+            mCurrentFrame = 0;
+        }
+
+        //シェーダーにボーンのデータを渡す
+        for (size_t i = 0; i < mAnimation->getBoneCount(); ++i) {
+            mCurrentBones[i] = mAnimation->getBone(i).offsetMat * motion.frameMat[i][mCurrentFrame];
+        }
     }
 
-    //シェーダーにボーンのデータを渡す
-    for (size_t i = 0; i < mAnimation->getBoneCount(); ++i) {
-        mCurrentBones[i] = mAnimation->getBone(i).offsetMat * motion.frameMat[i][mCurrentFrame];
-    }
     mMeshShader->setTransferData(mCurrentBones.data(), sizeof(SkinMeshConstantBuffer), 3);
 }
 
@@ -39,6 +45,7 @@ void SkinMeshComponent::changeMotion(unsigned motionNo) {
     assert(motionNo < mAnimation->getMotionCount());
     mCurrentMotionNo = motionNo;
     mCurrentFrame = 0;
+    mIsTPose = false;
 }
 
 void SkinMeshComponent::changeMotion(const std::string& motionName) {
@@ -46,6 +53,7 @@ void SkinMeshComponent::changeMotion(const std::string& motionName) {
         if (mAnimation->getMotion(i).name == motionName) {
             mCurrentMotionNo = i;
             mCurrentFrame = 0;
+            mIsTPose = false;
             return;
         }
     }
@@ -53,8 +61,20 @@ void SkinMeshComponent::changeMotion(const std::string& motionName) {
     Debug::logError("Not found motion name[" + motionName + "].");
 }
 
+void SkinMeshComponent::tPose() {
+    mIsTPose = true;
+}
+
+int SkinMeshComponent::getMotionCount() const {
+    return mAnimation->getMotionCount();
+}
+
 const Motion& SkinMeshComponent::getCurrentMotion() const {
     return mAnimation->getMotion(mCurrentMotionNo);
+}
+
+int SkinMeshComponent::getCurrentMotionNumber() const {
+    return mCurrentMotionNo;
 }
 
 int SkinMeshComponent::getCurrentMotionFrame() const {

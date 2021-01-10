@@ -88,6 +88,9 @@ public:
     //縦横
     virtual int horizontal() const = 0;
     virtual int vertical() const = 0;
+    //キーが押された瞬間の対応する数字を取得する
+    //押されなかったら-1
+    virtual int getNumber() const = 0;
     //決定キーが押された瞬間か
     virtual bool getEnter() const = 0;
 };

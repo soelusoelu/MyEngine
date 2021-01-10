@@ -1,4 +1,5 @@
 ﻿#include "ModelViewer.h"
+#include "AnimationViewer.h"
 #include "ModelViewCamera.h"
 #include "../AssetsRenderer/AssetsRenderTexture.h"
 #include "../Camera/SimpleCamera.h"
@@ -13,6 +14,7 @@ ModelViewer::ModelViewer()
     : mAssetsTextureGetter(nullptr)
     , mMeshManager(std::make_unique<MeshManager>(false))
     , mModelViewCamera(std::make_unique<ModelViewCamera>())
+    , mAnimationViewer(std::make_unique<AnimationViewer>())
 {
 }
 
@@ -27,22 +29,28 @@ void ModelViewer::initialize(
 
     callbackSelectAssetsTexture->callbackSelectTexture([&] { onSelectAssetsTexture(); });
 
-    auto p = std::make_shared<GameObject>();
-    //ワールド行列の計算
-    p->transform().computeWorldTransform();
-    //床メッシュ作成
-    auto mc = Component::addComponent<MeshComponent>(*p, "MeshComponent");
-    mc->createMesh("Plane.fbx", "Assets\\Model\\Shape\\");
-    auto mr = mc->getComponent<MeshRenderer>();
-    //所有権保持のため
-    mPlane = std::make_pair(p, mr);
-    //床を影無しで追加
-    mMeshManager->add(mr, false);
+    //auto p = std::make_shared<GameObject>();
+    ////ワールド行列の計算
+    //p->transform().computeWorldTransform();
+    ////床メッシュ作成
+    //auto mc = Component::addComponent<MeshComponent>(*p, "MeshComponent");
+    //mc->createMesh("Plane.fbx", "Assets\\Model\\Shape\\");
+    //auto mr = mc->getComponent<MeshRenderer>();
+    ////所有権保持のため
+    //mPlane = std::make_pair(p, mr);
+    ////床を影無しで追加
+    //mMeshManager->add(mr, false);
 }
 
 void ModelViewer::update(EngineMode mode) {
     if (mode == EngineMode::MODEL_VIEWER) {
+        if (mTarget.first) {
+            mTarget.first->update();
+            mTarget.first->lateUpdate();
+        }
+
         mModelViewCamera->update();
+        mAnimationViewer->update();
     }
 }
 
@@ -55,8 +63,9 @@ void ModelViewer::setTarget(
     }
 
     mTarget = std::make_pair(targetObj, targetMesh);
-    mMeshManager->add(targetMesh, true);
-    mModelViewCamera->changeModel(*targetMesh->getMeshComponent().getMesh());
+    mMeshManager->add(targetMesh, false);
+    mModelViewCamera->onChangeModel(*targetMesh->getMeshComponent().getMesh());
+    mAnimationViewer->onChangeModel(*targetObj);
 }
 
 void ModelViewer::draw(

@@ -11,6 +11,7 @@ class GameObject;
 class MeshManager;
 class MeshRenderer;
 class ModelViewCamera;
+class AnimationViewer;
 
 class ModelViewer {
     using GameObjectPtr = std::shared_ptr<GameObject>;
@@ -56,4 +57,5 @@ private:
     GameObjectMeshRendererPair mTarget;
     std::unique_ptr<MeshManager> mMeshManager;
     std::unique_ptr<ModelViewCamera> mModelViewCamera;
+    std::unique_ptr<AnimationViewer> mAnimationViewer;
 };

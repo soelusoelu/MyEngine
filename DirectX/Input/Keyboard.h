@@ -15,6 +15,7 @@ public:
     virtual bool getKeyUp(KeyCode key) const override;
     virtual int horizontal() const override;
     virtual int vertical() const override;
+    virtual int getNumber() const override;
     virtual bool getEnter() const override;
 
     bool initialize(const HWND& hWnd, IDirectInput8* directInput);

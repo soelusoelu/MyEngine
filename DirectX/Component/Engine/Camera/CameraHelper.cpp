@@ -9,7 +9,7 @@ Matrix4 CameraHelper::getViewMatrixTakingSphereInCamera(
     const Vector3& up
 ) {
     //fovYとfovXの小さい方をθとして選択
-    float theta = (aspectYDivX >= 1.f) ? fov : fov * aspectYDivX;
+    float theta = (aspectYDivX >= 1.f) ? fov * aspectYDivX : fov;
 
     //カメラを引く距離を算出
     float d = sphere.radius / Math::sin(theta / 2.f);

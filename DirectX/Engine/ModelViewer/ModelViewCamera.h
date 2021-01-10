@@ -11,7 +11,7 @@ public:
     ~ModelViewCamera();
     void update();
     //モデル変更時
-    void changeModel(const IMesh& mesh);
+    void onChangeModel(const IMesh& mesh);
     //カメラをモデル全体が映る位置(初期位置)に移動する
     void setModelCenterPosition();
     //カメラを取得する
