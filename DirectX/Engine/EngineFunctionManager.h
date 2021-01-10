@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "EngineMode.h"
+#include "IEngineModeChanger.h"
 #include "Pause/IPause.h"
 #include "../GameObject/IGameObjectsGetter.h"
 #include "../Math/Math.h"
@@ -15,6 +16,7 @@ class DirectionalLight;
 class Renderer;
 class DebugManager;
 class Pause;
+class EngineFuctionChanger;
 class AssetsRenderTextureManager;
 class SceneMeshOperator;
 class ModelViewer;
@@ -26,13 +28,16 @@ public:
     ~EngineFunctionManager();
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
+
     //初期化
     void initialize(
         const std::shared_ptr<Camera>& camera,
+        IEngineModeChanger* modeChanger,
         const IGameObjectsGetter* gameObjctsGetter,
         const IMeshesGetter* meshesGetter,
         const IFpsGetter* fpsGetter
     );
+
     //アップデート前処理
     void preUpdateProcess();
     //毎フレーム更新
@@ -67,6 +72,7 @@ private:
 private:
     std::unique_ptr<DebugManager> mDebugManager;
     std::unique_ptr<Pause> mPause;
+    std::unique_ptr<EngineFuctionChanger> mFunctionChanger;
     std::unique_ptr<AssetsRenderTextureManager> mAssetsRenderTextureManager;
     std::unique_ptr<SceneMeshOperator> mSceneMeshOperator;
     std::unique_ptr<ModelViewer> mModelViewer;

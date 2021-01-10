@@ -61,6 +61,17 @@
                 15.0
             ]
         },
+        "engineFuctionChanger": {
+            "startRenderPosition": [
+                0.0,
+                1048.0
+            ],
+            "spritesFilePath": [
+                "System/Game.png",
+                "System/MapEditor.png",
+                "System/ModelViewer.png"
+            ]
+        },
         "assetsRenderTextureList": {
             "textureSize": 64,
             "textureDisplayInterval": 32,
@@ -75,7 +86,7 @@
         "assetsRenderTextureAdder": {
             "renderPosition": [
                 0.0,
-                1016.0
+                968.0
             ],
             "spriteButtonFilePath": "System/add_mesh.png"
         },

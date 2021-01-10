@@ -47,6 +47,10 @@ SceneManager::~SceneManager() {
     TextBase::setDrawString(nullptr);
 }
 
+void SceneManager::change(EngineMode mode) {
+    mMode = mode;
+}
+
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
     const auto& sceneObj = inObj["sceneManager"];
     if (sceneObj.IsObject()) {
@@ -78,7 +82,7 @@ void SceneManager::initialize(const IFpsGetter* fpsGetter) {
     mCamera = cam->componentManager().getComponent<Camera>();
 
     mRenderer->initialize();
-    mEngineManager->initialize(mCamera, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
+    mEngineManager->initialize(mCamera, this, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
     mLightManager->initialize();
     mTextDrawer->initialize();
 
@@ -121,7 +125,7 @@ void SceneManager::update() {
     mSpriteManager->update();
 
     //ゲーム中じゃなければ終了
-    if (mMode != EngineMode::GAME) {
+    if (!isGameMode()) {
         return;
     }
     //シーン移行
@@ -211,8 +215,8 @@ void SceneManager::choiceBeginScene() {
         mMode = EngineMode::MODEL_VIEWER;
     } else {
         mMode = EngineMode::GAME;
-        createScene(mReleaseScene);
     }
+    createScene(mReleaseScene);
 }
 
 bool SceneManager::isGameMode() const {

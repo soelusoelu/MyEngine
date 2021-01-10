@@ -2,6 +2,7 @@
 
 #include "FpsCounter/IFpsGetter.h"
 #include "../Engine/EngineMode.h"
+#include "../Engine/IEngineModeChanger.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -18,10 +19,11 @@ class SpriteManager;
 class LightManager;
 class DrawString;
 
-class SceneManager {
+class SceneManager : public IEngineModeChanger {
 public:
     SceneManager();
     ~SceneManager();
+    virtual void change(EngineMode mode) override;
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize(const IFpsGetter* fpsGetter);

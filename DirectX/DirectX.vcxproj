@@ -165,6 +165,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Engine\EngineFuctionChanger.cpp" />
     <ClCompile Include="Engine\ModelViewer\AnimationViewer.cpp" />
     <ClCompile Include="Engine\AssetsRenderer\AssetsRenderTexture.cpp" />
     <ClCompile Include="Component\Engine\Camera\CameraHelper.cpp" />
@@ -423,8 +424,10 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Engine\EngineFuctionChanger.h" />
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
     <ClInclude Include="Engine\EngineMode.h" />
+    <ClInclude Include="Engine\IEngineModeChanger.h" />
     <ClInclude Include="Engine\ModelViewer\AnimationViewer.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTexture.h" />
     <ClInclude Include="Component\Engine\Camera\CameraHelper.h" />

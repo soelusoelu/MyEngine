@@ -278,6 +278,7 @@
     <ClCompile Include="Engine\ModelViewer\ModelViewCamera.cpp" />
     <ClCompile Include="Engine\ModelViewer\AnimationViewer.cpp" />
     <ClCompile Include="Engine\Camera\SimpleCamera.cpp" />
+    <ClCompile Include="Engine\EngineFuctionChanger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -611,6 +612,8 @@
     <ClInclude Include="Engine\EngineMode.h" />
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
     <ClInclude Include="Engine\Camera\SimpleCamera.h" />
+    <ClInclude Include="Engine\EngineFuctionChanger.h" />
+    <ClInclude Include="Engine\IEngineModeChanger.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
