@@ -974,7 +974,6 @@
     <None Include="Assets\Data\Plane.json" />
     <None Include="Assets\Data\Plane_map.json" />
     <None Include="Assets\Data\RoughnessMap.json" />
-    <None Include="Assets\Data\ShadowMap.json" />
     <None Include="Assets\Data\SimpleCharacter.json" />
     <None Include="Assets\Data\SkinMesh.json" />
     <None Include="Assets\Data\SphereMap.json" />

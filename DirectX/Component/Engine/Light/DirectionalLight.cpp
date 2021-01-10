@@ -6,7 +6,7 @@
 
 DirectionalLight::DirectionalLight(GameObject& gameObject) :
     Component(gameObject),
-    mDirection(Vector3::zero),
+    mDirection(Vector3::down),
     mLightColor(Vector3::one) {
 }
 

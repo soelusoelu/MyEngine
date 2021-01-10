@@ -52,11 +52,22 @@ void AssetsPlacement::placeAsset(
     //ファイル名から拡張子を抜いた部分 + _mapをゲームオブジェクトの名前とする
     auto name = fileName.substr(0, fileName.length() - ext.length()) + "_map";
 
-    const auto& newObj = MeshGameObjectCreater::createMeshGameObject(mGameObjectAdder, mMeshAdder, true, filePath, name);
-    decideAssetPlacePosition(camera, meshesGetter, newObj);
+    //ゲームオブジェクト生成
+    auto newGameObject = std::make_shared<GameObject>();
+    newGameObject->setName(name);
+    mGameObjectAdder->add(newGameObject);
+    //ゲームオブジェクトにメッシュをアタッチする
+    auto newMesh = Component::addComponent<MeshComponent>(*newGameObject, "MeshComponent");
+    newMesh->createMesh(filePath);
+
+    //位置を決定する
+    decideAssetPlacePosition(camera, meshesGetter, newGameObject);
+
+    //メッシュマネージャーに登録する
+    mMeshAdder->add(newMesh->getComponent<MeshRenderer>(), true);
 
     //インスペクターの対象に設定する
-    mInspector->setTarget(newObj);
+    mInspector->setTarget(newGameObject);
 }
 
 void AssetsPlacement::decideAssetPlacePosition(
@@ -76,8 +87,8 @@ void AssetsPlacement::decideAssetPlacePosition(
         asset->transform().setPosition(-hitObj.getPosition() + Vector3::transform(raycastHit.point - hitObj.getPosition(), hitObj.getWorldTransform()));
         //法線から角度を計算する
         //const auto& rot = Vector3::cross(Vector3::up, Vector3::transform(raycastHit.polygon.normal(), raycastHit.hitObject->transform().getRotation())) * 90.f;
-        //const auto& rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;
-        //asset->transform().setRotation(rot);
+        const auto& rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;
+        asset->transform().setRotation(rot);
         return;
     }
 

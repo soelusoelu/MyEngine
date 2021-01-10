@@ -18,7 +18,6 @@
 #include "../Component/Engine/Mesh/MeshOutLine.h"
 #include "../Component/Engine/Mesh/MeshRenderer.h"
 #include "../Component/Engine/Mesh/MeshShader.h"
-#include "../Component/Engine/Mesh/ShadowMap.h"
 #include "../Component/Engine/Mesh/SkinMeshComponent.h"
 #include "../Component/Engine/Other/GameObjectSaveAndLoader.h"
 #include "../Component/Engine/Other/SaveThis.h"
@@ -111,7 +110,6 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(MeshOutLine);
     ADD_COMPONENT(MeshRenderer);
     ADD_COMPONENT(MeshShader);
-    ADD_COMPONENT(ShadowMap);
     ADD_COMPONENT(SkinMeshComponent);
 
     ADD_COMPONENT(GameObjectSaveAndLoader);

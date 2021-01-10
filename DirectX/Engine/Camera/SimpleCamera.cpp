@@ -12,6 +12,8 @@ SimpleCamera::SimpleCamera()
     , mNearClip(0.1f)
     , mFarClip(1000.f)
 {
+    calcView();
+    calcProjection();
 }
 
 SimpleCamera::~SimpleCamera() = default;

@@ -38,16 +38,14 @@ void ModelViewCamera::onChangeModel(const IMesh& mesh) {
     //モデル全体を映すビュー行列を保存する
     mModelCenterView = view;
 
-    //射影行列を求める
-    const auto& proj = Matrix4::createPerspectiveFOV(
+    //射影行列を求め、カメラに設定する
+    mCamera->setProjection(Matrix4::createPerspectiveFOV(
         Window::width(),
         Window::height(),
         FOV,
         NEAR_CLIP,
         FAR_CLIP
-    );
-    //カメラに射影行列を設定する
-    mCamera->setProjection(proj);
+    ));
 }
 
 void ModelViewCamera::setModelCenterPosition() {

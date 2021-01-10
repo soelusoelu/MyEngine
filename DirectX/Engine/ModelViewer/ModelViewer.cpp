@@ -20,12 +20,21 @@ ModelViewer::ModelViewer()
 
 ModelViewer::~ModelViewer() = default;
 
+void ModelViewer::loadProperties(const rapidjson::Value& inObj) {
+    mMeshManager->loadProperties(inObj);
+}
+
+void ModelViewer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
+    mMeshManager->saveProperties(alloc, inObj);
+}
+
 void ModelViewer::initialize(
     const ICurrentSelectTextureGetter* assetsTextureGetter,
     ICallbackSelectAssetsTexture* callbackSelectAssetsTexture
 ) {
     mAssetsTextureGetter = assetsTextureGetter;
-    mMeshManager->createShadowMap();
+
+    mMeshManager->initialize();
 
     callbackSelectAssetsTexture->callbackSelectTexture([&] { onSelectAssetsTexture(); });
 

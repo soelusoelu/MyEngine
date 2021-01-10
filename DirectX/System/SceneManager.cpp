@@ -60,6 +60,7 @@ void SceneManager::loadProperties(const rapidjson::Value& inObj) {
     }
 
     mEngineManager->loadProperties(inObj);
+    mMeshManager->loadProperties(inObj);
     mLightManager->loadProperties(inObj);
     mTextDrawer->loadProperties(inObj);
 }
@@ -72,6 +73,7 @@ void SceneManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rap
     inObj.AddMember("sceneManager", props, alloc);
 
     mEngineManager->saveProperties(alloc, inObj);
+    mMeshManager->saveProperties(alloc, inObj);
     mLightManager->saveProperties(alloc, inObj);
     mTextDrawer->saveProperties(alloc, inObj);
 }
@@ -83,6 +85,7 @@ void SceneManager::initialize(const IFpsGetter* fpsGetter) {
 
     mRenderer->initialize();
     mEngineManager->initialize(mCamera, this, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
+    mMeshManager->initialize();
     mLightManager->initialize();
     mTextDrawer->initialize();
 
@@ -90,8 +93,6 @@ void SceneManager::initialize(const IFpsGetter* fpsGetter) {
 
     //デフォルトのインスペクターの対象に設定する
     mEngineManager->debug().getDebugLayer().inspector()->setTarget(cam);
-
-    mMeshManager->createShadowMap();
 
     mLightManager->createDirectionalLight();
 

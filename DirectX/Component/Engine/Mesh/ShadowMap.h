@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../../Component.h"
 #include "../../../System/Shader/ConstantBuffers.h"
+#include <rapidjson/document.h>
 #include <memory>
 
 class Shader;
@@ -9,13 +9,13 @@ class RenderTexture;
 class MeshRenderer;
 
 //モデルの影を落とすクラス
-class ShadowMap : public Component {
+class ShadowMap {
 public:
-    ShadowMap(GameObject& gameObject);
+    ShadowMap();
     ~ShadowMap();
-    virtual void start() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawInspector() override;
+    void initialize();
+    void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
 
     //描画準備
     void drawBegin(const Vector3& dirLightDirection);

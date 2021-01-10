@@ -15,10 +15,9 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-ShadowMap::ShadowMap(GameObject& gameObject)
-    : Component(gameObject)
-    , mDepthTextureCreateShader(AssetsManager::instance().createShader("ShadowDepthTextureCreater.hlsl"))
-    , mRenderTexture(std::make_unique<RenderTexture>(Window::width(), Window::height(), Format::FORMAT_D32_FLOAT, Format::FORMAT_R16_UNORM))
+ShadowMap::ShadowMap()
+    : mDepthTextureCreateShader(nullptr)
+    , mRenderTexture(nullptr)
     , mLightDistance(0.f)
     , mNearClip(0.f)
     , mFarClip(0.f)
@@ -27,7 +26,10 @@ ShadowMap::ShadowMap(GameObject& gameObject)
 
 ShadowMap::~ShadowMap() = default;
 
-void ShadowMap::start() {
+void ShadowMap::initialize() {
+    mDepthTextureCreateShader = AssetsManager::instance().createShader("ShadowDepthTextureCreater.hlsl");
+    mRenderTexture = std::make_unique<RenderTexture>(Window::width(), Window::height(), Format::FORMAT_D32_FLOAT, Format::FORMAT_R16_UNORM);
+
     //const auto& s = getComponent<SpriteComponent>();
     //const auto& tex = std::make_shared<Texture>(mRenderTexture->getShaderResourceView(), Vector2(Window::width(), Window::height()));
     //s->setTexture(tex);
@@ -36,15 +38,21 @@ void ShadowMap::start() {
 }
 
 void ShadowMap::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "lightDistance", &mLightDistance);
-    JsonHelper::getFloat(inObj, "nearClip", &mNearClip);
-    JsonHelper::getFloat(inObj, "farClip", &mFarClip);
+    const auto& obj = inObj["shadowMap"];
+    if (obj.IsObject()) {
+        JsonHelper::getFloat(obj, "lightDistance", &mLightDistance);
+        JsonHelper::getFloat(obj, "nearClip", &mNearClip);
+        JsonHelper::getFloat(obj, "farClip", &mFarClip);
+    }
 }
 
-void ShadowMap::drawInspector() {
-    ImGui::DragFloat("LightDistance", &mLightDistance, 0.1f);
-    ImGui::DragFloat("NearClip", &mNearClip, 0.1f, 0.f, mFarClip);
-    ImGui::DragFloat("FarClip", &mFarClip, 0.1f, mNearClip, 10000.f);
+void ShadowMap::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
+    rapidjson::Value props(rapidjson::kObjectType);
+    JsonHelper::setFloat(alloc, &props, "lightDistance", mLightDistance);
+    JsonHelper::setFloat(alloc, &props, "nearClip", mNearClip);
+    JsonHelper::setFloat(alloc, &props, "farClip", mFarClip);
+
+    inObj.AddMember("shadowMap", props, alloc);
 }
 
 void ShadowMap::drawBegin(const Vector3& dirLightDirection) {

@@ -8,7 +8,7 @@
 #include "../Transform/Transform3D.h"
 
 MeshManager::MeshManager(bool forGame)
-    : mShadowMap(nullptr)
+    : mShadowMap(std::make_unique<ShadowMap>())
     , mForGame(forGame)
 {
     //ゲームシーン用のマネージャーなら
@@ -35,9 +35,16 @@ void MeshManager::add(const MeshPtr& mesh, bool handleShadow) {
     }
 }
 
-void MeshManager::createShadowMap() {
-    auto sm = GameObjectCreater::create("ShadowMap");
-    mShadowMap = sm->componentManager().getComponent<ShadowMap>();
+void MeshManager::loadProperties(const rapidjson::Value& inObj) {
+    mShadowMap->loadProperties(inObj);
+}
+
+void MeshManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
+    mShadowMap->saveProperties(alloc, inObj);
+}
+
+void MeshManager::initialize() {
+    mShadowMap->initialize();
 }
 
 void MeshManager::update() {

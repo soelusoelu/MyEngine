@@ -3,6 +3,7 @@
 #include "IMeshAdder.h"
 #include "IMeshesGetter.h"
 #include "../Math/Math.h"
+#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 
@@ -16,7 +17,9 @@ public:
     virtual const MeshPtrList& getMeshes() const override;
     virtual void add(const MeshPtr& mesh, bool handleShadow) override;
 
-    void createShadowMap();
+    void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
+    void initialize();
     void update();
     void draw(
         const Matrix4& view,
@@ -59,7 +62,7 @@ private:
     //影の影響を受けないメッシュリスト
     MeshPtrList mMeshes;
     //シャドーマップ
-    std::shared_ptr<ShadowMap> mShadowMap;
+    std::unique_ptr<ShadowMap> mShadowMap;
     //ゲームシーン用のマネージャーか
     bool mForGame;
 };

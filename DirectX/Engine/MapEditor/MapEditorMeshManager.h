@@ -4,6 +4,7 @@
 #include "../AssetsRenderer/ICurrentSelectTextureGetter.h"
 #include "../DebugManager/DebugLayer/Inspector/IInspectorTargetSetter.h"
 #include "../../Math/Math.h"
+#include <rapidjson/document.h>
 #include <memory>
 
 class GameObjectManager;
@@ -15,6 +16,8 @@ class MapEditorMeshManager {
 public:
     MapEditorMeshManager();
     ~MapEditorMeshManager();
+    void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
 
     void initialize(
         IInspectorTargetSetter* inspector,

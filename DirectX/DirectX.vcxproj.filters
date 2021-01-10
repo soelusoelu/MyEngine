@@ -624,7 +624,6 @@
     <None Include="Shader\MeshCommonAndMaterialHeader.hlsli" />
     <None Include="Shader\OutLineHeader.hlsli" />
     <None Include="Shader\SimpleHeader.hlsli" />
-    <None Include="Assets\Data\ShadowMap.json" />
     <None Include="Assets\Data\BoxTest.json" />
     <None Include="Assets\Data\Camera.json" />
     <None Include="Assets\Data\CharacterCommonComponents.json" />

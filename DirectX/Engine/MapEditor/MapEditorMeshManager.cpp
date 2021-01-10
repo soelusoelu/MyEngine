@@ -10,15 +10,25 @@ MapEditorMeshManager::MapEditorMeshManager()
     , mCamera(std::make_unique<SimpleCamera>())
     , mPlace(std::make_unique<AssetsPlacement>())
 {
+    mCamera->setPosition(Vector3::up * 15.f + Vector3::back * 10.f);
+    mCamera->lookAt(Vector3::forward * 5.f);
 }
 
 MapEditorMeshManager::~MapEditorMeshManager() = default;
+
+void MapEditorMeshManager::loadProperties(const rapidjson::Value& inObj) {
+    mMeshManager->loadProperties(inObj);
+}
+
+void MapEditorMeshManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
+    mMeshManager->saveProperties(alloc, inObj);
+}
 
 void MapEditorMeshManager::initialize(
     IInspectorTargetSetter* inspector,
     const ICurrentSelectTextureGetter* textureGetter
 ) {
-    mMeshManager->createShadowMap();
+    mMeshManager->initialize();
     mPlace->initialize(mGameObjectManager.get(), mMeshManager.get(), inspector, textureGetter);
 }
 
@@ -27,9 +37,8 @@ void MapEditorMeshManager::update(
 ) {
     if (mode == EngineMode::MAP_EDITOR) {
         mPlace->placeAsset(*mCamera, mMeshManager.get());
+        mGameObjectManager->update();
     }
-
-    mGameObjectManager->update();
 }
 
 void MapEditorMeshManager::draw(

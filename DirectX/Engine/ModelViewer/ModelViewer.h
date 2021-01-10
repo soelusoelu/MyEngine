@@ -4,6 +4,7 @@
 #include "../AssetsRenderer/ICallbackSelectAssetsTexture.h"
 #include "../AssetsRenderer/ICurrentSelectTextureGetter.h"
 #include "../../Math/Math.h"
+#include <rapidjson/document.h>
 #include <memory>
 #include <utility>
 
@@ -21,6 +22,8 @@ class ModelViewer {
 public:
     ModelViewer();
     ~ModelViewer();
+    void loadProperties(const rapidjson::Value& inObj);
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
 
     //初期化
     void initialize(

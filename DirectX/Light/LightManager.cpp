@@ -28,6 +28,8 @@ void LightManager::initialize() {
 void LightManager::createDirectionalLight() {
     auto dirLight = GameObjectCreater::create("DirectionalLight");
     mDirectionalLight = dirLight->componentManager().getComponent<DirectionalLight>();
+    //向き計算のために
+    mDirectionalLight->lateUpdate();
 }
 
 void LightManager::loadProperties(const rapidjson::Value & inObj) {
