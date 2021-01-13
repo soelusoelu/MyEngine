@@ -23,6 +23,7 @@ const GameObjectPtrList& GameObjectManager::getGameObjects() const {
 }
 
 void GameObjectManager::add(const GameObjectPtr& newGameObject) {
+    setNameNumber(*newGameObject);
     mGameObjects.emplace_back(newGameObject);
 }
 
@@ -75,11 +76,6 @@ std::vector<std::shared_ptr<GameObject>> GameObjectManager::findGameObjects(cons
     return gameObjectArray;
 }
 
-void GameObjectManager::setNameNumber(std::string& name) const {
-    bool isEnd = false;
-    checkNameNumber(name, isEnd);
-}
-
 void GameObjectManager::remove() {
     auto itr = mGameObjects.begin();
     while (itr != mGameObjects.end()) {
@@ -89,6 +85,13 @@ void GameObjectManager::remove() {
             ++itr;
         }
     }
+}
+
+void GameObjectManager::setNameNumber(GameObject& target) const {
+    std::string name = target.name();
+    bool isEnd = false;
+    checkNameNumber(name, isEnd);
+    target.setName(name);
 }
 
 void GameObjectManager::checkNameNumber(std::string& name, bool& isEnd, int number) const {

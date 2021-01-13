@@ -78,10 +78,10 @@
             "textureDisplayInterval": 32,
             "texturesFilePath": [
                 "Assets\\Model\\Test\\test.obj",
-                "Assets\\Model\\Light\\DLight.obj",
-                "Assets\\Model\\Shape\\box.fbx",
-                "Assets\\Model\\Shape\\Sphere.obj",
-                "Assets\\Model\\Practice\\test.fbx"
+                "Assets\\Model\\Light\\PLight.obj",
+                "Assets\\Model\\Practice\\test.fbx",
+                "Assets\\Model\\Shape\\cone.fbx",
+                "Assets\\Model\\Shape\\Sphere.obj"
             ]
         },
         "assetsRenderTextureAdder": {

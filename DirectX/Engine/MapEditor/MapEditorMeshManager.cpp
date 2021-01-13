@@ -10,7 +10,7 @@ MapEditorMeshManager::MapEditorMeshManager()
     , mCamera(std::make_unique<SimpleCamera>())
     , mPlace(std::make_unique<AssetsPlacement>())
 {
-    mCamera->setPosition(Vector3::up * 15.f + Vector3::back * 10.f);
+    mCamera->setPosition(Vector3::up * 15.f + Vector3::back * 15.f);
     mCamera->lookAt(Vector3::forward * 5.f);
 }
 

@@ -50,7 +50,6 @@ bool GameObject::getActive() const {
 
 void GameObject::setName(const std::string& name) {
     mName = name;
-    mGameObjectManager->setNameNumber(mName);
 }
 
 const std::string& GameObject::name() const {
@@ -85,7 +84,6 @@ std::shared_ptr<GameObject> GameObject::create(const std::string& name, const st
     auto obj = std::make_shared<GameObject>();
     //名前を設定
     obj->mName = name;
-    mGameObjectManager->setNameNumber(obj->mName);
     //タグを設定
     obj->mTag = tag;
     //マネージャーに登録

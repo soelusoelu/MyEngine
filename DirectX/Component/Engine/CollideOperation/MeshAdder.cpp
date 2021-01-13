@@ -30,8 +30,6 @@ std::shared_ptr<MeshComponent> MeshAdder::addMeshCreateGameObject(const std::str
     const auto& ext = FileUtil::getFileExtension(fileName);
     //ファイル名から拡張子を抜いた部分 + _mapをゲームオブジェクトの名前とする
     auto name = fileName.substr(0, fileName.length() - ext.length()) + "_map";
-    //すでにあるメッシュが選択された場合に名前被りを避けるため
-    gameObject().getGameObjectManager().setNameNumber(name);
     //ゲームオブジェクト生成
     auto newGameObject = GameObject::create(name, tag);
 
