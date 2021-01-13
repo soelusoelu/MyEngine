@@ -1,6 +1,6 @@
 ﻿#include "CharacterCost.h"
-#include "../../../DebugLayer/ImGuiWrapper.h"
 #include "../../../Device/Subject.h"
+#include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
 #include "../../../Math/Math.h"
 #include "../../../Utility/LevelLoader.h"
 

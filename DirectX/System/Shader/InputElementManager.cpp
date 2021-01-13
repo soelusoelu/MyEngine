@@ -1,6 +1,6 @@
 ﻿#include "InputElementManager.h"
 #include "../SystemInclude.h"
-#include "../../DebugLayer/Debug.h"
+#include "../../Engine/DebugManager/DebugUtility/Debug.h"
 
 InputElementManager::InputElementManager() {
     mInputLayouts.emplace("Texture.hlsl", InputLayout{
