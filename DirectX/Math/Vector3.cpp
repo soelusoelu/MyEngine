@@ -173,23 +173,23 @@ Vector3 Vector3::lerp(const Vector3& a, const Vector3& b, float f) {
 }
 
 Vector3 Vector3::reflect(const Vector3& v, const Vector3& n) {
-    return v - 2.0f * Vector3::dot(v, n) * n;
+    return v - 2.f * Vector3::dot(v, n) * n;
 }
 
 Vector3 Vector3::transform(const Vector3& vec, const Matrix4& mat, float w) {
-    Vector3 retVal;
-    retVal.x = vec.x * mat.m[0][0] + vec.y * mat.m[1][0] + vec.z * mat.m[2][0] + w * mat.m[3][0];
-    retVal.y = vec.x * mat.m[0][1] + vec.y * mat.m[1][1] + vec.z * mat.m[2][1] + w * mat.m[3][1];
-    retVal.z = vec.x * mat.m[0][2] + vec.y * mat.m[1][2] + vec.z * mat.m[2][2] + w * mat.m[3][2];
-    //ignore w since we aren't returning a new value for it...
-    return retVal;
+    return Vector3(
+        vec.x * mat.m[0][0] + vec.y * mat.m[1][0] + vec.z * mat.m[2][0] + w * mat.m[3][0],
+        vec.x * mat.m[0][1] + vec.y * mat.m[1][1] + vec.z * mat.m[2][1] + w * mat.m[3][1],
+        vec.x * mat.m[0][2] + vec.y * mat.m[1][2] + vec.z * mat.m[2][2] + w * mat.m[3][2]
+    );
 }
 
 Vector3 Vector3::transformWithPerspDiv(const Vector3& vec, const Matrix4& mat, float w) {
-    Vector3 retVal;
-    retVal.x = vec.x * mat.m[0][0] + vec.y * mat.m[1][0] + vec.z * mat.m[2][0] + w * mat.m[3][0];
-    retVal.y = vec.x * mat.m[0][1] + vec.y * mat.m[1][1] + vec.z * mat.m[2][1] + w * mat.m[3][1];
-    retVal.z = vec.x * mat.m[0][2] + vec.y * mat.m[1][2] + vec.z * mat.m[2][2] + w * mat.m[3][2];
+    Vector3 retVal(
+        vec.x * mat.m[0][0] + vec.y * mat.m[1][0] + vec.z * mat.m[2][0] + w * mat.m[3][0],
+        vec.x * mat.m[0][1] + vec.y * mat.m[1][1] + vec.z * mat.m[2][1] + w * mat.m[3][1],
+        vec.x * mat.m[0][2] + vec.y * mat.m[1][2] + vec.z * mat.m[2][2] + w * mat.m[3][2]
+    );
     float transformedW = vec.x * mat.m[0][3] + vec.y * mat.m[1][3] + vec.z * mat.m[2][3] + w * mat.m[3][3];
     if (!Math::nearZero(Math::abs(transformedW))) {
         transformedW = 1.f / transformedW;

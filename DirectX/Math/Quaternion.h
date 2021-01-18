@@ -38,12 +38,13 @@ public:
     //線形補間
     static Quaternion lerp(const Quaternion& a, const Quaternion& b, float f);
 
+    //内積
     static float dot(const Quaternion& a, const Quaternion& b);
 
     //球面線形補間
     static Quaternion slerp(const Quaternion& a, const Quaternion& b, float f);
 
-    //掛け算
+    //足し算
     static Quaternion concatenate(const Quaternion& q, const Quaternion& p);
 
     static const Quaternion identity;

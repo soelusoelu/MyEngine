@@ -1,4 +1,5 @@
 ﻿#include "ModelViewCamera.h"
+#include "../Camera/EngineCamera.h"
 #include "../Camera/SimpleCamera.h"
 #include "../../Collision/Collision.h"
 #include "../../Component/Engine/Camera/CameraHelper.h"
@@ -6,7 +7,7 @@
 #include "../../System/Window.h"
 
 ModelViewCamera::ModelViewCamera()
-    : mCamera(std::make_unique<SimpleCamera>())
+    : mCamera(std::make_unique<EngineCamera>())
     , mModelCenterView()
 {
 }
@@ -14,6 +15,8 @@ ModelViewCamera::ModelViewCamera()
 ModelViewCamera::~ModelViewCamera() = default;
 
 void ModelViewCamera::update() {
+    mCamera->update();
+
     if (Input::keyboard().getKeyDown(KeyCode::F)) {
         setModelCenterPosition();
     }
@@ -34,12 +37,12 @@ void ModelViewCamera::onChangeModel(const IMesh& mesh) {
         Vector3::up
     );
     //カメラにビュー行列を設定する
-    mCamera->setView(view);
+    mCamera->getCamera().setView(view);
     //モデル全体を映すビュー行列を保存する
     mModelCenterView = view;
 
     //射影行列を求め、カメラに設定する
-    mCamera->setProjection(Matrix4::createPerspectiveFOV(
+    mCamera->getCamera().setProjection(Matrix4::createPerspectiveFOV(
         Window::width(),
         Window::height(),
         FOV,
@@ -49,9 +52,9 @@ void ModelViewCamera::onChangeModel(const IMesh& mesh) {
 }
 
 void ModelViewCamera::setModelCenterPosition() {
-    mCamera->setView(mModelCenterView);
+    mCamera->getCamera().setView(mModelCenterView);
 }
 
 const SimpleCamera& ModelViewCamera::getCamera() const {
-    return *mCamera;
+    return mCamera->getCamera();
 }

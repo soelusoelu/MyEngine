@@ -280,6 +280,7 @@
     <ClCompile Include="Engine\EngineFuctionChanger.cpp" />
     <ClCompile Include="Engine\MapEditor\MapEditorMeshManager.cpp" />
     <ClCompile Include="Engine\MapEditor\AssetsPlacement.cpp" />
+    <ClCompile Include="Engine\Camera\EngineCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -619,6 +620,7 @@
     <ClInclude Include="GameObject\IGameObjectAdder.h" />
     <ClInclude Include="Engine\ICallbackChangeEngineMode.h" />
     <ClInclude Include="Engine\IEngineModeGetter.h" />
+    <ClInclude Include="Engine\Camera\EngineCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

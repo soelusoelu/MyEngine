@@ -31,7 +31,7 @@ public:
     Vector3& operator+=(const Vector3& right);
     Vector3& operator-=(const Vector3& right);
 
-    //2つのベクトルがほぼ同じか
+    //2つのベクトルがほぼ同じ値か
     static bool equal(const Vector3& left, const Vector3& right);
 
     //ベクトルの長さの2乗を求める

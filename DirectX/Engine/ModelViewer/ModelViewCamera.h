@@ -3,6 +3,7 @@
 #include "../../Math/Math.h"
 #include "../../Mesh/IMesh.h"
 
+class EngineCamera;
 class SimpleCamera;
 
 class ModelViewCamera {
@@ -22,7 +23,7 @@ private:
     ModelViewCamera& operator=(const ModelViewCamera&) = delete;
 
 private:
-    std::unique_ptr<SimpleCamera> mCamera;
+    std::unique_ptr<EngineCamera> mCamera;
     Matrix4 mModelCenterView;
 
     static constexpr inline float FOV = 45.f;
