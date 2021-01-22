@@ -26,6 +26,8 @@ public:
     static void finalize();
     //毎フレーム更新
     static void update();
+    //毎フレーム遅延更新
+    static void lateUpdate();
 
     //各種入力クラスにアクセス
     static Keyboard& keyboard();

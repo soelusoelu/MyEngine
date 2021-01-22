@@ -4,14 +4,15 @@
 #include "../System/GlobalFunction.h"
 #include "../System/Window.h"
 
-Mouse::Mouse() :
-    mMouseDevice(nullptr),
-    mCurrentMouseState(),
-    mPreviousMouseState(),
-    mhWnd(nullptr),
-    mCurrentMousePosition(Vector2::zero),
-    mPreviousMousePosition(Vector2::zero),
-    mMouseMoveAmount(Vector2::zero)
+Mouse::Mouse()
+    : mMouseDevice(nullptr)
+    , mCurrentMouseState()
+    , mPreviousMouseState()
+    , mhWnd(nullptr)
+    , mCurrentMousePosition(Vector2::zero)
+    , mPreviousMousePosition(Vector2::zero)
+    , mMouseMoveAmount(Vector2::zero)
+    , mScrollWheel(0)
 {
 }
 
@@ -40,7 +41,11 @@ const Vector2& Mouse::getMouseMoveAmount() const {
 }
 
 int Mouse::getMouseScrollWheel() const {
-    return 1;
+    return mScrollWheel;
+}
+
+void Mouse::setWheelScrollValue(int value) {
+    mScrollWheel = value;
 }
 
 bool Mouse::initialize(const HWND& hWnd, IDirectInput8* directInput) {
@@ -77,6 +82,10 @@ void Mouse::update() {
     clampMousePosition();
 
     mMouseMoveAmount = mCurrentMousePosition - mPreviousMousePosition;
+}
+
+void Mouse::lateUpdate() {
+    mScrollWheel = 0;
 }
 
 void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {

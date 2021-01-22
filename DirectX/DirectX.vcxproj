@@ -521,6 +521,7 @@
     <ClInclude Include="Collision\IntersectHelper.h" />
     <ClInclude Include="Engine\SceneMesh\SceneMeshSelector.h" />
     <ClInclude Include="Engine\MapEditor\MapEditorMeshManager.h" />
+    <ClInclude Include="Input\IMouseWheelScrollValueSetter.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Mesh\IMeshAdder.h" />
     <ClInclude Include="Mesh\IMeshesGetter.h" />

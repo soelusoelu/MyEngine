@@ -12,6 +12,7 @@
 #include "../Imgui/imgui_impl_dx11.h"
 #include "../Imgui/imgui_impl_win32.h"
 #include "../Input/InputManager.h"
+#include "../Input/Mouse.h"
 #include "../Sound/XAudio2/SoundEngine.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/Random.h"
@@ -86,6 +87,7 @@ void Game::initialize() {
     //ファイルから値を読み込む
     LevelLoader::loadGlobal(this, GLOBAL_DATA_FILE_NAME);
 
+    mWindow->initialize(&InputManager::mouse());
     mWindow->createWindow(mInstance);
     const auto& hwnd = mWindow->gethWnd();
 
@@ -117,6 +119,8 @@ void Game::mainLoop() {
 
     mSceneManager->update();
     mSceneManager->draw();
+
+    InputManager::lateUpdate();
 
     //imguiの描画
     ImGui::Render();

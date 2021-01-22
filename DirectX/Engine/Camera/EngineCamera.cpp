@@ -11,6 +11,11 @@ EngineCamera::EngineCamera()
 
 EngineCamera::~EngineCamera() = default;
 
+void EngineCamera::initialize() {
+    mCameraRotation = Quaternion::identity;
+    mLengthCameraToLookAt = 0.f;
+}
+
 void EngineCamera::update() {
     const auto& mouse = Input::mouse();
 
@@ -19,10 +24,23 @@ void EngineCamera::update() {
 
     moveCamera(mouse, amount);
     rotateLookAtPoint(mouse, amount);
+    zoomCamera(mouse);
 }
 
 SimpleCamera& EngineCamera::getCamera() const {
     return *mCamera;
+}
+
+Vector3 EngineCamera::right() const {
+    return Vector3::transform(Vector3::right, mCameraRotation);
+}
+
+Vector3 EngineCamera::up() const {
+    return Vector3::transform(Vector3::up, mCameraRotation);
+}
+
+Vector3 EngineCamera::forward() const {
+    return Vector3::transform(Vector3::forward, mCameraRotation);
 }
 
 void EngineCamera::moveCamera(const IMouse& mouse, const Vector2& mouseMoveAmount) {
@@ -31,8 +49,8 @@ void EngineCamera::moveCamera(const IMouse& mouse, const Vector2& mouseMoveAmoun
     }
 
     //カメラの回転をもとに移動量を求める
-    auto moveAmount = Vector3::transform(Vector3::right, mCameraRotation) * -mouseMoveAmount.x;
-    moveAmount += Vector3::transform(Vector3::up, mCameraRotation) * mouseMoveAmount.y;
+    auto moveAmount = right() * -mouseMoveAmount.x;
+    moveAmount += up() * mouseMoveAmount.y;
     //移動速度を決定する
     moveAmount *= MOVE_SPEED;
 
@@ -49,17 +67,16 @@ void EngineCamera::rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseMo
     //新しい回転軸を計算する
     computeRotation(mouseMoveAmount);
 
-    //視線の逆向きベクトルを求める
-    auto back = Vector3::transform(Vector3::back, mCameraRotation);
     //カメラから注視点までの距離を計算する
     computeLengthCameraToLookAt();
 
-    mCamera->setPosition(mCamera->getLookAt() + back * mLengthCameraToLookAt);
+    mCamera->setPosition(mCamera->getLookAt() + -forward() * mLengthCameraToLookAt);
 }
 
 void EngineCamera::computeRotation(const Vector2& mouseMoveAmount) {
     //マウス移動量から回転軸を求める
     auto rotAxis = Vector3::normalize(Vector3(mouseMoveAmount.y, mouseMoveAmount.x, 0.f));
+    rotAxis = Vector3::transform(rotAxis, mCameraRotation);
     //回転軸とマウス移動量からクォータニオンを求める
     Quaternion r(rotAxis, mouseMoveAmount.length() * ROTATE_SPEED);
 
@@ -67,15 +84,20 @@ void EngineCamera::computeRotation(const Vector2& mouseMoveAmount) {
 }
 
 void EngineCamera::zoomCamera(const IMouse& mouse) {
-
+    int scroll = mouse.getMouseScrollWheel();
+    if (scroll > 0) {
+        zoomIn(mouse);
+    } else if (scroll < 0) {
+        zoomOut(mouse);
+    }
 }
 
 void EngineCamera::zoomIn(const IMouse& mouse) {
-
+    mCamera->setPosition(mCamera->getPosition() + forward() * ZOOM_SPEED);
 }
 
 void EngineCamera::zoomOut(const IMouse& mouse) {
-
+    mCamera->setPosition(mCamera->getPosition() + -forward() * ZOOM_SPEED);
 }
 
 Vector3 EngineCamera::getCameraToLookAt() const {

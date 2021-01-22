@@ -11,8 +11,15 @@ class EngineCamera {
 public:
     EngineCamera();
     ~EngineCamera();
+    void initialize();
     void update();
     SimpleCamera& getCamera() const;
+    //回転を考慮した右ベクトルを取得する
+    Vector3 right() const;
+    //回転を考慮した上ベクトルを取得する
+    Vector3 up() const;
+    //回転を考慮した前方ベクトルを取得する
+    Vector3 forward() const;
 
 private:
     EngineCamera(const EngineCamera&) = delete;
@@ -50,4 +57,5 @@ private:
 
     static constexpr float MOVE_SPEED = 0.0065f;
     static constexpr float ROTATE_SPEED = 0.5f;
+    static constexpr float ZOOM_SPEED = 1.f;
 };

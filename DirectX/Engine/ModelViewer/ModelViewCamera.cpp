@@ -14,6 +14,17 @@ ModelViewCamera::ModelViewCamera()
 
 ModelViewCamera::~ModelViewCamera() = default;
 
+void ModelViewCamera::initialize() {
+    //射影行列を求め、カメラに設定する
+    mCamera->getCamera().setProjection(Matrix4::createPerspectiveFOV(
+        Window::width(),
+        Window::height(),
+        FOV,
+        NEAR_CLIP,
+        FAR_CLIP
+    ));
+}
+
 void ModelViewCamera::update() {
     mCamera->update();
 
@@ -23,6 +34,9 @@ void ModelViewCamera::update() {
 }
 
 void ModelViewCamera::onChangeModel(const IMesh& mesh) {
+    //カメラ状態初期化
+    mCamera->initialize();
+
     auto& camera = mCamera->getCamera();
 
     //モデルを包む球を求める
@@ -42,15 +56,6 @@ void ModelViewCamera::onChangeModel(const IMesh& mesh) {
 
     //モデル全体を映すビュー行列を保存する
     mModelCenterView = camera.getView();
-
-    //射影行列を求め、カメラに設定する
-    camera.setProjection(Matrix4::createPerspectiveFOV(
-        Window::width(),
-        Window::height(),
-        FOV,
-        NEAR_CLIP,
-        FAR_CLIP
-    ));
 }
 
 void ModelViewCamera::setModelCenterPosition() {

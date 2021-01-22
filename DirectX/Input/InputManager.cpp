@@ -46,6 +46,10 @@ void InputManager::update() {
     mJoyPad->update();
 }
 
+void InputManager::lateUpdate() {
+    mMouse->lateUpdate();
+}
+
 Keyboard& InputManager::keyboard() {
     return *mKeyboard;
 }

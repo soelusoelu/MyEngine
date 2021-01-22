@@ -622,6 +622,7 @@
     <ClInclude Include="Engine\IEngineModeGetter.h" />
     <ClInclude Include="Engine\Camera\EngineCamera.h" />
     <ClInclude Include="Input\InputManager.h" />
+    <ClInclude Include="Input\IMouseWheelScrollValueSetter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

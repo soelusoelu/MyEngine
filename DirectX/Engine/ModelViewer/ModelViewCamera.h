@@ -10,6 +10,7 @@ class ModelViewCamera {
 public:
     ModelViewCamera();
     ~ModelViewCamera();
+    void initialize();
     void update();
     //モデル変更時
     void onChangeModel(const IMesh& mesh);
