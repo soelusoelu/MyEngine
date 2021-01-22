@@ -1,6 +1,7 @@
 ﻿#include "Vector3.h"
-#include "Math.h"
+#include "MathUtility.h"
 #include "Matrix4.h"
+#include "Quaternion.h"
 #include "Vector2.h"
 
 Vector3::Vector3() :
@@ -199,11 +200,9 @@ Vector3 Vector3::transformWithPerspDiv(const Vector3& vec, const Matrix4& mat, f
 }
 
 Vector3 Vector3::transform(const Vector3& v, const Quaternion& q) {
-    // v + 2.0*cross(q.xyz, cross(q.xyz,v) + q.w*v);
+    // v + 2.0 * cross(q.xyz, cross(q.xyz, v) + q.w * v);
     Vector3 qv(q.x, q.y, q.z);
-    Vector3 retVal = v;
-    retVal += 2.f * Vector3::cross(qv, Vector3::cross(qv, v) + q.w * v);
-    return retVal;
+    return (v + 2.f * Vector3::cross(qv, Vector3::cross(qv, v) + q.w * v));
 }
 
 const Vector3 Vector3::zero(0.f, 0.f, 0.f);

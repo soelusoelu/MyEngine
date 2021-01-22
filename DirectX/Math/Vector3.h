@@ -68,8 +68,8 @@ public:
     static Vector3 reflect(const Vector3& v, const Vector3& n);
 
     //ベクトルと行列の掛け算
-    static Vector3 transform(const Vector3& vec, const Matrix4& mat, float w = 1.0f);
-    static Vector3 transformWithPerspDiv(const Vector3& vec, const Matrix4& mat, float w = 1.0f);
+    static Vector3 transform(const Vector3& vec, const Matrix4& mat, float w = 1.f);
+    static Vector3 transformWithPerspDiv(const Vector3& vec, const Matrix4& mat, float w = 1.f);
     //ベクトルとクォータニオンの掛け算
     static Vector3 transform(const Vector3& v, const Quaternion& q);
 

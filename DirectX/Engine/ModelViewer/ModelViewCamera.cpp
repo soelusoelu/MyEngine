@@ -23,26 +23,28 @@ void ModelViewCamera::update() {
 }
 
 void ModelViewCamera::onChangeModel(const IMesh& mesh) {
+    auto& camera = mCamera->getCamera();
+
     //モデルを包む球を求める
     Sphere sphere;
     SphereHelper::create(sphere, mesh);
 
-    //モデル全体を映すビュー行列を求める
-    const auto& view = CameraHelper::getViewMatrixTakingSphereInCamera(
+    //モデル全体を映せるカメラ位置を設定する
+    camera.setPosition(CameraHelper::getCameraPositionTakingSphereInCamera(
         sphere,
         Window::width(),
         Window::height(),
         FOV,
-        Vector3::forward,
-        Vector3::up
-    );
-    //カメラにビュー行列を設定する
-    mCamera->getCamera().setView(view);
+        Vector3::forward
+    ));
+    //注視点をモデルの中心に設定する
+    camera.lookAt(sphere.center);
+
     //モデル全体を映すビュー行列を保存する
-    mModelCenterView = view;
+    mModelCenterView = camera.getView();
 
     //射影行列を求め、カメラに設定する
-    mCamera->getCamera().setProjection(Matrix4::createPerspectiveFOV(
+    camera.setProjection(Matrix4::createPerspectiveFOV(
         Window::width(),
         Window::height(),
         FOV,

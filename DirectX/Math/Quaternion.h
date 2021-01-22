@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-class Vector3;
+#include "Vector3.h"
 
 class Quaternion {
 public:
@@ -46,6 +46,9 @@ public:
 
     //足し算
     static Quaternion concatenate(const Quaternion& q, const Quaternion& p);
+
+    //指定された forward と upwards 方向に回転したクォータニオンを取得する
+    static Quaternion lookRotation(const Vector3& forward, const Vector3& upwards = Vector3::up);
 
     static const Quaternion identity;
 };
