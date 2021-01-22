@@ -9,7 +9,9 @@ Mouse::Mouse() :
     mPreviousMouseState(),
     mhWnd(nullptr),
     mCurrentMousePosition(Vector2::zero),
-    mPreviousMousePosition(Vector2::zero) {
+    mPreviousMousePosition(Vector2::zero),
+    mMouseMoveAmount(Vector2::zero)
+{
 }
 
 Mouse::~Mouse() {
@@ -32,8 +34,8 @@ const Vector2& Mouse::getMousePosition() const {
     return mCurrentMousePosition;
 }
 
-Vector2 Mouse::getMouseMoveAmount() const {
-    return mCurrentMousePosition - mPreviousMousePosition;
+const Vector2& Mouse::getMouseMoveAmount() const {
+    return mMouseMoveAmount;
 }
 
 bool Mouse::initialize(const HWND& hWnd, IDirectInput8* directInput) {
@@ -68,6 +70,8 @@ void Mouse::update() {
 
     updateMousePosition();
     clampMousePosition();
+
+    mMouseMoveAmount = mCurrentMousePosition - mPreviousMousePosition;
 }
 
 void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {
@@ -77,8 +81,8 @@ void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {
         key = MouseCode::LeftButton;
     } else if (src == "RightButton") {
         key = MouseCode::RightButton;
-    } else if (src == "CenterButton") {
-        key = MouseCode::CenterButton;
+    } else if (src == "WheelButton") {
+        key = MouseCode::WheelButton;
     } else if (src == "SideButton1") {
         key = MouseCode::SideButton1;
     } else if (src == "SideButton2") {

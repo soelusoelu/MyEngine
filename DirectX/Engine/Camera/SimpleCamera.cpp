@@ -43,7 +43,7 @@ void SimpleCamera::setPosition(const Vector3& pos) {
     calcView();
 }
 
-Vector3 SimpleCamera::getPosition() const {
+const Vector3& SimpleCamera::getPosition() const {
     return mPosition;
 }
 

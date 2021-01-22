@@ -5,7 +5,7 @@ class Vector2;
 enum class MouseCode {
     LeftButton = 0,
     RightButton = 1,
-    CenterButton = 2,
+    WheelButton = 2,
     SideButton1 = 3,
     SideButton2 = 4,
     SideButton3 = 5,
@@ -25,5 +25,5 @@ public:
     //マウスのウィンドウ位置
     virtual const Vector2& getMousePosition() const = 0;
     //1フレームにおけるマウスの移動量
-    virtual Vector2 getMouseMoveAmount() const = 0;
+    virtual const Vector2& getMouseMoveAmount() const = 0;
 };
