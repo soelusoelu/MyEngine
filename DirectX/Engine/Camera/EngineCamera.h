@@ -24,6 +24,12 @@ private:
     void rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseMoveAmount);
     //マウスの移動量から回転軸を計算する
     void computeRotation(const Vector2& mouseMoveAmount);
+    //ズームイン、ズームアウトをする
+    void zoomCamera(const IMouse& mouse);
+    //ズームイン
+    void zoomIn(const IMouse& mouse);
+    //ズームアウト
+    void zoomOut(const IMouse& mouse);
 
     //カメラから注視点までのベクトルを求める
     Vector3 getCameraToLookAt() const;

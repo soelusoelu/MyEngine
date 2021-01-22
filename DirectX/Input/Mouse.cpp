@@ -1,4 +1,5 @@
 ﻿#include "Mouse.h"
+#include "InputUtility.h"
 #include "../Math/Math.h"
 #include "../System/GlobalFunction.h"
 #include "../System/Window.h"
@@ -19,15 +20,15 @@ Mouse::~Mouse() {
 }
 
 bool Mouse::getMouseButtonDown(MouseCode button) const {
-    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80 && !(mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80));
+    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & InputUtility::VERSION && !(mPreviousMouseState.rgbButtons[static_cast<int>(button)] & InputUtility::VERSION));
 }
 
 bool Mouse::getMouseButton(MouseCode button) const {
-    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80 && (mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80));
+    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & InputUtility::VERSION && (mPreviousMouseState.rgbButtons[static_cast<int>(button)] & InputUtility::VERSION));
 }
 
 bool Mouse::getMouseButtonUp(MouseCode button) const {
-    return (!(mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80) && mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80);
+    return (!(mCurrentMouseState.rgbButtons[static_cast<int>(button)] & InputUtility::VERSION) && mPreviousMouseState.rgbButtons[static_cast<int>(button)] & InputUtility::VERSION);
 }
 
 const Vector2& Mouse::getMousePosition() const {
@@ -36,6 +37,10 @@ const Vector2& Mouse::getMousePosition() const {
 
 const Vector2& Mouse::getMouseMoveAmount() const {
     return mMouseMoveAmount;
+}
+
+int Mouse::getMouseScrollWheel() const {
+    return 1;
 }
 
 bool Mouse::initialize(const HWND& hWnd, IDirectInput8* directInput) {

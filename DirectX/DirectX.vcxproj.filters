@@ -55,7 +55,6 @@
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObjectFactory.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
-    <ClCompile Include="Input\InputUtility.cpp" />
     <ClCompile Include="Device\Subject.cpp" />
     <ClCompile Include="DirectX\BlendState.cpp" />
     <ClCompile Include="DirectX\Buffer.cpp" />
@@ -281,6 +280,7 @@
     <ClCompile Include="Engine\MapEditor\MapEditorMeshManager.cpp" />
     <ClCompile Include="Engine\MapEditor\AssetsPlacement.cpp" />
     <ClCompile Include="Engine\Camera\EngineCamera.cpp" />
+    <ClCompile Include="Input\InputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -621,6 +621,7 @@
     <ClInclude Include="Engine\ICallbackChangeEngineMode.h" />
     <ClInclude Include="Engine\IEngineModeGetter.h" />
     <ClInclude Include="Engine\Camera\EngineCamera.h" />
+    <ClInclude Include="Input\InputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

@@ -66,6 +66,18 @@ void EngineCamera::computeRotation(const Vector2& mouseMoveAmount) {
     mCameraRotation = Quaternion::concatenate(mCameraRotation, r);
 }
 
+void EngineCamera::zoomCamera(const IMouse& mouse) {
+
+}
+
+void EngineCamera::zoomIn(const IMouse& mouse) {
+
+}
+
+void EngineCamera::zoomOut(const IMouse& mouse) {
+
+}
+
 Vector3 EngineCamera::getCameraToLookAt() const {
     return (mCamera->getLookAt() - mCamera->getPosition());
 }

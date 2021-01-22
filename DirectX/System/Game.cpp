@@ -11,7 +11,7 @@
 #include "../Imgui/imgui.h"
 #include "../Imgui/imgui_impl_dx11.h"
 #include "../Imgui/imgui_impl_win32.h"
-#include "../Input/InputUtility.h"
+#include "../Input/InputManager.h"
 #include "../Sound/XAudio2/SoundEngine.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/Random.h"
@@ -36,7 +36,7 @@ Game::~Game() {
     Shader::finalize();
     Texture::finalize();
     GameObjectCreater::finalize();
-    InputUtility::finalize();
+    InputManager::finalize();
     SoundEngine::instance().finalize();
     AssetsManager::instance().finalize();
     MyDirectX::DirectX::instance().finalize();
@@ -61,14 +61,14 @@ void Game::run(HINSTANCE hInstance) {
 void Game::loadProperties(const rapidjson::Value& inObj) {
     mWindow->loadProperties(inObj);
     mFPSCounter->loadProperties(inObj);
-    InputUtility::loadProperties(inObj);
+    InputManager::loadProperties(inObj);
     mSceneManager->loadProperties(inObj);
 }
 
 void Game::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
     mWindow->saveProperties(alloc, inObj);
     mFPSCounter->saveProperties(alloc, inObj);
-    InputUtility::saveProperties(alloc, inObj);
+    InputManager::saveProperties(alloc, inObj);
     mSceneManager->saveProperties(alloc, inObj);
 }
 
@@ -80,7 +80,7 @@ void Game::initialize() {
     mWindow = std::make_unique<Window>();
 
     mFPSCounter = std::make_unique<FPSCounter>();
-    InputUtility::create();
+    InputManager::create();
     mSceneManager = new SceneManager();
 
     //ファイルから値を読み込む
@@ -97,7 +97,7 @@ void Game::initialize() {
     ImGui_ImplDX11_Init(MyDirectX::DirectX::instance().device(), MyDirectX::DirectX::instance().deviceContext());
 
     Random::initialize();
-    InputUtility::initialize(hwnd);
+    InputManager::initialize(hwnd);
     GameObjectCreater::initialize();
     mSceneManager->initialize(mFPSCounter.get());
 }
@@ -112,7 +112,7 @@ void Game::mainLoop() {
     dx.clearRenderTarget();
     dx.clearDepthStencilView();
 
-    InputUtility::update();
+    InputManager::update();
     mWindow->update();
 
     mSceneManager->update();
