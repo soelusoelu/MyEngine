@@ -269,7 +269,7 @@
     <ClCompile Include="Component\Game\Character\SimpleCharacter.cpp" />
     <ClCompile Include="Component\Game\Character\OverlapPrevention.cpp" />
     <ClCompile Include="Component\Game\Character\PhaseChangeSaver.cpp" />
-    <ClCompile Include="Component\Engine\Mesh\ShadowMap.cpp" />
+    <ClCompile Include="Mesh\Shadow\ShadowMap.cpp" />
     <ClCompile Include="Component\Game\UI\NextStageSelect.cpp" />
     <ClCompile Include="System\Texture\RenderTexture.cpp" />
     <ClCompile Include="Sprite\SpriteUtility.cpp" />
@@ -567,7 +567,7 @@
     <ClInclude Include="Component\Game\Character\SimpleCharacter.h" />
     <ClInclude Include="Component\Game\Character\OverlapPrevention.h" />
     <ClInclude Include="Component\Game\Character\PhaseChangeSaver.h" />
-    <ClInclude Include="Component\Engine\Mesh\ShadowMap.h" />
+    <ClInclude Include="Mesh\Shadow\ShadowMap.h" />
     <ClInclude Include="Component\Game\UI\NextStageSelect.h" />
     <ClInclude Include="System\Texture\RenderTexture.h" />
     <ClInclude Include="Sprite\SpriteUtility.h" />
