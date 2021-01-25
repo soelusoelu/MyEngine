@@ -7,7 +7,7 @@
 
 class Physics;
 
-class Collider : public Component, public std::enable_shared_from_this<Collider> {
+class Collider : public Component {
     using CollPtr = std::shared_ptr<Collider>;
     using CollPtrList = std::list<CollPtr>;
 
@@ -31,23 +31,29 @@ public:
     void automation();
     //コライダーを追加
     void addHitCollider(const CollPtr& hit);
-    //衝突した瞬間のオブジェクトリストを取得
-    CollPtrList onCollisionEnter() const;
-    //衝突し続けているオブジェクトリストを取得
-    CollPtrList onCollisionStay() const;
-    //衝突しなくなった瞬間のオブジェクトリストを取得
-    CollPtrList onCollisionExit() const;
 
     static void setPhysics(Physics* physics);
+
+private:
+    //衝突し続けているコライダーを通知する
+    void notifyCollisionStay() const;
+    //衝突しなくなったコライダーを通知する
+    void notifyCollisionExit() const;
+    //衝突した瞬間か
+    bool isCollisionEnter(const CollPtr& hit) const;
+    //衝突し続けているか
+    bool isCollisionStay(const CollPtr& hit) const;
+    //衝突しなくなったか
+    bool isCollisionExit(const CollPtr& hit) const;
 
 protected:
     bool mIsAutoUpdate;
     bool mEnable;
 
+    static inline Physics* mPhysics = nullptr;
+
 private:
     CollPtrList mPreviousCollider;
     CollPtrList mCurrentCollider;
-
-    static inline Physics* mPhysics = nullptr;
 };
 

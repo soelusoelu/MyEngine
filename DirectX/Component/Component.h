@@ -11,8 +11,8 @@
 #include <vector>
 
 class GameObject;
+class Collider;
 class Transform3D;
-class ComponentManager;
 
 class Component : public Object {
 public:
@@ -31,6 +31,12 @@ public:
     virtual void finalize() {};
     //アクティブ・非アクティブ時の切り替え
     virtual void onEnable(bool value) {};
+    //衝突した瞬間のコライダーを取得する
+    virtual void onCollisionEnter(Collider& other) {};
+    //衝突し続けているコライダーを取得する
+    virtual void onCollisionStay(Collider& other) {};
+    //衝突しなくなった瞬間のコライダーを取得する
+    virtual void onCollisionExit(Collider& other) {};
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj) {};
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
