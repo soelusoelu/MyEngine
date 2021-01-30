@@ -13,7 +13,7 @@ void ComponentManager::start() {
     }
 }
 
-void ComponentManager::update() const  {
+void ComponentManager::update() const {
     for (const auto& comp : mComponents) {
         comp->update();
     }
@@ -40,6 +40,24 @@ void ComponentManager::addComponent(const ComponentPtr& component) {
 void ComponentManager::onEnable(bool value) const {
     for (const auto& comp : mComponents) {
         comp->onEnable(value);
+    }
+}
+
+void ComponentManager::onCollisionEnter(Collider& other) const {
+    for (const auto& comp : mComponents) {
+        comp->onCollisionEnter(other);
+    }
+}
+
+void ComponentManager::onCollisionStay(Collider& other) const {
+    for (const auto& comp : mComponents) {
+        comp->onCollisionStay(other);
+    }
+}
+
+void ComponentManager::onCollisionExit(Collider& other) const {
+    for (const auto& comp : mComponents) {
+        comp->onCollisionExit(other);
     }
 }
 
