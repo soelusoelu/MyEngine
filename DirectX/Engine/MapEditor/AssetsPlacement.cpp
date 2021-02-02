@@ -84,10 +84,18 @@ void AssetsPlacement::decideAssetPlacePosition(
         hitObj.getParentChildRelation().addChild(asset);
 
         //衝突した位置に移動
-        asset->transform().setPosition(-hitObj.getPosition() + Vector3::transform(raycastHit.point - hitObj.getPosition(), hitObj.getWorldTransform()));
+        const auto& world = hitObj.getWorldTransform();
+        auto pos = raycastHit.point - world.getTranslation();
+        auto mat = Matrix4::createScale(world.getScale());
+        auto r = world.getQuaternion();
+        r.conjugate();
+        mat *= Matrix4::createFromQuaternion(r);
+        pos = Vector3::transform(pos, mat);
+        asset->transform().setPosition(pos);
+        //asset->transform().setPosition(-hitObj.getPosition() + Vector3::transform(raycastHit.point - hitObj.getPosition(), hitObj.getWorldTransform()));
         //法線から角度を計算する
         //const auto& rot = Vector3::cross(Vector3::up, Vector3::transform(raycastHit.polygon.normal(), raycastHit.hitObject->transform().getRotation())) * 90.f;
-        const auto& rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;
+        auto rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;
         asset->transform().setRotation(rot);
         return;
     }
