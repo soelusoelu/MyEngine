@@ -58,7 +58,7 @@ void AssetsPlacement::placeAsset(
     mGameObjectAdder->add(newGameObject);
 
     //位置を決定する
-    decideAssetPlacePosition(camera, meshesGetter, newGameObject);
+    decideAssetPlaceTransform(camera, meshesGetter, newGameObject);
 
     //ゲームオブジェクトにメッシュをアタッチする
     auto newMesh = Component::addComponent<MeshComponent>(*newGameObject, "MeshComponent");
@@ -70,7 +70,7 @@ void AssetsPlacement::placeAsset(
     mInspector->setTarget(newGameObject);
 }
 
-void AssetsPlacement::decideAssetPlacePosition(
+void AssetsPlacement::decideAssetPlaceTransform(
     const SimpleCamera& camera,
     const IMeshesGetter* meshesGetter,
     const std::shared_ptr<GameObject>& asset
@@ -84,24 +84,40 @@ void AssetsPlacement::decideAssetPlacePosition(
         hitObj.getParentChildRelation().addChild(asset);
 
         //衝突した位置に移動
-        const auto& world = hitObj.getWorldTransform();
-        auto pos = raycastHit.point - world.getTranslation();
-        auto mat = Matrix4::createScale(world.getScale());
-        auto r = world.getQuaternion();
-        r.conjugate();
-        mat *= Matrix4::createFromQuaternion(r);
-        pos = Vector3::transform(pos, mat);
-        asset->transform().setPosition(pos);
-        //asset->transform().setPosition(-hitObj.getPosition() + Vector3::transform(raycastHit.point - hitObj.getPosition(), hitObj.getWorldTransform()));
+        decideAssetPlacePosition(*asset, hitObj, raycastHit.point);
+
         //法線から角度を計算する
-        //const auto& rot = Vector3::cross(Vector3::up, Vector3::transform(raycastHit.polygon.normal(), raycastHit.hitObject->transform().getRotation())) * 90.f;
-        auto rot = Vector3::cross(Vector3::up, raycastHit.polygon.normal()) * 90.f;
-        asset->transform().setRotation(rot);
+        decideAssetPlaceRotation(*asset, raycastHit.polygon.normal());
         return;
     }
 
     //どのメッシュとも衝突しなかったら、カメラの近くに適当に移動
     asset->transform().setPosition(ray.pointOnSegment(0.01f));
+}
+
+void AssetsPlacement::decideAssetPlacePosition(
+    const GameObject& target,
+    const Transform3D& hitObject,
+    const Vector3& hitPoint
+) const {
+    auto pos = hitPoint - hitObject.getPosition();
+    auto scale = hitObject.getScale();
+    auto s = Vector3(1.f / scale.x, 1.f / scale.y, 1.f / scale.z);
+    auto mat = Matrix4::createScale(s);
+    auto rot = hitObject.getRotation();
+    rot.conjugate();
+    mat *= Matrix4::createFromQuaternion(rot);
+    pos = Vector3::transform(pos, mat);
+    target.transform().setPosition(pos);
+}
+
+void AssetsPlacement::decideAssetPlaceRotation(
+    const GameObject& target,
+    const Vector3& hitPolygonNormal
+) const {
+    //const auto& rot = Vector3::cross(Vector3::up, Vector3::transform(raycastHit.polygon.normal(), raycastHit.hitObject->transform().getRotation())) * 90.f;
+    auto rot = Vector3::cross(Vector3::up, hitPolygonNormal) * 90.f;
+    target.transform().setRotation(rot);
 }
 
 bool AssetsPlacement::placeConditions() const {

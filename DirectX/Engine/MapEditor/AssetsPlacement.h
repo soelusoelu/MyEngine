@@ -10,6 +10,7 @@
 
 class SimpleCamera;
 class GameObject;
+class Transform3D;
 
 //ゲーム画面にアセットを配置するクラス
 class AssetsPlacement {
@@ -35,11 +36,25 @@ private:
     AssetsPlacement& operator=(const AssetsPlacement&) = delete;
 
     //アセットを配置する場所を決める
-    void decideAssetPlacePosition(
+    void decideAssetPlaceTransform(
         const SimpleCamera& camera,
         const IMeshesGetter* meshesGetter,
         const std::shared_ptr<GameObject>& asset
     ) const;
+
+    //アセットを配置する位置を決める
+    void decideAssetPlacePosition(
+        const GameObject& target,
+        const Transform3D& hitObject,
+        const Vector3& hitPoint
+    ) const;
+
+    //配置したアセットの向きを決める
+    void decideAssetPlaceRotation(
+        const GameObject& target,
+        const Vector3& hitPolygonNormal
+    ) const;
+
     //アセットを配置する条件が整っているか
     bool placeConditions() const;
 
