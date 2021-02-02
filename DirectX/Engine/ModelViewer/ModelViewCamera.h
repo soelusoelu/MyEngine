@@ -25,7 +25,8 @@ private:
 
 private:
     std::unique_ptr<EngineCamera> mCamera;
-    Matrix4 mModelCenterView;
+    Vector3 mModelCenterPosition;
+    Vector3 mModelCetnerLookAt;
 
     static constexpr inline float FOV = 45.f;
     static constexpr inline float NEAR_CLIP = 0.1f;

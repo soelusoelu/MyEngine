@@ -13,6 +13,7 @@ public:
     ~EngineCamera();
     void initialize();
     void update();
+    //カメラの基礎要素を取得する
     SimpleCamera& getCamera() const;
     //回転を考慮した右ベクトルを取得する
     Vector3 right() const;
@@ -54,6 +55,7 @@ private:
     std::unique_ptr<SimpleCamera> mCamera;
     Quaternion mCameraRotation;
     float mLengthCameraToLookAt;
+    bool mIsComputeLengthCameraToLookAt;
 
     static constexpr float MOVE_SPEED = 0.0065f;
     static constexpr float ROTATE_SPEED = 0.5f;
