@@ -100,13 +100,12 @@ void AssetsPlacement::decideAssetPlacePosition(
     const Transform3D& hitObject,
     const Vector3& hitPoint
 ) const {
-    auto pos = hitPoint - hitObject.getPosition();
-    auto scale = hitObject.getScale();
-    auto s = Vector3(1.f / scale.x, 1.f / scale.y, 1.f / scale.z);
-    auto mat = Matrix4::createScale(s);
-    auto rot = hitObject.getRotation();
-    rot.conjugate();
-    mat *= Matrix4::createFromQuaternion(rot);
+    const auto& world = hitObject.getWorldTransform();
+    auto pos = hitPoint - world.getTranslation();
+    auto mat = Matrix4::createScale(world.getScale());
+    auto r = world.getQuaternion();
+    r.conjugate();
+    mat *= Matrix4::createFromQuaternion(r);
     pos = Vector3::transform(pos, mat);
     target.transform().setPosition(pos);
 }

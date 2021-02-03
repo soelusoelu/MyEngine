@@ -38,7 +38,13 @@ void Transform3D::setPosition(const Vector3& pos) {
 }
 
 Vector3 Transform3D::getPosition() const {
-    return mWorldTransform.getTranslation();
+    auto parent = mParentChildRelation->parent();
+    auto pos = mPosition;
+    while (parent) {
+        pos += parent->transform().mPosition;
+        parent = parent->parent();
+    }
+    return pos;
 }
 
 const Vector3& Transform3D::getLocalPosition() const {
@@ -74,7 +80,13 @@ void Transform3D::setRotation(const Vector3& eulers) {
 }
 
 Quaternion Transform3D::getRotation() const {
-    return mWorldTransform.getQuaternion();
+    auto parent = mParentChildRelation->parent();
+    auto rotation = mRotation;
+    while (parent) {
+        rotation = Quaternion::concatenate(rotation, parent->transform().mRotation);
+        parent = parent->parent();
+    }
+    return rotation;
 }
 
 const Quaternion& Transform3D::getLocalRotation() const {
@@ -119,7 +131,13 @@ void Transform3D::setScale(float scale) {
 }
 
 Vector3 Transform3D::getScale() const {
-    return mWorldTransform.getScale();
+    auto parent = mParentChildRelation->parent();
+    auto scale = mScale;
+    while (parent) {
+        scale *= parent->transform().mScale;
+        parent = parent->parent();
+    }
+    return scale;
 }
 
 const Vector3& Transform3D::getLocalScale() const {
