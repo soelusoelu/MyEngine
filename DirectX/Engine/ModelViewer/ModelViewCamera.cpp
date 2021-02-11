@@ -8,8 +8,7 @@
 
 ModelViewCamera::ModelViewCamera()
     : mCamera(std::make_unique<EngineCamera>())
-    , mModelCenterPosition()
-    , mModelCetnerLookAt()
+    , mModelCenterView()
 {
 }
 
@@ -30,7 +29,6 @@ void ModelViewCamera::update() {
     mCamera->update();
 
     if (Input::keyboard().getKeyDown(KeyCode::F)) {
-        mCamera->initialize();
         setModelCenterPosition();
     }
 }
@@ -45,25 +43,23 @@ void ModelViewCamera::onChangeModel(const IMesh& mesh) {
     Sphere sphere;
     SphereHelper::create(sphere, mesh);
 
-    //注視点をモデルの中心に設定する
-    mModelCetnerLookAt = sphere.center;
-    camera.lookAt(mModelCetnerLookAt);
-
     //モデル全体を映せるカメラ位置を設定する
-    mModelCenterPosition = CameraHelper::getCameraPositionTakingSphereInCamera(
+    camera.setPosition(CameraHelper::getCameraPositionTakingSphereInCamera(
         sphere,
         Window::width(),
         Window::height(),
         FOV,
         Vector3::forward
-    );
-    camera.setPosition(mModelCenterPosition);
+    ));
+    //注視点をモデルの中心に設定する
+    camera.lookAt(sphere.center);
+
+    //モデル全体を映すビュー行列を保存する
+    mModelCenterView = camera.getView();
 }
 
 void ModelViewCamera::setModelCenterPosition() {
-    auto& camera = mCamera->getCamera();
-    camera.setPosition(mModelCenterPosition);
-    camera.lookAt(mModelCetnerLookAt);
+    mCamera->getCamera().setView(mModelCenterView);
 }
 
 const SimpleCamera& ModelViewCamera::getCamera() const {

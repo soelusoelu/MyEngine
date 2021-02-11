@@ -26,57 +26,14 @@
 #include "../Component/Engine/Scene/MapEditor.h"
 #include "../Component/Engine/Sound/ListenerComponent.h"
 #include "../Component/Engine/Sound/SoundComponent.h"
+#include "../Component/Engine/Sprite/MeshRenderOnTextureComponent.h"
 #include "../Component/Engine/Sprite/Sprite3D.h"
 #include "../Component/Engine/Sprite/SpriteButtonComponent.h"
 #include "../Component/Engine/Sprite/SpriteComponent.h"
 #include "../Component/Engine/Text/Text.h"
 #include "../Component/Engine/Text/TextFloat.h"
 #include "../Component/Engine/Text/TextNumber.h"
-#include "../Component/Game/Camera/CameraMove.h"
-#include "../Component/Game/AI/ASAI.h"
-#include "../Component/Game/AI/ASCell.h"
-#include "../Component/Game/AI/ASCellManager.h"
-#include "../Component/Game/Character/CharacterAction.h"
-#include "../Component/Game/Character/CharacterCommonComponents.h"
-#include "../Component/Game/Character/CharacterDead.h"
-#include "../Component/Game/Character/CharacterManager.h"
-#include "../Component/Game/Character/HitPointRenderer.h"
-#include "../Component/Game/Character/OverlapPrevention.h"
-#include "../Component/Game/Character/PhaseChangeSaver.h"
-#include "../Component/Game/Character/SimpleCharacter.h"
-#include "../Component/Game/CharacterOperation/CharacterCost.h"
-#include "../Component/Game/CharacterOperation/CharacterCreater.h"
-#include "../Component/Game/CharacterOperation/CharacterCreateSpriteOperation.h"
-#include "../Component/Game/CharacterOperation/CharacterDeleter.h"
-#include "../Component/Game/CharacterOperation/CharacterOperation.h"
-#include "../Component/Game/CharacterOperation/CharacterSelector.h"
-#include "../Component/Game/CharacterOperation/CostRenderer.h"
-#include "../Component/Game/CharacterOperation/DragAndDropCharacter.h"
-#include "../Component/Game/EnemyOperation/EnemyCreater.h"
-#include "../Component/Game/EnemyOperation/EnemyOperation.h"
-#include "../Component/Game/GameState/GameClear.h"
-#include "../Component/Game/GameState/GameJudge.h"
-#include "../Component/Game/GameState/GameReset.h"
-#include "../Component/Game/GameState/GameStart.h"
-#include "../Component/Game/GameState/StageClear.h"
-#include "../Component/Game/GameState/StageFail.h"
-#include "../Component/Game/GameState/StageFailArrow.h"
-#include "../Component/Game/Map/Map.h"
-#include "../Component/Game/Other/HitPointComponent.h"
-#include "../Component/Game/Scene/GamePlay.h"
-#include "../Component/Game/Scene/StageSelect.h"
 #include "../Component/Game/Scene/Title.h"
-#include "../Component/Game/UI/CharacterPlacementWarning.h"
-#include "../Component/Game/UI/ClearToStageSelect.h"
-#include "../Component/Game/UI/GameEnd.h"
-#include "../Component/Game/UI/NextStageSelect.h"
-#include "../Component/Game/UI/Menu/Menu.h"
-#include "../Component/Game/UI/Menu/MenuClose.h"
-#include "../Component/Game/UI/Menu/MenuGameEnd.h"
-#include "../Component/Game/UI/Menu/MenuToStageSelect.h"
-#include "../Component/Game/UI/Menu/MenuToTitle.h"
-#include "../Component/Game/UI/Menu/MenuWindow.h"
-#include "../Component/Game/UI/Menu/MenuWindowInitializer.h"
 #include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/GlobalFunction.h"
 #include "../Utility/LevelLoader.h"
@@ -123,6 +80,7 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(ListenerComponent);
     ADD_COMPONENT(SoundComponent);
 
+    ADD_COMPONENT(MeshRenderOnTextureComponent);
     ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteButtonComponent);
     ADD_COMPONENT(SpriteComponent);
@@ -133,58 +91,7 @@ GameObjectFactory::GameObjectFactory() {
 #pragma endregion
 
 #pragma region Game
-    ADD_COMPONENT(ASAI);
-
-    ADD_COMPONENT(CameraMove);
-
-    ADD_COMPONENT(CharacterAction);
-    ADD_COMPONENT(CharacterCommonComponents);
-    ADD_COMPONENT(CharacterDead);
-    ADD_COMPONENT(CharacterManager);
-    ADD_COMPONENT(HitPointRenderer);
-    ADD_COMPONENT(OverlapPrevention);
-    ADD_COMPONENT(PhaseChangeSaver);
-    ADD_COMPONENT(SimpleCharacter);
-
-    ADD_COMPONENT(CharacterCost);
-    ADD_COMPONENT(CharacterCreater);
-    ADD_COMPONENT(CharacterCreateSpriteOperation);
-    ADD_COMPONENT(CharacterDeleter);
-    ADD_COMPONENT(CharacterOperation);
-    ADD_COMPONENT(CharacterSelector);
-    ADD_COMPONENT(CostRenderer);
-    ADD_COMPONENT(DragAndDropCharacter);
-
-    ADD_COMPONENT(EnemyCreater);
-    ADD_COMPONENT(EnemyOperation);
-
-    ADD_COMPONENT(GameClear);
-    ADD_COMPONENT(GameJudge);
-    ADD_COMPONENT(GameReset);
-    ADD_COMPONENT(GameStart);
-    ADD_COMPONENT(StageClear);
-    ADD_COMPONENT(StageFail);
-    ADD_COMPONENT(StageFailArrow);
-
-    ADD_COMPONENT(Map);
-
-    ADD_COMPONENT(HitPointComponent);
-
-    ADD_COMPONENT(GamePlay);
-    ADD_COMPONENT(StageSelect);
     ADD_COMPONENT(Title);
-
-    ADD_COMPONENT(CharacterPlacementWarning);
-    ADD_COMPONENT(ClearToStageSelect);
-    ADD_COMPONENT(GameEnd);
-    ADD_COMPONENT(NextStageSelect);
-    ADD_COMPONENT(Menu);
-    ADD_COMPONENT(MenuClose);
-    ADD_COMPONENT(MenuGameEnd);
-    ADD_COMPONENT(MenuToStageSelect);
-    ADD_COMPONENT(MenuToTitle);
-    ADD_COMPONENT(MenuWindow);
-    ADD_COMPONENT(MenuWindowInitializer);
 #pragma endregion
 }
 

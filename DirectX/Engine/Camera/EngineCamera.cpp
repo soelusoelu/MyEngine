@@ -6,7 +6,6 @@ EngineCamera::EngineCamera()
     : mCamera(std::make_unique<SimpleCamera>())
     , mCameraRotation(Quaternion::identity)
     , mLengthCameraToLookAt(0.f)
-    , mIsComputeLengthCameraToLookAt(true)
 {
 }
 
@@ -15,7 +14,6 @@ EngineCamera::~EngineCamera() = default;
 void EngineCamera::initialize() {
     mCameraRotation = Quaternion::identity;
     mLengthCameraToLookAt = 0.f;
-    mIsComputeLengthCameraToLookAt = true;
 }
 
 void EngineCamera::update() {
@@ -59,8 +57,6 @@ void EngineCamera::moveCamera(const IMouse& mouse, const Vector2& mouseMoveAmoun
     //注視点と位置を設定する
     mCamera->lookAt(mCamera->getLookAt() + moveAmount);
     mCamera->setPosition(mCamera->getPosition() + moveAmount);
-
-    mIsComputeLengthCameraToLookAt = true;
 }
 
 void EngineCamera::rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseMoveAmount) {
@@ -98,12 +94,10 @@ void EngineCamera::zoomCamera(const IMouse& mouse) {
 
 void EngineCamera::zoomIn(const IMouse& mouse) {
     mCamera->setPosition(mCamera->getPosition() + forward() * ZOOM_SPEED);
-    mIsComputeLengthCameraToLookAt = true;
 }
 
 void EngineCamera::zoomOut(const IMouse& mouse) {
     mCamera->setPosition(mCamera->getPosition() + -forward() * ZOOM_SPEED);
-    mIsComputeLengthCameraToLookAt = true;
 }
 
 Vector3 EngineCamera::getCameraToLookAt() const {
@@ -111,11 +105,7 @@ Vector3 EngineCamera::getCameraToLookAt() const {
 }
 
 void EngineCamera::computeLengthCameraToLookAt() {
-    //計算フラグが立っていたら計算する
-    if (mIsComputeLengthCameraToLookAt) {
-        mLengthCameraToLookAt = getCameraToLookAt().length();
-        mIsComputeLengthCameraToLookAt = false;
-    }
+    mLengthCameraToLookAt = getCameraToLookAt().length();
 }
 
 bool EngineCamera::canMove(const IMouse& mouse, const Vector2& mouseMoveAmount) const {

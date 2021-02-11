@@ -295,11 +295,11 @@ Quaternion Matrix4::getQuaternion() const {
 }
 
 Vector3 Matrix4::getScale() const {
-    return Vector3(
-        Vector3(m[0][0], m[0][1], m[0][2]).length(),
-        Vector3(m[1][0], m[1][1], m[1][2]).length(),
-        Vector3(m[2][0], m[2][1], m[2][2]).length()
-    );
+    Vector3 retVal;
+    retVal.x = Vector3(m[0][0], m[0][1], m[0][2]).length();
+    retVal.y = Vector3(m[1][0], m[1][1], m[1][2]).length();
+    retVal.z = Vector3(m[2][0], m[2][1], m[2][2]).length();
+    return retVal;
 }
 
 Matrix4 Matrix4::createScale(float xScale, float yScale, float zScale) {

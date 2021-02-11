@@ -16,13 +16,6 @@
     {
       "type": "ListenerComponent",
       "properties": {}
-    },
-    {
-      "type": "CameraMove",
-      "properties": {
-        "cameraSpeed": 40.0,
-        "rotateSpeed": 40.0
-      }
     }
   ]
 }

@@ -21,7 +21,7 @@
             "enterPad": "A"
         },
         "sceneManager": {
-            "beginScene": "MapEditor",
+            "beginScene": "Title",
             "releaseScene": "Title",
             "removeExclusionTag": [
                 "Camera",
@@ -76,13 +76,7 @@
         "assetsRenderTextureList": {
             "textureSize": 64,
             "textureDisplayInterval": 32,
-            "texturesFilePath": [
-                "Assets\\Model\\Test\\test.obj",
-                "Assets\\Model\\Light\\PLight.obj",
-                "Assets\\Model\\Practice\\test.fbx",
-                "Assets\\Model\\Shape\\cone.fbx",
-                "Assets\\Model\\Shape\\Sphere.obj"
-            ]
+            "texturesFilePath": []
         },
         "assetsRenderTextureAdder": {
             "renderPosition": [
@@ -92,6 +86,7 @@
             "spriteButtonFilePath": "System/add_mesh.png"
         },
         "shadowMap": {
+            "shadowTextureSize": 8192,
             "lightDistance": 270.0,
             "nearClip": 10.0,
             "farClip": 300.0

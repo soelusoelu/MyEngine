@@ -28,7 +28,9 @@ void EngineFunctionManager::loadProperties(const rapidjson::Value& inObj) {
     mDebugManager->loadProperties(inObj);
     mPause->loadProperties(inObj);
     mFunctionChanger->loadProperties(inObj);
+    mMapEditor->loadProperties(inObj);
     mAssetsRenderTextureManager->loadProperties(inObj);
+    mModelViewer->loadProperties(inObj);
 }
 
 void EngineFunctionManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
@@ -46,6 +48,7 @@ void EngineFunctionManager::initialize(
     const IMeshesGetter* meshesGetter,
     const IFpsGetter* fpsGetter
 ) {
+#ifdef _DEBUG
     mDebugManager->initialize(gameObjctsGetter, fpsGetter, mPause.get());
     mPause->initialize();
     mFunctionChanger->initialize(callback);
@@ -53,13 +56,17 @@ void EngineFunctionManager::initialize(
     mAssetsRenderTextureManager->initialize();
     mSceneMeshOperator->initialize(camera, meshesGetter);
     mModelViewer->initialize(engineModeGetter, mAssetsRenderTextureManager.get(), mAssetsRenderTextureManager->getCallbackSelectAssetsTexture());
+#endif // _DEBUG
 }
 
 void EngineFunctionManager::preUpdateProcess() {
+#ifdef _DEBUG
     mDebugManager->preUpdateProcess();
+#endif // _DEBUG
 }
 
 void EngineFunctionManager::update(EngineMode mode) {
+#ifdef _DEBUG
     mAssetsRenderTextureManager->update(mode);
     mMapEditor->update(mode);
     mModelViewer->update(mode);
@@ -67,9 +74,11 @@ void EngineFunctionManager::update(EngineMode mode) {
     mPause->update();
     mFunctionChanger->update();
     mSceneMeshOperator->update();
+#endif // _DEBUG
 }
 
 void EngineFunctionManager::draw(EngineMode mode, const Renderer& renderer, Matrix4& proj) const {
+#ifdef _DEBUG
     //レンダリング領域をデバッグに変更
     renderer.renderToDebug(proj);
 
@@ -77,6 +86,7 @@ void EngineFunctionManager::draw(EngineMode mode, const Renderer& renderer, Matr
     mPause->drawButton(proj);
     mFunctionChanger->draw(proj);
     mDebugManager->draw(mode, renderer, proj);
+#endif // _DEBUG
 }
 
 void EngineFunctionManager::draw3D(
@@ -85,10 +95,12 @@ void EngineFunctionManager::draw3D(
     const Camera& camera,
     const DirectionalLight& dirLight
 ) const {
+#ifdef _DEBUG
     mAssetsRenderTextureManager->drawMeshes(mode);
     mMapEditor->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mModelViewer->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
     mDebugManager->draw3D(mode, renderer, camera.getViewProjection());
+#endif // _DEBUG
 }
 
 void EngineFunctionManager::onChangeMapEditorMode() {
