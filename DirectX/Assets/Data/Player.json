@@ -1,0 +1,14 @@
+{
+  "components": [
+    {
+      "type": "MeshComponent",
+      "properties": {
+        "fileName": "Player\\Death.fbx"
+      }
+    },
+    {
+      "type": "AABBCollider",
+      "properties": {}
+    }
+  ]
+}

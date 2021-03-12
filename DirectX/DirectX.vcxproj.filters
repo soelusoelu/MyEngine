@@ -240,6 +240,8 @@
     <ClCompile Include="Mesh\Shadow\ShadowMap.cpp" />
     <ClCompile Include="Component\Engine\Sprite\MeshRenderOnTextureComponent.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTextureManager.cpp" />
+    <ClCompile Include="Component\Engine\Camera\CameraMove.cpp" />
+    <ClCompile Include="Component\Engine\Collider\AABBAnimationCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -535,6 +537,9 @@
     <ClInclude Include="Component\Engine\Sprite\MeshRenderOnTextureComponent.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTextureManager.h" />
     <ClInclude Include="System\AssetsDirectoryPath.h" />
+    <ClInclude Include="Component\Engine\Camera\CameraMove.h" />
+    <ClInclude Include="Component\Engine\Collider\AABBAnimationCollider.h" />
+    <ClInclude Include="Collision\BoxConstantGroup.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
@@ -551,5 +556,7 @@
     <None Include="Assets\Data\Ground1.json" />
     <None Include="Shader\MaterialHeader.hlsli" />
     <None Include="Assets\Data\ModelViewer.json" />
+    <None Include="Assets\Data\Player.json" />
+    <None Include="Assets\Data\Plane.json" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include "../../../GameObject/GameObject.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Mesh/Mesh.h"
+#include "../../../System/AssetsDirectoryPath.h"
 #include "../../../System/AssetsManager.h"
 #include "../../../Utility/LevelLoader.h"
 #include "../../../Utility/FileUtil.h"
@@ -12,7 +13,7 @@ MeshComponent::MeshComponent(GameObject& gameObject)
     : Component(gameObject)
     , mMesh(nullptr)
     , mFileName()
-    , mDirectoryPath()
+    , mDirectoryPath(AssetsDirectoryPath::MODEL_PATH)
     , mIsActive(true)
     , mShadowHandle(true)
     , mStarted(false)
@@ -48,9 +49,7 @@ void MeshComponent::onEnable(bool value) {
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     //ファイル名からメッシュを生成
     if (JsonHelper::getString(inObj, "fileName", &mFileName)) {
-        if (!JsonHelper::getString(inObj, "directoryPath", &mDirectoryPath)) {
-            mDirectoryPath = "Assets\\Model\\";
-        }
+        JsonHelper::getString(inObj, "directoryPath", &mDirectoryPath);
         createMesh(mFileName, mDirectoryPath);
     }
 

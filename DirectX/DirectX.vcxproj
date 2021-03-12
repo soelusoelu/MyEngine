@@ -96,6 +96,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)DirectXTex;$(RAPID_JSON_PATH)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -165,6 +166,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\Engine\Collider\AABBAnimationCollider.cpp" />
+    <ClCompile Include="Component\Engine\Camera\CameraMove.cpp" />
     <ClCompile Include="Engine\Camera\EngineCamera.cpp" />
     <ClCompile Include="Engine\EngineFuctionChanger.cpp" />
     <ClCompile Include="Engine\ModelViewer\AnimationViewer.cpp" />
@@ -323,7 +326,9 @@
     <ClCompile Include="Sound\Voice\SourceVoice\SourceVoice.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
-    <ClCompile Include="Mesh\Fbx\FBX.cpp" />
+    <ClCompile Include="Mesh\Fbx\FBX.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+    </ClCompile>
     <ClCompile Include="DirectX\DirectX.cpp" />
     <ClCompile Include="Engine\DebugManager\DebugUtility\Debug.cpp" />
     <ClCompile Include="Collision\Triangle.cpp" />
@@ -385,6 +390,9 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision\BoxConstantGroup.h" />
+    <ClInclude Include="Component\Engine\Collider\AABBAnimationCollider.h" />
+    <ClInclude Include="Component\Engine\Camera\CameraMove.h" />
     <ClInclude Include="Engine\Camera\EngineCamera.h" />
     <ClInclude Include="Engine\EngineFuctionChanger.h" />
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
@@ -867,6 +875,8 @@
     <None Include="Assets\Data\Global.json" />
     <None Include="Assets\Data\Ground1.json" />
     <None Include="Assets\Data\ModelViewer.json" />
+    <None Include="Assets\Data\Plane.json" />
+    <None Include="Assets\Data\Player.json" />
     <None Include="Assets\Data\Title.json" />
     <None Include="Assets\Data\Waveform.json" />
     <None Include="Shader\MaterialHeader.hlsli" />

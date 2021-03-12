@@ -1,7 +1,7 @@
 {
   "tag": "Camera",
   "transform": {
-    "position": [ 0.0, 20.0, -50.0 ],
+    "position": [ 0.0, 10.0, -50.0 ],
     "rotation": [ 30.0, 0.0, 0.0 ]
   },
   "components": [
@@ -16,6 +16,13 @@
     {
       "type": "ListenerComponent",
       "properties": {}
+    },
+    {
+      "type": "CameraMove",
+      "properties": {
+        "cameraSpeed": 50.0,
+        "rotateSpeed": 30.0
+      }
     }
   ]
 }

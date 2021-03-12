@@ -7,13 +7,14 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-AABBCollider::AABBCollider(GameObject& gameObject) :
-    Collider(gameObject),
-    mAABB(),
-    mDefaultMin(Vector3::zero),
-    mDefaultMax(Vector3::zero),
-    mIsRenderCollision(true),
-    mLoadedProperties(false) {
+AABBCollider::AABBCollider(GameObject& gameObject)
+    : Collider(gameObject)
+    , mAABB()
+    , mDefaultMin(Vector3::zero)
+    , mDefaultMax(Vector3::zero)
+    , mIsRenderCollision(true)
+    , mLoadedProperties(false)
+{
 }
 
 AABBCollider::~AABBCollider() = default;
@@ -122,8 +123,8 @@ const std::array<Vector3, 8>& AABBCollider::getBoxPoints() const {
     return mPoints;
 }
 
-std::array<std::pair<Vector3, Vector3>, 6> AABBCollider::getBoxSurfacesCenterAndNormal() const {
-    return std::array<std::pair<Vector3, Vector3>, 6> {
+std::array<std::pair<Vector3, Vector3>, BoxConstantGroup::SURFACES_NUM> AABBCollider::getBoxSurfacesCenterAndNormal() const {
+    return std::array<std::pair<Vector3, Vector3>, BoxConstantGroup::SURFACES_NUM> {
         //面の中心位置と法線を格納する
         std::make_pair((mPoints[3] + mPoints[0]) / 2.f, Vector3::down),
         std::make_pair((mPoints[7] + mPoints[4]) / 2.f, Vector3::up),
@@ -200,14 +201,14 @@ void AABBCollider::updateAABB() {
 void AABBCollider::updatePoints() {
     const auto& min = mAABB.min;
     const auto& max = mAABB.max;
-    mPoints[0] = min;
-    mPoints[1] = Vector3(max.x, min.y, min.z);
-    mPoints[2] = Vector3(min.x, min.y, max.z);
-    mPoints[3] = Vector3(max.x, min.y, max.z);
-    mPoints[4] = Vector3(min.x, max.y, min.z);
-    mPoints[5] = Vector3(max.x, max.y, min.z);
-    mPoints[6] = Vector3(min.x, max.y, max.z);
-    mPoints[7] = max;
+    mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_LEFT] = min;
+    mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_RIGHT] = Vector3(max.x, min.y, min.z);
+    mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT] = Vector3(min.x, min.y, max.z);
+    mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT] = Vector3(max.x, min.y, max.z);
+    mPoints[BoxConstantGroup::BOX_NEAR_TOP_LEFT] = Vector3(min.x, max.y, min.z);
+    mPoints[BoxConstantGroup::BOX_NEAR_TOP_RIGHT] = Vector3(max.x, max.y, min.z);
+    mPoints[BoxConstantGroup::BOX_BACK_TOP_LEFT] = Vector3(min.x, max.y, max.z);
+    mPoints[BoxConstantGroup::BOX_BACK_TOP_RIGHT] = max;
 }
 
 void AABBCollider::computeDefaultPoint() {
@@ -235,19 +236,19 @@ void AABBCollider::computeDefaultPoint() {
 void AABBCollider::renderCollision() {
 #ifdef _DEBUG
     //デバッグ時のみ当たり判定を表示
-    Debug::renderLine(mPoints[0], mPoints[1], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[0], mPoints[2], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[2], mPoints[3], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[1], mPoints[3], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_LEFT], mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_RIGHT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_LEFT], mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT], mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_RIGHT], mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT], ColorPalette::lightGreen);
 
-    Debug::renderLine(mPoints[4], mPoints[5], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[4], mPoints[6], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[6], mPoints[7], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[5], mPoints[7], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_TOP_LEFT], mPoints[BoxConstantGroup::BOX_NEAR_TOP_RIGHT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_TOP_LEFT], mPoints[BoxConstantGroup::BOX_BACK_TOP_LEFT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_BACK_TOP_LEFT], mPoints[BoxConstantGroup::BOX_BACK_TOP_RIGHT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_TOP_RIGHT], mPoints[BoxConstantGroup::BOX_BACK_TOP_RIGHT], ColorPalette::lightGreen);
 
-    Debug::renderLine(mPoints[0], mPoints[4], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[1], mPoints[5], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[2], mPoints[6], ColorPalette::lightGreen);
-    Debug::renderLine(mPoints[3], mPoints[7], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_LEFT], mPoints[BoxConstantGroup::BOX_NEAR_TOP_LEFT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_NEAR_BOTTOM_RIGHT], mPoints[BoxConstantGroup::BOX_NEAR_TOP_RIGHT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT], mPoints[BoxConstantGroup::BOX_BACK_TOP_LEFT], ColorPalette::lightGreen);
+    Debug::renderLine(mPoints[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT], mPoints[BoxConstantGroup::BOX_BACK_TOP_RIGHT], ColorPalette::lightGreen);
 #endif // _DEBUG
 }

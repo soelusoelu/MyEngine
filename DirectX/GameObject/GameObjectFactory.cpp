@@ -3,12 +3,14 @@
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/Engine/Camera/Camera.h"
+#include "../Component/Engine/Camera/CameraMove.h"
 #include "../Component/Engine/CollideOperation/AABBMouseScaler.h"
 #include "../Component/Engine/CollideOperation/AABBSelector.h"
 #include "../Component/Engine/CollideOperation/CollideAdder.h"
 #include "../Component/Engine/CollideOperation/CollideMouseOperator.h"
 #include "../Component/Engine/CollideOperation/MeshAdder.h"
 #include "../Component/Engine/Collider/AABBCollider.h"
+#include "../Component/Engine/Collider/AABBAnimationCollider.h"
 #include "../Component/Engine/Collider/CircleCollider.h"
 #include "../Component/Engine/Collider/SphereCollider.h"
 #include "../Component/Engine/Light/DirectionalLight.h"
@@ -48,6 +50,7 @@ GameObjectFactory::GameObjectFactory() {
 
 #pragma region Engine
     ADD_COMPONENT(Camera);
+    ADD_COMPONENT(CameraMove);
 
     ADD_COMPONENT(AABBMouseScaler);
     ADD_COMPONENT(AABBSelector);
@@ -56,6 +59,7 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(MeshAdder);
 
     ADD_COMPONENT(AABBCollider);
+    ADD_COMPONENT(AABBAnimationCollider);
     ADD_COMPONENT(CircleCollider);
     ADD_COMPONENT(SphereCollider);
 

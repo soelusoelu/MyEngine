@@ -9,7 +9,10 @@
 #include <memory>
 #include <utility>
 
-class AABBCollider : public Collider, public std::enable_shared_from_this<AABBCollider> {
+class AABBCollider
+    : public Collider
+    , public std::enable_shared_from_this<AABBCollider> {
+
 public:
     AABBCollider(GameObject& gameObject);
     ~AABBCollider();
@@ -28,11 +31,14 @@ public:
     //AABBのすべての点を取得する
     const std::array<Vector3, 8>& getBoxPoints() const;
     //AABBのすべての面の中心位置と法線を取得する
-    std::array<std::pair<Vector3, Vector3>, 6> getBoxSurfacesCenterAndNormal() const;
+    std::array<std::pair<Vector3, Vector3>, BoxConstantGroup::SURFACES_NUM> getBoxSurfacesCenterAndNormal() const;
     //当たり判定を可視化するか
     void setRenderCollision(bool value);
 
 private:
+    AABBCollider(const AABBCollider&) = delete;
+    AABBCollider& operator=(const AABBCollider&) = delete;
+
     //AABBを作成する
     void createAABB(const IMesh& mesh);
     //メッシュから最小、最大点を割り出す
@@ -54,7 +60,7 @@ private:
     //transformの影響を考慮しない最大点
     Vector3 mDefaultMax;
     //AABBの各点
-    std::array<Vector3, 8> mPoints;
+    std::array<Vector3, BoxConstantGroup::POINTS_NUM> mPoints;
     //当たり判定を表示するか
     bool mIsRenderCollision;
     //ファイルから値を読み込んだか

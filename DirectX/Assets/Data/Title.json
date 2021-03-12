@@ -3,14 +3,6 @@
     {
       "type": "Title",
       "properties": {}
-    },
-    {
-      "type": "SpriteComponent",
-      "properties": {
-        "fileName": "Title.png",
-        "position": [ 960.0, 0.0 ],
-        "pivot": "CenterTop"
-      }
     }
   ]
 }
