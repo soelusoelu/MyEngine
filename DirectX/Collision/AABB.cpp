@@ -1,4 +1,5 @@
 ﻿#include "AABB.h"
+#include "BoxConstantGroup.h"
 #include <array>
 
 AABB::AABB() :
@@ -12,14 +13,7 @@ AABB::AABB(const Vector3& min, const Vector3& max) :
 }
 
 void AABB::updateMinMax(const Vector3& point) {
-    //min.x = Math::Min(min.x, point.x);
-    //min.y = Math::Min(min.y, point.y);
-    //min.z = Math::Min(min.z, point.z);
     min = Vector3::Min(min, point);
-
-    //max.x = Math::Max(max.x, point.x);
-    //max.y = Math::Max(max.y, point.y);
-    //max.z = Math::Max(max.z, point.z);
     max = Vector3::Max(max, point);
 }
 
@@ -27,14 +21,14 @@ void AABB::rotate(const Quaternion& q) {
     //ボックスの角の8つの点を格納する
     std::array<Vector3, 8> points;
     //最小点からボックスの角の点を計算していく
-    points[0] = min;
-    points[1] = Vector3(max.x, min.y, min.z);
-    points[2] = Vector3(min.x, max.y, min.z);
-    points[3] = Vector3(min.x, min.y, max.z);
-    points[4] = Vector3(min.x, max.y, max.z);
-    points[5] = Vector3(max.x, min.y, max.z);
-    points[6] = Vector3(max.x, max.y, min.z);
-    points[7] = max;
+    points[BoxConstantGroup::BOX_NEAR_BOTTOM_LEFT] = min;
+    points[BoxConstantGroup::BOX_NEAR_BOTTOM_RIGHT] = Vector3(max.x, min.y, min.z);
+    points[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT] = Vector3(min.x, max.y, min.z);
+    points[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT] = Vector3(min.x, min.y, max.z);
+    points[BoxConstantGroup::BOX_NEAR_TOP_LEFT] = Vector3(min.x, max.y, max.z);
+    points[BoxConstantGroup::BOX_NEAR_TOP_RIGHT] = Vector3(max.x, min.y, max.z);
+    points[BoxConstantGroup::BOX_BACK_TOP_LEFT] = Vector3(max.x, max.y, min.z);
+    points[BoxConstantGroup::BOX_BACK_TOP_RIGHT] = max;
 
     //最初に最小の点を回転させる
     auto p = Vector3::transform(points[0], q);

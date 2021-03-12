@@ -1,6 +1,7 @@
 ﻿#include "SkinMeshComponent.h"
 #include "MeshComponent.h"
 #include "MeshShader.h"
+#include "../../../Device/Subject.h"
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../System/Shader/ConstantBuffers.h"
 #include <cassert>
@@ -9,6 +10,7 @@ SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
     : Component(gameObject)
     , mAnimation(nullptr)
     , mMeshShader(nullptr)
+    , mCallbackComputeCurrentBones(std::make_unique<Subject>())
     , mCurrentMotionNo(0)
     , mCurrentFrame(0)
     , mIsTPose(false)
@@ -31,6 +33,9 @@ void SkinMeshComponent::update() {
         for (size_t i = 0; i < mAnimation->getBoneCount(); ++i) {
             mCurrentBones[i] = mAnimation->getBone(i).offsetMat * motion.frameMat[i][mCurrentFrame];
         }
+
+        //通知を送る
+        mCallbackComputeCurrentBones->notify();
     }
 
     mMeshShader->setTransferData(mCurrentBones.data(), sizeof(SkinMeshConstantBuffer), 3);
@@ -90,4 +95,8 @@ void SkinMeshComponent::setValue(const std::shared_ptr<MeshShader>& meshShader, 
     mMeshShader = meshShader;
 
     mCurrentBones.resize(mAnimation->getBoneCount());
+}
+
+void SkinMeshComponent::callbackComputeCurrentBones(const std::function<void()>& callback) {
+    mCallbackComputeCurrentBones->addObserver(callback);
 }

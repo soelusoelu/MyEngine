@@ -9,7 +9,7 @@ AABBAnimationCollider::AABBAnimationCollider(GameObject& gameObject)
     : Collider(gameObject)
     , mAABB()
     , mMesh(nullptr)
-    , mAnimation(nullptr)
+    , mAnimationCPU(nullptr)
     , mIsRenderCollision(true)
 {
 }
@@ -20,7 +20,10 @@ void AABBAnimationCollider::start() {
     Collider::start();
 
     mMesh = getComponent<MeshComponent>();
-    mAnimation = getComponent<AnimationCPU>();
+    mAnimationCPU = getComponent<AnimationCPU>();
+    if (!mAnimationCPU) {
+        mAnimationCPU = addComponent<AnimationCPU>("AnimationCPU");
+    }
 
     //最新のAABBの点を計算する
     updatePoints();
@@ -79,7 +82,7 @@ void AABBAnimationCollider::updateAABB() {
     AABB temp(Vector3::one * Math::infinity, Vector3::one * Math::negInfinity);
     for (size_t i = 0; i < mesh->getMeshCount(); ++i) {
         Vector3 min, max;
-        computeMinMax(min, max, mAnimation->getCurrentMotionVertexPositions(i));
+        computeMinMax(min, max, mAnimationCPU->getCurrentMotionVertexPositions(i));
 
         //当たり判定更新
         temp.updateMinMax(min);

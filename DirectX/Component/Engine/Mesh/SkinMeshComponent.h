@@ -4,10 +4,12 @@
 #include "../../../Math/Math.h"
 #include "../../../Mesh/IAnimation.h"
 #include "../../../Mesh/Motion.h"
+#include <functional>
 #include <string>
 #include <vector>
 
 class MeshShader;
+class Subject;
 
 class SkinMeshComponent : public Component {
 public:
@@ -35,16 +37,26 @@ public:
     const std::vector<Matrix4>& getBoneCurrentFrameMatrix() const;
     //各種インターフェースを設定する
     void setValue(const std::shared_ptr<MeshShader>& meshShader, IAnimation* anim);
+    //このフレームでのボーン姿勢計算後に呼ばれるコールバック
+    void callbackComputeCurrentBones(const std::function<void()>& callback);
 
 private:
     SkinMeshComponent(const SkinMeshComponent&) = delete;
     SkinMeshComponent& operator=(const SkinMeshComponent&) = delete;
 
 private:
+    //アニメーションインターフェース
     IAnimation* mAnimation;
+    //メッシュ用シェーダーコンポーネント
     std::shared_ptr<MeshShader> mMeshShader;
+    //現在のボーン姿勢
     std::vector<Matrix4> mCurrentBones;
+    //ボーン姿勢計算後に呼ばれるコールバック
+    std::unique_ptr<Subject> mCallbackComputeCurrentBones;
+    //現在のモーション番号
     int mCurrentMotionNo;
+    //現在のモーションフレーム
     int mCurrentFrame;
+    //Tポーズか
     bool mIsTPose;
 };

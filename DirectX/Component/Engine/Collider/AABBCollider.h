@@ -29,7 +29,7 @@ public:
     //AABBを取得する
     const AABB& getAABB() const;
     //AABBのすべての点を取得する
-    const std::array<Vector3, 8>& getBoxPoints() const;
+    const std::array<Vector3, BoxConstantGroup::POINTS_NUM>& getBoxPoints() const;
     //AABBのすべての面の中心位置と法線を取得する
     std::array<std::pair<Vector3, Vector3>, BoxConstantGroup::SURFACES_NUM> getBoxSurfacesCenterAndNormal() const;
     //当たり判定を可視化するか

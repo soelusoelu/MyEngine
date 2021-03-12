@@ -47,7 +47,7 @@ private:
     //メッシュコンポーネント
     std::shared_ptr<MeshComponent> mMesh;
     //アニメーションコンポーネント
-    std::shared_ptr<AnimationCPU> mAnimation;
+    std::shared_ptr<AnimationCPU> mAnimationCPU;
     //AABBの各点
     std::array<Vector3, BoxConstantGroup::POINTS_NUM> mPoints;
     //当たり判定を表示するか

@@ -9,10 +9,6 @@
     {
       "type": "AABBAnimationCollider",
       "properties": {}
-    },
-    {
-      "type": "AnimationCPU",
-      "properties": {}
     }
   ]
 }

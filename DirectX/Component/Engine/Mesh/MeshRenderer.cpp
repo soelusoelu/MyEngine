@@ -116,8 +116,8 @@ void MeshRenderer::createSkinMeshComponent() {
     //SkinMeshComponentがアタッチされてないなら追加する
     if (!skinMesh) {
         skinMesh = addComponent<SkinMeshComponent>("SkinMeshComponent");
-        skinMesh->setValue(mMeshShader, iAnim);
     }
+    skinMesh->setValue(mMeshShader, iAnim);
 }
 
 void MeshRenderer::addToManager() {
