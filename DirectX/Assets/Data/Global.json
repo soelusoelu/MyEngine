@@ -76,9 +76,7 @@
         "assetsRenderTextureList": {
             "textureSize": 64,
             "textureDisplayInterval": 32,
-            "texturesFilePath": [
-                "Assets\\Model\\Walk.fbx"
-            ]
+            "texturesFilePath": []
         },
         "assetsRenderTextureAdder": {
             "renderPosition": [

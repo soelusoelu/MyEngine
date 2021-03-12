@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "../../Component.h"
-#include "../../../Mesh/IAnimation.h"
 #include "../../../Math/Math.h"
+#include "../../../Mesh/IAnimation.h"
 #include "../../../Mesh/Motion.h"
 #include <string>
 #include <vector>
@@ -35,6 +35,10 @@ public:
     const std::vector<Matrix4>& getBoneCurrentFrameMatrix() const;
     //各種インターフェースを設定する
     void setValue(const std::shared_ptr<MeshShader>& meshShader, IAnimation* anim);
+
+private:
+    SkinMeshComponent(const SkinMeshComponent&) = delete;
+    SkinMeshComponent& operator=(const SkinMeshComponent&) = delete;
 
 private:
     IAnimation* mAnimation;

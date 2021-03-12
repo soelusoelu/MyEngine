@@ -12,13 +12,15 @@ AABB::AABB(const Vector3& min, const Vector3& max) :
 }
 
 void AABB::updateMinMax(const Vector3& point) {
-    min.x = Math::Min(min.x, point.x);
-    min.y = Math::Min(min.y, point.y);
-    min.z = Math::Min(min.z, point.z);
+    //min.x = Math::Min(min.x, point.x);
+    //min.y = Math::Min(min.y, point.y);
+    //min.z = Math::Min(min.z, point.z);
+    min = Vector3::Min(min, point);
 
-    max.x = Math::Max(max.x, point.x);
-    max.y = Math::Max(max.y, point.y);
-    max.z = Math::Max(max.z, point.z);
+    //max.x = Math::Max(max.x, point.x);
+    //max.y = Math::Max(max.y, point.y);
+    //max.z = Math::Max(max.z, point.z);
+    max = Vector3::Max(max, point);
 }
 
 void AABB::rotate(const Quaternion& q) {

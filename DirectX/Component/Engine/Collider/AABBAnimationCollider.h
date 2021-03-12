@@ -1,13 +1,14 @@
 ﻿#pragma once
 
 #include "Collider.h"
+#include "../Mesh/IAnimationCPU.h"
 #include "../../../Collision/Collision.h"
 #include "../../../Math/Math.h"
-#include "../../../Mesh/IMesh.h"
 #include <array>
 #include <memory>
 
-class SkinMeshComponent;
+class MeshComponent;
+class AnimationCPU;
 
 class AABBAnimationCollider
     : public Collider
@@ -33,6 +34,8 @@ private:
 
     //AABBを更新する
     void updateAABB();
+    //メッシュから最小、最大点を割り出す
+    void computeMinMax(Vector3& outMin, Vector3& outMax, const MeshVertexPositions& positions);
     //AABBの点を更新する
     void updatePoints();
     //当たり判定を可視化する
@@ -41,8 +44,10 @@ private:
 private:
     //当たり判定であるAABB
     AABB mAABB;
+    //メッシュコンポーネント
+    std::shared_ptr<MeshComponent> mMesh;
     //アニメーションコンポーネント
-    std::shared_ptr<SkinMeshComponent> mAnimation;
+    std::shared_ptr<AnimationCPU> mAnimation;
     //AABBの各点
     std::array<Vector3, BoxConstantGroup::POINTS_NUM> mPoints;
     //当たり判定を表示するか

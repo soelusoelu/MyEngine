@@ -15,6 +15,7 @@
 #include "../Component/Engine/Collider/SphereCollider.h"
 #include "../Component/Engine/Light/DirectionalLight.h"
 #include "../Component/Engine/Light/PointLightComponent.h"
+#include "../Component/Engine/Mesh/AnimationCPU.h"
 #include "../Component/Engine/Mesh/MeshComponent.h"
 #include "../Component/Engine/Mesh/MeshMaterial.h"
 #include "../Component/Engine/Mesh/MeshOutLine.h"
@@ -66,6 +67,7 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(PointLightComponent);
 
+    ADD_COMPONENT(AnimationCPU);
     ADD_COMPONENT(MeshComponent);
     ADD_COMPONENT(MeshMaterial);
     ADD_COMPONENT(MeshOutLine);

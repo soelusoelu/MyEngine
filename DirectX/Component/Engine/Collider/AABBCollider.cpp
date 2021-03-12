@@ -141,7 +141,7 @@ void AABBCollider::setRenderCollision(bool value) {
 
 void AABBCollider::createAABB(const IMesh& mesh) {
     //すべてのメッシュからAABBを作成する
-    for (size_t i = 0; i < mesh.getMeshCount(); i++) {
+    for (size_t i = 0; i < mesh.getMeshCount(); ++i) {
         Vector3 min, max;
         computeMinMax(min, max, mesh.getMeshVertices(i));
 

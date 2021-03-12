@@ -5,8 +5,8 @@ FbxBoneWeightParser::FbxBoneWeightParser() = default;
 FbxBoneWeightParser::~FbxBoneWeightParser() = default;
 
 void FbxBoneWeightParser::parse(
-    MeshVertices & meshVertices,
-    const FbxMesh * fbxMesh
+    MeshVertices& meshVertices,
+    const FbxMesh* fbxMesh
 ) {
     FbxDeformer* fbxDeformer = fbxMesh->GetDeformer(0, FbxDeformer::eSkin);
     FbxSkin* fbxSkin = static_cast<FbxSkin*>(fbxDeformer);
@@ -43,7 +43,7 @@ void FbxBoneWeightParser::parse(
 }
 
 void FbxBoneWeightParser::addWeight(
-    MeshVertex & vertex,
+    MeshVertex& vertex,
     int boneIndex,
     float weight
 ) {
@@ -68,7 +68,7 @@ void FbxBoneWeightParser::addWeight(
 }
 
 void FbxBoneWeightParser::normalizeWeight(
-    MeshVertices & meshVertice
+    MeshVertices& meshVertice
 ) {
     //5本以上にまたっがてる場合のため
     for (size_t i = 0; i < meshVertice.size(); i++) {

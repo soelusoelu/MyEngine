@@ -242,6 +242,7 @@
     <ClCompile Include="System\Texture\MeshRenderOnTextureManager.cpp" />
     <ClCompile Include="Component\Engine\Camera\CameraMove.cpp" />
     <ClCompile Include="Component\Engine\Collider\AABBAnimationCollider.cpp" />
+    <ClCompile Include="Component\Engine\Mesh\AnimationCPU.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -540,6 +541,8 @@
     <ClInclude Include="Component\Engine\Camera\CameraMove.h" />
     <ClInclude Include="Component\Engine\Collider\AABBAnimationCollider.h" />
     <ClInclude Include="Collision\BoxConstantGroup.h" />
+    <ClInclude Include="Component\Engine\Mesh\AnimationCPU.h" />
+    <ClInclude Include="Component\Engine\Mesh\IAnimationCPU.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
