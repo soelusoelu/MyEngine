@@ -3,9 +3,8 @@
 #include "Collider.h"
 #include "../Mesh/IAnimationCPU.h"
 #include "../../../Collision/Collision.h"
-#include "../../../Math/Math.h"
-#include <array>
 #include <memory>
+#include <vector>
 
 class MeshComponent;
 class AnimationCPU;
@@ -24,7 +23,7 @@ public:
     virtual void drawInspector() override;
 
     //AABBを取得する
-    const AABB& getAABB() const;
+    const std::vector<AABB>& getAABBs() const;
     //当たり判定を可視化するか
     void setRenderCollision(bool value);
 
@@ -43,13 +42,13 @@ private:
 
 private:
     //当たり判定であるAABB
-    AABB mAABB;
+    std::vector<AABB> mAABBs;
     //メッシュコンポーネント
     std::shared_ptr<MeshComponent> mMesh;
     //アニメーションコンポーネント
     std::shared_ptr<AnimationCPU> mAnimationCPU;
     //AABBの各点
-    std::array<Vector3, BoxConstantGroup::POINTS_NUM> mPoints;
+    std::vector<BoxPoints> mPoints;
     //当たり判定を表示するか
     bool mIsRenderCollision;
 };

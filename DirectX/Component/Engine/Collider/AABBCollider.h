@@ -29,7 +29,7 @@ public:
     //AABBを取得する
     const AABB& getAABB() const;
     //AABBのすべての点を取得する
-    const std::array<Vector3, BoxConstantGroup::POINTS_NUM>& getBoxPoints() const;
+    const BoxPoints& getBoxPoints() const;
     //AABBのすべての面の中心位置と法線を取得する
     std::array<std::pair<Vector3, Vector3>, BoxConstantGroup::SURFACES_NUM> getBoxSurfacesCenterAndNormal() const;
     //当たり判定を可視化するか
@@ -60,7 +60,7 @@ private:
     //transformの影響を考慮しない最大点
     Vector3 mDefaultMax;
     //AABBの各点
-    std::array<Vector3, BoxConstantGroup::POINTS_NUM> mPoints;
+    BoxPoints mPoints;
     //当たり判定を表示するか
     bool mIsRenderCollision;
     //ファイルから値を読み込んだか

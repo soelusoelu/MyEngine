@@ -119,7 +119,7 @@ const AABB& AABBCollider::getAABB() const {
     return mAABB;
 }
 
-const std::array<Vector3, 8>& AABBCollider::getBoxPoints() const {
+const BoxPoints& AABBCollider::getBoxPoints() const {
     return mPoints;
 }
 
