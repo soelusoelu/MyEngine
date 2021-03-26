@@ -3,11 +3,15 @@
     {
       "type": "MeshComponent",
       "properties": {
-        "fileName": "Player\\Death.fbx"
+        "fileName": "Player\\MIX.fbx"
       }
     },
     {
       "type": "AABBAnimationCollider",
+      "properties": {}
+    },
+    {
+      "type": "PlayerAnimationController",
       "properties": {}
     }
   ]

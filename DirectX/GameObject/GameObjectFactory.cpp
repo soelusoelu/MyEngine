@@ -36,6 +36,7 @@
 #include "../Component/Engine/Text/Text.h"
 #include "../Component/Engine/Text/TextFloat.h"
 #include "../Component/Engine/Text/TextNumber.h"
+#include "../Component/Game/Player/PlayerAnimationController.h"
 #include "../Component/Game/Scene/Title.h"
 #include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/GlobalFunction.h"
@@ -97,6 +98,8 @@ GameObjectFactory::GameObjectFactory() {
 #pragma endregion
 
 #pragma region Game
+    ADD_COMPONENT(PlayerAnimationController);
+
     ADD_COMPONENT(Title);
 #pragma endregion
 }

@@ -212,6 +212,7 @@
     <ClCompile Include="Engine\MapEditor\MapEditorMeshManager.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Component\Engine\Sprite\MeshRenderOnTextureComponent.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerAnimationController.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTextureManager.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshOperator.cpp" />
@@ -454,6 +455,7 @@
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Component\Engine\Sprite\MeshRenderOnTextureComponent.h" />
     <ClInclude Include="Component\Engine\Mesh\IAnimationCPU.h" />
+    <ClInclude Include="Component\Game\Player\PlayerAnimationController.h" />
     <ClInclude Include="System\AssetsDirectoryPath.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTextureManager.h" />
     <ClInclude Include="Mesh\IMeshAdder.h" />
