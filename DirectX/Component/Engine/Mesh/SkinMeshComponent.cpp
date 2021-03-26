@@ -38,7 +38,8 @@ void SkinMeshComponent::update() {
         mCallbackComputeCurrentBones->notify();
     }
 
-    mMeshShader->setTransferData(mCurrentBones.data(), sizeof(SkinMeshConstantBuffer), 3);
+    //gpu側でスキニングする場合に送る必要がある
+    //mMeshShader->setTransferData(mCurrentBones.data(), sizeof(SkinMeshConstantBuffer), 3);
 }
 
 void SkinMeshComponent::setMotionName(const std::string& name, unsigned motionNo) {

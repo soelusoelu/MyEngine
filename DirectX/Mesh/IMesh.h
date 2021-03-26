@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "../Collision/Collision.h"
 #include "../Math/Math.h"
+#include <vector>
 
 //外部公開用メッシュインターフェース
 class IMesh {
@@ -23,4 +24,6 @@ public:
     virtual Triangle getPolygon(unsigned meshIndex, unsigned polygonIndex) const = 0;
     //指定のメッシュの指定のポリゴンにワールド行列を演算し取得する
     virtual Triangle getPolygon(unsigned meshIndex, unsigned polygonIndex, const Matrix4& world) const = 0;
+    //指定のメッシュに頂点情報を設定する
+    virtual void setMeshVertices(const MeshVertices& newMeshVertices, unsigned index) = 0;
 };

@@ -30,8 +30,10 @@ private:
     void computeCombinationMatrix(Matrix4& out, const MeshVertex& vertex);
 
 private:
-    const IMesh* mMesh;
+    IMesh* mMesh;
     std::shared_ptr<SkinMeshComponent> mAnimation;
     //モーション中の頂点位置配列
     MeshesVertexPositions mCurrentMeshesVertexPositions;
+    //モーション中のメッシュ頂点情報配列
+    std::vector<MeshVertices> mCurrentMeshesVertices;
 };

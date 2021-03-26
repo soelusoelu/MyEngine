@@ -107,15 +107,15 @@ void MeshShader::setDefaultShader() {
     if (getComponent<MeshComponent>()->handleShadow()) {
         shader = "Shadow.hlsl";
         //ボーンが有るなら
-        if (mAnimation->getBoneCount() > 0) {
-            shader = "SkinMeshShadow.hlsl";
-        }
+        //if (mAnimation->getBoneCount() > 0) {
+        //    shader = "SkinMeshShadow.hlsl";
+        //}
     } else {
         shader = "Mesh.hlsl";
         //ボーンが有るなら
-        if (mAnimation->getBoneCount() > 0) {
-            shader = "SkinMesh.hlsl";
-        }
+        //if (mAnimation->getBoneCount() > 0) {
+        //    shader = "SkinMesh.hlsl";
+        //}
     }
 
     //シェーダーを生成する

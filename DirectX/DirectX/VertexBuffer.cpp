@@ -17,3 +17,7 @@ void VertexBuffer::setVertexBuffer(unsigned start, unsigned numStream, unsigned 
     */
     MyDirectX::DirectX::instance().deviceContext()->IASetVertexBuffers(start, numStream, mBuffer.GetAddressOf(), &mDesc.oneSize, &offset);
 }
+
+void VertexBuffer::updateVertexBuffer(const void* newVertices) {
+    MyDirectX::DirectX::instance().deviceContext()->UpdateSubresource(mBuffer.Get(), 0, nullptr, newVertices, 0, 0);
+}

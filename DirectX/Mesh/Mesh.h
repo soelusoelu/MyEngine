@@ -33,6 +33,8 @@ public:
     virtual Triangle getPolygon(unsigned meshIndex, unsigned polygonIndex) const override;
     //指定のメッシュの指定のポリゴンにワールド行列を演算し取得する
     virtual Triangle getPolygon(unsigned meshIndex, unsigned polygonIndex, const Matrix4& world) const override;
+    //指定のメッシュに頂点情報を設定する
+    virtual void setMeshVertices(const MeshVertices& newMeshVertices, unsigned index) override;
 
     //モーションを取得する
     virtual const Motion& getMotion(unsigned index) const override;

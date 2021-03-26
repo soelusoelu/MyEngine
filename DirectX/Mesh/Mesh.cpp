@@ -59,6 +59,11 @@ Triangle Mesh::getPolygon(unsigned meshIndex, unsigned polygonIndex, const Matri
     return polygon;
 }
 
+void Mesh::setMeshVertices(const MeshVertices& newMeshVertices, unsigned index) {
+    assert(index < mVertexBuffers.size());
+    mVertexBuffers[index]->updateVertexBuffer(newMeshVertices.data());
+}
+
 const Motion& Mesh::getMotion(unsigned index) const {
     assert(index < mMotions.size());
     return mMotions[index];

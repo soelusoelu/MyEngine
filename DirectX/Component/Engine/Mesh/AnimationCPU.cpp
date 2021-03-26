@@ -2,6 +2,7 @@
 #include "MeshComponent.h"
 #include "SkinMeshComponent.h"
 #include "../../../System/SystemInclude.h"
+#include <algorithm>
 #include <cassert>
 
 AnimationCPU::AnimationCPU(GameObject& gameObject)
@@ -22,8 +23,12 @@ void AnimationCPU::start() {
 
     auto meshCount = mMesh->getMeshCount();
     mCurrentMeshesVertexPositions.resize(meshCount);
+    mCurrentMeshesVertices.resize(meshCount);
     for (size_t i = 0; i < meshCount; ++i) {
-        mCurrentMeshesVertexPositions[i].resize(mMesh->getMeshVertices(i).size());
+        const auto& meshVertices = mMesh->getMeshVertices(i);
+        mCurrentMeshesVertexPositions[i].resize(meshVertices.size());
+        mCurrentMeshesVertices[i].resize(meshVertices.size());
+        std::copy(meshVertices.begin(), meshVertices.end(), mCurrentMeshesVertices[i].begin());
     }
 }
 
@@ -35,14 +40,20 @@ const MeshVertexPositions& AnimationCPU::getCurrentMotionVertexPositions(unsigne
 void AnimationCPU::updateVertexPositionsAfterSkinning() {
     for (size_t i = 0; i < mMesh->getMeshCount(); ++i) {
         auto& vertexPositions = mCurrentMeshesVertexPositions[i];
+        auto& meshVertices = mCurrentMeshesVertices[i];
         const auto& vertices = mMesh->getMeshVertices(i);
         for (size_t j = 0; j < vertices.size(); ++j) {
             Matrix4 comb{};
             ZeroMemory(&comb, sizeof(comb));
             computeCombinationMatrix(comb, vertices[j]);
 
-            vertexPositions[j] = Vector3::transform(vertices[j].pos, comb);
+            auto result = Vector3::transform(vertices[j].pos, comb);
+            vertexPositions[j] = result;
+            meshVertices[j].pos = result;
         }
+
+        //スキニング後の新しい頂点情報を設定する
+        mMesh->setMeshVertices(meshVertices, i);
     }
 }
 
