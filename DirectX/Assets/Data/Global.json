@@ -87,7 +87,7 @@
         },
         "shadowMap": {
             "shadowTextureSize": 8192,
-            "lightDistance": 270.0,
+            "lightDistance": 290.0,
             "nearClip": 10.0,
             "farClip": 300.0
         },

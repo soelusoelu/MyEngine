@@ -9,6 +9,18 @@
 class MeshComponent;
 class AnimationCPU;
 
+//AABBが持つ情報群
+struct AABBInfomation {
+    //AABB
+    AABB aabb;
+    //AABBの結合対象
+    std::vector<unsigned> concatenateTargets;
+    //AABBの各点
+    BoxPoints points;
+    //アクティブか
+    bool isActive = true;
+};
+
 class AABBAnimationCollider
     : public Collider
     , public std::enable_shared_from_this<AABBAnimationCollider> {
@@ -22,8 +34,10 @@ public:
     virtual void onEnable(bool value) override;
     virtual void drawInspector() override;
 
+    //指定したAABBを結合する
+    void concatenate(unsigned a, unsigned b);
     //AABBを取得する
-    const std::vector<AABB>& getAABBs() const;
+    const AABB& getAABB(unsigned index) const;
     //当たり判定を可視化するか
     void setRenderCollision(bool value);
 
@@ -32,7 +46,13 @@ private:
     AABBAnimationCollider& operator=(const AABBAnimationCollider&) = delete;
 
     //AABBを更新する
-    void updateAABB();
+    void computeAABB();
+    //AABBのサイズを更新する
+    void updateAABB(unsigned target, unsigned index);
+    //AABBのサイズを作成し直す
+    void resizeAABB(unsigned index);
+    //AABBを作成する
+    void createAABB();
     //メッシュから最小、最大点を割り出す
     void computeMinMax(Vector3& outMin, Vector3& outMax, const MeshVertexPositions& positions);
     //AABBの点を更新する
@@ -41,14 +61,12 @@ private:
     void renderCollision();
 
 private:
-    //当たり判定であるAABB
-    std::vector<AABB> mAABBs;
+    //当たり判定であるAABB情報群
+    std::vector<AABBInfomation> mAABBs;
     //メッシュコンポーネント
     std::shared_ptr<MeshComponent> mMesh;
     //アニメーションコンポーネント
     std::shared_ptr<AnimationCPU> mAnimationCPU;
-    //AABBの各点
-    std::vector<BoxPoints> mPoints;
     //当たり判定を表示するか
     bool mIsRenderCollision;
 };
