@@ -8,7 +8,6 @@
 
 AABBAnimationCollider::AABBAnimationCollider(GameObject& gameObject)
     : Collider(gameObject)
-    , mAABBs()
     , mMesh(nullptr)
     , mAnimationCPU(nullptr)
     , mIsRenderCollision(true)
@@ -82,6 +81,7 @@ void AABBAnimationCollider::concatenate(unsigned a, unsigned b) {
 }
 
 const AABB& AABBAnimationCollider::getAABB(unsigned index) const {
+    assert(index < mAABBs.size());
     return mAABBs[index].aabb;
 }
 

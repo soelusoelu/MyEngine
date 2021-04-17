@@ -10,8 +10,8 @@ PlayerColliderController::PlayerColliderController(GameObject& gameObject)
 PlayerColliderController::~PlayerColliderController() = default;
 
 void PlayerColliderController::start() {
-    mCollider = getComponent<AABBAnimationCollider>();
+    //mCollider = getComponent<AABBAnimationCollider>();
     //mCollider->concatenate(HEAD, NOSE);
-    mCollider->concatenate(HEAD, LEFT_EYE);
-    mCollider->concatenate(HEAD, RIGHT_EYE);
+    //mCollider->concatenate(HEAD, LEFT_EYE);
+    //mCollider->concatenate(HEAD, RIGHT_EYE);
 }

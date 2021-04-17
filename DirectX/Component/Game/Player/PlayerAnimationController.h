@@ -6,8 +6,8 @@
 class SkinMeshComponent;
 
 class PlayerAnimationController
-    : public Component {
-
+    : public Component
+{
 public:
     PlayerAnimationController(GameObject& gameObject);
     ~PlayerAnimationController();

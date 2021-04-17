@@ -14,7 +14,11 @@
 class VertexBuffer;
 class IndexBuffer;
 
-class Mesh : public IMesh, public IAnimation, public IMeshDrawer {
+class Mesh
+    : public IMesh
+    , public IAnimation
+    , public IMeshDrawer
+{
 public:
     Mesh();
     ~Mesh();

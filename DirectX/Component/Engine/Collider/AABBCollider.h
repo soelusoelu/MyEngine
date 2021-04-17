@@ -11,8 +11,8 @@
 
 class AABBCollider
     : public Collider
-    , public std::enable_shared_from_this<AABBCollider> {
-
+    , public std::enable_shared_from_this<AABBCollider>
+{
 public:
     AABBCollider(GameObject& gameObject);
     ~AABBCollider();

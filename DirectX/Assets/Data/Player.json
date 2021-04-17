@@ -7,7 +7,7 @@
       }
     },
     {
-      "type": "AABBAnimationCollider",
+      "type": "OBBAnimationCollider",
       "properties": {}
     },
     {

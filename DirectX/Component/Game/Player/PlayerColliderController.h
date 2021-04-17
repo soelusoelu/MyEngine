@@ -6,8 +6,8 @@
 class AABBAnimationCollider;
 
 class PlayerColliderController
-    : public Component {
-
+    : public Component
+{
 public:
     PlayerColliderController(GameObject& gameObject);
     ~PlayerColliderController();

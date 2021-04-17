@@ -3,6 +3,7 @@
 #include "Collider.h"
 #include "../Mesh/IAnimationCPU.h"
 #include "../../../Collision/Collision.h"
+#include "../../../Math/Math.h"
 #include <memory>
 #include <vector>
 
@@ -23,8 +24,8 @@ struct AABBInfomation {
 
 class AABBAnimationCollider
     : public Collider
-    , public std::enable_shared_from_this<AABBAnimationCollider> {
-
+    , public std::enable_shared_from_this<AABBAnimationCollider>
+{
 public:
     AABBAnimationCollider(GameObject& gameObject);
     ~AABBAnimationCollider();

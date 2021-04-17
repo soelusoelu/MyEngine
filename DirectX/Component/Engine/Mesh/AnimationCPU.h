@@ -11,8 +11,8 @@ class SkinMeshComponent;
 //頂点ブレンドをCPU(このクラス)で行うクラス
 class AnimationCPU
     : public Component
-    , public IAnimationCPU {
-
+    , public IAnimationCPU
+{
 public:
     AnimationCPU(GameObject& gameObject);
     ~AnimationCPU();
