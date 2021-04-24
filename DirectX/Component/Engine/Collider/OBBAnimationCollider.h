@@ -16,8 +16,6 @@ struct OBBInfomation {
     OBB obb;
     //OBBの結合対象
     std::vector<unsigned> concatenateTargets;
-    //OBBの各点
-    BoxPoints points;
     //アクティブか
     bool isActive = true;
 };
@@ -53,14 +51,6 @@ private:
     void resizeOBB(unsigned meshIndex);
     //OBBを作成する
     void createOBB();
-    //行列を収集する
-    Matrix3 collectMatrix(unsigned meshIndex);
-    //固有ベクトルを取得する
-    Matrix3 getEigenvector(Matrix3& mat);
-    //行列の各成分の絶対値の最大値とその位置を求める
-    void getMaxValueForMatrix(const Matrix3& mat, float& outMax, unsigned& outRow, unsigned& outColumn);
-    //OBBの点を更新する
-    void updatePoints();
     //当たり判定を可視化する
     void renderCollision();
 

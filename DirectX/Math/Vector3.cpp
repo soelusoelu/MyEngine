@@ -80,6 +80,17 @@ Vector3& Vector3::operator*=(const Vector3& right) {
     return *this;
 }
 
+Vector3& Vector3::operator/=(float scalar) {
+    if (Math::nearZero(scalar)) {
+        return *this;
+    }
+
+    x /= scalar;
+    y /= scalar;
+    z /= scalar;
+    return *this;
+}
+
 Vector3& Vector3::operator+=(const Vector3& right) {
     x += right.x;
     y += right.y;

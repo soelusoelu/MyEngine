@@ -216,6 +216,7 @@
     <ClCompile Include="Component\Game\Player\PlayerColliderController.cpp" />
     <ClCompile Include="Collision\OBB.cpp" />
     <ClCompile Include="Component\Engine\Collider\OBBAnimationCollider.cpp" />
+    <ClCompile Include="Collision\OBBCreater.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTextureManager.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshOperator.cpp" />
@@ -462,6 +463,7 @@
     <ClInclude Include="Component\Game\Player\PlayerColliderController.h" />
     <ClInclude Include="Collision\OBB.h" />
     <ClInclude Include="Component\Engine\Collider\OBBAnimationCollider.h" />
+    <ClInclude Include="Collision\OBBCreater.h" />
     <ClInclude Include="System\AssetsDirectoryPath.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTextureManager.h" />
     <ClInclude Include="Mesh\IMeshAdder.h" />
