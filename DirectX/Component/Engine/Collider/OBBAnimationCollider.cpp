@@ -25,8 +25,13 @@ void OBBAnimationCollider::start() {
         mAnimationCPU = addComponent<AnimationCPU>("AnimationCPU");
     }
 
-    //基礎となるOBBを作成する
-    createOBB();
+    //メッシュの数分拡張する
+    unsigned meshCount = mMesh->getMesh()->getMeshCount();
+    mOBBs.resize(meshCount);
+    //すべてのメッシュからOBBを作成する
+    for (unsigned i = 0; i < meshCount; ++i) {
+        createOBB(i);
+    }
 
     if (mPhysics) {
         //mPhysics->add(shared_from_this());
@@ -38,9 +43,6 @@ void OBBAnimationCollider::lateUpdate() {
 
     //OBBを更新する
     //computeOBB();
-
-    ////OBBの点を更新する
-    //updatePoints();
 
     //当たり判定を可視化する
     if (mIsRenderCollision) {
@@ -96,7 +98,7 @@ void OBBAnimationCollider::computeOBB() {
         if (!target.isActive) {
             continue;
         }
-        resizeOBB(i);
+        createOBB(i);
 
         const auto& targets = target.concatenateTargets;
         for (const auto& t : targets) {
@@ -115,19 +117,9 @@ void OBBAnimationCollider::updateOBB(unsigned target, unsigned index) {
     //obb.updateMinMax(max);
 }
 
-void OBBAnimationCollider::resizeOBB(unsigned meshIndex) {
+void OBBAnimationCollider::createOBB(unsigned meshIndex) {
     const auto& vertices = mMesh->getMesh()->getMeshVertices(meshIndex);
     mOBBs[meshIndex].obb = OBBCreater::create(vertices);
-}
-
-void OBBAnimationCollider::createOBB() {
-    //メッシュの数分拡張する
-    unsigned meshCount = mMesh->getMesh()->getMeshCount();
-    mOBBs.resize(meshCount);
-    //すべてのメッシュからOBBを作成する
-    for (unsigned i = 0; i < meshCount; ++i) {
-        resizeOBB(i);
-    }
 }
 
 void OBBAnimationCollider::renderCollision() {

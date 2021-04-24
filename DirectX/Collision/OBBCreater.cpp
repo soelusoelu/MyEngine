@@ -123,21 +123,12 @@ Matrix3 OBBCreater::computeEigenvector(const Matrix3& mat) {
     Matrix3 matCopy{};
     memcpy_s(&matCopy, sizeof(matCopy), &mat, sizeof(mat));
     Matrix3 eigenvector{};
-    constexpr int limit = 100;
-    int count = 0;
-    unsigned row = 0;
-    unsigned column = 0;
     while (true) {
-        ++count;
-        if (count >= limit) {
-            //assert(false);
-            break;
-        }
-
-
         float max = 0.f;
+        unsigned row = 0;
+        unsigned column = 0;
         getMaxValueForMatrix(matCopy, max, row, column);
-        if (max <= 0.0001f) {
+        if (max <= 0.05f) {
             break;
         }
 
@@ -186,7 +177,7 @@ Matrix3 OBBCreater::computeEigenvector(const Matrix3& mat) {
 
 void OBBCreater::getMaxValueForMatrix(const Matrix3& mat, float& outMax, unsigned& outRow, unsigned& outColumn) {
     outRow = 0;
-    outColumn = 0;
+    outColumn = 1;
     float max = FLT_MIN;
 
     for (int i = 0; i < 3; ++i) {

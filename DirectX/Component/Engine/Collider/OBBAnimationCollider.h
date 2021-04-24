@@ -47,10 +47,8 @@ private:
     void computeOBB();
     //OBBのサイズを更新する
     void updateOBB(unsigned target, unsigned index);
-    //OBBのサイズを作成し直す
-    void resizeOBB(unsigned meshIndex);
     //OBBを作成する
-    void createOBB();
+    void createOBB(unsigned meshIndex);
     //当たり判定を可視化する
     void renderCollision();
 
