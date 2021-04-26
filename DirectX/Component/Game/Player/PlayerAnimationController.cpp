@@ -12,7 +12,7 @@ PlayerAnimationController::~PlayerAnimationController() = default;
 
 void PlayerAnimationController::start() {
     mAnimation = getComponent<SkinMeshComponent>();
-    mAnimation->tPose();
+    //mAnimation->tPose();
 }
 
 void PlayerAnimationController::update() {

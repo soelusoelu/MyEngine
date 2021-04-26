@@ -17,6 +17,11 @@ void AABB::updateMinMax(const Vector3& point) {
     max = Vector3::Max(max, point);
 }
 
+void AABB::updateMinMax(const AABB& src) {
+    min = Vector3::Min(min, src.min);
+    max = Vector3::Max(max, src.max);
+}
+
 void AABB::rotate(const Quaternion& q) {
     //ボックスの角の8つの点を格納する
     std::array<Vector3, 8> points;

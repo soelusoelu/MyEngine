@@ -9,6 +9,7 @@ struct AABB {
     AABB();
     AABB(const Vector3& min, const Vector3& max);
     void updateMinMax(const Vector3& point);
+    void updateMinMax(const AABB& src);
     void rotate(const Quaternion& q);
     bool contains(const Vector3& point) const;
     float minDistanceSquare(const Vector3& point) const;

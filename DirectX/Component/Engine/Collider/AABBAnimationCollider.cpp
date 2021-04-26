@@ -4,6 +4,7 @@
 #include "../../../Device/Physics.h"
 #include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
+#include "../../../Transform/Transform3D.h"
 #include <cassert>
 
 AABBAnimationCollider::AABBAnimationCollider(GameObject& gameObject)
@@ -25,8 +26,14 @@ void AABBAnimationCollider::start() {
         mAnimationCPU = addComponent<AnimationCPU>("AnimationCPU");
     }
 
-    //基礎となるAABBを作成する
-    createAABB();
+    //メッシュの数分拡張する
+    unsigned meshCount = mMesh->getMesh()->getMeshCount();
+    mAABBs.resize(meshCount);
+    //すべてのメッシュからAABBを作成する
+    for (unsigned i = 0; i < meshCount; ++i) {
+        createAABB(i);
+    }
+
     //最新のAABBの点を計算する
     updatePoints();
 
@@ -96,73 +103,42 @@ void AABBAnimationCollider::computeAABB() {
         if (!target.isActive) {
             continue;
         }
-        resizeAABB(i);
+        //スキニングの結果からAABBを作成する
+        createAABB(i);
 
         const auto& targets = target.concatenateTargets;
         for (const auto& t : targets) {
+            //
             updateAABB(i, t);
         }
+
+        adaptAABBToTransform(i);
     }
 }
 
 void AABBAnimationCollider::updateAABB(unsigned target, unsigned index) {
-    //スキニング結果から更新する
-    Vector3 min, max;
-    computeMinMax(min, max, mAnimationCPU->getCurrentMotionVertexPositions(index));
-
-    auto& aabb = mAABBs[target].aabb;
-    aabb.updateMinMax(min);
-    aabb.updateMinMax(max);
+    mAABBs[target].aabb.updateMinMax(createdAABB(index));
 }
 
-void AABBAnimationCollider::resizeAABB(unsigned index) {
-    //スキニング結果から更新する
-    Vector3 min, max;
-    computeMinMax(min, max, mAnimationCPU->getCurrentMotionVertexPositions(index));
-
-    auto& aabb = mAABBs[index].aabb;
-    aabb.min = min;
-    aabb.max = max;
+void AABBAnimationCollider::createAABB(unsigned index) {
+    mAABBs[index].aabb = createdAABB(index);
 }
 
-void AABBAnimationCollider::createAABB() {
-    //メッシュの数分拡張する
-    unsigned meshCount = mMesh->getMesh()->getMeshCount();
-    mAABBs.resize(meshCount);
-    //すべてのメッシュからAABBを作成する
-    for (unsigned i = 0; i < meshCount; ++i) {
-        resizeAABB(i);
-    }
+void AABBAnimationCollider::adaptAABBToTransform(unsigned index) {
+    const auto& t = transform();
+    const auto& pos = t.getPosition();
+    const auto& scale = t.getScale();
+    //AABBをtransformの値から更新する
+    auto& target = mAABBs[index].aabb;
+    target.min *= scale;
+    target.max *= scale;
+    target.rotate(t.getRotation());
+    target.min += pos;
+    target.max += pos;
 }
 
-void AABBAnimationCollider::computeMinMax(Vector3& outMin, Vector3& outMax, const MeshVertexPositions& positions) {
-    auto min = Vector3::one * Math::infinity;
-    auto max = Vector3::one * Math::negInfinity;
-
-    //メッシュ情報から最小、最大点を割り出す
-    for (const auto& p : positions) {
-        if (p.x < min.x) {
-            min.x = p.x;
-        }
-        if (p.x > max.x) {
-            max.x = p.x;
-        }
-        if (p.y < min.y) {
-            min.y = p.y;
-        }
-        if (p.y > max.y) {
-            max.y = p.y;
-        }
-        if (p.z < min.z) {
-            min.z = p.z;
-        }
-        if (p.z > max.z) {
-            max.z = p.z;
-        }
-    }
-
-    outMin = min;
-    outMax = max;
+AABB AABBAnimationCollider::createdAABB(unsigned index) const {
+    return AABBCreater::create(mAnimationCPU->getCurrentMotionVertexPositions(index));
 }
 
 void AABBAnimationCollider::updatePoints() {

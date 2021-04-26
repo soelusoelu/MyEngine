@@ -1,13 +1,16 @@
 {
+  "transform": {
+    "scale": [ 0.01, 0.01, 0.01 ]
+  },
   "components": [
     {
       "type": "MeshComponent",
       "properties": {
-        "fileName": "Practice\\test.fbx"
+        "fileName": "Player\\slashMIX.fbx"
       }
     },
     {
-      "type": "OBBAnimationCollider",
+      "type": "AABBAnimationCollider",
       "properties": {}
     },
     {

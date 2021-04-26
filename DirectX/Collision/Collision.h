@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "AABB.h"
+#include "AABBCreater.h"
 #include "BoxConstantGroup.h"
 #include "Circle.h"
 #include "Intersect.h"

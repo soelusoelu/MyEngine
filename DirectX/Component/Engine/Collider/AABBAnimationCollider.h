@@ -50,12 +50,12 @@ private:
     void computeAABB();
     //AABBのサイズを更新する
     void updateAABB(unsigned target, unsigned index);
-    //AABBのサイズを作成し直す
-    void resizeAABB(unsigned index);
     //AABBを作成する
-    void createAABB();
-    //メッシュから最小、最大点を割り出す
-    void computeMinMax(Vector3& outMin, Vector3& outMax, const MeshVertexPositions& positions);
+    void createAABB(unsigned index);
+    //transformを考慮したAABBにする
+    void adaptAABBToTransform(unsigned index);
+    //AABBを生成する
+    AABB createdAABB(unsigned index) const;
     //AABBの点を更新する
     void updatePoints();
     //当たり判定を可視化する

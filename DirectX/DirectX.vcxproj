@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Collision\AABBCreater.cpp" />
     <ClCompile Include="Component\Engine\Mesh\AnimationCPU.cpp" />
     <ClCompile Include="Component\Engine\Collider\AABBAnimationCollider.cpp" />
     <ClCompile Include="Component\Engine\Camera\CameraMove.cpp" />
@@ -396,6 +397,7 @@
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision\AABBCreater.h" />
     <ClInclude Include="Component\Engine\Mesh\AnimationCPU.h" />
     <ClInclude Include="Collision\BoxConstantGroup.h" />
     <ClInclude Include="Component\Engine\Collider\AABBAnimationCollider.h" />
