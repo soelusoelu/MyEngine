@@ -21,3 +21,13 @@ private:
 private:
     std::shared_ptr<SkinMeshComponent> mAnimation;
 };
+
+namespace PlayerMotionName {
+constexpr char FIRST_ATTACK[] = "FirstAttack";
+constexpr char SECOND_ATTACK[] = "SecondAttack";
+constexpr char DEATH[] = "Death";
+constexpr char IDOL[] = "Idol";
+constexpr char ROLL[] = "Roll";
+constexpr char DASH[] = "Dash";
+constexpr char WALK[] = "Walk";
+}

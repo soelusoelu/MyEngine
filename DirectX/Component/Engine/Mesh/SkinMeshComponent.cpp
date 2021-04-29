@@ -45,7 +45,7 @@ void SkinMeshComponent::changeMotion(unsigned motionNo) {
 }
 
 void SkinMeshComponent::changeMotion(const std::string& motionName) {
-    for (size_t i = 0; i < mAnimation->getMotionCount(); ++i) {
+    for (unsigned i = 0; i < mAnimation->getMotionCount(); ++i) {
         if (mAnimation->getMotion(i).name == motionName) {
             mCurrentMotionNo = i;
             mCurrentFrame = 0;
@@ -80,6 +80,23 @@ bool SkinMeshComponent::getLoop() const {
 
 int SkinMeshComponent::getMotionCount() const {
     return mAnimation->getMotionCount();
+}
+
+const Motion& SkinMeshComponent::getMotion(unsigned motionNo) const {
+    assert(motionNo < mAnimation->getMotionCount());
+    return mAnimation->getMotion(motionNo);
+}
+
+const Motion& SkinMeshComponent::getMotion(const std::string& motionName) const {
+    for (unsigned i = 0; i < mAnimation->getMotionCount(); ++i) {
+        const auto& motion = mAnimation->getMotion(i);
+        if (motion.name == motionName) {
+            return motion;
+        }
+    }
+
+    Debug::logError("Not found motion name[" + motionName + "].");
+    return getCurrentMotion();
 }
 
 const Motion& SkinMeshComponent::getCurrentMotion() const {

@@ -14,15 +14,15 @@ void PlayerAnimationController::start() {
     mAnimation = getComponent<SkinMeshComponent>();
     //mAnimation->tPose();
 
-    mAnimation->setMotionName("SecondAttack", 0);
+    mAnimation->setMotionName(PlayerMotionName::SECOND_ATTACK, 0);
     mAnimation->setMotionName("nazo", 1);
     mAnimation->setMotionName("nazo2", 2);
-    mAnimation->setMotionName("FirstAttack", 3);
-    mAnimation->setMotionName("Death", 4);
-    mAnimation->setMotionName("Idol", 5);
-    mAnimation->setMotionName("Roll", 6);
-    mAnimation->setMotionName("Dash", 7);
-    mAnimation->setMotionName("Walk", 8);
+    mAnimation->setMotionName(PlayerMotionName::FIRST_ATTACK, 3);
+    mAnimation->setMotionName(PlayerMotionName::DEATH, 4);
+    mAnimation->setMotionName(PlayerMotionName::IDOL, 5);
+    mAnimation->setMotionName(PlayerMotionName::ROLL, 6);
+    mAnimation->setMotionName(PlayerMotionName::DASH, 7);
+    mAnimation->setMotionName(PlayerMotionName::WALK, 8);
 }
 
 void PlayerAnimationController::update() {

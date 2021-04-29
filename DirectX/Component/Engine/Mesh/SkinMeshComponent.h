@@ -37,6 +37,10 @@ public:
     bool getLoop() const;
     //モーション数を取得する
     int getMotionCount() const;
+    //モーション番号からモーションを取得する
+    const Motion& getMotion(unsigned motionNo) const;
+    //モーション名からモーションを取得する
+    const Motion& getMotion(const std::string& motionName) const;
     //現在のモーションを取得する
     const Motion& getCurrentMotion() const;
     //現在のモーション番号を取得する

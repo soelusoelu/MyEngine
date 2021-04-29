@@ -20,7 +20,10 @@
     },
     {
       "type": "PlayerAttack",
-      "properties": {}
+      "properties": {
+        "firstLowestCoolTimeUpToAdditionalAttack": 0.5,
+        "secondLowestCoolTimeUpToAdditionalAttack": 0.4
+      }
     }
   ]
 }
