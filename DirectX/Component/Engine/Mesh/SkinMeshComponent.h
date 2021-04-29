@@ -27,9 +27,13 @@ public:
     void changeMotion(const std::string& motionName);
     //姿勢をTポーズにする
     void tPose();
-    //アニメーションのループ状態を指定する
+    //モーションを更新するか設定する
+    void setMotionUpdateFlag(bool value);
+    //モーションを更新するか取得する
+    bool getMotionUpdateFlag() const;
+    //モーションのループ状態を指定する
     void setLoop(bool value);
-    //アニメーションのループ状態を取得する
+    //モーションのループ状態を取得する
     bool getLoop() const;
     //モーション数を取得する
     int getMotionCount() const;
@@ -50,8 +54,8 @@ private:
     SkinMeshComponent(const SkinMeshComponent&) = delete;
     SkinMeshComponent& operator=(const SkinMeshComponent&) = delete;
 
-    void calcTPose();
     void calcNextPose();
+    void calcCurrentFrame();
 
 private:
     //アニメーションインターフェース
@@ -66,8 +70,8 @@ private:
     int mCurrentMotionNo;
     //現在のモーションフレーム
     int mCurrentFrame;
-    //Tポーズか
-    bool mIsTPose;
-    //アニメーションを繰り返すか
+    //モーションを更新するか
+    bool mIsMotionUpdate;
+    //モーションを繰り返すか
     bool mIsLoop;
 };

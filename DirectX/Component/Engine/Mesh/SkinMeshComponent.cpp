@@ -13,7 +13,7 @@ SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
     , mCallbackComputeCurrentBones(std::make_unique<Subject>())
     , mCurrentMotionNo(0)
     , mCurrentFrame(0)
-    , mIsTPose(false)
+    , mIsMotionUpdate(true)
     , mIsLoop(true)
 {
 }
@@ -21,9 +21,7 @@ SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
 SkinMeshComponent::~SkinMeshComponent() = default;
 
 void SkinMeshComponent::update() {
-    if (mIsTPose) {
-        calcTPose();
-    } else {
+    if (mIsMotionUpdate) {
         calcNextPose();
 
         //通知を送る
@@ -43,7 +41,7 @@ void SkinMeshComponent::changeMotion(unsigned motionNo) {
     assert(motionNo < mAnimation->getMotionCount());
     mCurrentMotionNo = motionNo;
     mCurrentFrame = 0;
-    mIsTPose = false;
+    mIsMotionUpdate = true;
 }
 
 void SkinMeshComponent::changeMotion(const std::string& motionName) {
@@ -51,7 +49,7 @@ void SkinMeshComponent::changeMotion(const std::string& motionName) {
         if (mAnimation->getMotion(i).name == motionName) {
             mCurrentMotionNo = i;
             mCurrentFrame = 0;
-            mIsTPose = false;
+            mIsMotionUpdate = true;
             return;
         }
     }
@@ -60,7 +58,16 @@ void SkinMeshComponent::changeMotion(const std::string& motionName) {
 }
 
 void SkinMeshComponent::tPose() {
-    mIsTPose = true;
+    mIsMotionUpdate = false;
+    mCurrentBones.assign(mCurrentBones.size(), Matrix4::identity);
+}
+
+void SkinMeshComponent::setMotionUpdateFlag(bool value) {
+    mIsMotionUpdate = value;
+}
+
+bool SkinMeshComponent::getMotionUpdateFlag() const {
+    return mIsMotionUpdate;
 }
 
 void SkinMeshComponent::setLoop(bool value) {
@@ -102,10 +109,6 @@ void SkinMeshComponent::callbackComputeCurrentBones(const std::function<void()>&
     mCallbackComputeCurrentBones->addObserver(callback);
 }
 
-void SkinMeshComponent::calcTPose() {
-    mCurrentBones.assign(mCurrentBones.size(), Matrix4::identity);
-}
-
 void SkinMeshComponent::calcNextPose() {
     const auto& motion = mAnimation->getMotion(mCurrentMotionNo);
 
@@ -114,7 +117,14 @@ void SkinMeshComponent::calcNextPose() {
         mCurrentBones[i] = mAnimation->getBone(i).offsetMat * motion.frameMat[i][mCurrentFrame];
     }
 
+    calcCurrentFrame();
+}
+
+void SkinMeshComponent::calcCurrentFrame() {
+    const auto& motion = mAnimation->getMotion(mCurrentMotionNo);
+
     ++mCurrentFrame;
+
     if (mCurrentFrame < motion.numFrame) {
         return;
     }
@@ -123,5 +133,6 @@ void SkinMeshComponent::calcNextPose() {
         mCurrentFrame = 0;
     } else {
         mCurrentFrame = motion.numFrame - 1;
+        mIsMotionUpdate = false;
     }
 }
