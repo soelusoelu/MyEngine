@@ -249,6 +249,8 @@
     <ClCompile Include="Component\Engine\Collider\OBBAnimationCollider.cpp" />
     <ClCompile Include="Collision\OBBCreater.cpp" />
     <ClCompile Include="Collision\AABBCreater.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerMove.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerAttack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -555,6 +557,8 @@
     <ClInclude Include="Component\Engine\Collider\OBBAnimationCollider.h" />
     <ClInclude Include="Collision\OBBCreater.h" />
     <ClInclude Include="Collision\AABBCreater.h" />
+    <ClInclude Include="Component\Game\Player\PlayerMove.h" />
+    <ClInclude Include="Component\Game\Player\PlayerAttack.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

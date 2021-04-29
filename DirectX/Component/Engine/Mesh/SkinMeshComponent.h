@@ -11,7 +11,9 @@
 class MeshShader;
 class Subject;
 
-class SkinMeshComponent : public Component {
+class SkinMeshComponent
+    : public Component
+{
 public:
     SkinMeshComponent(GameObject& gameObject);
     ~SkinMeshComponent();
@@ -25,6 +27,10 @@ public:
     void changeMotion(const std::string& motionName);
     //姿勢をTポーズにする
     void tPose();
+    //アニメーションのループ状態を指定する
+    void setLoop(bool value);
+    //アニメーションのループ状態を取得する
+    bool getLoop() const;
     //モーション数を取得する
     int getMotionCount() const;
     //現在のモーションを取得する
@@ -44,6 +50,9 @@ private:
     SkinMeshComponent(const SkinMeshComponent&) = delete;
     SkinMeshComponent& operator=(const SkinMeshComponent&) = delete;
 
+    void calcTPose();
+    void calcNextPose();
+
 private:
     //アニメーションインターフェース
     IAnimation* mAnimation;
@@ -59,4 +68,6 @@ private:
     int mCurrentFrame;
     //Tポーズか
     bool mIsTPose;
+    //アニメーションを繰り返すか
+    bool mIsLoop;
 };

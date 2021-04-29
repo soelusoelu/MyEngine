@@ -20,8 +20,8 @@ struct OBBInfomation {
     bool isActive = true;
 };
 
-class OBBAnimationCollider :
-    public Collider
+class OBBAnimationCollider
+    : public Collider
 {
 public:
     OBBAnimationCollider(GameObject& gameObject);

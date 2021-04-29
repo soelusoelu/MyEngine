@@ -14,6 +14,7 @@ SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
     , mCurrentMotionNo(0)
     , mCurrentFrame(0)
     , mIsTPose(false)
+    , mIsLoop(true)
 {
 }
 
@@ -21,18 +22,9 @@ SkinMeshComponent::~SkinMeshComponent() = default;
 
 void SkinMeshComponent::update() {
     if (mIsTPose) {
-        mCurrentBones.assign(mCurrentBones.size(), Matrix4::identity);
+        calcTPose();
     } else {
-        const auto& motion = mAnimation->getMotion(mCurrentMotionNo);
-        ++mCurrentFrame;
-        if (mCurrentFrame >= motion.numFrame) {
-            mCurrentFrame = 0;
-        }
-
-        //シェーダーにボーンのデータを渡す
-        for (size_t i = 0; i < mAnimation->getBoneCount(); ++i) {
-            mCurrentBones[i] = mAnimation->getBone(i).offsetMat * motion.frameMat[i][mCurrentFrame];
-        }
+        calcNextPose();
 
         //通知を送る
         mCallbackComputeCurrentBones->notify();
@@ -71,6 +63,14 @@ void SkinMeshComponent::tPose() {
     mIsTPose = true;
 }
 
+void SkinMeshComponent::setLoop(bool value) {
+    mIsLoop = value;
+}
+
+bool SkinMeshComponent::getLoop() const {
+    return mIsLoop;
+}
+
 int SkinMeshComponent::getMotionCount() const {
     return mAnimation->getMotionCount();
 }
@@ -100,4 +100,28 @@ void SkinMeshComponent::setValue(const std::shared_ptr<MeshShader>& meshShader, 
 
 void SkinMeshComponent::callbackComputeCurrentBones(const std::function<void()>& callback) {
     mCallbackComputeCurrentBones->addObserver(callback);
+}
+
+void SkinMeshComponent::calcTPose() {
+    mCurrentBones.assign(mCurrentBones.size(), Matrix4::identity);
+}
+
+void SkinMeshComponent::calcNextPose() {
+    const auto& motion = mAnimation->getMotion(mCurrentMotionNo);
+
+    //シェーダーにボーンのデータを渡す
+    for (size_t i = 0; i < mAnimation->getBoneCount(); ++i) {
+        mCurrentBones[i] = mAnimation->getBone(i).offsetMat * motion.frameMat[i][mCurrentFrame];
+    }
+
+    ++mCurrentFrame;
+    if (mCurrentFrame < motion.numFrame) {
+        return;
+    }
+
+    if (mIsLoop) {
+        mCurrentFrame = 0;
+    } else {
+        mCurrentFrame = motion.numFrame - 1;
+    }
 }

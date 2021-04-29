@@ -1,12 +1,9 @@
 {
-  "transform": {
-    "scale": [ 0.01, 0.01, 0.01 ]
-  },
   "components": [
     {
       "type": "MeshComponent",
       "properties": {
-        "fileName": "Player\\slashMIX.fbx"
+        "fileName": "Player\\motion.fbx"
       }
     },
     {
@@ -19,6 +16,10 @@
     },
     {
       "type": "PlayerColliderController",
+      "properties": {}
+    },
+    {
+      "type": "PlayerAttack",
       "properties": {}
     }
   ]

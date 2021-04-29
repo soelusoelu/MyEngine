@@ -108,10 +108,11 @@ void AABBAnimationCollider::computeAABB() {
 
         const auto& targets = target.concatenateTargets;
         for (const auto& t : targets) {
-            //
+            //AABBを拡張する
             updateAABB(i, t);
         }
 
+        //transformに適応する
         adaptAABBToTransform(i);
     }
 }

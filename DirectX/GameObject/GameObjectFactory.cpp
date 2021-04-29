@@ -38,6 +38,7 @@
 #include "../Component/Engine/Text/TextFloat.h"
 #include "../Component/Engine/Text/TextNumber.h"
 #include "../Component/Game/Player/PlayerAnimationController.h"
+#include "../Component/Game/Player/PlayerAttack.h"
 #include "../Component/Game/Player/PlayerColliderController.h"
 #include "../Component/Game/Scene/Title.h"
 #include "../Engine/DebugManager/DebugUtility/Debug.h"
@@ -102,6 +103,7 @@ GameObjectFactory::GameObjectFactory() {
 
 #pragma region Game
     ADD_COMPONENT(PlayerAnimationController);
+    ADD_COMPONENT(PlayerAttack);
     ADD_COMPONENT(PlayerColliderController);
 
     ADD_COMPONENT(Title);
