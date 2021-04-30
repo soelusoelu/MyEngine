@@ -23,6 +23,8 @@ void PlayerAnimationController::start() {
     mAnimation->setMotionName(PlayerMotionName::ROLL, 6);
     mAnimation->setMotionName(PlayerMotionName::DASH, 7);
     mAnimation->setMotionName(PlayerMotionName::WALK, 8);
+
+    mAnimation->changeMotion(PlayerMotionName::IDOL);
 }
 
 void PlayerAnimationController::update() {

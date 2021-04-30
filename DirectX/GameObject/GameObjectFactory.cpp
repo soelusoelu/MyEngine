@@ -40,6 +40,8 @@
 #include "../Component/Game/Player/PlayerAnimationController.h"
 #include "../Component/Game/Player/PlayerAttack.h"
 #include "../Component/Game/Player/PlayerColliderController.h"
+#include "../Component/Game/Player/PlayerMove.h"
+#include "../Component/Game/Player/PlayerRoll.h"
 #include "../Component/Game/Scene/Title.h"
 #include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/GlobalFunction.h"
@@ -105,6 +107,8 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(PlayerAnimationController);
     ADD_COMPONENT(PlayerAttack);
     ADD_COMPONENT(PlayerColliderController);
+    ADD_COMPONENT(PlayerMove);
+    ADD_COMPONENT(PlayerRoll);
 
     ADD_COMPONENT(Title);
 #pragma endregion

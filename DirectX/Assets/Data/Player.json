@@ -19,10 +19,22 @@
       "properties": {}
     },
     {
+      "type": "PlayerMove",
+      "properties": {
+        "walkSpeed": 60.0
+      }
+    },
+    {
       "type": "PlayerAttack",
       "properties": {
         "firstLowestCoolTimeUpToAdditionalAttack": 0.5,
         "secondLowestCoolTimeUpToAdditionalAttack": 0.4
+      }
+    },
+    {
+      "type": "PlayerRoll",
+      "properties": {
+        "rollingDistance": 60.0
       }
     }
   ]

@@ -52,5 +52,5 @@ private:
     DIJOYSTATE2 mPreviousJoyState;
     JoyCode mEnterPad;
     std::string mEnterPadStr;
-    static constexpr float DEAD_ZONE = 100.f;
+    static constexpr float DEAD_ZONE = 200.f;
 };

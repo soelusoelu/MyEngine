@@ -169,12 +169,12 @@ Quaternion Quaternion::lookRotation(const Vector3& forward, const Vector3& upwar
     auto y = Vector3::normalize(Vector3::cross(z, x));
 
     auto m = Matrix4::identity;
-    m.m[0][0] = x.x; m.m[0][1] = y.x; m.m[0][2] = z.x;
-    m.m[1][0] = x.y; m.m[1][1] = y.y; m.m[1][2] = z.y;
-    m.m[2][0] = x.z; m.m[2][1] = y.z; m.m[2][2] = z.z;
-    //m.m[0][0] = x.x; m.m[0][1] = x.y; m.m[0][2] = x.z;
-    //m.m[1][0] = y.x; m.m[1][1] = y.y; m.m[1][2] = y.z;
-    //m.m[2][0] = z.x; m.m[2][1] = z.y; m.m[2][2] = z.z;
+    //m.m[0][0] = x.x; m.m[0][1] = y.x; m.m[0][2] = z.x;
+    //m.m[1][0] = x.y; m.m[1][1] = y.y; m.m[1][2] = z.y;
+    //m.m[2][0] = x.z; m.m[2][1] = y.z; m.m[2][2] = z.z;
+    m.m[0][0] = x.x; m.m[0][1] = x.y; m.m[0][2] = x.z;
+    m.m[1][0] = y.x; m.m[1][1] = y.y; m.m[1][2] = y.z;
+    m.m[2][0] = z.x; m.m[2][1] = z.y; m.m[2][2] = z.z;
 
     return m.getQuaternion();
 }

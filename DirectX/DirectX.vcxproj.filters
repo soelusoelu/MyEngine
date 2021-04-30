@@ -251,6 +251,7 @@
     <ClCompile Include="Collision\AABBCreater.cpp" />
     <ClCompile Include="Component\Game\Player\PlayerMove.cpp" />
     <ClCompile Include="Component\Game\Player\PlayerAttack.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerRoll.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -559,6 +560,7 @@
     <ClInclude Include="Collision\AABBCreater.h" />
     <ClInclude Include="Component\Game\Player\PlayerMove.h" />
     <ClInclude Include="Component\Game\Player\PlayerAttack.h" />
+    <ClInclude Include="Component\Game\Player\PlayerRoll.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
