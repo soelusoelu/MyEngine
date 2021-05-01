@@ -1,4 +1,5 @@
 {
+  "tag": "Player",
   "components": [
     {
       "type": "MeshComponent",

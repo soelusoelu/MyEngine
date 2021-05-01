@@ -112,19 +112,17 @@ bool JoyPad::getJoyUp(JoyCode joy) const {
 }
 
 Vector2 JoyPad::leftStick() const {
-    Vector2 temp = Vector2::zero;
-    temp.x = (Math::abs(mCurrentJoyState.lX) > DEAD_ZONE) ? mCurrentJoyState.lX / STICK_VALUE : 0.f;
-    temp.y = (Math::abs(mCurrentJoyState.lY) > DEAD_ZONE) ? -mCurrentJoyState.lY / STICK_VALUE : 0.f;
-
-    return temp;
+    return Vector2(
+        (Math::abs(mCurrentJoyState.lX) > DEAD_ZONE) ? mCurrentJoyState.lX / STICK_VALUE : 0.f,
+        (Math::abs(mCurrentJoyState.lY) > DEAD_ZONE) ? -mCurrentJoyState.lY / STICK_VALUE : 0.f
+    );
 }
 
 Vector2 JoyPad::rightStick() const {
-    Vector2 temp = Vector2::zero;
-    temp.x = (Math::abs(mCurrentJoyState.lRx) > DEAD_ZONE) ? mCurrentJoyState.lRx / STICK_VALUE : 0.f;
-    temp.y = (Math::abs(mCurrentJoyState.lRx) > DEAD_ZONE) ? -mCurrentJoyState.lRx / STICK_VALUE : 0.f;
-
-    return temp;
+    return Vector2(
+        (Math::abs(mCurrentJoyState.lRx) > DEAD_ZONE) ? mCurrentJoyState.lRx / STICK_VALUE : 0.f,
+        (Math::abs(mCurrentJoyState.lRy) > DEAD_ZONE) ? -mCurrentJoyState.lRy / STICK_VALUE : 0.f
+    );
 }
 
 bool JoyPad::getEnter() const {

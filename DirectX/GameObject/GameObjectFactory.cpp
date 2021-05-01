@@ -37,6 +37,7 @@
 #include "../Component/Engine/Text/Text.h"
 #include "../Component/Engine/Text/TextFloat.h"
 #include "../Component/Engine/Text/TextNumber.h"
+#include "../Component/Game/Camera/GameCamera.h"
 #include "../Component/Game/Player/PlayerAnimationController.h"
 #include "../Component/Game/Player/PlayerAttack.h"
 #include "../Component/Game/Player/PlayerColliderController.h"
@@ -104,6 +105,8 @@ GameObjectFactory::GameObjectFactory() {
 #pragma endregion
 
 #pragma region Game
+    ADD_COMPONENT(GameCamera);
+
     ADD_COMPONENT(PlayerAnimationController);
     ADD_COMPONENT(PlayerAttack);
     ADD_COMPONENT(PlayerColliderController);

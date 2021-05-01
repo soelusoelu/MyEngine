@@ -197,7 +197,7 @@ bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {
 }
 
 void Camera::calcView() {
-    mView = Matrix4::createLookAt(getPosition(), mLookAt, transform().up());
+    mView = Matrix4::createLookAt(getPosition(), mLookAt, Vector3::up);
 }
 
 void Camera::calcProj() {

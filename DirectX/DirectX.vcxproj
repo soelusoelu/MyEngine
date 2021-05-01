@@ -207,6 +207,7 @@
     <ClCompile Include="Component\Engine\Mesh\MeshMaterial.cpp" />
     <ClCompile Include="DirectX\DepthStencilView.cpp" />
     <ClCompile Include="Component\Engine\Scene\MapEditor.cpp" />
+    <ClCompile Include="Component\Game\Camera\GameCamera.cpp" />
     <ClCompile Include="GameObject\MeshGameObjectCreater.cpp" />
     <ClCompile Include="Collision\IntersectHelper.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshSelector.cpp" />
@@ -454,6 +455,7 @@
     <ClInclude Include="DirectX\DepthStencilView.h" />
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
     <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
+    <ClInclude Include="Component\Game\Camera\GameCamera.h" />
     <ClInclude Include="GameObject\IGameObjectAdder.h" />
     <ClInclude Include="GameObject\IGameObjectsGetter.h" />
     <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
@@ -893,6 +895,7 @@
     <None Include="Assets\Data\Camera.json" />
     <None Include="Assets\Data\CollideOperator.json" />
     <None Include="Assets\Data\DirectionalLight.json" />
+    <None Include="Assets\Data\GameCamera.json" />
     <None Include="Assets\Data\Global.json" />
     <None Include="Assets\Data\Ground1.json" />
     <None Include="Assets\Data\ModelViewer.json" />

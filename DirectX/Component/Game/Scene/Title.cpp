@@ -1,4 +1,5 @@
 ﻿#include "Title.h"
+#include "../Camera/GameCamera.h"
 #include "../../Engine/Mesh/MeshComponent.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectFactory.h"
@@ -12,6 +13,8 @@ Title::Title(GameObject& gameObject) :
 Title::~Title() = default;
 
 void Title::awake() {
-    GameObjectCreater::create("Player");
+    auto player = GameObjectCreater::create("Player");
     GameObjectCreater::create("Plane");
+    auto camera = GameObjectCreater::create("GameCamera");
+    camera->componentManager().getComponent<GameCamera>()->setPlayer(player);
 }

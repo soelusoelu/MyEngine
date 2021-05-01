@@ -1,0 +1,13 @@
+{
+  "tag": "GameCamera",
+  "components": [
+    {
+      "type": "GameCamera",
+      "properties": {
+        "rotateSpeed": 1.5,
+        "cameraToPlayerDistance": 60.0,
+        "lookAtOffsetY": 8.0
+      }
+    }
+  ]
+}
