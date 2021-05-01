@@ -19,10 +19,10 @@ PlayerAttack::~PlayerAttack() = default;
 
 void PlayerAttack::start() {
     mAnimation = getComponent<SkinMeshComponent>();
-    const auto& firstAttack = mAnimation->getMotion(PlayerMotionName::FIRST_ATTACK);
+    const auto& firstAttack = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK);
     mAdditionalAttackTimer[0].receptionTimeUpToAdditionalAttack = static_cast<float>(firstAttack.numFrame) / 60.f;
     mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].receptionTimeUpToAdditionalAttack);
-    const auto& secondAttack = mAnimation->getMotion(PlayerMotionName::SECOND_ATTACK);
+    const auto& secondAttack = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK);
     mAdditionalAttackTimer[1].receptionTimeUpToAdditionalAttack = static_cast<float>(secondAttack.numFrame) / 60.f;
 }
 
@@ -51,7 +51,7 @@ void PlayerAttack::updateAttack() {
 }
 
 void PlayerAttack::firstAttack() {
-    mAnimation->changeMotion(PlayerMotionName::FIRST_ATTACK);
+    mAnimation->changeMotion(PlayerMotions::FIRST_ATTACK);
     mAnimation->setLoop(false);
     mIsFirstAttackMiddle = true;
     mIsSecondAttackMiddle = false;
@@ -60,7 +60,7 @@ void PlayerAttack::firstAttack() {
 }
 
 void PlayerAttack::secondAttack() {
-    mAnimation->changeMotion(PlayerMotionName::SECOND_ATTACK);
+    mAnimation->changeMotion(PlayerMotions::SECOND_ATTACK);
     mAnimation->setLoop(false);
     mIsFirstAttackMiddle = false;
     mIsSecondAttackMiddle = true;
@@ -74,7 +74,7 @@ void PlayerAttack::attackEnd() {
         mAttackMotionElapsedTime->reset();
         mIsFirstAttackMiddle = false;
         mIsSecondAttackMiddle = false;
-        mAnimation->changeMotion(PlayerMotionName::IDOL);
+        mAnimation->changeMotion(PlayerMotions::IDOL);
     }
 }
 

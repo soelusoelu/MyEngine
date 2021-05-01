@@ -20,14 +20,14 @@ PlayerRoll::~PlayerRoll() = default;
 void PlayerRoll::start() {
     mAnimation = getComponent<SkinMeshComponent>();
 
-    const auto& rollingMotion = mAnimation->getMotion(PlayerMotionName::ROLL);
+    const auto& rollingMotion = mAnimation->getMotion(PlayerMotions::ROLL);
     auto limit = static_cast<float>(rollingMotion.numFrame) / 60.f;
     mRollingMotionTime->setLimitTime(limit);
 }
 
 void PlayerRoll::update() {
     if (Input::joyPad().getJoyDown(JoyCode::B)) {
-        mAnimation->changeMotion(PlayerMotionName::ROLL);
+        mAnimation->changeMotion(PlayerMotions::ROLL);
         mAnimation->setLoop(false);
         mIsDuringRolling = true;
     }
@@ -36,7 +36,7 @@ void PlayerRoll::update() {
         mRollingMotionTime->update();
         if (mRollingMotionTime->isTime()) {
             mRollingMotionTime->reset();
-            mAnimation->changeMotion(PlayerMotionName::IDOL);
+            mAnimation->changeMotion(PlayerMotions::IDOL);
             mIsDuringRolling = false;
             return;
         }

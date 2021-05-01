@@ -59,14 +59,14 @@ void PlayerMove::move(const Vector2& leftStickValue) {
     t.setRotation(Quaternion::lookRotation(moveDir));
 
     if (!mIsMoving) {
-        mAnimation->changeMotion(PlayerMotionName::WALK);
+        mAnimation->changeMotion(PlayerMotions::WALK);
         mIsMoving = true;
     }
 }
 
 void PlayerMove::stop() {
     if (mIsMoving) {
-        mAnimation->changeMotion(PlayerMotionName::IDOL);
+        mAnimation->changeMotion(PlayerMotions::IDOL);
         mIsMoving = false;
     }
 }

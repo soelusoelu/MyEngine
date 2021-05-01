@@ -1,5 +1,6 @@
 ﻿#include "GameCamera.h"
 #include "../../Engine/Camera/Camera.h"
+#include "../../../Device/Time.h"
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
@@ -38,7 +39,7 @@ void GameCamera::update() {
     const auto& rightStick = Input::joyPad().rightStick();
     auto& t = transform();
     if (!Vector2::equal(rightStick, Vector2::zero)) {
-        t.rotate(Vector3(rightStick.y, -rightStick.x, 0.f) * mRotateSpeed);
+        t.rotate(Vector3(rightStick.y, -rightStick.x, 0.f) * mRotateSpeed * Time::deltaTime);
     }
 
     mCamera->setPosition(lookAt + -t.forward() * mToPlayerDistance);
