@@ -9,9 +9,10 @@ PlayerAttack::PlayerAttack(GameObject& gameObject)
     : Component(gameObject)
     , mAnimation(nullptr)
     , mAttackMotionElapsedTime(std::make_unique<Time>())
-    , mAdditionalAttackTimer{ 0.f, 0.f, 0.f, 0.f }
+    , mAdditionalAttackTimer{ 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f }
     , mIsFirstAttackMiddle(false)
     , mIsSecondAttackMiddle(false)
+    , mIsEndAttackMiddle(false)
 {
 }
 
@@ -19,11 +20,16 @@ PlayerAttack::~PlayerAttack() = default;
 
 void PlayerAttack::start() {
     mAnimation = getComponent<SkinMeshComponent>();
-    const auto& firstAttack = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK);
-    mAdditionalAttackTimer[0].receptionTimeUpToAdditionalAttack = static_cast<float>(firstAttack.numFrame) / 60.f;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].receptionTimeUpToAdditionalAttack);
-    const auto& secondAttack = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK);
-    mAdditionalAttackTimer[1].receptionTimeUpToAdditionalAttack = static_cast<float>(secondAttack.numFrame) / 60.f;
+    const auto& firstAttack = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK_START);
+    mAdditionalAttackTimer[0].motionTime = static_cast<float>(firstAttack.numFrame) / 60.f;
+    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].motionTime);
+    const auto& secondAttack = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK_START);
+    mAdditionalAttackTimer[1].motionTime = static_cast<float>(secondAttack.numFrame) / 60.f;
+
+    const auto& firstAttackEnd = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK_END);
+    mAdditionalAttackTimer[2].motionTime = static_cast<float>(firstAttackEnd.numFrame) / 60.f;
+    const auto& secondAttackEnd = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK_END);
+    mAdditionalAttackTimer[3].motionTime = static_cast<float>(firstAttackEnd.numFrame) / 60.f;
 }
 
 void PlayerAttack::update() {
@@ -34,6 +40,10 @@ void PlayerAttack::update() {
     if (mIsFirstAttackMiddle || mIsSecondAttackMiddle) {
         attackEnd();
     }
+
+    if (mIsEndAttackMiddle) {
+        updateEndAttack();
+    }
 }
 
 void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
@@ -42,43 +52,88 @@ void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void PlayerAttack::updateAttack() {
-    if (isFirstAttackable()) {
+    if (canFirstAttack()) {
         firstAttack();
     }
-    if (isSecondAttackable()) {
+    if (canSecondAttack()) {
         secondAttack();
     }
 }
 
+void PlayerAttack::updateEndAttack() {
+    mAttackMotionElapsedTime->update();
+
+    //モーション中は無視
+    if (!mAttackMotionElapsedTime->isTime()) {
+        return;
+    }
+
+    //タイマーリセット
+    mAttackMotionElapsedTime->reset();
+
+    mAnimation->changeMotion(PlayerMotions::IDOL);
+
+    mIsEndAttackMiddle = false;
+}
+
 void PlayerAttack::firstAttack() {
-    mAnimation->changeMotion(PlayerMotions::FIRST_ATTACK);
+    mAnimation->changeMotion(PlayerMotions::FIRST_ATTACK_START);
     mAnimation->setLoop(false);
     mIsFirstAttackMiddle = true;
     mIsSecondAttackMiddle = false;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].receptionTimeUpToAdditionalAttack);
+    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].motionTime);
     mAttackMotionElapsedTime->reset();
 }
 
 void PlayerAttack::secondAttack() {
-    mAnimation->changeMotion(PlayerMotions::SECOND_ATTACK);
+    mAnimation->changeMotion(PlayerMotions::SECOND_ATTACK_START);
     mAnimation->setLoop(false);
     mIsFirstAttackMiddle = false;
     mIsSecondAttackMiddle = true;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[1].receptionTimeUpToAdditionalAttack);
+    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[1].motionTime);
     mAttackMotionElapsedTime->reset();
 }
 
 void PlayerAttack::attackEnd() {
     mAttackMotionElapsedTime->update();
-    if (mAttackMotionElapsedTime->isTime()) {
-        mAttackMotionElapsedTime->reset();
-        mIsFirstAttackMiddle = false;
-        mIsSecondAttackMiddle = false;
-        mAnimation->changeMotion(PlayerMotions::IDOL);
+
+    if (!mAttackMotionElapsedTime->isTime()) {
+        return;
     }
+
+    mAttackMotionElapsedTime->reset();
+
+    //1回目の攻撃終了か
+    if (isEndFirstAttack()) {
+        firstAttackEnd();
+    }
+    //2回目の攻撃終了か
+    if (isEndSecondAttack()) {
+        secondAttackEnd();
+    }
+
+    //攻撃状態リセット
+    mIsFirstAttackMiddle = false;
+    mIsSecondAttackMiddle = false;
 }
 
-bool PlayerAttack::isFirstAttackable() const {
+void PlayerAttack::firstAttackEnd() {
+    mAnimation->changeMotion(PlayerMotions::FIRST_ATTACK_END);
+    mAnimation->setLoop(false);
+    mIsEndAttackMiddle = true;
+    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[2].motionTime);
+    mAttackMotionElapsedTime->reset();
+}
+
+void PlayerAttack::secondAttackEnd() {
+    mAnimation->changeMotion(PlayerMotions::SECOND_ATTACK_END);
+    mAnimation->setLoop(false);
+    mIsEndAttackMiddle = true;
+    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[3].motionTime);
+    mAttackMotionElapsedTime->reset();
+}
+
+bool PlayerAttack::canFirstAttack() const {
     if (mIsFirstAttackMiddle) {
         return false;
     }
@@ -89,7 +144,7 @@ bool PlayerAttack::isFirstAttackable() const {
     return true;
 }
 
-bool PlayerAttack::isSecondAttackable() const {
+bool PlayerAttack::canSecondAttack() const {
     if (!mIsFirstAttackMiddle) {
         return false;
     }
@@ -101,6 +156,28 @@ bool PlayerAttack::isSecondAttackable() const {
     }
     if (mAttackMotionElapsedTime->isTime()) {
         mAttackMotionElapsedTime->reset();
+        return false;
+    }
+
+    return true;
+}
+
+bool PlayerAttack::isEndFirstAttack() const {
+    if (!mIsFirstAttackMiddle) {
+        return false;
+    }
+    if (mIsSecondAttackMiddle) {
+        return false;
+    }
+
+    return true;
+}
+
+bool PlayerAttack::isEndSecondAttack() const {
+    if (mIsFirstAttackMiddle) {
+        return false;
+    }
+    if (!mIsSecondAttackMiddle) {
         return false;
     }
 
