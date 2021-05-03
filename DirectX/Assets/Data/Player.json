@@ -33,6 +33,10 @@
       }
     },
     {
+      "type": "PlayerGuard",
+      "properties": {}
+    },
+    {
       "type": "PlayerRoll",
       "properties": {
         "rollingDistance": 60.0

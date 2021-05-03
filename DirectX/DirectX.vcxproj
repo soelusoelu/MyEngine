@@ -222,6 +222,7 @@
     <ClCompile Include="Component\Game\Player\PlayerMove.cpp" />
     <ClCompile Include="Component\Game\Player\PlayerAttack.cpp" />
     <ClCompile Include="Component\Game\Player\PlayerRoll.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerGuard.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTextureManager.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshOperator.cpp" />
@@ -474,6 +475,7 @@
     <ClInclude Include="Component\Game\Player\PlayerMove.h" />
     <ClInclude Include="Component\Game\Player\PlayerAttack.h" />
     <ClInclude Include="Component\Game\Player\PlayerRoll.h" />
+    <ClInclude Include="Component\Game\Player\PlayerGuard.h" />
     <ClInclude Include="System\AssetsDirectoryPath.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTextureManager.h" />
     <ClInclude Include="Mesh\IMeshAdder.h" />

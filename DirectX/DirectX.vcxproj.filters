@@ -253,6 +253,7 @@
     <ClCompile Include="Component\Game\Player\PlayerAttack.cpp" />
     <ClCompile Include="Component\Game\Player\PlayerRoll.cpp" />
     <ClCompile Include="Component\Game\Camera\GameCamera.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerGuard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ComponentManager.h" />
@@ -563,6 +564,7 @@
     <ClInclude Include="Component\Game\Player\PlayerAttack.h" />
     <ClInclude Include="Component\Game\Player\PlayerRoll.h" />
     <ClInclude Include="Component\Game\Camera\GameCamera.h" />
+    <ClInclude Include="Component\Game\Player\PlayerGuard.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />
