@@ -8,8 +8,9 @@
 PlayerAttack::PlayerAttack(GameObject& gameObject)
     : Component(gameObject)
     , mAnimation(nullptr)
-    , mAttackMotionElapsedTime(std::make_unique<Time>())
-    , mAdditionalAttackTimer{ 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f }
+    , mAttackMotionElapsedTimer(std::make_unique<Time>())
+    , mAttackMotionTime{ 0.f, 0.f, 0.f, 0.f }
+    , mLowestCoolTimeUpToAdditionalAttack{ 0.f, 0.f }
     , mIsFirstAttackMiddle(false)
     , mIsSecondAttackMiddle(false)
     , mIsEndAttackMiddle(false)
@@ -20,16 +21,15 @@ PlayerAttack::~PlayerAttack() = default;
 
 void PlayerAttack::start() {
     mAnimation = getComponent<SkinMeshComponent>();
-    const auto& firstAttack = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK_START);
-    mAdditionalAttackTimer[0].motionTime = static_cast<float>(firstAttack.numFrame) / 60.f;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].motionTime);
-    const auto& secondAttack = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK_START);
-    mAdditionalAttackTimer[1].motionTime = static_cast<float>(secondAttack.numFrame) / 60.f;
 
+    const auto& firstAttack = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK_START);
+    mAttackMotionTime[FIRST_ATTACK_START_NO] = static_cast<float>(firstAttack.numFrame) / 60.f;
+    const auto& secondAttack = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK_START);
+    mAttackMotionTime[SECOND_ATTACK_START_NO] = static_cast<float>(secondAttack.numFrame) / 60.f;
     const auto& firstAttackEnd = mAnimation->getMotion(PlayerMotions::FIRST_ATTACK_END);
-    mAdditionalAttackTimer[2].motionTime = static_cast<float>(firstAttackEnd.numFrame) / 60.f;
+    mAttackMotionTime[FIRST_ATTACK_END_NO] = static_cast<float>(firstAttackEnd.numFrame) / 60.f;
     const auto& secondAttackEnd = mAnimation->getMotion(PlayerMotions::SECOND_ATTACK_END);
-    mAdditionalAttackTimer[3].motionTime = static_cast<float>(firstAttackEnd.numFrame) / 60.f;
+    mAttackMotionTime[SECOND_ATTACK_END_NO] = static_cast<float>(secondAttackEnd.numFrame) / 60.f;
 }
 
 void PlayerAttack::update() {
@@ -47,8 +47,16 @@ void PlayerAttack::update() {
 }
 
 void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "firstLowestCoolTimeUpToAdditionalAttack", &mAdditionalAttackTimer[0].lowestCoolTimeUpToAdditionalAttack);
-    JsonHelper::getFloat(inObj, "secondLowestCoolTimeUpToAdditionalAttack", &mAdditionalAttackTimer[1].lowestCoolTimeUpToAdditionalAttack);
+    JsonHelper::getFloat(
+        inObj,
+        "firstLowestCoolTimeUpToAdditionalAttack",
+        &mLowestCoolTimeUpToAdditionalAttack[FIRST_ATTACK_START_NO]
+    );
+    JsonHelper::getFloat(
+        inObj,
+        "secondLowestCoolTimeUpToAdditionalAttack",
+        &mLowestCoolTimeUpToAdditionalAttack[SECOND_ATTACK_START_NO]
+    );
 }
 
 void PlayerAttack::updateAttack() {
@@ -61,17 +69,12 @@ void PlayerAttack::updateAttack() {
 }
 
 void PlayerAttack::updateEndAttack() {
-    mAttackMotionElapsedTime->update();
-
-    //モーション中は無視
-    if (!mAttackMotionElapsedTime->isTime()) {
+    if (!updateTimer()) {
         return;
     }
 
-    //タイマーリセット
-    mAttackMotionElapsedTime->reset();
-
     mAnimation->changeMotion(PlayerMotions::IDOL);
+    mAnimation->setLoop(true);
 
     mIsEndAttackMiddle = false;
 }
@@ -81,8 +84,8 @@ void PlayerAttack::firstAttack() {
     mAnimation->setLoop(false);
     mIsFirstAttackMiddle = true;
     mIsSecondAttackMiddle = false;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[0].motionTime);
-    mAttackMotionElapsedTime->reset();
+    mAttackMotionElapsedTimer->setLimitTime(mAttackMotionTime[FIRST_ATTACK_START_NO]);
+    mAttackMotionElapsedTimer->reset();
 }
 
 void PlayerAttack::secondAttack() {
@@ -90,18 +93,14 @@ void PlayerAttack::secondAttack() {
     mAnimation->setLoop(false);
     mIsFirstAttackMiddle = false;
     mIsSecondAttackMiddle = true;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[1].motionTime);
-    mAttackMotionElapsedTime->reset();
+    mAttackMotionElapsedTimer->setLimitTime(mAttackMotionTime[SECOND_ATTACK_START_NO]);
+    mAttackMotionElapsedTimer->reset();
 }
 
 void PlayerAttack::attackEnd() {
-    mAttackMotionElapsedTime->update();
-
-    if (!mAttackMotionElapsedTime->isTime()) {
+    if (!updateTimer()) {
         return;
     }
-
-    mAttackMotionElapsedTime->reset();
 
     //1回目の攻撃終了か
     if (isEndFirstAttack()) {
@@ -121,16 +120,27 @@ void PlayerAttack::firstAttackEnd() {
     mAnimation->changeMotion(PlayerMotions::FIRST_ATTACK_END);
     mAnimation->setLoop(false);
     mIsEndAttackMiddle = true;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[2].motionTime);
-    mAttackMotionElapsedTime->reset();
+    mAttackMotionElapsedTimer->setLimitTime(mAttackMotionTime[FIRST_ATTACK_END_NO]);
+    mAttackMotionElapsedTimer->reset();
 }
 
 void PlayerAttack::secondAttackEnd() {
     mAnimation->changeMotion(PlayerMotions::SECOND_ATTACK_END);
     mAnimation->setLoop(false);
     mIsEndAttackMiddle = true;
-    mAttackMotionElapsedTime->setLimitTime(mAdditionalAttackTimer[3].motionTime);
-    mAttackMotionElapsedTime->reset();
+    mAttackMotionElapsedTimer->setLimitTime(mAttackMotionTime[SECOND_ATTACK_END_NO]);
+    mAttackMotionElapsedTimer->reset();
+}
+
+bool PlayerAttack::updateTimer() {
+    mAttackMotionElapsedTimer->update();
+
+    if (mAttackMotionElapsedTimer->isTime()) {
+        mAttackMotionElapsedTimer->reset();
+        return true;
+    }
+
+    return false;
 }
 
 bool PlayerAttack::canFirstAttack() const {
@@ -151,11 +161,11 @@ bool PlayerAttack::canSecondAttack() const {
     if (mIsSecondAttackMiddle) {
         return false;
     }
-    if (mAttackMotionElapsedTime->getCountUpTime() < mAdditionalAttackTimer[0].lowestCoolTimeUpToAdditionalAttack) {
+    if (mAttackMotionElapsedTimer->getCountUpTime() < mLowestCoolTimeUpToAdditionalAttack[FIRST_ATTACK_START_NO]) {
         return false;
     }
-    if (mAttackMotionElapsedTime->isTime()) {
-        mAttackMotionElapsedTime->reset();
+    if (mAttackMotionElapsedTimer->isTime()) {
+        mAttackMotionElapsedTimer->reset();
         return false;
     }
 

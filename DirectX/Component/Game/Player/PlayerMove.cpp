@@ -60,6 +60,7 @@ void PlayerMove::move(const Vector2& leftStickValue) {
 
     if (!mIsMoving) {
         mAnimation->changeMotion(PlayerMotions::WALK);
+        mAnimation->setLoop(true);
         mIsMoving = true;
     }
 }
@@ -67,6 +68,7 @@ void PlayerMove::move(const Vector2& leftStickValue) {
 void PlayerMove::stop() {
     if (mIsMoving) {
         mAnimation->changeMotion(PlayerMotions::IDOL);
+        mAnimation->setLoop(true);
         mIsMoving = false;
     }
 }

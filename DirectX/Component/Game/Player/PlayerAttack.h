@@ -9,13 +9,6 @@ class Time;
 class PlayerAttack
     : public Component
 {
-    struct AdditionalAttackTimer {
-        //モーション時間
-        float motionTime;
-        //追加攻撃までの最低クールタイム
-        float lowestCoolTimeUpToAdditionalAttack;
-    };
-
 public:
     PlayerAttack(GameObject& gameObject);
     ~PlayerAttack();
@@ -41,6 +34,8 @@ private:
     void firstAttackEnd();
     //2回目の攻撃終了
     void secondAttackEnd();
+    //モーションタイマー更新
+    bool updateTimer();
     //1回目の攻撃が可能か
     bool canFirstAttack() const;
     //2回目の攻撃が可能か
@@ -51,20 +46,23 @@ private:
     bool isEndSecondAttack() const;
 
 private:
+    static constexpr unsigned FIRST_ATTACK_START_NO = 0;
+    static constexpr unsigned SECOND_ATTACK_START_NO = 1;
+    static constexpr unsigned FIRST_ATTACK_END_NO = 2;
+    static constexpr unsigned SECOND_ATTACK_END_NO = 3;
+    static constexpr unsigned NUM_ATTACK_MOTION = 2;
+    static constexpr unsigned NUM_ATTACK_MOTION_DOUBLE = NUM_ATTACK_MOTION * 2;
+
     std::shared_ptr<SkinMeshComponent> mAnimation;
-    //攻撃モーション経過時間
-    std::unique_ptr<Time> mAttackMotionElapsedTime;
-    //追加攻撃まで時間
-    AdditionalAttackTimer mAdditionalAttackTimer[4];
+    //モーション経過時間
+    std::unique_ptr<Time> mAttackMotionElapsedTimer;
+    //各攻撃モーション時間
+    float mAttackMotionTime[NUM_ATTACK_MOTION_DOUBLE];
+    //追加攻撃までの最低クールタイム
+    float mLowestCoolTimeUpToAdditionalAttack[NUM_ATTACK_MOTION];
     //各攻撃の最中か
     bool mIsFirstAttackMiddle;
     bool mIsSecondAttackMiddle;
     //攻撃終了中か
     bool mIsEndAttackMiddle;
-
-    static constexpr unsigned FIRST_ATTACK_START_NO = 0;
-    static constexpr unsigned SECOND_ATTACK_START_NO = 1;
-    static constexpr unsigned FIRST_ATTACK_END_NO = 2;
-    static constexpr unsigned SECOND_ATTACK_END_NO = 3;
-    static constexpr unsigned NUM_ATTACK_MOTION = 4;
 };
