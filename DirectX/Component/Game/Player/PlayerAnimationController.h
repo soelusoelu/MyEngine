@@ -4,6 +4,10 @@
 #include <memory>
 
 class SkinMeshComponent;
+class PlayerMove;
+class PlayerRoll;
+class PlayerAttack;
+class PlayerGuard;
 
 class PlayerAnimationController
     : public Component
@@ -20,6 +24,10 @@ private:
 
 private:
     std::shared_ptr<SkinMeshComponent> mAnimation;
+    std::shared_ptr<PlayerMove> mMove;
+    std::shared_ptr<PlayerRoll> mRoll;
+    std::shared_ptr<PlayerAttack> mAttack;
+    std::shared_ptr<PlayerGuard> mGuard;
 };
 
 namespace PlayerMotions {

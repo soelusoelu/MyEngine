@@ -22,7 +22,9 @@
     {
       "type": "PlayerMove",
       "properties": {
-        "walkSpeed": 60.0
+        "walkSpeed": 45.0,
+        "dashSpeed": 90.0,
+        "dashMigrationTime": 0.25
       }
     },
     {
@@ -39,7 +41,7 @@
     {
       "type": "PlayerRoll",
       "properties": {
-        "rollingDistance": 60.0
+        "rollingDistance": 30.0
       }
     }
   ]

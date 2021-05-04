@@ -6,7 +6,6 @@
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
-#include "../../../Input/Input.h"
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
@@ -14,8 +13,11 @@ PlayerMove::PlayerMove(GameObject& gameObject)
     : Component(gameObject)
     , mCamera(nullptr)
     , mAnimation(nullptr)
+    , mDashMigrationTimer(std::make_unique<Time>())
     , mWalkSpeed(0.f)
-    , mIsMoving(false)
+    , mDashSpeed(0.f)
+    , mIsWalking(false)
+    , mIsDashing(false)
 {
 }
 
@@ -27,23 +29,72 @@ void PlayerMove::start() {
     mAnimation = getComponent<SkinMeshComponent>();
 }
 
-void PlayerMove::update() {
+void PlayerMove::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getFloat(inObj, "walkSpeed", &mWalkSpeed);
+    JsonHelper::getFloat(inObj, "dashSpeed", &mDashSpeed);
+    if (float time = 0.f; JsonHelper::getFloat(inObj, "dashMigrationTime", &time)) {
+        mDashMigrationTimer->setLimitTime(time);
+    }
+}
+
+void PlayerMove::originalUpdate() {
     auto p1 = transform().getPosition() + Vector3::up * 10.f;
     Debug::renderLine(p1, p1 + transform().forward() * 10.f, ColorPalette::blue);
 
-    const auto& leftStick = Input::joyPad().leftStick();
-    if (isMovable(leftStick)) {
-        move(leftStick);
+    const auto& pad = Input::joyPad();
+    const auto& leftStick = pad.leftStick();
+    if (canMove(leftStick)) {
+        if (canDash(pad)) {
+            dash(pad, leftStick);
+        } else {
+            walk(leftStick);
+        }
     } else {
         stop();
     }
 }
 
-void PlayerMove::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "walkSpeed", &mWalkSpeed);
+bool PlayerMove::isMoving() const {
+    if (mIsWalking) {
+        return true;
+    }
+    if (mIsDashing) {
+        return true;
+    }
+
+    return false;
 }
 
-void PlayerMove::move(const Vector2& leftStickValue) {
+bool PlayerMove::isWalking() const {
+    return mIsWalking;
+}
+
+bool PlayerMove::isDashing() const {
+    return mIsDashing;
+}
+
+void PlayerMove::walk(const Vector2& leftStickValue) {
+    move(mWalkSpeed, leftStickValue);
+
+    if (!mIsWalking) {
+        mAnimation->changeMotion(PlayerMotions::WALK);
+        mAnimation->setLoop(true);
+        mIsWalking = true;
+        mIsDashing = false;
+    }
+}
+
+void PlayerMove::dash(const JoyPad& pad, const Vector2& leftStickValue) {
+    move(mDashSpeed, leftStickValue);
+
+    if (!mIsDashing) {
+        mAnimation->changeMotion(PlayerMotions::DASH);
+        mIsWalking = false;
+        mIsDashing = true;
+    }
+}
+
+void PlayerMove::move(float moveSpeed, const Vector2& leftStickValue) {
     //カメラの視線ベクトルから向きを得る
     auto eye = Vector3::normalize(mCamera->getLookAt() - mCamera->getPosition());
     auto lookRot = Quaternion::lookRotation(eye);
@@ -55,24 +106,33 @@ void PlayerMove::move(const Vector2& leftStickValue) {
 
     auto& t = transform();
     auto moveDir = camRight * leftStickValue.x + camForward * leftStickValue.y;
-    t.translate(moveDir * mWalkSpeed * Time::deltaTime);
+    t.translate(moveDir * moveSpeed * Time::deltaTime);
     t.setRotation(Quaternion::lookRotation(moveDir));
-
-    if (!mIsMoving) {
-        mAnimation->changeMotion(PlayerMotions::WALK);
-        mAnimation->setLoop(true);
-        mIsMoving = true;
-    }
 }
 
 void PlayerMove::stop() {
-    if (mIsMoving) {
+    if (mIsWalking || mIsDashing) {
         mAnimation->changeMotion(PlayerMotions::IDOL);
         mAnimation->setLoop(true);
-        mIsMoving = false;
+        mIsWalking = false;
+        mIsDashing = false;
     }
 }
 
-bool PlayerMove::isMovable(const Vector2& leftStickValue) const {
+bool PlayerMove::canMove(const Vector2& leftStickValue) const {
     return !(Vector2::equal(leftStickValue, Vector2::zero));
+}
+
+bool PlayerMove::canDash(const JoyPad& pad) {
+    if (!pad.getJoy(DASH_BUTTON)) {
+        mDashMigrationTimer->reset();
+        return false;
+    }
+
+    if (!mDashMigrationTimer->isTime()) {
+        mDashMigrationTimer->update();
+        return false;
+    }
+
+    return true;
 }

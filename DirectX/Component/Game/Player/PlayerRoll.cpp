@@ -10,8 +10,10 @@ PlayerRoll::PlayerRoll(GameObject& gameObject)
     : Component(gameObject)
     , mAnimation(nullptr)
     , mRollingDistance(0.f)
-    , mIsDuringRolling(false)
+    , mIsRolling(false)
     , mRollingMotionTime(std::make_unique<Time>())
+    , mRollingStartPoint()
+    , mRollingEndPoint()
 {
 }
 
@@ -25,27 +27,34 @@ void PlayerRoll::start() {
     mRollingMotionTime->setLimitTime(limit);
 }
 
-void PlayerRoll::update() {
-    if (Input::joyPad().getJoyDown(JoyCode::B)) {
+void PlayerRoll::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getFloat(inObj, "rollingDistance", &mRollingDistance);
+}
+
+void PlayerRoll::originalUpdate() {
+    auto& t = transform();
+
+    if (Input::joyPad().getJoyUp(JoyCode::B)) {
         mAnimation->changeMotion(PlayerMotions::ROLL);
         mAnimation->setLoop(false);
-        mIsDuringRolling = true;
+        mIsRolling = true;
+        mRollingStartPoint = t.getPosition();
+        mRollingEndPoint = t.getPosition() + t.forward() * mRollingDistance;
     }
 
-    if (mIsDuringRolling) {
+    if (mIsRolling) {
         mRollingMotionTime->update();
         if (mRollingMotionTime->isTime()) {
             mRollingMotionTime->reset();
             mAnimation->changeMotion(PlayerMotions::IDOL);
-            mIsDuringRolling = false;
+            mIsRolling = false;
             return;
         }
 
-        auto& t = transform();
-        t.translate(t.forward() * mRollingMotionTime->rate() * mRollingDistance * Time::deltaTime);
+        t.setPosition(Vector3::lerp(mRollingStartPoint, mRollingEndPoint, mRollingMotionTime->rate()));
     }
 }
 
-void PlayerRoll::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "rollingDistance", &mRollingDistance);
+bool PlayerRoll::isRolling() const {
+    return mIsRolling;
 }
