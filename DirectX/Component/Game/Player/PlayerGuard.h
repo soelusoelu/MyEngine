@@ -13,6 +13,8 @@ public:
     ~PlayerGuard();
     virtual void start() override;
     virtual void update() override;
+    void originalUpdate();
+    bool isGuarding() const;
 
 private:
     PlayerGuard(const PlayerGuard&) = delete;
@@ -20,4 +22,5 @@ private:
 
 private:
     std::shared_ptr<SkinMeshComponent> mAnimation;
+    bool mIsGuarding;
 };

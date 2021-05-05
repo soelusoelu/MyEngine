@@ -5,7 +5,6 @@
 #include "PlayerMove.h"
 #include "PlayerRoll.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
-#include "../../../Input/Input.h"
 
 PlayerAnimationController::PlayerAnimationController(GameObject& gameObject)
     : Component(gameObject)
@@ -30,22 +29,14 @@ void PlayerAnimationController::start() {
 }
 
 void PlayerAnimationController::update() {
-    //int keyNum = Input::keyboard().getNumber();
-
-    //if (keyNum == -1) {
-    //    return;
-    //}
-
-    //int motinoCount = mAnimation->getMotionCount();
-    //if (keyNum < mAnimation->getMotionCount()) {
-    //    mAnimation->changeMotion(keyNum);
-    //}
-
     if (canRoll()) {
         mRoll->originalUpdate();
     }
     if (canAttack()) {
         mAttack->originalUpdate();
+    }
+    if (canGuard()) {
+        mGuard->originalUpdate();
     }
     if (canMove()) {
         mMove->originalUpdate();
@@ -59,6 +50,9 @@ bool PlayerAnimationController::canMove() const {
     if (mAttack->isAttacking()) {
         return false;
     }
+    if (mGuard->isGuarding()) {
+        return false;
+    }
 
     return true;
 }
@@ -69,6 +63,20 @@ bool PlayerAnimationController::canRoll() const {
 
 bool PlayerAnimationController::canAttack() const {
     if (mRoll->isRolling()) {
+        return false;
+    }
+    if (mGuard->isGuarding()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool PlayerAnimationController::canGuard() const {
+    if (mRoll->isRolling()) {
+        return false;
+    }
+    if (mAttack->isAttacking()) {
         return false;
     }
 

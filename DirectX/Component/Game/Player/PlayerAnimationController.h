@@ -25,6 +25,7 @@ private:
     bool canMove() const;
     bool canRoll() const;
     bool canAttack() const;
+    bool canGuard() const;
 
 private:
     std::shared_ptr<SkinMeshComponent> mAnimation;

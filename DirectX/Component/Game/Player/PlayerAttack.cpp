@@ -32,6 +32,16 @@ void PlayerAttack::start() {
     mAttackMotionTime[SECOND_ATTACK_END_NO] = static_cast<float>(secondAttackEnd.numFrame) / 60.f;
 }
 
+void PlayerAttack::update() {
+    if (mIsFirstAttackMiddle || mIsSecondAttackMiddle) {
+        attackEnd();
+    }
+
+    if (mIsEndAttackMiddle) {
+        updateEndAttack();
+    }
+}
+
 void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getFloat(
         inObj,
@@ -46,16 +56,15 @@ void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void PlayerAttack::originalUpdate() {
-    if (Input::joyPad().getJoyDown(JoyCode::RightButton)) {
-        updateAttack();
+    if (!Input::joyPad().getJoyDown(JoyCode::RightButton)) {
+        return;
     }
 
-    if (mIsFirstAttackMiddle || mIsSecondAttackMiddle) {
-        attackEnd();
+    if (canFirstAttack()) {
+        firstAttack();
     }
-
-    if (mIsEndAttackMiddle) {
-        updateEndAttack();
+    if (canSecondAttack()) {
+        secondAttack();
     }
 }
 
@@ -71,15 +80,6 @@ bool PlayerAttack::isAttacking() const {
     }
 
     return false;
-}
-
-void PlayerAttack::updateAttack() {
-    if (canFirstAttack()) {
-        firstAttack();
-    }
-    if (canSecondAttack()) {
-        secondAttack();
-    }
 }
 
 void PlayerAttack::updateEndAttack() {
