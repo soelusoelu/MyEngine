@@ -586,5 +586,6 @@
     <None Include="Assets\Data\Player.json" />
     <None Include="Assets\Data\Plane.json" />
     <None Include="Assets\Data\GameCamera.json" />
+    <None Include="Assets\Data\Enemy.json" />
   </ItemGroup>
 </Project>

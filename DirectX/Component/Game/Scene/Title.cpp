@@ -14,6 +14,7 @@ Title::~Title() = default;
 
 void Title::awake() {
     auto player = GameObjectCreater::create("Player");
+    GameObjectCreater::create("Enemy");
     GameObjectCreater::create("Plane");
     auto camera = GameObjectCreater::create("GameCamera");
     camera->componentManager().getComponent<GameCamera>()->setPlayer(player);

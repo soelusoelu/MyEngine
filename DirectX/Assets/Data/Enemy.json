@@ -1,0 +1,18 @@
+{
+  "tag": "Enemy",
+  "transform": {
+    "scale": [ 5.0, 5.0, 5.0 ]
+  },
+  "components": [
+    {
+      "type": "MeshComponent",
+      "properties": {
+        "fileName": "Practice\\test.fbx"
+      }
+    },
+    {
+      "type": "AABBAnimationCollider",
+      "properties": {}
+    }
+  ]
+}

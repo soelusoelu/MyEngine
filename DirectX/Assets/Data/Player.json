@@ -1,5 +1,8 @@
 {
   "tag": "Player",
+  "transform": {
+    "position": [ 0.0, 0.0, -15.0 ]
+  },
   "components": [
     {
       "type": "MeshComponent",

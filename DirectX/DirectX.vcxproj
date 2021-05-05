@@ -899,6 +899,7 @@
     <None Include="Assets\Data\Camera.json" />
     <None Include="Assets\Data\CollideOperator.json" />
     <None Include="Assets\Data\DirectionalLight.json" />
+    <None Include="Assets\Data\Enemy.json" />
     <None Include="Assets\Data\GameCamera.json" />
     <None Include="Assets\Data\Global.json" />
     <None Include="Assets\Data\Ground1.json" />
