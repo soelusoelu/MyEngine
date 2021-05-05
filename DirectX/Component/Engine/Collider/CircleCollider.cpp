@@ -3,8 +3,8 @@
 #include "../../../Imgui/imgui.h"
 #include "../../../Transform/Transform2D.h"
 
-CircleCollider::CircleCollider(GameObject& gameObject) :
-    Collider(gameObject),
+CircleCollider::CircleCollider() :
+    Collider(),
     mSprite(nullptr),
     mCircle() {
 }

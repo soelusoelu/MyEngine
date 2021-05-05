@@ -13,8 +13,8 @@
 #include "../../../Input/Input.h"
 #include "../../../Mesh/IMesh.h"
 
-CollideMouseOperator::CollideMouseOperator(GameObject& gameObject)
-    : Component(gameObject)
+CollideMouseOperator::CollideMouseOperator()
+    : Component()
     , mCamera(nullptr)
     , mAABBSelector(nullptr)
     , mCollideAdder(nullptr)

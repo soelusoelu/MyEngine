@@ -5,6 +5,10 @@
 struct Sphere;
 
 class CameraHelper {
+private:
+    CameraHelper() = delete;
+    ~CameraHelper() = delete;
+
 public:
     //スフィアがカメラに収まるビュー行列を作成する
     static Matrix4 getViewMatrixTakingSphereInCamera(
@@ -24,8 +28,4 @@ public:
         float fov,
         const Vector3& direction
     );
-
-private:
-    CameraHelper() = delete;
-    ~CameraHelper() = delete;
 };

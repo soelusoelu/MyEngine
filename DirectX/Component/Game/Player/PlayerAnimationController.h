@@ -13,7 +13,7 @@ class PlayerAnimationController
     : public Component
 {
 public:
-    PlayerAnimationController(GameObject& gameObject);
+    PlayerAnimationController();
     ~PlayerAnimationController();
     virtual void start() override;
     virtual void update() override;

@@ -9,7 +9,7 @@ class GameObjectSaveAndLoader : public Component {
     using StringArray = std::vector<std::string>;
 
 public:
-    GameObjectSaveAndLoader(GameObject& gameObject);
+    GameObjectSaveAndLoader();
     ~GameObjectSaveAndLoader();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;

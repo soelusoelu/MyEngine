@@ -8,8 +8,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-PlayerMove::PlayerMove(GameObject& gameObject)
-    : Component(gameObject)
+PlayerMove::PlayerMove()
+    : Component()
     , mCamera(nullptr)
     , mAnimation(nullptr)
     , mDashMigrationTimer(std::make_unique<Time>())

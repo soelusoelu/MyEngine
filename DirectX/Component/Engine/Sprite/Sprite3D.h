@@ -13,7 +13,7 @@ class Transform3D;
 
 class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D> {
 public:
-    Sprite3D(GameObject& gameObject);
+    Sprite3D();
     ~Sprite3D();
     virtual void awake() override;
     virtual void lateUpdate() override;

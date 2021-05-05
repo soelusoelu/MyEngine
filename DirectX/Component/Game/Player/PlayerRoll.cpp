@@ -6,8 +6,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-PlayerRoll::PlayerRoll(GameObject& gameObject)
-    : Component(gameObject)
+PlayerRoll::PlayerRoll()
+    : Component()
     , mAnimation(nullptr)
     , mRollingDistance(0.f)
     , mIsRolling(false)

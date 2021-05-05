@@ -2,8 +2,8 @@
 #include "../../../GameObject/GameObjectFactory.h"
 #include "../../../Utility/LevelLoader.h"
 
-GameObjectSaveAndLoader::GameObjectSaveAndLoader(GameObject& gameObject)
-    : Component(gameObject)
+GameObjectSaveAndLoader::GameObjectSaveAndLoader()
+    : Component()
 {
 }
 

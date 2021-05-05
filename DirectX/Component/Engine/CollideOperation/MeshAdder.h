@@ -9,7 +9,7 @@ class MeshComponent;
 //メッシュを追加するクラス
 class MeshAdder : public Component {
 public:
-    MeshAdder(GameObject& gameObject);
+    MeshAdder();
     ~MeshAdder();
 
     //指定のゲームオブジェクトにメッシュコンポーネントをアタッチする

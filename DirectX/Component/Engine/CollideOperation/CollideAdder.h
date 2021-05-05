@@ -7,7 +7,7 @@ class MeshComponent;
 //コライダーを追加するクラス
 class CollideAdder : public Component {
 public:
-    CollideAdder(GameObject& gameObject);
+    CollideAdder();
     ~CollideAdder();
     void addAABBCollide(MeshComponent& mesh);
 

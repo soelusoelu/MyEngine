@@ -14,7 +14,7 @@ class AnimationCPU
     , public IAnimationCPU
 {
 public:
-    AnimationCPU(GameObject& gameObject);
+    AnimationCPU();
     ~AnimationCPU();
     virtual void start() override;
 

@@ -10,7 +10,7 @@ class AABBCollider;
 
 class RayMouse : public Component {
 public:
-    RayMouse(GameObject& gameObject);
+    RayMouse();
     ~RayMouse();
     virtual void start() override;
     virtual void update() override;

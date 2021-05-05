@@ -9,7 +9,7 @@ class DrawString;
 
 class TextBase : public Component {
 public:
-    TextBase(GameObject& gameObject);
+    TextBase();
     virtual ~TextBase();
     virtual void onEnable(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

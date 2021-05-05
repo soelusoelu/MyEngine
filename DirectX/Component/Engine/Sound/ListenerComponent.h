@@ -9,7 +9,7 @@ class Sound3DListener;
 
 class ListenerComponent : public Component {
 public:
-    ListenerComponent(GameObject& gameObject);
+    ListenerComponent();
     ~ListenerComponent();
     virtual void awake() override;
     virtual void update() override;

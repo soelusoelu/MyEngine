@@ -15,7 +15,7 @@ class SkinMeshComponent
     : public Component
 {
 public:
-    SkinMeshComponent(GameObject& gameObject);
+    SkinMeshComponent();
     ~SkinMeshComponent();
     virtual void update() override;
 

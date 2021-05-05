@@ -27,7 +27,7 @@ class AABBAnimationCollider
     , public std::enable_shared_from_this<AABBAnimationCollider>
 {
 public:
-    AABBAnimationCollider(GameObject& gameObject);
+    AABBAnimationCollider();
     ~AABBAnimationCollider();
     virtual void start() override;
     virtual void lateUpdate() override;

@@ -11,7 +11,7 @@ class AABBCollider;
 //AABBをマウスで拡縮する
 class AABBMouseScaler : public Component {
 public:
-    AABBMouseScaler(GameObject& gameObject);
+    AABBMouseScaler();
     ~AABBMouseScaler();
     virtual void start() override;
     virtual void update() override;

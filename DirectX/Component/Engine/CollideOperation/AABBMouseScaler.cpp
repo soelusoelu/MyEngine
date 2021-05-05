@@ -11,8 +11,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-AABBMouseScaler::AABBMouseScaler(GameObject& gameObject)
-    : Component(gameObject)
+AABBMouseScaler::AABBMouseScaler()
+    : Component()
     , mCamera(nullptr)
     , mCollider(nullptr)
     , mEditPointRadius(0.f)

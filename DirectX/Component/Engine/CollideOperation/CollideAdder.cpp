@@ -2,8 +2,8 @@
 #include "../Collider/AABBCollider.h"
 #include "../Mesh/MeshComponent.h"
 
-CollideAdder::CollideAdder(GameObject& gameObject) :
-    Component(gameObject) {
+CollideAdder::CollideAdder() :
+    Component() {
 }
 
 CollideAdder::~CollideAdder() = default;

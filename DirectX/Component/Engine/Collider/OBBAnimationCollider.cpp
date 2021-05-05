@@ -6,8 +6,8 @@
 #include "../../../Transform/Transform3D.h"
 #include <cassert>
 
-OBBAnimationCollider::OBBAnimationCollider(GameObject& gameObject)
-    : Collider(gameObject)
+OBBAnimationCollider::OBBAnimationCollider()
+    : Collider()
     , mMesh(nullptr)
     , mAnimationCPU(nullptr)
     , mIsRenderCollision(true)

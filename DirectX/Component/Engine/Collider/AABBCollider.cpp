@@ -7,8 +7,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-AABBCollider::AABBCollider(GameObject& gameObject)
-    : Collider(gameObject)
+AABBCollider::AABBCollider()
+    : Collider()
     , mAABB()
     , mDefaultMin(Vector3::zero)
     , mDefaultMax(Vector3::zero)

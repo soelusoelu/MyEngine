@@ -14,7 +14,7 @@ class DirectionalLight;
 
 class MeshOutLine : public Component, public IDrawBefore {
 public:
-    MeshOutLine(GameObject& gameObject);
+    MeshOutLine();
     ~MeshOutLine();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

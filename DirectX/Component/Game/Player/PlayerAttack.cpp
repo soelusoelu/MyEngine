@@ -5,8 +5,8 @@
 #include "../../../Input/Input.h"
 #include "../../../Utility/LevelLoader.h"
 
-PlayerAttack::PlayerAttack(GameObject& gameObject)
-    : Component(gameObject)
+PlayerAttack::PlayerAttack()
+    : Component()
     , mAnimation(nullptr)
     , mAttackMotionElapsedTimer(std::make_unique<Time>())
     , mAttackMotionTime{ 0.f, 0.f, 0.f, 0.f }

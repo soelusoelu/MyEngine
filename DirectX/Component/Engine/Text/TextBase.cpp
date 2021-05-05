@@ -3,8 +3,8 @@
 #include "../../../System/Window.h"
 #include "../../../Utility/LevelLoader.h"
 
-TextBase::TextBase(GameObject& gameObject) :
-    Component(gameObject),
+TextBase::TextBase() :
+    Component(),
     mPosition(Vector2::zero),
     mScale(Vector2::one),
     mColor(ColorPalette::white),

@@ -6,8 +6,8 @@
 #include "PlayerRoll.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
 
-PlayerAnimationController::PlayerAnimationController(GameObject& gameObject)
-    : Component(gameObject)
+PlayerAnimationController::PlayerAnimationController()
+    : Component()
     , mAnimation(nullptr)
     , mMove(nullptr)
     , mRoll(nullptr)

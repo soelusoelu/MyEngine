@@ -9,8 +9,8 @@
 #include "../../../Utility/LevelLoader.h"
 #include "../../../Utility/FileUtil.h"
 
-MeshComponent::MeshComponent(GameObject& gameObject)
-    : Component(gameObject)
+MeshComponent::MeshComponent()
+    : Component()
     , mMesh(nullptr)
     , mFileName()
     , mDirectoryPath(AssetsDirectoryPath::MODEL_PATH)

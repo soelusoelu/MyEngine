@@ -13,7 +13,7 @@ class GameObjectSaveAndLoader;
 
 class CollideMouseOperator : public Component {
 public:
-    CollideMouseOperator(GameObject& gameObject);
+    CollideMouseOperator();
     ~CollideMouseOperator();
     virtual void start() override;
     virtual void update() override;

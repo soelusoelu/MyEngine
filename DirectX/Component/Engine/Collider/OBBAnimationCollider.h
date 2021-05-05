@@ -24,7 +24,7 @@ class OBBAnimationCollider
     : public Collider
 {
 public:
-    OBBAnimationCollider(GameObject& gameObject);
+    OBBAnimationCollider();
     ~OBBAnimationCollider();
     virtual void start() override;
     virtual void lateUpdate() override;

@@ -8,7 +8,10 @@
 #include <unordered_set>
 #include <vector>
 
-class GameObjectManager : public IGameObjectsGetter, public IGameObjectAdder {
+class GameObjectManager
+    : public IGameObjectsGetter
+    , public IGameObjectAdder
+{
     using GameObjectPtrArray = std::vector<GameObjectPtr>;
 
 public:

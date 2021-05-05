@@ -566,6 +566,7 @@
     <ClInclude Include="Component\Game\Camera\GameCamera.h" />
     <ClInclude Include="Component\Game\Player\PlayerGuard.h" />
     <ClInclude Include="Component\Game\Player\PlayerMotions.h" />
+    <ClInclude Include="GameObject\IThisGetter.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\MeshCommonHeader.hlsli" />

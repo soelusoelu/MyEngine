@@ -4,7 +4,7 @@
 
 class Title : public Scene {
 public:
-    Title(GameObject& gameObject);
+    Title();
     ~Title();
     virtual void awake() override;
 

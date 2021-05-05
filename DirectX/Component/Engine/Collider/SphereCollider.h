@@ -8,7 +8,7 @@
 
 class SphereCollider : public Collider {
 public:
-    SphereCollider(GameObject& gameObject);
+    SphereCollider();
     ~SphereCollider();
     virtual void start() override;
     virtual void lateUpdate() override;

@@ -6,7 +6,7 @@
 
 class Camera : public Component {
 public:
-    Camera(GameObject& gameObject);
+    Camera();
     ~Camera();
     virtual void awake() override;
     virtual void lateUpdate() override;

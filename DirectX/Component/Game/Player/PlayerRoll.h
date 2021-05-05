@@ -11,7 +11,7 @@ class PlayerRoll
     : public Component
 {
 public:
-    PlayerRoll(GameObject& gameObject);
+    PlayerRoll();
     ~PlayerRoll();
     virtual void start() override;
     virtual void update() override;

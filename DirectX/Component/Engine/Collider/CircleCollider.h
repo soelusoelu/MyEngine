@@ -9,7 +9,7 @@ class SpriteComponent;
 
 class CircleCollider : public Collider {
 public:
-    CircleCollider(GameObject& gameObject);
+    CircleCollider();
     ~CircleCollider();
     virtual void start() override;
     virtual void update() override;

@@ -15,6 +15,14 @@ GameObject::~GameObject() {
     mComponentManager->finalize();
 }
 
+GameObject& GameObject::getThis() {
+    return *this;
+}
+
+const GameObject& GameObject::getThis() const {
+    return *this;
+}
+
 void GameObject::update() {
     if (getActive()) {
         mComponentManager->update();
@@ -72,12 +80,12 @@ ComponentManager& GameObject::componentManager() const {
     return *mComponentManager;
 }
 
-void GameObject::setGameObjectManager(GameObjectManager* manager) {
-    mGameObjectManager = manager;
-}
-
 GameObjectManager& GameObject::getGameObjectManager() {
     return *mGameObjectManager;
+}
+
+void GameObject::setGameObjectManager(GameObjectManager* manager) {
+    mGameObjectManager = manager;
 }
 
 std::shared_ptr<GameObject> GameObject::create(const std::string& name, const std::string& tag) {

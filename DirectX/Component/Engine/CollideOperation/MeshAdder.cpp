@@ -5,8 +5,8 @@
 #include "../../../GameObject/GameObjectManager.h"
 #include "../../../Utility/FileUtil.h"
 
-MeshAdder::MeshAdder(GameObject& gameObject)
-    : Component(gameObject) {
+MeshAdder::MeshAdder()
+    : Component() {
 }
 
 MeshAdder::~MeshAdder() = default;

@@ -7,8 +7,8 @@
 #include "../../../Transform/Transform3D.h"
 #include <cassert>
 
-AABBAnimationCollider::AABBAnimationCollider(GameObject& gameObject)
-    : Collider(gameObject)
+AABBAnimationCollider::AABBAnimationCollider()
+    : Collider()
     , mMesh(nullptr)
     , mAnimationCPU(nullptr)
     , mIsRenderCollision(true)

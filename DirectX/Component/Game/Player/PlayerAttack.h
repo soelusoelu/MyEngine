@@ -10,7 +10,7 @@ class PlayerAttack
     : public Component
 {
 public:
-    PlayerAttack(GameObject& gameObject);
+    PlayerAttack();
     ~PlayerAttack();
     virtual void start() override;
     virtual void update() override;

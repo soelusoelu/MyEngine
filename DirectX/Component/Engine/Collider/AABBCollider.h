@@ -14,7 +14,7 @@ class AABBCollider
     , public std::enable_shared_from_this<AABBCollider>
 {
 public:
-    AABBCollider(GameObject& gameObject);
+    AABBCollider();
     ~AABBCollider();
     virtual void start() override;
     virtual void lateUpdate() override;

@@ -4,8 +4,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-Camera::Camera(GameObject& gameObject) :
-    Component(gameObject),
+Camera::Camera() :
+    Component(),
     mLookAt(Vector3::forward * 10.f),
     mFOV(45.f),
     mNearClip(0.1f),

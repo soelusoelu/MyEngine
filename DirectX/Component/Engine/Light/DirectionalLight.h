@@ -5,7 +5,7 @@
 
 class DirectionalLight : public Component {
 public:
-    DirectionalLight(GameObject& gameObject);
+    DirectionalLight();
     ~DirectionalLight();
     virtual void lateUpdate() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

@@ -5,7 +5,7 @@
 //自分自身を保存するクラス
 class SaveThis : public Component {
 public:
-    SaveThis(GameObject& gameObject);
+    SaveThis();
     ~SaveThis();
     virtual void finalize() override;
 

@@ -4,8 +4,8 @@
 #include "../../../Imgui/imgui.h"
 #include "../../../Transform/Transform3D.h"
 
-SphereCollider::SphereCollider(GameObject& gameObject) :
-    Collider(gameObject),
+SphereCollider::SphereCollider() :
+    Collider(),
     mSphere(),
     mDefaultCenter(Vector3::zero),
     mDefaultRadius(0.f) {

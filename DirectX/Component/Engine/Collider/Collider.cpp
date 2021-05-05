@@ -3,8 +3,8 @@
 #include "../../../Imgui/imgui.h"
 #include <algorithm>
 
-Collider::Collider(GameObject& gameObject) :
-    Component(gameObject),
+Collider::Collider() :
+    Component(),
     mIsAutoUpdate(true),
     mEnable(false) {
 }

@@ -9,8 +9,8 @@
 #include "../../../GameObject/GameObjectManager.h"
 #include "../../../Input/Input.h"
 
-AABBSelector::AABBSelector(GameObject& gameObject)
-    : Component(gameObject)
+AABBSelector::AABBSelector()
+    : Component()
     , mAABBMouseScaler(nullptr)
     , mCanAccess(false)
 {

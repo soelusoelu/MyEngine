@@ -8,8 +8,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-GameCamera::GameCamera(GameObject& gameObject)
-    : Component(gameObject)
+GameCamera::GameCamera()
+    : Component()
     , mCamera(nullptr)
     , mPlayer(nullptr)
     , mRotateSpeed(0.f)

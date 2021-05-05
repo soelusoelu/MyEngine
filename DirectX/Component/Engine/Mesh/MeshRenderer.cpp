@@ -5,8 +5,8 @@
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../Mesh/MeshManager.h"
 
-MeshRenderer::MeshRenderer(GameObject& gameObject)
-    : Component(gameObject)
+MeshRenderer::MeshRenderer()
+    : Component()
     , mBeforeDrawer(nullptr)
     , mMeshComponent(nullptr)
     , mMeshShader(nullptr)

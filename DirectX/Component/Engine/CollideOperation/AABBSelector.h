@@ -14,7 +14,7 @@ class AABBSelector : public Component {
     using AABBColliderPtrArray = std::vector<AABBColliderPtr>;
 
 public:
-    AABBSelector(GameObject& gameObject);
+    AABBSelector();
     ~AABBSelector();
     virtual void start() override;
     virtual void update() override;

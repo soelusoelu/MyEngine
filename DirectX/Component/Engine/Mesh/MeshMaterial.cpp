@@ -1,8 +1,8 @@
 ﻿#include "MeshMaterial.h"
 #include <cassert>
 
-MeshMaterial::MeshMaterial(GameObject& gameObject)
-    : Component(gameObject)
+MeshMaterial::MeshMaterial()
+    : Component()
 {
 }
 

@@ -8,8 +8,8 @@
 #include "../../../Utility/LevelLoader.h"
 #include <string>
 
-SpriteButtonComponent::SpriteButtonComponent(GameObject& gameObject)
-    : Component(gameObject)
+SpriteButtonComponent::SpriteButtonComponent()
+    : Component()
     , mSprite(nullptr)
     , mSelectingSprite(nullptr)
     , mCallbackClick(std::make_unique<Subject>())

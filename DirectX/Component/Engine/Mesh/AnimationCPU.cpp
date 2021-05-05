@@ -5,8 +5,8 @@
 #include <algorithm>
 #include <cassert>
 
-AnimationCPU::AnimationCPU(GameObject& gameObject)
-    : Component(gameObject)
+AnimationCPU::AnimationCPU()
+    : Component()
     , mMesh(nullptr)
     , mAnimation(nullptr)
 {

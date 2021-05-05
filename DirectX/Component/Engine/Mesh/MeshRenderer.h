@@ -12,7 +12,7 @@ class MeshManager;
 //メッシュ描画専用クラス
 class MeshRenderer : public Component, public std::enable_shared_from_this<MeshRenderer> {
 public:
-    MeshRenderer(GameObject& gameObject);
+    MeshRenderer();
     ~MeshRenderer();
     virtual void start() override;
 

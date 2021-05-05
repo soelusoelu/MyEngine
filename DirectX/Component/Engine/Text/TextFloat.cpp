@@ -3,8 +3,8 @@
 #include "../../../Imgui/imgui.h"
 #include "../../../Utility/LevelLoader.h"
 
-TextFloat::TextFloat(GameObject& gameObject) :
-    TextBase(gameObject),
+TextFloat::TextFloat() :
+    TextBase(),
     mNumber(0.f),
     mDecimalDigits(1) {
 }

@@ -11,8 +11,8 @@
 #include "../../../System/Window.h"
 #include "../../../Utility/StringUtil.h"
 
-RayMouse::RayMouse(GameObject& gameObject) :
-    Component(gameObject),
+RayMouse::RayMouse() :
+    Component(),
     mCamera(nullptr),
     mMesh(nullptr),
     mAABB(nullptr),

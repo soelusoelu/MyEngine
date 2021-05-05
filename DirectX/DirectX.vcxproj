@@ -460,6 +460,7 @@
     <ClInclude Include="Component\Game\Camera\GameCamera.h" />
     <ClInclude Include="GameObject\IGameObjectAdder.h" />
     <ClInclude Include="GameObject\IGameObjectsGetter.h" />
+    <ClInclude Include="GameObject\IThisGetter.h" />
     <ClInclude Include="GameObject\MeshGameObjectCreater.h" />
     <ClInclude Include="Collision\IntersectHelper.h" />
     <ClInclude Include="Engine\SceneMesh\SceneMeshSelector.h" />

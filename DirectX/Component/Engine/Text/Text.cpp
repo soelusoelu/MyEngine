@@ -4,8 +4,8 @@
 #include "../../../Utility/LevelLoader.h"
 #include "../../../Utility/StringUtil.h"
 
-Text::Text(GameObject& gameObject) :
-    TextBase(gameObject),
+Text::Text() :
+    TextBase(),
     mText("") {
 }
 

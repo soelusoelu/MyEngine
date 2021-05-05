@@ -6,8 +6,8 @@
 #include "../../../System/Shader/ConstantBuffers.h"
 #include <cassert>
 
-SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
-    : Component(gameObject)
+SkinMeshComponent::SkinMeshComponent()
+    : Component()
     , mAnimation(nullptr)
     , mMeshShader(nullptr)
     , mCallbackChangeMotion(std::make_unique<Subject>())

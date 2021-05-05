@@ -3,8 +3,8 @@
 #include "../../../Imgui/imgui.h"
 #include "../../../Utility/LevelLoader.h"
 
-TextNumber::TextNumber(GameObject& gameObject) :
-    TextBase(gameObject),
+TextNumber::TextNumber() :
+    TextBase(),
     mNumber(0) {
 }
 

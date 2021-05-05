@@ -5,7 +5,7 @@
 
 class Text : public TextBase {
 public:
-    Text(GameObject& gameObject);
+    Text();
     ~Text();
     virtual void lateUpdate() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

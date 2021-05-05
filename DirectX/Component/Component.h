@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 #include "ComponentManager.h"
+#include "../GameObject/IThisGetter.h"
 #include "../GameObject/Object.h"
+#include "../GameObject/GameObject.h"
 #include <rapidjson/document.h>
 #include <any>
 #include <list>
@@ -14,10 +16,11 @@ class GameObject;
 class Collider;
 class Transform3D;
 
-class Component : public Object {
+class Component
+    : public Object
+{
 public:
-    Component() = delete;
-    Component(GameObject& gameObject);
+    Component();
     virtual ~Component();
     //loadPropertiesの直後に呼び出される
     virtual void awake() {};
@@ -65,7 +68,8 @@ public:
     //コンポーネントの追加
     template <typename T>
     static std::shared_ptr<T> addComponent(GameObject& gameObject, const std::string& componentName) {
-        auto t = std::make_shared<T>(gameObject);
+        auto t = std::make_shared<T>();
+        t->mGameObjectGetter = &gameObject;
         t->mComponentName = componentName;
         t->componentManager().addComponent(t);
         t->awake();
@@ -76,13 +80,14 @@ public:
     //自身にコンポーネントを追加する
     template <typename T>
     std::shared_ptr<T> addComponent(const std::string& componentName) {
-        return addComponent<T>(mGameObject, componentName);
+        return addComponent<T>(mGameObjectGetter->getThis(), componentName);
     }
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
     static void create(GameObject& gameObject, const std::string& componentName, const rapidjson::Value& inObj) {
-        auto t = std::make_shared<T>(gameObject);
+        auto t = std::make_shared<T>();
+        t->mGameObjectGetter = &gameObject;
         t->mComponentName = componentName;
         t->componentManager().addComponent(t);
         t->loadProperties(inObj);
@@ -94,6 +99,6 @@ private:
     ComponentManager& componentManager() const;
 
 private:
-    GameObject& mGameObject;
+    IThisGetter<GameObject>* mGameObjectGetter;
     std::string mComponentName;
 };

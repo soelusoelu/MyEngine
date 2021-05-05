@@ -8,8 +8,8 @@
 #include "../../../Transform/Transform2D.h"
 #include "../../../Utility/LevelLoader.h"
 
-SpriteComponent::SpriteComponent(GameObject& gameObject) :
-    Component(gameObject),
+SpriteComponent::SpriteComponent() :
+    Component(),
     mDrawOrder(0),
     mSprite(std::make_unique<Sprite>()) {
 }

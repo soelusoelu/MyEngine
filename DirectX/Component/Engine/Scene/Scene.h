@@ -9,7 +9,7 @@ using ValuePassMap = std::unordered_map<std::string, std::any>;
 
 class Scene : public Component {
 public:
-    Scene(GameObject& gameObject);
+    Scene();
     virtual ~Scene();
 
     //前のシーンから値を受け取る

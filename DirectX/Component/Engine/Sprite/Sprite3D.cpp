@@ -14,8 +14,8 @@
 #include "../../../Utility/LevelLoader.h"
 #include <cassert>
 
-Sprite3D::Sprite3D(GameObject& gameObject) :
-    Component(gameObject),
+Sprite3D::Sprite3D() :
+    Component(),
     mTransform(std::make_unique<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),

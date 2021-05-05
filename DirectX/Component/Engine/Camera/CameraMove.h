@@ -8,7 +8,7 @@ class Camera;
 //カメラの動きを扱うクラス
 class CameraMove : public Component {
 public:
-    CameraMove(GameObject& gameObject);
+    CameraMove();
     ~CameraMove();
     virtual void start() override;
     virtual void update() override;

@@ -5,8 +5,8 @@
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectFactory.h"
 
-MapEditor::MapEditor(GameObject& gameObject)
-    : Scene(gameObject)
+MapEditor::MapEditor()
+    : Scene()
 {
 }
 

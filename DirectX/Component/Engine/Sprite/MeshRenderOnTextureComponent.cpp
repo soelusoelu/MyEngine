@@ -7,8 +7,8 @@
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../Utility/LevelLoader.h"
 
-MeshRenderOnTextureComponent::MeshRenderOnTextureComponent(GameObject& gameObject)
-    : Component(gameObject)
+MeshRenderOnTextureComponent::MeshRenderOnTextureComponent()
+    : Component()
     , mMeshRenderOnTexture(nullptr)
     , mSphereCoverMesh()
     , mView()

@@ -3,8 +3,8 @@
 #include "../../../Sound/XAudio2/SoundEngine.h"
 #include "../../../Transform/Transform3D.h"
 
-ListenerComponent::ListenerComponent(GameObject& gameObject) :
-    Component(gameObject),
+ListenerComponent::ListenerComponent() :
+    Component(),
     mListener(std::make_shared<Sound3DListener>()) {
 }
 

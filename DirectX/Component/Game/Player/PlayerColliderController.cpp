@@ -1,8 +1,8 @@
 ﻿#include "PlayerColliderController.h"
 #include "../../Engine/Collider/AABBAnimationCollider.h"
 
-PlayerColliderController::PlayerColliderController(GameObject& gameObject)
-    : Component(gameObject)
+PlayerColliderController::PlayerColliderController()
+    : Component()
     , mCollider(nullptr)
 {
 }

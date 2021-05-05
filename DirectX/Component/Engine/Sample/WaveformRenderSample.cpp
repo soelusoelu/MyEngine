@@ -11,8 +11,8 @@
 #include "../../../Sound/Volume/SoundVolume.h"
 #include "../../../System/Window.h"
 
-WaveformRenderSample::WaveformRenderSample(GameObject& gameObject) :
-    Component(gameObject),
+WaveformRenderSample::WaveformRenderSample() :
+    Component(),
     mSound(nullptr),
     mFourierID(0) {
 }

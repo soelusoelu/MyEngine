@@ -14,7 +14,7 @@ class Mesh;
 
 class MeshComponent : public Component {
 public:
-    MeshComponent(GameObject& gameObject);
+    MeshComponent();
     virtual ~MeshComponent();
     virtual void awake() override;
     virtual void start() override;

@@ -14,7 +14,7 @@ struct Sphere;
 
 class MeshRenderOnTextureComponent : public Component, public std::enable_shared_from_this<MeshRenderOnTextureComponent> {
 public:
-    MeshRenderOnTextureComponent(GameObject& gameObject);
+    MeshRenderOnTextureComponent();
     ~MeshRenderOnTextureComponent();
     virtual void start() override;
     virtual void update() override;

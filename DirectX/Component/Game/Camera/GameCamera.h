@@ -10,7 +10,7 @@ class GameCamera
     : public Component
 {
 public:
-    GameCamera(GameObject& gameObject);
+    GameCamera();
     ~GameCamera();
     virtual void start() override;
     virtual void update() override;

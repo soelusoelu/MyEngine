@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IThisGetter.h"
 #include "Object.h"
 #include <rapidjson/document.h>
 #include <memory>
@@ -9,10 +10,16 @@ class ComponentManager;
 class GameObjectManager;
 class Transform3D;
 
-class GameObject final : public Object {
+class GameObject final
+    : public Object
+    , public IThisGetter<GameObject>
+{
 public:
     GameObject();
     ~GameObject();
+
+    virtual GameObject& getThis() override;
+    virtual const GameObject& getThis() const override;
 
     //更新
     void update();
@@ -42,11 +49,11 @@ public:
     //コンポーネント管理者の取得
     ComponentManager& componentManager() const;
 
-    //GameObjectManagerの登録
-    static void setGameObjectManager(GameObjectManager* manager);
     //GameObjectManagerの取得
     GameObjectManager& getGameObjectManager();
 
+    //GameObjectManagerの登録
+    static void setGameObjectManager(GameObjectManager* manager);
     //ゲームオブジェクトを生成
     static std::shared_ptr<GameObject> create(const std::string& name, const std::string& tag);
 

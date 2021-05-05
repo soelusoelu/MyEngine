@@ -11,7 +11,7 @@ class MeshMaterial : public Component {
     using MaterialMap = std::unordered_map<unsigned, MaterialPtr>;
 
 public:
-    MeshMaterial(GameObject& gameObject);
+    MeshMaterial();
     ~MeshMaterial();
     //マテリアルを設定する
     void setMaterial(const MaterialPtr& material, unsigned index);

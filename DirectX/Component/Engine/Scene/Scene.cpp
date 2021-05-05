@@ -1,8 +1,8 @@
 ﻿#include "Scene.h"
 #include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 
-Scene::Scene(GameObject& gameObject) :
-    Component(gameObject),
+Scene::Scene() :
+    Component(),
     mNext() {
 }
 

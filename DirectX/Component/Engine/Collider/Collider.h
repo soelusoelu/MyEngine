@@ -12,7 +12,7 @@ class Collider : public Component {
     using CollPtrList = std::list<CollPtr>;
 
 protected:
-    Collider(GameObject& gameObject);
+    Collider();
     virtual ~Collider();
 
 public:

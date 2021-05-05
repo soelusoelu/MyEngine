@@ -9,7 +9,7 @@ class PlayerGuard
     : public Component
 {
 public:
-    PlayerGuard(GameObject& gameObject);
+    PlayerGuard();
     ~PlayerGuard();
     virtual void start() override;
     virtual void update() override;

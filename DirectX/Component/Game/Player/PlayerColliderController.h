@@ -9,7 +9,7 @@ class PlayerColliderController
     : public Component
 {
 public:
-    PlayerColliderController(GameObject& gameObject);
+    PlayerColliderController();
     ~PlayerColliderController();
     virtual void start() override;
 

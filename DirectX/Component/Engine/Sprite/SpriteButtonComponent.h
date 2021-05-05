@@ -12,7 +12,7 @@ class SpriteButtonComponent : public Component {
     using SpritePtr = std::shared_ptr<SpriteComponent>;
 
 public:
-    SpriteButtonComponent(GameObject& gameObject);
+    SpriteButtonComponent();
     ~SpriteButtonComponent();
     virtual void start() override;
     virtual void update() override;

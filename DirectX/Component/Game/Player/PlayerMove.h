@@ -19,7 +19,7 @@ class PlayerMove
     };
 
 public:
-    PlayerMove(GameObject& gameObject);
+    PlayerMove();
     ~PlayerMove();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

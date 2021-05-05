@@ -4,7 +4,7 @@
 
 class MapEditor : public Scene {
 public:
-    MapEditor(GameObject& gameObject);
+    MapEditor();
     ~MapEditor();
     virtual void awake() override;
     virtual void update() override;

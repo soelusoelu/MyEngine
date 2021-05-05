@@ -9,7 +9,7 @@ class SoundComponent;
 
 class WaveformRenderSample : public Component {
 public:
-    WaveformRenderSample(GameObject& gameObject);
+    WaveformRenderSample();
     ~WaveformRenderSample();
     virtual void start() override;
     virtual void update() override;

@@ -17,8 +17,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-MeshOutLine::MeshOutLine(GameObject& gameObject)
-    : Component(gameObject)
+MeshOutLine::MeshOutLine()
+    : Component()
     , mMesh(nullptr)
     , mDrawer(nullptr)
     , mOutLineShader(nullptr)

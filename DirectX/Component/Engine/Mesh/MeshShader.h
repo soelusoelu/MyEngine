@@ -13,7 +13,7 @@ class MeshMaterial;
 //メッシュのシェーダーを扱うクラス
 class MeshShader : public Component {
 public:
-    MeshShader(GameObject& gameObject);
+    MeshShader();
     ~MeshShader();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

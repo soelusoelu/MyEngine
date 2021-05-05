@@ -5,8 +5,8 @@
 #include "../../../GameObject/GameObjectFactory.h"
 #include "../../../Transform/Transform3D.h"
 
-Title::Title(GameObject& gameObject) :
-    Scene(gameObject)
+Title::Title() :
+    Scene()
 {
 }
 

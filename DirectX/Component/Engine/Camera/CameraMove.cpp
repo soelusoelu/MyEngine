@@ -6,8 +6,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-CameraMove::CameraMove(GameObject& gameObject) :
-    Component(gameObject),
+CameraMove::CameraMove() :
+    Component(),
     mCamera(nullptr),
     mCameraSpeed(0.f),
     mRotateSpeed(0.f) {

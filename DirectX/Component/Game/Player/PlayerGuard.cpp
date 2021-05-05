@@ -3,8 +3,8 @@
 #include "../../Engine/Mesh/SkinMeshComponent.h"
 #include "../../../Input/Input.h"
 
-PlayerGuard::PlayerGuard(GameObject& gameObject)
-    : Component(gameObject)
+PlayerGuard::PlayerGuard()
+    : Component()
     , mAnimation(nullptr)
     , mIsGuarding(false)
 {

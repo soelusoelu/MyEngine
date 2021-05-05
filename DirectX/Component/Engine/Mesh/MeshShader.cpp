@@ -12,8 +12,8 @@
 #include "../../../Transform/Transform3D.h"
 #include "../../../Utility/LevelLoader.h"
 
-MeshShader::MeshShader(GameObject& gameObject)
-    : Component(gameObject)
+MeshShader::MeshShader()
+    : Component()
     , mMeshMaterial(nullptr)
     , mMesh(nullptr)
     , mAnimation(nullptr)
