@@ -51,6 +51,8 @@ public:
     const std::vector<Matrix4>& getBoneCurrentFrameMatrix() const;
     //各種インターフェースを設定する
     void setValue(const std::shared_ptr<MeshShader>& meshShader, IAnimation* anim);
+    //changeMotion後に呼ばれるコールバック
+    void callbackChangeMotion(const std::function<void()>& callback);
     //このフレームでのボーン姿勢計算後に呼ばれるコールバック
     void callbackComputeCurrentBones(const std::function<void()>& callback);
 
@@ -68,6 +70,8 @@ private:
     std::shared_ptr<MeshShader> mMeshShader;
     //現在のボーン姿勢
     std::vector<Matrix4> mCurrentBones;
+    //changeMotion後に呼ばれるコールバック
+    std::unique_ptr<Subject> mCallbackChangeMotion;
     //ボーン姿勢計算後に呼ばれるコールバック
     std::unique_ptr<Subject> mCallbackComputeCurrentBones;
     //現在のモーション番号

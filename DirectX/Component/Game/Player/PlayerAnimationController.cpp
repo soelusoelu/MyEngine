@@ -1,6 +1,7 @@
 #include "PlayerAnimationController.h"
 #include "PlayerAttack.h"
 #include "PlayerGuard.h"
+#include "PlayerMotions.h"
 #include "PlayerMove.h"
 #include "PlayerRoll.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
@@ -40,10 +41,36 @@ void PlayerAnimationController::update() {
     //    mAnimation->changeMotion(keyNum);
     //}
 
-    if (mMove->isWalking()) {
+    if (canRoll()) {
         mRoll->originalUpdate();
     }
-    if (!mRoll->isRolling()) {
+    if (canAttack()) {
+        mAttack->originalUpdate();
+    }
+    if (canMove()) {
         mMove->originalUpdate();
     }
+}
+
+bool PlayerAnimationController::canMove() const {
+    if (mRoll->isRolling()) {
+        return false;
+    }
+    if (mAttack->isAttacking()) {
+        return false;
+    }
+
+    return true;
+}
+
+bool PlayerAnimationController::canRoll() const {
+    return mMove->isWalking();
+}
+
+bool PlayerAnimationController::canAttack() const {
+    if (mRoll->isRolling()) {
+        return false;
+    }
+
+    return true;
 }

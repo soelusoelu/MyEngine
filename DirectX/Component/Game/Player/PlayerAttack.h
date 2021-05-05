@@ -13,8 +13,10 @@ public:
     PlayerAttack(GameObject& gameObject);
     ~PlayerAttack();
     virtual void start() override;
-    virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
+    void originalUpdate();
+    //攻撃中か
+    bool isAttacking() const;
 
 private:
     PlayerAttack(const PlayerAttack&) = delete;

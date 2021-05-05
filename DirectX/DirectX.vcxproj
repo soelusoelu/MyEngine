@@ -407,6 +407,7 @@
     <ClInclude Include="Collision\BoxConstantGroup.h" />
     <ClInclude Include="Component\Engine\Collider\AABBAnimationCollider.h" />
     <ClInclude Include="Component\Engine\Camera\CameraMove.h" />
+    <ClInclude Include="Component\Game\Player\PlayerMotions.h" />
     <ClInclude Include="Engine\Camera\EngineCamera.h" />
     <ClInclude Include="Engine\EngineFuctionChanger.h" />
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />

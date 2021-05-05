@@ -1,5 +1,5 @@
 ﻿#include "PlayerAttack.h"
-#include "PlayerAnimationController.h"
+#include "PlayerMotions.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
 #include "../../../Device/Time.h"
 #include "../../../Input/Input.h"
@@ -32,7 +32,20 @@ void PlayerAttack::start() {
     mAttackMotionTime[SECOND_ATTACK_END_NO] = static_cast<float>(secondAttackEnd.numFrame) / 60.f;
 }
 
-void PlayerAttack::update() {
+void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getFloat(
+        inObj,
+        "firstLowestCoolTimeUpToAdditionalAttack",
+        &mLowestCoolTimeUpToAdditionalAttack[FIRST_ATTACK_START_NO]
+    );
+    JsonHelper::getFloat(
+        inObj,
+        "secondLowestCoolTimeUpToAdditionalAttack",
+        &mLowestCoolTimeUpToAdditionalAttack[SECOND_ATTACK_START_NO]
+    );
+}
+
+void PlayerAttack::originalUpdate() {
     if (Input::joyPad().getJoyDown(JoyCode::RightButton)) {
         updateAttack();
     }
@@ -46,17 +59,18 @@ void PlayerAttack::update() {
     }
 }
 
-void PlayerAttack::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(
-        inObj,
-        "firstLowestCoolTimeUpToAdditionalAttack",
-        &mLowestCoolTimeUpToAdditionalAttack[FIRST_ATTACK_START_NO]
-    );
-    JsonHelper::getFloat(
-        inObj,
-        "secondLowestCoolTimeUpToAdditionalAttack",
-        &mLowestCoolTimeUpToAdditionalAttack[SECOND_ATTACK_START_NO]
-    );
+bool PlayerAttack::isAttacking() const {
+    if (mIsFirstAttackMiddle) {
+        return true;
+    }
+    if (mIsSecondAttackMiddle) {
+        return true;
+    }
+    if (mIsEndAttackMiddle) {
+        return true;
+    }
+
+    return false;
 }
 
 void PlayerAttack::updateAttack() {

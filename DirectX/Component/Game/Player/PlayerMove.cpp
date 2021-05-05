@@ -1,9 +1,8 @@
 ﻿#include "PlayerMove.h"
-#include "PlayerAnimationController.h"
+#include "PlayerMotions.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
 #include "../../../Device/Time.h"
-#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
 #include "../../../Transform/Transform3D.h"
@@ -27,6 +26,7 @@ void PlayerMove::start() {
     const auto& cam = gameObject().getGameObjectManager().find("Camera");
     mCamera = cam->componentManager().getComponent<Camera>();
     mAnimation = getComponent<SkinMeshComponent>();
+    mAnimation->callbackChangeMotion([&] { onChangeMotion(); });
 }
 
 void PlayerMove::loadProperties(const rapidjson::Value& inObj) {
@@ -38,9 +38,6 @@ void PlayerMove::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void PlayerMove::originalUpdate() {
-    auto p1 = transform().getPosition() + Vector3::up * 10.f;
-    Debug::renderLine(p1, p1 + transform().forward() * 10.f, ColorPalette::blue);
-
     const auto& pad = Input::joyPad();
     const auto& leftStick = pad.leftStick();
     if (canMove(leftStick)) {
@@ -135,4 +132,17 @@ bool PlayerMove::canDash(const JoyPad& pad) {
     }
 
     return true;
+}
+
+void PlayerMove::onChangeMotion() {
+    auto curMotionNo = mAnimation->getCurrentMotionNumber();
+    if (curMotionNo == PlayerMotions::WALK) {
+        return;
+    }
+    if (curMotionNo == PlayerMotions::DASH) {
+        return;
+    }
+
+    mIsWalking = false;
+    mIsDashing = false;
 }

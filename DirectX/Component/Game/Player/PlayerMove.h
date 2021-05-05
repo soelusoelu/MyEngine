@@ -41,6 +41,7 @@ private:
     void stop();
     bool canMove(const Vector2& leftStickValue) const;
     bool canDash(const JoyPad& pad);
+    void onChangeMotion();
 
 private:
     std::shared_ptr<Camera> mCamera;

@@ -10,6 +10,7 @@ SkinMeshComponent::SkinMeshComponent(GameObject& gameObject)
     : Component(gameObject)
     , mAnimation(nullptr)
     , mMeshShader(nullptr)
+    , mCallbackChangeMotion(std::make_unique<Subject>())
     , mCallbackComputeCurrentBones(std::make_unique<Subject>())
     , mCurrentMotionNo(0)
     , mCurrentFrame(0)
@@ -42,14 +43,15 @@ void SkinMeshComponent::changeMotion(unsigned motionNo) {
     mCurrentMotionNo = motionNo;
     mCurrentFrame = 0;
     mIsMotionUpdate = true;
+
+    mCallbackChangeMotion->notify();
 }
 
 void SkinMeshComponent::changeMotion(const std::string& motionName) {
     for (unsigned i = 0; i < mAnimation->getMotionCount(); ++i) {
         if (mAnimation->getMotion(i).name == motionName) {
-            mCurrentMotionNo = i;
-            mCurrentFrame = 0;
-            mIsMotionUpdate = true;
+            changeMotion(i);
+
             return;
         }
     }
@@ -120,6 +122,10 @@ void SkinMeshComponent::setValue(const std::shared_ptr<MeshShader>& meshShader, 
     mMeshShader = meshShader;
 
     mCurrentBones.resize(mAnimation->getBoneCount());
+}
+
+void SkinMeshComponent::callbackChangeMotion(const std::function<void()>& callback) {
+    mCallbackChangeMotion->addObserver(callback);
 }
 
 void SkinMeshComponent::callbackComputeCurrentBones(const std::function<void()>& callback) {

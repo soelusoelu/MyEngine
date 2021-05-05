@@ -1,5 +1,5 @@
 ﻿#include "PlayerRoll.h"
-#include "PlayerAnimationController.h"
+#include "PlayerMotions.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
 #include "../../../Device/Time.h"
 #include "../../../Input/Input.h"
@@ -27,31 +27,35 @@ void PlayerRoll::start() {
     mRollingMotionTime->setLimitTime(limit);
 }
 
+void PlayerRoll::update() {
+    if (!mIsRolling) {
+        return;
+    }
+
+    mRollingMotionTime->update();
+    if (mRollingMotionTime->isTime()) {
+        mRollingMotionTime->reset();
+        mAnimation->changeMotion(PlayerMotions::IDOL);
+        mIsRolling = false;
+        return;
+    }
+
+    transform().setPosition(Vector3::lerp(mRollingStartPoint, mRollingEndPoint, mRollingMotionTime->rate()));
+}
+
 void PlayerRoll::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getFloat(inObj, "rollingDistance", &mRollingDistance);
 }
 
 void PlayerRoll::originalUpdate() {
-    auto& t = transform();
-
     if (Input::joyPad().getJoyUp(JoyCode::B)) {
         mAnimation->changeMotion(PlayerMotions::ROLL);
         mAnimation->setLoop(false);
         mIsRolling = true;
+
+        auto& t = transform();
         mRollingStartPoint = t.getPosition();
         mRollingEndPoint = t.getPosition() + t.forward() * mRollingDistance;
-    }
-
-    if (mIsRolling) {
-        mRollingMotionTime->update();
-        if (mRollingMotionTime->isTime()) {
-            mRollingMotionTime->reset();
-            mAnimation->changeMotion(PlayerMotions::IDOL);
-            mIsRolling = false;
-            return;
-        }
-
-        t.setPosition(Vector3::lerp(mRollingStartPoint, mRollingEndPoint, mRollingMotionTime->rate()));
     }
 }
 

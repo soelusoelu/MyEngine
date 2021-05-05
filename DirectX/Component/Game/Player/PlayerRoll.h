@@ -14,6 +14,7 @@ public:
     PlayerRoll(GameObject& gameObject);
     ~PlayerRoll();
     virtual void start() override;
+    virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     void originalUpdate();
     //ローリング中か
