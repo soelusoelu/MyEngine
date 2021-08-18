@@ -2,12 +2,14 @@
 
 #include "TextBase.h"
 
-class TextFloat : public TextBase {
+class TextFloat
+    : public TextBase
+{
 public:
     TextFloat();
     ~TextFloat();
     virtual void lateUpdate() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
     void setNumber(float number);
     float number() const;

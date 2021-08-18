@@ -18,6 +18,7 @@ FBX::~FBX() = default;
 void FBX::parse(
     const std::string& filePath,
     std::vector<MeshVertices>& meshesVertices,
+    std::vector<MeshVerticesPosition>& meshesVerticesPosition,
     std::vector<Indices>& meshesIndices,
     std::vector<Material>& materials,
     std::vector<Motion>& motions,
@@ -52,6 +53,7 @@ void FBX::parse(
     //全メッシュの作成
     createMeshes(
         meshesVertices,
+        meshesVerticesPosition,
         meshesIndices,
         materials,
         scene,
@@ -67,6 +69,7 @@ void FBX::parse(
 
 void FBX::createMeshes(
     std::vector<MeshVertices>& meshesVertices,
+    std::vector<MeshVerticesPosition>& meshesVerticesPosition,
     std::vector<Indices>& meshesIndices,
     std::vector<Material>& materials,
     const FbxScene* fbxScene,
@@ -77,6 +80,7 @@ void FBX::createMeshes(
 
     //メッシュの数に合わせて拡張する
     meshesVertices.resize(numMeshes);
+    meshesVerticesPosition.resize(numMeshes);
     meshesIndices.resize(numMeshes);
     materials.resize(numMeshes);
     mFbxMeshes.resize(numMeshes);
@@ -91,6 +95,7 @@ void FBX::createMeshes(
 
         createMesh(
             meshesVertices[i],
+            meshesVerticesPosition[i],
             meshesIndices[i],
             materials[i],
             mesh,
@@ -101,13 +106,14 @@ void FBX::createMeshes(
 
 void FBX::createMesh(
     MeshVertices& meshVertices,
+    MeshVerticesPosition& meshVerticesPosition,
     Indices& indices,
     Material& material,
     FbxMesh* fbxMesh,
     const std::string& directoryPath
 ) {
     //メッシュの読み込み
-    mMeshParser->parse(meshVertices, indices, fbxMesh);
+    mMeshParser->parse(meshVertices, meshVerticesPosition, indices, fbxMesh);
     //マテリアルの読み込み
     mMaterialParser->parse(material, fbxMesh, directoryPath);
 }

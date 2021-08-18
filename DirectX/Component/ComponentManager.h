@@ -21,6 +21,8 @@ public:
     void update() const;
     //所有するすべてのコンポーネントを遅延更新
     void lateUpdate() const;
+    //所有するすべてのコンポーネントから削除命令が出ているものを削除
+    void destroy();
     //所有するすべてのコンポーネントの終了処理を実行
     void finalize();
     //コンポーネントの追加
@@ -66,14 +68,14 @@ public:
     }
 
     //すべてのコンポーネントを保存する
-    void saveComponents(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
+    void saveComponents(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
 
 private:
     ComponentManager(const ComponentManager&) = delete;
     ComponentManager& operator=(const ComponentManager&) = delete;
 
     //各コンポーネントを保存する
-    void saveComponent(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* outArray, const Component& component) const;
+    void saveComponent(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& outArray, Component& component) const;
 
 private:
     ComponentPtrArray mComponents;

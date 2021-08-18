@@ -1,12 +1,13 @@
 ﻿#include "TextFloat.h"
 #include "../../../Device/DrawString.h"
-#include "../../../Imgui/imgui.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
+#include "../../../Utility/JsonHelper.h"
 
-TextFloat::TextFloat() :
-    TextBase(),
-    mNumber(0.f),
-    mDecimalDigits(1) {
+TextFloat::TextFloat()
+    : TextBase()
+    , mNumber(0.f)
+    , mDecimalDigits(1)
+{
 }
 
 TextFloat::~TextFloat() = default;
@@ -18,18 +19,18 @@ void TextFloat::lateUpdate() {
     mDrawString->drawNumber(mNumber, mPosition, mScale, mDecimalDigits, mColor, mAlpha, mPivot);
 }
 
-void TextFloat::loadProperties(const rapidjson::Value& inObj) {
-    TextBase::loadProperties(inObj);
+void TextFloat::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    TextBase::saveAndLoad(inObj, alloc, mode);
 
-    JsonHelper::getFloat(inObj, "number", &mNumber);
-    JsonHelper::getInt(inObj, "decimalDigits", &mDecimalDigits);
+    JsonHelper::getSet(mNumber, "number", inObj, alloc, mode);
+    JsonHelper::getSet(mDecimalDigits, "decimalDigits", inObj, alloc, mode);
 }
 
 void TextFloat::drawInspector() {
     TextBase::drawInspector();
 
-    ImGui::Text("Text: %f", mNumber);
-    ImGui::Text("DecimalDigits: %d", mDecimalDigits);
+    ImGuiWrapper::dragFloat("number", mNumber);
+    ImGuiWrapper::sliderInt("decimalDigits", mDecimalDigits, 0, 8);
 }
 
 void TextFloat::setNumber(float number) {

@@ -20,10 +20,10 @@ void EngineCamera::update() {
     const auto& mouse = Input::mouse();
 
     //1フレームのマウス移動量を取得
-    const auto& amount = mouse.getMouseMoveAmount();
+    const auto& mouseVelocity = mouse.getMouseVelocity();
 
-    moveCamera(mouse, amount);
-    rotateLookAtPoint(mouse, amount);
+    moveCamera(mouse, mouseVelocity);
+    rotateLookAtPoint(mouse, mouseVelocity);
     zoomCamera(mouse);
 }
 
@@ -43,14 +43,14 @@ Vector3 EngineCamera::forward() const {
     return Vector3::transform(Vector3::forward, mCameraRotation);
 }
 
-void EngineCamera::moveCamera(const IMouse& mouse, const Vector2& mouseMoveAmount) {
-    if (!canMove(mouse, mouseMoveAmount)) {
+void EngineCamera::moveCamera(const IMouse& mouse, const Vector2& mouseVelocity) {
+    if (!canMove(mouse, mouseVelocity)) {
         return;
     }
 
     //カメラの回転をもとに移動量を求める
-    auto moveAmount = right() * -mouseMoveAmount.x;
-    moveAmount += up() * mouseMoveAmount.y;
+    auto moveAmount = right() * -mouseVelocity.x;
+    moveAmount += up() * mouseVelocity.y;
     //移動速度を決定する
     moveAmount *= MOVE_SPEED;
 
@@ -59,13 +59,13 @@ void EngineCamera::moveCamera(const IMouse& mouse, const Vector2& mouseMoveAmoun
     mCamera->setPosition(mCamera->getPosition() + moveAmount);
 }
 
-void EngineCamera::rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseMoveAmount) {
-    if (!canRotate(mouse, mouseMoveAmount)) {
+void EngineCamera::rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseVelocity) {
+    if (!canRotate(mouse, mouseVelocity)) {
         return;
     }
 
     //新しい回転軸を計算する
-    computeRotation(mouseMoveAmount);
+    computeRotation(mouseVelocity);
 
     //カメラから注視点までの距離を計算する
     computeLengthCameraToLookAt();
@@ -73,14 +73,11 @@ void EngineCamera::rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseMo
     mCamera->setPosition(mCamera->getLookAt() + -forward() * mLengthCameraToLookAt);
 }
 
-void EngineCamera::computeRotation(const Vector2& mouseMoveAmount) {
-    //マウス移動量から回転軸を求める
-    auto rotAxis = Vector3::normalize(Vector3(mouseMoveAmount.y, mouseMoveAmount.x, 0.f));
-    rotAxis = Vector3::transform(rotAxis, mCameraRotation);
-    //回転軸とマウス移動量からクォータニオンを求める
-    Quaternion r(rotAxis, mouseMoveAmount.length() * ROTATE_SPEED);
-
-    mCameraRotation = Quaternion::concatenate(mCameraRotation, r);
+void EngineCamera::computeRotation(const Vector2& mouseVelocity) {
+    auto euler = mCameraRotation.euler();
+    euler.y += mouseVelocity.x * ROTATE_SPEED;
+    euler.x += mouseVelocity.y * ROTATE_SPEED;
+    mCameraRotation.setEuler(euler);
 }
 
 void EngineCamera::zoomCamera(const IMouse& mouse) {
@@ -108,28 +105,28 @@ void EngineCamera::computeLengthCameraToLookAt() {
     mLengthCameraToLookAt = getCameraToLookAt().length();
 }
 
-bool EngineCamera::canMove(const IMouse& mouse, const Vector2& mouseMoveAmount) const {
+bool EngineCamera::canMove(const IMouse& mouse, const Vector2& mouseVelocity) const {
     if (!mouse.getMouseButton(MouseCode::WheelButton)) {
         return false;
     }
-    if (!isMoveMousePosition(mouseMoveAmount)) {
+    if (!isMoveMousePosition(mouseVelocity)) {
         return false;
     }
 
     return true;
 }
 
-bool EngineCamera::canRotate(const IMouse& mouse, const Vector2& mouseMoveAmount) const {
+bool EngineCamera::canRotate(const IMouse& mouse, const Vector2& mouseVelocity) const {
     if (!mouse.getMouseButton(MouseCode::RightButton)) {
         return false;
     }
-    if (!isMoveMousePosition(mouseMoveAmount)) {
+    if (!isMoveMousePosition(mouseVelocity)) {
         return false;
     }
 
     return true;
 }
 
-bool EngineCamera::isMoveMousePosition(const Vector2& mouseMoveAmount) const {
-    return !Vector2::equal(mouseMoveAmount, Vector2::zero);
+bool EngineCamera::isMoveMousePosition(const Vector2& mouseVelocity) const {
+    return !Vector2::equal(mouseVelocity, Vector2::zero);
 }

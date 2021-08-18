@@ -1,40 +1,42 @@
 ﻿#pragma once
 
 #include "EngineMode.h"
-#include "ICallbackChangeEngineMode.h"
+#include "IEngineManagingClassGetter.h"
 #include "IEngineModeGetter.h"
-#include "Pause/IPause.h"
+#include "../Device/FileOperator.h"
 #include "../GameObject/IGameObjectsGetter.h"
 #include "../Math/Math.h"
 #include "../Mesh/IMeshesGetter.h"
 #include "../System/FpsCounter/IFpsGetter.h"
 #include <memory>
 #include <string>
-#include <rapidjson/document.h>
 
 class Camera;
 class DirectionalLight;
 class Renderer;
-class DebugManager;
 class Pause;
 class EngineFuctionChanger;
-class MapEditorMeshManager;
-class AssetsRenderTextureManager;
 class SceneMeshOperator;
 class ModelViewer;
 
 //エンジン機能統括クラス
-class EngineFunctionManager {
+class EngineFunctionManager
+    : public FileOperator
+    , public IEngineManagingClassGetter
+{
 public:
     EngineFunctionManager();
     ~EngineFunctionManager();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
+
+    virtual IEngineFunctionChanger& getModeChanger() const override;
+    virtual DebugManager& debug() const override;
+    virtual IPause& pause() const override;
+    virtual AssetsRenderTextureManager& getAssetsRenderTextureManager() const override;
+    virtual MapEditorMeshManager& getMapEditorMeshManager() const override;
 
     //初期化
     void initialize(
         const std::shared_ptr<Camera>& camera,
-        ICallbackChangeEngineMode* callback,
         const IEngineModeGetter* engineModeGetter,
         const IGameObjectsGetter* gameObjctsGetter,
         const IMeshesGetter* meshesGetter,
@@ -47,11 +49,9 @@ public:
     void update(EngineMode mode);
 
     //2D関連の描画
-    void draw(
-        EngineMode mode,
-        const Renderer& renderer,
-        Matrix4& proj
-    ) const;
+    void draw2D(const Renderer& renderer, Matrix4& proj) const;
+    //2Dデバッグ関連の描画
+    void drawDebug2D(EngineMode mode, Matrix4& proj) const;
 
     //3D関連の描画
     void draw3D(
@@ -61,21 +61,11 @@ public:
         const DirectionalLight& dirLight
     ) const;
 
-    void onChangeMapEditorMode();
-    void onChangeModelViewerMode();
-
-    //デバッグ機能へのアクセス
-    DebugManager& debug() const;
-    //ポーズ機能へのアクセス
-    IPause& pause() const;
-    //アセットテクスチャ管理者を取得する
-    AssetsRenderTextureManager& getAssetsRenderTextureManager() const;
-    //マップエディタ管理者を取得する
-    MapEditorMeshManager& getMapEditorMeshManager() const;
-
 private:
     EngineFunctionManager(const EngineFunctionManager&) = delete;
     EngineFunctionManager& operator=(const EngineFunctionManager&) = delete;
+
+    virtual void childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
 private:
     std::unique_ptr<DebugManager> mDebugManager;

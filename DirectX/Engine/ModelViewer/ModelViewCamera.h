@@ -1,8 +1,9 @@
 ﻿#pragma once
 
+#include "IModelViewerCallback.h"
 #include "../../Math/Math.h"
-#include "../../Mesh/IMesh.h"
 
+class GameObject;
 class EngineCamera;
 class SimpleCamera;
 
@@ -10,10 +11,8 @@ class ModelViewCamera {
 public:
     ModelViewCamera();
     ~ModelViewCamera();
-    void initialize();
+    void initialize(IModelViewerCallback* callback);
     void update();
-    //モデル変更時
-    void onChangeModel(const IMesh& mesh);
     //カメラをモデル全体が映る位置(初期位置)に移動する
     void setModelCenterPosition();
     //カメラを取得する
@@ -22,6 +21,9 @@ public:
 private:
     ModelViewCamera(const ModelViewCamera&) = delete;
     ModelViewCamera& operator=(const ModelViewCamera&) = delete;
+
+    //モデル変更時
+    void onChangeModel(const GameObject& newModel);
 
 private:
     std::unique_ptr<EngineCamera> mCamera;

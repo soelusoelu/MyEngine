@@ -1,18 +1,19 @@
 ﻿#include "DebugUtility.h"
 #include "Log.h"
 #include "PointRenderer.h"
+#include "LineRenderer/LineInstancingDrawer.h"
 #include "LineRenderer/LineRenderer2D.h"
-#include "LineRenderer/LineRenderer3D.h"
 #include "../../../Device/DrawString.h"
 #include "../../../Device/Renderer.h"
 #include "../../../System/GlobalFunction.h"
 
 DebugUtility::DebugUtility()
-    : mPause(nullptr)
+    : FileOperator("DebugUtility")
+    , mPause(nullptr)
     , mLog(std::make_unique<Log>())
     , mPointRenderer(std::make_unique<PointRenderer>())
     , mLineRenderer2D(std::make_unique<LineRenderer2D>())
-    , mLineRenderer3D(std::make_unique<LineRenderer3D>())
+    , mLineRenderer3D(std::make_unique<LineInstancingDrawer>())
 {
 }
 
@@ -23,14 +24,6 @@ DebugUtility& DebugUtility::instance() {
         mInstance = new DebugUtility();
     }
     return *mInstance;
-}
-
-void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
-    mLog->loadProperties(inObj);
-}
-
-void DebugUtility::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
-    mLog->saveProperties(alloc, inObj);
 }
 
 void DebugUtility::initialize(const IPause* pause) {
@@ -63,21 +56,17 @@ void DebugUtility::draw(EngineMode mode, DrawString& drawer) const {
     }
 }
 
-void DebugUtility::drawLine2D(EngineMode mode, const Renderer& renderer, Matrix4& proj) const {
-    if (mode == EngineMode::GAME) {
-        renderer.renderLine2D(proj);
-        mLineRenderer2D->draw(proj);
-    }
+void DebugUtility::drawLine2D(const Renderer& renderer, Matrix4& proj) const {
+    renderer.renderLine2D(proj);
+    mLineRenderer2D->draw(proj);
 }
 
 void DebugUtility::draw3D(EngineMode mode, const Renderer& renderer, const Matrix4& viewProj) const {
-    if (mode == EngineMode::GAME) {
-        renderer.renderPointLine3D();
-        renderer.renderPoint3D();
-        mPointRenderer->draw(viewProj);
-        renderer.renderLine3D();
-        mLineRenderer3D->draw(viewProj);
-    }
+    renderer.renderPointLine3D();
+    renderer.renderPoint3D();
+    mPointRenderer->draw(viewProj);
+    renderer.renderLine3D();
+    mLineRenderer3D->draw(viewProj);
 }
 
 Log& DebugUtility::log() const {
@@ -92,6 +81,10 @@ LineRenderer2D& DebugUtility::lineRenderer2D() const {
     return *mLineRenderer2D;
 }
 
-LineRenderer3D& DebugUtility::lineRenderer3D() const {
+LineInstancingDrawer& DebugUtility::lineRenderer3D() const {
     return *mLineRenderer3D;
+}
+
+void DebugUtility::childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mLog->writeAndRead(inObj, alloc, mode);
 }

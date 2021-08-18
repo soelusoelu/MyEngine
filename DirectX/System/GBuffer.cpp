@@ -2,7 +2,8 @@
 #include "AssetsManager.h"
 #include "Window.h"
 #include "Shader/ConstantBuffers.h"
-#include "Shader/Shader.h"
+#include "Shader/DataTransfer.h"
+#include "Shader/ShaderBinder.h"
 #include "../Component/Engine/Camera/Camera.h"
 #include "../Component/Engine/Light/DirectionalLight.h"
 #include "../DirectX/DirectXInclude.h"
@@ -12,8 +13,8 @@
 
 GBuffer::GBuffer()
     : mSampler(nullptr)
-    , mGBufferShader(nullptr)
-    , mDefferdShader(nullptr)
+    , mGBufferShaderID(-1)
+    , mDefferdShaderID(-1)
     , mVertexBuffer(nullptr)
     , mIndexBuffer(nullptr)
 {
@@ -30,7 +31,7 @@ void GBuffer::create() {
     desc.width = Window::standardWidth();
     desc.height = Window::standardHeight();
     desc.format = Format::FORMAT_RGBA16_FLOAT;
-    desc.usage = Usage::USAGE_DEFAULT;
+    desc.usage = Usage::DEFAULT;
     desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);
@@ -83,7 +84,7 @@ void GBuffer::renderToTexture() {
     auto& dx = MyDirectX::DirectX::instance();
 
     //シェーダーをセット
-    mGBufferShader->setShaderInfo();
+    ShaderBinder::bind(mGBufferShaderID);
 
     //各テクスチャをレンダーターゲットに設定
     RenderTargetView::setRenderTargets(mRenderTargets);
@@ -95,11 +96,11 @@ void GBuffer::renderToTexture() {
     dx.clearDepthStencilView();
 
     //デプステスト有効化
-    dx.depthStencilState()->depthTest(true);
+    dx.depthStencilState().depthTest(true);
     //デプスマスク有効化
-    dx.depthStencilState()->depthMask(true);
+    dx.depthStencilState().depthMask(true);
     //通常合成
-    dx.blendState()->normal();
+    dx.blendState().normal();
 }
 
 void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightManager) {
@@ -112,7 +113,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     dx.clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
-    mDefferdShader->setShaderInfo();
+    ShaderBinder::bind(mDefferdShaderID);
     //1パス目で作成したテクスチャー3枚をセット
     setShaderResources();
     //サンプラーをセット
@@ -125,7 +126,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     cb.ambientLight = lightManager.getAmbientLight();
 
     //シェーダーにデータ転送
-    mDefferdShader->transferData(&cb, sizeof(cb));
+    DataTransfer::transferConstantBuffer(mDefferdShaderID, &cb);
 
     //スクリーンサイズのポリゴンをレンダー
     dx.setPrimitive(PrimitiveType::TRIANGLE_LIST);
@@ -134,7 +135,7 @@ void GBuffer::renderFromTexture(const Camera& camera, const LightManager& lightM
     //インデックスバッファをセット
     mIndexBuffer->setIndexBuffer();
     //デプステスト無効化
-    dx.depthStencilState()->depthTest(false);
+    dx.depthStencilState().depthTest(false);
 
     dx.drawIndexed(6);
 }
@@ -155,8 +156,8 @@ void GBuffer::createSampler() {
 
 void GBuffer::createShader() {
     //シェーダー生成
-    mGBufferShader = AssetsManager::instance().createShader("GBuffer.hlsl");
-    mDefferdShader = AssetsManager::instance().createShader("Deferred.hlsl");
+    mGBufferShaderID = AssetsManager::instance().createShader("GBuffer.hlsl");
+    mDefferdShaderID = AssetsManager::instance().createShader("Deferred.hlsl");
 }
 
 void GBuffer::createVertexBuffer() {
@@ -170,13 +171,13 @@ void GBuffer::createVertexBuffer() {
     BufferDesc bd;
     bd.oneSize = sizeof(PosNormUVVertex);
     bd.size = bd.oneSize * 4;
-    bd.usage = Usage::USAGE_DEFAULT;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
+    bd.usage = Usage::DEFAULT;
+    bd.type = static_cast<unsigned>(BufferType::VERTEX);
 
     SubResourceDesc sub;
     sub.data = vertices;
 
-    mVertexBuffer = std::make_unique<VertexBuffer>(bd, sub);
+    mVertexBuffer = std::make_unique<VertexBuffer>(bd, &sub);
 }
 
 void GBuffer::createIndexBuffer() {
@@ -187,8 +188,8 @@ void GBuffer::createIndexBuffer() {
     };
     BufferDesc bd;
     bd.size = sizeof(indices);
-    bd.usage = Usage::USAGE_IMMUTABLE;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
+    bd.usage = Usage::IMMUTABLE;
+    bd.type = static_cast<unsigned>(BufferType::INDEX);
 
     SubResourceDesc sub;
     sub.data = indices;

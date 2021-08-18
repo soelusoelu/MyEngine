@@ -3,6 +3,7 @@
 #include "IMeshAdder.h"
 #include "IMeshesGetter.h"
 #include "../Math/Math.h"
+#include "../Utility/FileMode.h"
 #include <rapidjson/document.h>
 #include <list>
 #include <memory>
@@ -10,15 +11,17 @@
 class MeshRenderer;
 class ShadowMap;
 
-class MeshManager : public IMeshesGetter, public IMeshAdder {
+class MeshManager
+    : public IMeshesGetter
+    , public IMeshAdder
+{
 public:
     MeshManager();
     ~MeshManager();
     virtual const MeshPtrList& getMeshes() const override;
     virtual void add(const MeshPtr& mesh, bool handleShadow) override;
 
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
+    void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode);
     void initialize();
     void update();
     //描画

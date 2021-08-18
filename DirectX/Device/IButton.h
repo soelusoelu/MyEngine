@@ -11,10 +11,10 @@ public:
     virtual void setClickFunc(const std::function<void()>& onClick) = 0;
     //ボタンの位置を返す
     virtual const Vector2& getPosition() const = 0;
-    //ハイライト設定
-    virtual void setHighlighted(bool set) = 0;
-    //現在のハイライト設定を返す
-    virtual bool getHighlighted() const = 0;
+    //アクティブ指定
+    virtual void setActive(bool value) = 0;
+    //アクティブか
+    virtual bool getActive() const = 0;
     //ptがボタンの範囲内ならtrueを返す
     virtual bool containsPoint(const Vector2& pt) const = 0;
     //ボタンがクリックされたら

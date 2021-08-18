@@ -7,12 +7,14 @@
 
 class DrawString;
 
-class TextBase : public Component {
+class TextBase
+    : public Component
+{
 public:
     TextBase();
     virtual ~TextBase();
     virtual void onEnable(bool value) override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
     void setPosition(const Vector2& pos);
     const Vector2& getPosition() const;

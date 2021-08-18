@@ -10,6 +10,10 @@ AnimationViewer::AnimationViewer()
 
 AnimationViewer::~AnimationViewer() = default;
 
+void AnimationViewer::initialize(IModelViewerCallback* callback) {
+    callback->callbackModelChange([&](GameObject& newModel) { onChangeModel(newModel); });
+}
+
 void AnimationViewer::update() {
     if (!mAnimation) {
         return;
@@ -25,15 +29,7 @@ void AnimationViewer::update() {
     setTPose();
 }
 
-void AnimationViewer::onChangeModel(const GameObject& newModel) {
-    mAnimation = newModel.componentManager().getComponent<SkinMeshComponent>();
-}
-
 void AnimationViewer::setTPose() {
-    if (!mAnimation) {
-        return;
-    }
-
     if (Input::keyboard().getKeyDown(KeyCode::Alpha0)) {
         mAnimation->tPose();
     }
@@ -42,7 +38,7 @@ void AnimationViewer::setTPose() {
 bool AnimationViewer::isChangeMotion(int& nextMotionNumber) const {
     int keyNumber = Input::keyboard().getNumber();
     //数字キーが押されてなければ終了
-    if (keyNumber == -1) {
+    if (keyNumber == Keyboard::INVALID_NUMBER) {
         return false;
     }
     //数字キーが0なら終了(Tポーズ用)
@@ -63,4 +59,12 @@ bool AnimationViewer::isChangeMotion(int& nextMotionNumber) const {
 
     nextMotionNumber = nextNum;
     return true;
+}
+
+void AnimationViewer::onChangeModel(const GameObject& newModel) {
+    mAnimation = newModel.componentManager().getComponent<SkinMeshComponent>();
+    if (mAnimation) {
+        //初期姿勢はTポーズ
+        mAnimation->tPose();
+    }
 }

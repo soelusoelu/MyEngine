@@ -1,12 +1,13 @@
 ﻿#include "Text.h"
 #include "../../../Device/DrawString.h"
 #include "../../../Imgui/imgui.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 #include "../../../Utility/StringUtil.h"
 
-Text::Text() :
-    TextBase(),
-    mText("") {
+Text::Text()
+    : TextBase()
+    , mText("")
+{
 }
 
 Text::~Text() = default;
@@ -27,10 +28,10 @@ void Text::lateUpdate() {
     }
 }
 
-void Text::loadProperties(const rapidjson::Value& inObj) {
-    TextBase::loadProperties(inObj);
+void Text::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    TextBase::saveAndLoad(inObj, alloc, mode);
 
-    JsonHelper::getString(inObj, "text", &mText);
+    JsonHelper::getSet(mText, "text", inObj, alloc, mode);
 }
 
 void Text::drawInspector() {
@@ -39,7 +40,7 @@ void Text::drawInspector() {
     ImGui::Text("Text: %s", mText.c_str());
 }
 
-void Text::setText(const std::string & text) {
+void Text::setText(const std::string& text) {
     mText = text;
 }
 

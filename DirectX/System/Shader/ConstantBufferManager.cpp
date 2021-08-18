@@ -1,7 +1,6 @@
 ﻿#include "ConstantBufferManager.h"
 #include "ConstantBuffers.h"
 #include "../../DirectX/DirectXInclude.h"
-#include "../../Engine/DebugManager/DebugUtility/Debug.h"
 
 ConstantBufferManager::ConstantBufferManager() {
     mConstantBuffers.emplace("Texture.hlsl", BuffersSize{ sizeof(TextureConstantBuffer) });
@@ -38,17 +37,15 @@ std::vector<std::unique_ptr<Buffer>> ConstantBufferManager::createConstantBuffer
 
         //バッファ共通設定
         BufferDesc cb;
-        cb.usage = Usage::USAGE_DYNAMIC;
-        cb.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_CONSTANT_BUFFER);
-        cb.cpuAccessFlags = static_cast<unsigned>(BufferCPUAccessFlag::CPU_ACCESS_WRITE);
+        cb.usage = Usage::DYNAMIC;
+        cb.type = static_cast<unsigned>(BufferType::CONSTANT_BUFFER);
+        cb.cpuAccessFlags = static_cast<unsigned>(BufferCPUAccessFlag::WRITE);
 
         //バッファの数だけ生成する
         for (size_t i = 0; i < size; i++) {
             cb.size = ((itr->second[i] + 0xff) & ~0xff);
             buffers[i] = std::make_unique<Buffer>(cb);
         }
-    } else {
-        Debug::windowMessage(shaderName + "のConstantBufferが設定されていません");
     }
 
     return buffers;

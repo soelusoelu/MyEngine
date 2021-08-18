@@ -29,12 +29,8 @@ void MeshManager::add(const MeshPtr& mesh, bool handleShadow) {
     }
 }
 
-void MeshManager::loadProperties(const rapidjson::Value& inObj) {
-    mShadowMap->loadProperties(inObj);
-}
-
-void MeshManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
-    mShadowMap->saveProperties(alloc, inObj);
+void MeshManager::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mShadowMap->writeAndRead(inObj, alloc, mode);
 }
 
 void MeshManager::initialize() {
@@ -56,13 +52,14 @@ void MeshManager::draw(
         return;
     }
 
-    MyDirectX::DirectX::instance().rasterizerState()->setCulling(CullMode::BACK);
-
     if (mShadowMap) {
         drawShadow(view, projection, cameraPosition, dirLightDirection, dirLightColor);
     }
 
     drawMeshes(view, projection, cameraPosition, dirLightDirection, dirLightColor);
+
+    //ワイヤーフレームになっているかも知れないからソリッドに戻す
+    MyDirectX::DirectX::instance().rasterizerState().setFillMode(FillMode::SOLID);
 }
 
 void MeshManager::clear() {
@@ -150,6 +147,10 @@ void MeshManager::drawShadow(
     const Vector3& dirLightDirection,
     const Vector3& dirLightColor
 ) const {
+    if (mShadowMeshes.empty()) {
+        return;
+    }
+
     //描画準備
     mShadowMap->drawBegin(dirLightDirection);
 

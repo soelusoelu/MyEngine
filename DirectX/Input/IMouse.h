@@ -25,7 +25,7 @@ public:
     //マウスのウィンドウ位置を取得する
     virtual const Vector2& getMousePosition() const = 0;
     //1フレームにおけるマウスの移動量を取得する
-    virtual const Vector2& getMouseMoveAmount() const = 0;
+    virtual const Vector2& getMouseVelocity() const = 0;
     //ホイール回転量を取得する
     virtual int getMouseScrollWheel() const = 0;
 };

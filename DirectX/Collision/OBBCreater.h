@@ -1,22 +1,22 @@
 ﻿#pragma once
 
-#include "../Mesh/IMeshLoader.h"
+#include "../Math/Math.h"
+#include <vector>
 
 struct OBB;
 
 //OBBを生成するクラス
 class OBBCreater {
-public:
-    static OBB create(const MeshVertices& vertices);
-
 private:
     OBBCreater() = delete;
     ~OBBCreater() = delete;
-    OBBCreater(const OBBCreater&) = delete;
-    OBBCreater& operator=(const OBBCreater&) = delete;
 
+public:
+    static OBB create(const std::vector<Vector3>& positions);
+
+private:
     //行列を収集する
-    static Matrix3 collectMatrix(const MeshVertices& vertices);
+    static Matrix3 collectMatrix(const std::vector<Vector3>& positions);
     //固有ベクトルを求める
     static Matrix3 computeEigenvector(const Matrix3& mat);
     //行列の各成分の絶対値の最大値とその位置を求める

@@ -4,9 +4,10 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class Mesh;
-class TextureFromFile;
+class Texture;
 class Shader;
 
 class AssetsManager {
@@ -21,9 +22,18 @@ public:
     void finalize();
 
     //テクスチャを読み込む
-    void loadTexture(const std::string& fileName, const std::string& directoryPath = AssetsDirectoryPath::TEXTURE_PATH);
-    //ファイルパスからテクスチャを取得する
-    std::shared_ptr<TextureFromFile> createTexture(const std::string& fileName, const std::string& directoryPath = AssetsDirectoryPath::TEXTURE_PATH);
+    void loadTexture(const std::string& filename, const std::string& directoryPath = AssetsDirectoryPath::TEXTURE_PATH);
+    //ファイルパスからテクスチャIDを取得する
+    int createTexture(const std::string& filename, const std::string& directoryPath = AssetsDirectoryPath::TEXTURE_PATH);
+    //テクスチャを追加する
+    int addTexture(const std::shared_ptr<Texture>& texture);
+    //IDからテクスチャを取得する
+    const Texture& getTextureFromID(int id) const;
+
+    //ファイルパスからシェーダーを取得する
+    int createShader(const std::string& filename, const std::string& directoryPath = AssetsDirectoryPath::SHADER_PATH);
+    //IDからシェーダーを取得する
+    const Shader& getShaderFormID(int id) const;
 
     //メッシュを読み込む
     void loadMesh(const std::string& fileName, const std::string& directoryPath = AssetsDirectoryPath::MODEL_PATH);
@@ -34,22 +44,32 @@ public:
     //ファイルパスからメッシュを取得する
     std::shared_ptr<Mesh> createMeshFromFilePath(const std::string& filePath);
 
-    //ファイルパスからシェーダーを取得する
-    std::shared_ptr<Shader> createShader(const std::string& fileName, const std::string& directoryPath = AssetsDirectoryPath::SHADER_PATH);
-
 private:
     AssetsManager(const AssetsManager&) = delete;
     AssetsManager& operator=(const AssetsManager&) = delete;
 
     //読み込み済みのテクスチャか
-    bool loadedTexture(const std::string& filePath) const;
+    bool loadedTexture(const std::string& filePath, int* outID = nullptr) const;
+    //読み込み済みのシェーダーか
+    bool loadedShader(const std::string& filePath, int* outID = nullptr) const;
     //読み込み済みのメッシュか
     bool loadedMesh(const std::string& filePath) const;
 
 private:
+    struct TextureParam {
+        std::shared_ptr<Texture> texture;
+        std::string filePath;
+        int id;
+    };
+    struct ShaderParam {
+        std::shared_ptr<Shader> shader;
+        std::string filePath;
+        int id;
+    };
+
     static inline AssetsManager* mInstance = nullptr;
 
-    std::unordered_map<std::string, std::shared_ptr<TextureFromFile>> mTextures;
+    std::vector<TextureParam> mTextures;
+    std::vector<ShaderParam> mShaders;
     std::unordered_map<std::string, std::shared_ptr<Mesh>> mMeshes;
-    std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
 };

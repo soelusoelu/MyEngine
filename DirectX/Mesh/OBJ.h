@@ -14,6 +14,7 @@ public:
     virtual void parse(
         const std::string& filePath,
         std::vector<MeshVertices>& meshesVertices,
+        std::vector<MeshVerticesPosition>& meshesVerticesPosition,
         std::vector<Indices>& meshesIndices,
         std::vector<Material>& materials,
         std::vector<Motion>& motions,
@@ -27,6 +28,7 @@ private:
     void loadUV(std::istringstream& iss);
     void loadFace(
         MeshVertices& meshVertices,
+        MeshVerticesPosition& meshVerticesPosition,
         Indices& indices,
         std::istringstream& iss
     );

@@ -3,12 +3,15 @@
 #include "../../Component.h"
 #include "../../../Math/Math.h"
 
-class DirectionalLight : public Component {
+class DirectionalLight
+    : public Component
+{
 public:
     DirectionalLight();
     ~DirectionalLight();
+    virtual void start() override;
     virtual void lateUpdate() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     void setDirection(const Vector3& dir);

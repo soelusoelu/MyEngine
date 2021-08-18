@@ -35,37 +35,22 @@ Texture::Texture(const std::shared_ptr<ShaderResourceView>& view, const Vector2&
 
 Texture::~Texture() = default;
 
-void Texture::finalize() {
-    safeDelete(vertexBuffer);
-    safeDelete(vertexBuffer3D);
-    safeDelete(indexBuffer);
-}
-
 const Vector2& Texture::getTextureSize() const {
     return mTextureSize;
 }
 
-void Texture::setVSTextures(unsigned start, unsigned numTextures) const {
-    mShaderResourceView->setVSShaderResources(start, numTextures);
+const ShaderResourceView& Texture::getShaderResourceView() const {
+    return *mShaderResourceView;
 }
 
-void Texture::setPSTextures(unsigned start, unsigned numTextures) const {
-    mShaderResourceView->setPSShaderResources(start, numTextures);
+const Sampler& Texture::getSampler() const {
+    return *mSampler;
 }
 
-void Texture::setVSSamplers(unsigned start, unsigned numSamplers) const {
-    mSampler->setVSSamplers(start, numSamplers);
-}
-
-void Texture::setPSSamplers(unsigned start, unsigned numSamplers) const {
-    mSampler->setPSSamplers(start, numSamplers);
-}
-
-void Texture::setTextureInfo(unsigned start, unsigned numSamplers) const {
-    setVSTextures(start, numSamplers);
-    setPSTextures(start, numSamplers);
-    setVSSamplers(start, numSamplers);
-    setPSSamplers(start, numSamplers);
+void Texture::finalize() {
+    safeDelete(vertexBuffer);
+    safeDelete(vertexBuffer3D);
+    safeDelete(indexBuffer);
 }
 
 void Texture::createVertexBuffer() {
@@ -79,13 +64,13 @@ void Texture::createVertexBuffer() {
     BufferDesc bd;
     bd.oneSize = sizeof(TextureVertex);
     bd.size = bd.oneSize * 4; //頂点が4つだから
-    bd.usage = Usage::USAGE_IMMUTABLE;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
+    bd.usage = Usage::IMMUTABLE;
+    bd.type = static_cast<unsigned>(BufferType::VERTEX);
 
     SubResourceDesc sub;
     sub.data = vertices;
 
-    vertexBuffer = new VertexBuffer(bd, sub);
+    vertexBuffer = new VertexBuffer(bd, &sub);
 
     static const TextureVertex vertices3D[] = {
         Vector3(-0.5f, 0.5f, 0.f), Vector2(0.f, 0.f), //左上
@@ -96,7 +81,7 @@ void Texture::createVertexBuffer() {
 
     sub.data = vertices3D;
 
-    vertexBuffer3D = new VertexBuffer(bd, sub);
+    vertexBuffer3D = new VertexBuffer(bd, &sub);
 }
 
 void Texture::createIndexBuffer() {
@@ -106,8 +91,8 @@ void Texture::createIndexBuffer() {
     };
     BufferDesc bd;
     bd.size = sizeof(indices);
-    bd.usage = Usage::USAGE_IMMUTABLE;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
+    bd.usage = Usage::IMMUTABLE;
+    bd.type = static_cast<unsigned>(BufferType::INDEX);
 
     SubResourceDesc sub;
     sub.data = indices;

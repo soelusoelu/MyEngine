@@ -7,8 +7,8 @@ class Sampler {
 public:
     Sampler(const SamplerDesc& desc);
     ~Sampler();
-    void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1);
-    void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1);
+    void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
+    void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
     const SamplerDesc& desc() const;
 
 private:

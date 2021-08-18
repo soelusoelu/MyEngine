@@ -1,29 +1,29 @@
 ﻿#pragma once
 
-#include "IInspectorTargetSetter.h"
-#include "../../../../Math/Math.h"
-#include <rapidjson/document.h>
-#include <any>
+#include "IInspector.h"
+#include "../../../../Device/FileOperator.h"
 #include <memory>
-#include <string>
 
-class Component;
 class GameObject;
-class Transform3D;
 
 //ImGuiを使用したインスペクター
-class ImGuiInspector : public IInspectorTargetSetter {
+class ImGuiInspector
+    : public FileOperator
+    , public IInspector
+{
 public:
     ImGuiInspector();
     ~ImGuiInspector();
     virtual void setTarget(const std::shared_ptr<GameObject>& target) override;
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+    virtual float getInspectorPositionX() const override;
+
     void drawInspect() const;
 
 private:
     ImGuiInspector(const ImGuiInspector&) = delete;
     ImGuiInspector& operator=(const ImGuiInspector&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
     void drawName(const GameObject& target) const;
     void drawTag(const GameObject& target) const;

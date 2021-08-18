@@ -1,7 +1,9 @@
 ﻿#include "Intersect.h"
 #include "AABB.h"
+#include "BoxHelper.h"
 #include "Circle.h"
 #include "IntersectHelper.h"
+#include "OBB.h"
 #include "Ray.h"
 #include "RaycastHit.h"
 #include "Sphere.h"
@@ -39,6 +41,167 @@ bool Intersect::intersectAABB(const AABB& a, const AABB& b) {
         );
     //いずれにも当てはまらなければ衝突している
     return !no;
+}
+
+//cpp only
+//分離軸に投影された軸成分から投影線分長を算出
+float lengthSegmentOnSeparateAxis(const Vector3& sep, const Vector3& e1, const Vector3& e2, const Vector3* e3 = nullptr) {
+    //3つの内積の絶対値の和で投影線分長を計算
+    //分離軸sepは標準化されていること
+    float r1 = Math::abs(Vector3::dot(sep, e1));
+    float r2 = Math::abs(Vector3::dot(sep, e2));
+    float r3 = e3 ? (Math::abs(Vector3::dot(sep, *e3))) : 0.f;
+    return r1 + r2 + r3;
+}
+
+bool Intersect::intersectOBB(const OBB& a, const OBB& b) {
+    //各方向ベクトル
+    auto NAe1 = Vector3::transform(Vector3::right, a.rotation);
+    auto Ae1 = NAe1 * a.extents.x;
+    auto NAe2 = Vector3::transform(Vector3::up, a.rotation);
+    auto Ae2 = NAe2 * a.extents.y;
+    auto NAe3 = Vector3::transform(Vector3::forward, a.rotation);
+    auto Ae3 = NAe3 * a.extents.z;
+    auto NBe1 = Vector3::transform(Vector3::right, b.rotation);
+    auto Be1 = NBe1 * b.extents.x;
+    auto NBe2 = Vector3::transform(Vector3::up, b.rotation);
+    auto Be2 = NBe2 * b.extents.y;
+    auto NBe3 = Vector3::transform(Vector3::forward, b.rotation);
+    auto Be3 = NBe3 * b.extents.z;
+    //OBB間の距離
+    auto interval = a.center - b.center;
+
+    //分離軸 : Ae1
+    float rA = Ae1.length();
+    float rB = lengthSegmentOnSeparateAxis(NAe1, Be1, Be2, &Be3);
+    float L = Math::abs(Vector3::dot(interval, NAe1));
+    if (L > rA + rB) {
+        return false; // 衝突していない
+    }
+
+     //分離軸 : Ae2
+    rA = Ae2.length();
+    rB = lengthSegmentOnSeparateAxis(NAe2, Be1, Be2, &Be3);
+    L = Math::abs(Vector3::dot(interval, NAe2));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : Ae3
+    rA = Ae3.length();
+    rB = lengthSegmentOnSeparateAxis(NAe3, Be1, Be2, &Be3);
+    L = Math::abs(Vector3::dot(interval, NAe3));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : Be1
+    rA = lengthSegmentOnSeparateAxis(NBe1, Ae1, Ae2, &Ae3);
+    rB = Be1.length();
+    L = Math::abs(Vector3::dot(interval, NBe1));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : Be2
+    rA = lengthSegmentOnSeparateAxis(NBe2, Ae1, Ae2, &Ae3);
+    rB = Be2.length();
+    L = Math::abs(Vector3::dot(interval, NBe2));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : Be3
+    rA = lengthSegmentOnSeparateAxis(NBe3, Ae1, Ae2, &Ae3);
+    rB = Be3.length();
+    L = Math::abs(Vector3::dot(interval, NBe3));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C11
+    auto cross = Vector3::cross(NAe1, NBe1);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae2, Ae3);
+    rB = lengthSegmentOnSeparateAxis(cross, Be2, Be3);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C12
+    cross = Vector3::cross(NAe1, NBe2);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae2, Ae3);
+    rB = lengthSegmentOnSeparateAxis(cross, Be1, Be3);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C13
+    cross = Vector3::cross(NAe1, NBe3);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae2, Ae3);
+    rB = lengthSegmentOnSeparateAxis(cross, Be1, Be2);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C21
+    cross = Vector3::cross(NAe2, NBe1);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae1, Ae3);
+    rB = lengthSegmentOnSeparateAxis(cross, Be2, Be3);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C22
+    cross = Vector3::cross(NAe2, NBe2);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae1, Ae3);
+    rB = lengthSegmentOnSeparateAxis(cross, Be1, Be3);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C23
+    cross = Vector3::cross(NAe2, NBe3);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae1, Ae3);
+    rB = lengthSegmentOnSeparateAxis(cross, Be1, Be2);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C31
+    cross = Vector3::cross(NAe3, NBe1);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae1, Ae2);
+    rB = lengthSegmentOnSeparateAxis(cross, Be2, Be3);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C32
+    cross = Vector3::cross(NAe3, NBe2);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae1, Ae2);
+    rB = lengthSegmentOnSeparateAxis(cross, Be1, Be3);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離軸 : C33
+    cross = Vector3::cross(NAe3, NBe3);
+    rA = lengthSegmentOnSeparateAxis(cross, Ae1, Ae2);
+    rB = lengthSegmentOnSeparateAxis(cross, Be1, Be2);
+    L = Math::abs(Vector3::dot(interval, cross));
+    if (L > rA + rB) {
+        return false;
+    }
+
+    //分離平面が存在しないから衝突している
+    return true;
 }
 
 bool Intersect::intersectRayPlane(const Ray& ray, const Plane& p, Vector3* intersectPoint) {
@@ -102,7 +265,7 @@ bool Intersect::intersectRayPolygon(const Ray& ray, const Triangle& polygon, Vec
     return intersectRayPolygon(ray, polygon.p0, polygon.p1, polygon.p2, intersectPoint);
 }
 
-bool Intersect::intersectRaySphere(const Ray& ray, const Sphere& sphere, Vector3& intersectPoint) {
+bool Intersect::intersectRaySphere(const Ray& ray, const Sphere& sphere, Vector3* intersectPoint) {
     //方程式のX, Y, a, b, cを計算
     Vector3 X = ray.start - sphere.center;
     Vector3 Y = ray.end - ray.start;
@@ -121,10 +284,14 @@ bool Intersect::intersectRaySphere(const Ray& ray, const Sphere& sphere, Vector3
     float tMax = (-b + disc) / (2.f * a);
     //tが線分の領域にあるのかチェック
     if (tMin >= 0.f && tMin <= 1.f) {
-        intersectPoint = ray.pointOnSegment(tMin);
+        if (intersectPoint) {
+            *intersectPoint = ray.pointOnSegment(tMin);
+        }
         return true;
     } else if (tMax >= 0.f && tMax <= 1.f) {
-        intersectPoint = ray.pointOnSegment(tMax);
+        if (intersectPoint) {
+            *intersectPoint = ray.pointOnSegment(tMax);
+        }
         return true;
     }
 
@@ -168,12 +335,11 @@ bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& inte
     testSidePlane(ray.start.z, ray.end.z, aabb.max.z, tValues);
 
     //t値を昇順で並べ替える
-    std::sort(tValues.begin(), tValues.end(), [](
-        float a,
-        float b
-        ) {
-            return a < b;
-        });
+    std::sort(
+        tValues.begin(),
+        tValues.end(),
+        [&](float a, float b) { return a < b; }
+    );
 
     //ボックスに交点が含まれているか調べる
     for (const auto& t : tValues) {
@@ -185,6 +351,59 @@ bool Intersect::intersectRayAABB(const Ray& ray, const AABB& aabb, Vector3& inte
     }
 
     //衝突していない
+    return false;
+}
+
+bool Intersect::intersectRayOBB(const Ray& ray, const OBB& obb) {
+    auto points = BoxHelper::getPoints(obb);
+
+    const auto& ftr = points[BoxConstantGroup::BOX_BACK_TOP_RIGHT];
+    const auto& fbr = points[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT];
+    const auto& ftl = points[BoxConstantGroup::BOX_BACK_TOP_LEFT];
+    const auto& fbl = points[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT];
+    const auto& btr = points[BoxConstantGroup::BOX_FORE_TOP_RIGHT];
+    const auto& bbr = points[BoxConstantGroup::BOX_FORE_BOTTOM_RIGHT];
+    const auto& btl = points[BoxConstantGroup::BOX_FORE_TOP_LEFT];
+    const auto& bbl = points[BoxConstantGroup::BOX_FORE_BOTTOM_LEFT];
+
+    //各面からポリゴンの衝突判定を行う
+    //上面
+    if (intersectRayPolygon(ray, ftr, ftl, btr)) {
+        return true;
+    } else if (intersectRayPolygon(ray, ftl, btr, btl)) {
+        return true;
+    }
+    //下面
+    if (intersectRayPolygon(ray, fbr, fbl, bbr)) {
+        return true;
+    } else if (intersectRayPolygon(ray, fbl, bbr, bbl)) {
+        return true;
+    }
+    //前面
+    if (intersectRayPolygon(ray, btr, btl, bbr)) {
+        return true;
+    } else if (intersectRayPolygon(ray, btl, bbr, bbl)) {
+        return true;
+    }
+    //奥面
+    if (intersectRayPolygon(ray, ftr, ftl, fbr)) {
+        return true;
+    } else if (intersectRayPolygon(ray, ftl, fbr, fbl)) {
+        return true;
+    }
+    //右面
+    if (intersectRayPolygon(ray, ftr, btr, fbr)) {
+        return true;
+    } else if (intersectRayPolygon(ray, btr, fbr, bbr)) {
+        return true;
+    }
+    //左面
+    if (intersectRayPolygon(ray, ftl, btl, bbl)) {
+        return true;
+    } else if (intersectRayPolygon(ray, btl, bbl, fbl)) {
+        return true;
+    }
+
     return false;
 }
 

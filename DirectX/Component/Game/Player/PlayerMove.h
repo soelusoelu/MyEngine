@@ -1,28 +1,33 @@
 ﻿#pragma once
 
+#include "IMoveDirectionGetter.h"
+#include "IPlayerMove.h"
 #include "../../Component.h"
-#include "../../../Input/Input.h"
+#include "../../../Device/Function.h"
 #include "../../../Math/Math.h"
+#include <functional>
 #include <memory>
 
 class Camera;
 class SkinMeshComponent;
-class Time;
+class PlayerWalk;
+class PlayerDash;
+class BulletShooter;
 
 class PlayerMove
     : public Component
+    , public IPlayerMove
+    , public IMoveDirectionGetter
 {
-    enum class State {
-        IDOL,
-        WALK,
-        DASH
-    };
-
 public:
     PlayerMove();
     ~PlayerMove();
+    //Component
     virtual void start() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+
+    //IMoveDirectionGetter
+    virtual const Vector3& getMoveDirectionInputedLast() const override;
+
     void originalUpdate();
     //動いているか
     bool isMoving() const;
@@ -30,26 +35,31 @@ public:
     bool isWalking() const;
     //走っているか
     bool isDashing() const;
+    //移動停止した際のコールバック
+    void callbackToStop(const std::function<void()>& callback);
 
 private:
     PlayerMove(const PlayerMove&) = delete;
     PlayerMove& operator=(const PlayerMove&) = delete;
 
-    void walk(const Vector2& leftStickValue);
-    void dash(const JoyPad& pad, const Vector2& leftStickValue);
-    void move(float moveSpeed, const Vector2& leftStickValue);
+    //IPlayerMove
+    virtual void move(float moveSpeed) override;
+    virtual void rotateToMoveDirection() override;
+
+    //移動方向を求める
+    void calcMoveDirection(const Vector2& leftStickValue);
+    //移動停止処理
     void stop();
+    //動ける状態か
     bool canMove(const Vector2& leftStickValue) const;
-    bool canDash(const JoyPad& pad);
-    void onChangeMotion();
 
 private:
     std::shared_ptr<Camera> mCamera;
     std::shared_ptr<SkinMeshComponent> mAnimation;
-    std::unique_ptr<Time> mDashMigrationTimer;
-    float mWalkSpeed;
-    float mDashSpeed;
-    bool mIsWalking;
-    bool mIsDashing;
-    static constexpr JoyCode DASH_BUTTON = JoyCode::B;
+    std::shared_ptr<PlayerWalk> mWalk;
+    std::shared_ptr<PlayerDash> mDash;
+    std::shared_ptr<BulletShooter> mShooter;
+    Function<void()> mCallbackToStop;
+    //最後に入力された移動方向
+    Vector3 mMoveDirectionInputedLast;
 };

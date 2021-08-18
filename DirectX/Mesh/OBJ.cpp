@@ -12,6 +12,7 @@ OBJ::~OBJ() = default;
 void OBJ::parse(
     const std::string& filePath,
     std::vector<MeshVertices>& meshesVertices,
+    std::vector<MeshVerticesPosition>&meshesVerticesPosition,
     std::vector<Indices>& meshesIndices,
     std::vector<Material>& materials,
     std::vector<Motion> & motions,
@@ -29,6 +30,7 @@ void OBJ::parse(
 
     //現状1つ
     meshesVertices.resize(1);
+    meshesVerticesPosition.resize(1);
     meshesIndices.resize(1);
     materials.resize(1);
 
@@ -57,7 +59,7 @@ void OBJ::parse(
         } else if (key == "vn") { //先頭文字列がvnなら法線
             loadNormal(lineStream);
         } else if (key == "f") { //先頭文字列がfならポリゴン
-            loadFace(meshesVertices.back(), meshesIndices.back(), lineStream);
+            loadFace(meshesVertices.back(), meshesVerticesPosition.back(), meshesIndices.back(), lineStream);
         } else if (key == "mtllib") {
             loadMaterial(materials.back(), lineStream, directoryPath);
         }
@@ -97,6 +99,7 @@ void OBJ::loadUV(std::istringstream& iss) {
 
 void OBJ::loadFace(
     MeshVertices& meshVertices,
+    MeshVerticesPosition& meshVerticesPosition,
     Indices& indices,
     std::istringstream& iss
 ) {
@@ -134,6 +137,7 @@ void OBJ::loadFace(
 
         //頂点データを登録
         meshVertices.emplace_back(vertex);
+        meshVerticesPosition.emplace_back(vertex.pos);
 
         //頂点インデックスに追加
         indices.emplace_back(indices.size());
@@ -225,7 +229,7 @@ void OBJ::loadTexture(Material& material, std::istringstream& iss, const std::st
     std::string textureName;
     iss >> textureName;
     //テクスチャ読み込み
-    material.texture = AssetsManager::instance().createTexture(textureName, directoryPath);
+    material.textureID = AssetsManager::instance().createTexture(textureName, directoryPath);
 }
 
 bool OBJ::isSkip(const std::string& line) {

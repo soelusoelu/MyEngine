@@ -1,0 +1,38 @@
+{
+  "tag": "Weapon",
+  "transform": {
+    "position": [
+      3.1600000858306886,
+      5.510000228881836,
+      0.14000000059604646
+    ],
+    "rotation": [
+      21.094985961914064,
+      88.0978012084961,
+      56.5989990234375
+    ],
+    "scale": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "components": [
+    {
+      "type": "MeshComponent",
+      "properties": {
+        "fileName": "Player\\sword.fbx"
+      }
+    },
+    {
+      "type": "AABBCollider",
+      "properties": {}
+    },
+    {
+      "type": "WeaponDamage",
+      "properties": {
+        "damage": 30
+      }
+    }
+  ]
+}

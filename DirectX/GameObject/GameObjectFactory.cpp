@@ -13,18 +13,19 @@
 #include "../Component/Engine/Collider/AABBAnimationCollider.h"
 #include "../Component/Engine/Collider/CircleCollider.h"
 #include "../Component/Engine/Collider/OBBAnimationCollider.h"
+#include "../Component/Engine/Collider/OBBCollider.h"
 #include "../Component/Engine/Collider/SphereCollider.h"
 #include "../Component/Engine/Light/DirectionalLight.h"
 #include "../Component/Engine/Light/PointLightComponent.h"
 #include "../Component/Engine/Mesh/AnimationCPU.h"
 #include "../Component/Engine/Mesh/MeshComponent.h"
-#include "../Component/Engine/Mesh/MeshMaterial.h"
 #include "../Component/Engine/Mesh/MeshOutLine.h"
 #include "../Component/Engine/Mesh/MeshRenderer.h"
 #include "../Component/Engine/Mesh/MeshShader.h"
 #include "../Component/Engine/Mesh/SkinMeshComponent.h"
 #include "../Component/Engine/Other/GameObjectSaveAndLoader.h"
 #include "../Component/Engine/Other/SaveThis.h"
+#include "../Component/Engine/Other/SimpleMotionChanger.h"
 #include "../Component/Engine/Sample/RayMouse.h"
 #include "../Component/Engine/Sample/WaveformRenderSample.h"
 #include "../Component/Engine/Scene/MapEditor.h"
@@ -38,15 +39,37 @@
 #include "../Component/Engine/Text/TextFloat.h"
 #include "../Component/Engine/Text/TextNumber.h"
 #include "../Component/Game/Camera/GameCamera.h"
+#include "../Component/Game/Camera/LockOn.h"
+#include "../Component/Game/Camera/TPSCamera.h"
+#include "../Component/Game/Enemy/EnemyAI.h"
+#include "../Component/Game/Enemy/EnemyMove.h"
+#include "../Component/Game/Enemy/Octopus.h"
+#include "../Component/Game/Enemy/OctopusFoot.h"
+#include "../Component/Game/Enemy/OctopusFootAttack.h"
+#include "../Component/Game/Enemy/OctopusFootCommonSetting.h"
+#include "../Component/Game/Enemy/OctopusFootManager.h"
+#include "../Component/Game/Enemy/OctopusHead.h"
+#include "../Component/Game/Player/BulletShooter.h"
 #include "../Component/Game/Player/PlayerAnimationController.h"
-#include "../Component/Game/Player/PlayerAttack.h"
 #include "../Component/Game/Player/PlayerColliderController.h"
-#include "../Component/Game/Player/PlayerGuard.h"
+#include "../Component/Game/Player/PlayerDash.h"
 #include "../Component/Game/Player/PlayerMove.h"
-#include "../Component/Game/Player/PlayerRoll.h"
+#include "../Component/Game/Player/PlayerWalk.h"
+#include "../Component/Game/Player/PlayerWeapon.h"
+#include "../Component/Game/Player/Stamina.h"
+#include "../Component/Game/PlayerEnemyCommon/HitPoint.h"
+#include "../Component/Game/PlayerEnemyCommon/PlayerEnemyConnection.h"
 #include "../Component/Game/Scene/Title.h"
+#include "../Component/Game/UI/BossEnemyHitPointGauge.h"
+#include "../Component/Game/UI/BossEnemyUIManager.h"
+#include "../Component/Game/UI/PlayerHitPointGauge.h"
+#include "../Component/Game/UI/PlayerUIManager.h"
+#include "../Component/Game/UI/StaminaGauge.h"
+#include "../Component/Game/Weapon/CrossHair.h"
+#include "../Component/Game/Weapon/WeaponDamage.h"
 #include "../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../System/GlobalFunction.h"
+#include "../Utility/JsonHelper.h"
 #include "../Utility/LevelLoader.h"
 #include <cassert>
 
@@ -71,6 +94,7 @@ GameObjectFactory::GameObjectFactory() {
     ADD_COMPONENT(AABBAnimationCollider);
     ADD_COMPONENT(CircleCollider);
     ADD_COMPONENT(OBBAnimationCollider);
+    ADD_COMPONENT(OBBCollider);
     ADD_COMPONENT(SphereCollider);
 
     ADD_COMPONENT(DirectionalLight);
@@ -78,7 +102,6 @@ GameObjectFactory::GameObjectFactory() {
 
     ADD_COMPONENT(AnimationCPU);
     ADD_COMPONENT(MeshComponent);
-    ADD_COMPONENT(MeshMaterial);
     ADD_COMPONENT(MeshOutLine);
     ADD_COMPONENT(MeshRenderer);
     ADD_COMPONENT(MeshShader);
@@ -86,6 +109,7 @@ GameObjectFactory::GameObjectFactory() {
 
     ADD_COMPONENT(GameObjectSaveAndLoader);
     ADD_COMPONENT(SaveThis);
+    ADD_COMPONENT(SimpleMotionChanger);
 
     ADD_COMPONENT(RayMouse);
     ADD_COMPONENT(WaveformRenderSample);
@@ -107,15 +131,40 @@ GameObjectFactory::GameObjectFactory() {
 
 #pragma region Game
     ADD_COMPONENT(GameCamera);
+    ADD_COMPONENT(LockOn);
+    ADD_COMPONENT(TPSCamera);
 
+    ADD_COMPONENT(EnemyAI);
+    ADD_COMPONENT(EnemyMove);
+    ADD_COMPONENT(Octopus);
+    ADD_COMPONENT(OctopusFoot);
+    ADD_COMPONENT(OctopusFootAttack);
+    ADD_COMPONENT(OctopusFootCommonSetting);
+    ADD_COMPONENT(OctopusFootManager);
+    ADD_COMPONENT(OctopusHead);
+
+    ADD_COMPONENT(BulletShooter);
     ADD_COMPONENT(PlayerAnimationController);
-    ADD_COMPONENT(PlayerAttack);
     ADD_COMPONENT(PlayerColliderController);
-    ADD_COMPONENT(PlayerGuard);
+    ADD_COMPONENT(PlayerDash);
     ADD_COMPONENT(PlayerMove);
-    ADD_COMPONENT(PlayerRoll);
+    ADD_COMPONENT(PlayerWalk);
+    ADD_COMPONENT(PlayerWeapon);
+    ADD_COMPONENT(Stamina);
+
+    ADD_COMPONENT(HitPoint);
+    ADD_COMPONENT(PlayerEnemyConnection);
 
     ADD_COMPONENT(Title);
+
+    ADD_COMPONENT(BossEnemyHitPointGauge);
+    ADD_COMPONENT(BossEnemyUIManager);
+    ADD_COMPONENT(PlayerHitPointGauge);
+    ADD_COMPONENT(PlayerUIManager);
+    ADD_COMPONENT(StaminaGauge);
+
+    ADD_COMPONENT(CrossHair);
+    ADD_COMPONENT(WeaponDamage);
 #pragma endregion
 }
 
@@ -134,7 +183,7 @@ std::shared_ptr<GameObject> GameObjectFactory::createGameObjectFromFile(const st
     return createGameObject(document, type, directoryPath);
 }
 
-std::shared_ptr<GameObject> GameObjectFactory::createGameObject(const rapidjson::Document& inDocument, const std::string& type, const std::string& directoryPath) {
+std::shared_ptr<GameObject> GameObjectFactory::createGameObject(rapidjson::Document& inDocument, const std::string& type, const std::string& directoryPath) {
     //タグを読み込む
     const auto& tag = loadTag(inDocument);
     //ゲームオブジェクトを生成
@@ -157,14 +206,14 @@ std::string GameObjectFactory::loadTag(const rapidjson::Document& inDocument) {
     //初期タグをNoneにする
     std::string tag = "None";
     //タグ属性があれば読み込む
-    JsonHelper::getString(inDocument, "tag", &tag);
+    JsonHelper::getString(tag, "tag", inDocument);
 
     return tag;
 }
 
-void GameObjectFactory::loadGameObjectProperties(GameObject& gameObject, const rapidjson::Document& inDocument) {
+void GameObjectFactory::loadGameObjectProperties(GameObject& gameObject,  rapidjson::Document& inDocument) {
     if (inDocument.HasMember("transform")) {
-        gameObject.loadProperties(inDocument["transform"]);
+        gameObject.saveAndLoad(inDocument["transform"], inDocument.GetAllocator(), FileMode::LOAD);
     }
 }
 
@@ -176,7 +225,7 @@ void GameObjectFactory::loadPrototypeComponents(GameObject& gameObject, const ra
 
     //継承コンポーネントのファイル名を取得する
     std::string prototype;
-    JsonHelper::getString(inDocument, "prototype", &prototype);
+    JsonHelper::getString(prototype, "prototype", inDocument);
 
     rapidjson::Document document;
     const auto& fileName = prototype + ".json";
@@ -189,25 +238,26 @@ void GameObjectFactory::loadPrototypeComponents(GameObject& gameObject, const ra
     loadComponents(gameObject, document);
 }
 
-void GameObjectFactory::loadComponents(GameObject& gameObject, const rapidjson::Document& inDocument) const {
+void GameObjectFactory::loadComponents(GameObject& gameObject, rapidjson::Document& inDocument) const {
     //ファイルにcomponentsメンバがなければ終了
     if (!inDocument.HasMember("components")) {
         return;
     }
 
-    const auto& components = inDocument["components"];
+    auto& components = inDocument["components"];
     //componentsメンバが配列じゃなければなければ終了
     if (!components.IsArray()) {
         return;
     }
 
+    rapidjson::Document::AllocatorType& alloc = inDocument.GetAllocator();
     for (rapidjson::SizeType i = 0; i < components.Size(); ++i) {
         //各コンポーネントを読み込んでいく
-        loadComponent(gameObject, components[i]);
+        loadComponent(gameObject, components[i], alloc);
     }
 }
 
-void GameObjectFactory::loadComponent(GameObject& gameObject, const rapidjson::Value& component) const {
+void GameObjectFactory::loadComponent(GameObject& gameObject, rapidjson::Value& component, rapidjson::Document::AllocatorType& alloc) const {
     //有効なオブジェクトか
     if (!component.IsObject()) {
         return;
@@ -229,11 +279,11 @@ void GameObjectFactory::loadComponent(GameObject& gameObject, const rapidjson::V
     }
 
     //新規コンポーネントを生成
-    itr->second(gameObject, type, component["properties"]);
+    itr->second(gameObject, type, component["properties"], alloc);
 }
 
 bool GameObjectFactory::isValidType(std::string& outType, const rapidjson::Value& inObj) const {
-    return (JsonHelper::getString(inObj, "type", &outType));
+    return (JsonHelper::getString(outType, "type", inObj));
 }
 
 
@@ -246,6 +296,6 @@ void GameObjectCreater::finalize() {
     safeDelete(mFactory);
 }
 
-std::shared_ptr<GameObject> GameObjectCreater::create(const std::string& type) {
-    return mFactory->createGameObjectFromFile(type);
+std::shared_ptr<GameObject> GameObjectCreater::create(const std::string& type, const std::string& directoryPath) {
+    return mFactory->createGameObjectFromFile(type, directoryPath);
 }

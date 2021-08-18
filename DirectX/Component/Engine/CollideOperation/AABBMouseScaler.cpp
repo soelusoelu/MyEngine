@@ -9,7 +9,7 @@
 #include "../../../Imgui/imgui.h"
 #include "../../../Input/Input.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 AABBMouseScaler::AABBMouseScaler()
     : Component()
@@ -57,14 +57,9 @@ void AABBMouseScaler::update() {
     }
 }
 
-void AABBMouseScaler::loadProperties(const rapidjson::Value & inObj) {
-    JsonHelper::getFloat(inObj, "editPointRadius", &mEditPointRadius);
-    JsonHelper::getFloat(inObj, "collisionExpantionAmount", &mCollisionExpantionAmount);
-}
-
-void AABBMouseScaler::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setFloat(alloc, inObj, "editPointRadius", mEditPointRadius);
-    JsonHelper::setFloat(alloc, inObj, "collisionExpantionAmount", mCollisionExpantionAmount);
+void AABBMouseScaler::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mEditPointRadius, "editPointRadius", inObj, alloc, mode);
+    JsonHelper::getSet(mCollisionExpantionAmount, "collisionExpantionAmount", inObj, alloc, mode);
 }
 
 void AABBMouseScaler::drawInspector() {
@@ -90,9 +85,8 @@ void AABBMouseScaler::selectBoxPoint() {
 
     //すべての面の中心位置を球に見立ててレイと球の当たり判定を行う
     Ray cameraToMousePos = mCamera->screenToRay(Input::mouse().getMousePosition());
-    Vector3 intersectPoint;
     for (const auto& surface : surfaces) {
-        if (Intersect::intersectRaySphere(cameraToMousePos, { surface.first, mEditPointRadius }, intersectPoint)) {
+        if (Intersect::intersectRaySphere(cameraToMousePos, { surface.first, mEditPointRadius })) {
             mSelectSurface = surface;
             mSelectedEditPoint = true;
             return;
@@ -105,7 +99,7 @@ void AABBMouseScaler::calculateNewBoxPoint() {
     const auto& surfaceNormal = mSelectSurface.second;
 
     //マウスの移動量を3次元に換算する
-    const auto& mouseMoveAmount = Input::mouse().getMouseMoveAmount();
+    const auto& mouseMoveAmount = Input::mouse().getMouseVelocity();
     auto dir = Vector3(
         mouseMoveAmount.x,
         -mouseMoveAmount.y,

@@ -8,6 +8,7 @@ FbxMeshParser::~FbxMeshParser() = default;
 //長いけど無駄にfor文を回さなくて済む
 void FbxMeshParser::parse(
     MeshVertices& meshVertices,
+    MeshVerticesPosition& meshVerticesPosition,
     Indices& indices,
     FbxMesh* fbxMesh
 ) const {
@@ -28,6 +29,7 @@ void FbxMeshParser::parse(
 
     //事前に拡張しとく
     meshVertices.resize(polygonVertexCount);
+    meshVerticesPosition.resize(polygonVertexCount);
 
     //メッシュごとのトランスフォームを計算
     FbxNode* node = fbxMesh->GetNode();
@@ -41,10 +43,10 @@ void FbxMeshParser::parse(
         MeshVertex vertex;
 
         int index = polygonVertices[i];
-        vertex.pos = FbxUtility::fbxVector4ToVector3(src[index], true);
+        vertex.pos = FbxUtility::fbxVector4ToVector3(src[index]);
         vertex.pos = Vector3::transform(vertex.pos, mat);
 
-        vertex.normal = FbxUtility::fbxVector4ToVector3(normalArray[i], true);
+        vertex.normal = FbxUtility::fbxVector4ToVector3(normalArray[i]);
         vertex.normal = Vector3::transform(vertex.normal, q);
 
         //UVは使用している場合のみ
@@ -55,16 +57,17 @@ void FbxMeshParser::parse(
 
         //頂点情報を格納
         meshVertices[i] = vertex;
+        meshVerticesPosition[i] = vertex.pos;
     }
 
     //indicesはポリゴン頂点数
     indices.resize(polygonVertexCount);
 
     for (int i = 0, polyCount = fbxMesh->GetPolygonCount(); i < polyCount; ++i) {
-        //fbxは右手系なので、DirectXの左手系に直すために2->1->0の順にインデックスを格納していく
-        indices[i * 3 + 0] = i * 3 + 2;
-        indices[i * 3 + 1] = i * 3 + 1;
-        indices[i * 3 + 2] = i * 3;
+        auto idx = i * 3;
+        indices[idx] = idx;
+        indices[idx + 1] = idx + 1;
+        indices[idx + 2] = idx + 2;
     }
 }
 

@@ -2,7 +2,7 @@
 #include "../Imgui/imgui.h"
 #include "../Imgui/imgui_impl_dx11.h"
 #include "../Imgui/imgui_impl_win32.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 #include "../Utility/StringUtil.h"
 
 Window* gWindow = nullptr;
@@ -13,10 +13,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 Window::Window()
-    : mhWnd(nullptr)
+    : FileOperator("Window")
+    , mhWnd(nullptr)
     , mWndClass()
     , mMouseWheelScrollValueSetter(nullptr)
-    , mTitle("")
+    , mTitle()
 {
 }
 
@@ -122,6 +123,10 @@ int Window::height() {
     return mGameHeight;
 }
 
+Vector2 Window::size() {
+    return Vector2(static_cast<float>(mGameWidth), static_cast<float>(mGameHeight));
+}
+
 int Window::standardWidth() {
     return mStandardWidth;
 }
@@ -149,19 +154,18 @@ Vector2 Window::getWindowCorrect() {
     );
 }
 
-void Window::loadProperties(const rapidjson::Value& inObj) {
-    const auto& windowObj = inObj["window"];
-    if (windowObj.IsObject()) {
-        JsonHelper::getString(windowObj, "title", &mTitle);
-        JsonHelper::getInt(windowObj, "windowWidth", &mWidth);
-        JsonHelper::getInt(windowObj, "windowHeight", &mHeight);
-        JsonHelper::getInt(windowObj, "releaseWindowWidth", &mReleaseWidth);
-        JsonHelper::getInt(windowObj, "releaseWindowHeight", &mReleaseHeight);
-        JsonHelper::getInt(windowObj, "windowStandardWidth", &mStandardWidth);
-        JsonHelper::getInt(windowObj, "windowStandardHeight", &mStandardHeight);
-        JsonHelper::getInt(windowObj, "windowDebugWidth", &mDebugWidth);
-        JsonHelper::getInt(windowObj, "windowDebugHeight", &mDebugHeight);
+void Window::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mTitle, "title", inObj, alloc, mode);
+    JsonHelper::getSet(mWidth, "windowWidth", inObj, alloc, mode);
+    JsonHelper::getSet(mHeight, "windowHeight", inObj, alloc, mode);
+    JsonHelper::getSet(mReleaseWidth, "releaseWindowWidth", inObj, alloc, mode);
+    JsonHelper::getSet(mReleaseHeight, "releaseWindowHeight", inObj, alloc, mode);
+    JsonHelper::getSet(mStandardWidth, "windowStandardWidth", inObj, alloc, mode);
+    JsonHelper::getSet(mStandardHeight, "windowStandardHeight", inObj, alloc, mode);
+    JsonHelper::getSet(mDebugWidth, "windowDebugWidth", inObj, alloc, mode);
+    JsonHelper::getSet(mDebugHeight, "windowDebugHeight", inObj, alloc, mode);
 
+    if (mode == FileMode::LOAD) {
 #ifdef _DEBUG
         mGameWidth = mWidth;
         mGameHeight = mHeight;
@@ -170,21 +174,6 @@ void Window::loadProperties(const rapidjson::Value& inObj) {
         mGameHeight = mReleaseHeight;
 #endif // _DEBUG
     }
-}
-
-void Window::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setString(alloc, &props, "title", mTitle);
-    JsonHelper::setInt(alloc, &props, "windowWidth", mWidth);
-    JsonHelper::setInt(alloc, &props, "windowHeight", mHeight);
-    JsonHelper::setInt(alloc, &props, "releaseWindowWidth", mReleaseWidth);
-    JsonHelper::setInt(alloc, &props, "releaseWindowHeight", mReleaseHeight);
-    JsonHelper::setInt(alloc, &props, "windowStandardWidth", mStandardWidth);
-    JsonHelper::setInt(alloc, &props, "windowStandardHeight", mStandardHeight);
-    JsonHelper::setInt(alloc, &props, "windowDebugWidth", mDebugWidth);
-    JsonHelper::setInt(alloc, &props, "windowDebugHeight", mDebugHeight);
-
-    inObj.AddMember("window", props, alloc);
 }
 
 void Window::updateWindowToClientSize() {

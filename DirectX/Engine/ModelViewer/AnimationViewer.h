@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IModelViewerCallback.h"
 #include <memory>
 
 class GameObject;
@@ -9,10 +10,10 @@ class AnimationViewer {
 public:
     AnimationViewer();
     ~AnimationViewer();
+    //初期化
+    void initialize(IModelViewerCallback* callback);
     //毎フレーム更新
     void update();
-    //モデル変更時
-    void onChangeModel(const GameObject& newModel);
     //姿勢をTポーズにする
     void setTPose();
 
@@ -22,6 +23,8 @@ private:
 
     //モーションを変更するか
     bool isChangeMotion(int& nextMotionNumber) const;
+    //モデル変更時
+    void onChangeModel(const GameObject& newModel);
 
 private:
     std::shared_ptr<SkinMeshComponent> mAnimation;

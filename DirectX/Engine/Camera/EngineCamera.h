@@ -26,11 +26,11 @@ private:
     EngineCamera& operator=(const EngineCamera&) = delete;
 
     //カメラを移動する
-    void moveCamera(const IMouse& mouse, const Vector2& mouseMoveAmount);
+    void moveCamera(const IMouse& mouse, const Vector2& mouseVelocity);
     //注視点を中心にカメラを回転する
-    void rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseMoveAmount);
+    void rotateLookAtPoint(const IMouse& mouse, const Vector2& mouseVelocity);
     //マウスの移動量から回転軸を計算する
-    void computeRotation(const Vector2& mouseMoveAmount);
+    void computeRotation(const Vector2& mouseVelocity);
     //ズームイン、ズームアウトをする
     void zoomCamera(const IMouse& mouse);
     //ズームイン
@@ -44,11 +44,11 @@ private:
     void computeLengthCameraToLookAt();
 
     //カメラを移動できる状態か
-    bool canMove(const IMouse& mouse, const Vector2& mouseMoveAmount) const;
+    bool canMove(const IMouse& mouse, const Vector2& mouseVelocity) const;
     //カメラを回転できる状態か
-    bool canRotate(const IMouse& mouse, const Vector2& mouseMoveAmount) const;
+    bool canRotate(const IMouse& mouse, const Vector2& mouseVelocity) const;
     //マウスが移動したか
-    bool isMoveMousePosition(const Vector2& mouseMoveAmount) const;
+    bool isMoveMousePosition(const Vector2& mouseVelocity) const;
 
 private:
     std::unique_ptr<SimpleCamera> mCamera;

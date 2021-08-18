@@ -16,5 +16,7 @@ public:
     //絶対パスからAssetsフォルダ部分を抜き出す
     static std::string getAssetsFromAbsolutePath(const std::string& absolutePath);
     //ファイルダイアログを開く
-    static bool openFileDialog(std::string& outFilePath, std::string& outFileName);
+    static bool openFileDialog(std::string& outFilePath, std::string& outFilename);
+    //ファイルを保存する
+    static bool saveFileDialog(std::string& outFilePath, std::string& outFilename);
 };

@@ -1,10 +1,7 @@
 ﻿#pragma once
 
 #include "../Math/Math.h"
-#include <memory>
 #include <string>
-
-class Texture;
 
 struct Material {
     Vector3 ambient; //アンビエント
@@ -15,8 +12,10 @@ struct Material {
     float transparency; //透明値
     float shininess;
     std::string materialName; //マテリアル名
-    std::shared_ptr<Texture> texture;
-    std::shared_ptr<Texture> normalMapTexture;
+    int textureID;
+    int normalMapTextureID;
+
+    static constexpr int INVALID_ID = -1;
 
     Material() :
         ambient(Vector3::zero),
@@ -27,7 +26,7 @@ struct Material {
         transparency(1.f),
         shininess(1.f),
         materialName(),
-        texture(nullptr),
-        normalMapTexture(nullptr) {
+        textureID(INVALID_ID),
+        normalMapTextureID(INVALID_ID) {
     }
 };

@@ -12,7 +12,9 @@
 
 class Mesh;
 
-class MeshComponent : public Component {
+class MeshComponent
+    : public Component
+{
 public:
     MeshComponent();
     virtual ~MeshComponent();
@@ -20,8 +22,7 @@ public:
     virtual void start() override;
     virtual void finalize() override;
     virtual void onEnable(bool value) override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     //メッシュを作成する

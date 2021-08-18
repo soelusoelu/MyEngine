@@ -3,6 +3,7 @@
 #include "../../../Math/Math.h"
 
 struct Sphere;
+struct Ray;
 
 class CameraHelper {
 private:
@@ -10,6 +11,25 @@ private:
     ~CameraHelper() = delete;
 
 public:
+    //スクリーン座標をワールド座標に変換する
+    //zが0のときカメラから最も近い点、1のとき最も遠い点を計算する z[0, 1]
+    static Vector3 screenToWorldPoint(
+        const Vector2& position,
+        const Matrix4& view,
+        const Matrix4& projection,
+        float z = 1.f
+    );
+
+    //カメラ位置からスクリーン座標からワールド座標に変換した点へのレイを取得する
+    //zが0のときカメラから最も近い点、1のとき最も遠い点を計算する z[0, 1]
+    static Ray screenToRay(
+        const Vector3& start,
+        const Vector2& end,
+        const Matrix4& view,
+        const Matrix4& projection,
+        float z = 1.f
+    );
+
     //スフィアがカメラに収まるビュー行列を作成する
     static Matrix4 getViewMatrixTakingSphereInCamera(
         const Sphere& sphere,

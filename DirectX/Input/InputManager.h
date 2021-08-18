@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../System/SystemInclude.h"
+#include "../Utility/FileMode.h"
 #include <rapidjson/document.h>
 #include <dinput.h>
 #pragma comment(lib,"dxguid.lib")
@@ -20,8 +21,7 @@ public:
     //各種入力クラス初期化
     static bool initialize(const HWND& hWnd);
     //ファイルから読み取り
-    static void loadProperties(const rapidjson::Value& inObj);
-    static void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
+    static void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode);
     //終了処理
     static void finalize();
     //毎フレーム更新

@@ -1,18 +1,16 @@
 ﻿#include "SpriteButtonComponent.h"
 #include "../Sprite/SpriteComponent.h"
-#include "../../../Device/Subject.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Input/Input.h"
 #include "../../../Sprite/SpriteUtility.h"
 #include "../../../Transform/Transform2D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 #include <string>
 
 SpriteButtonComponent::SpriteButtonComponent()
     : Component()
     , mSprite(nullptr)
     , mSelectingSprite(nullptr)
-    , mCallbackClick(std::make_unique<Subject>())
     , mEnableFunction(true)
     , mPreviousContains(false)
     , mWaitOneFrame(true)
@@ -46,7 +44,7 @@ void SpriteButtonComponent::update() {
 
     //マウスの左ボタンを押していれば通知を送る
     if (contains && mouse.getMouseButtonDown(MouseCode::LeftButton)) {
-        mCallbackClick->notify();
+        mCallbackClick();
     }
 
     mPreviousContains = contains;
@@ -58,10 +56,16 @@ void SpriteButtonComponent::lateUpdate() {
     }
 }
 
-void SpriteButtonComponent::loadProperties(const rapidjson::Value& inObj) {
-    if (std::string fileName;  JsonHelper::getString(inObj, "selectingSpriteFileName", &fileName)) {
-        mSelectingSprite = addComponent<SpriteComponent>("SpriteComponent");
-        mSelectingSprite->setTextureFromFileName(fileName);
+void SpriteButtonComponent::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    if (mode == FileMode::SAVE) {
+        if (std::string filename;  JsonHelper::getString(filename, "selectingSpriteFilename", inObj)) {
+            mSelectingSprite = addComponent<SpriteComponent>("SpriteComponent");
+            mSelectingSprite->setTextureFromFileName(filename);
+        }
+    } else {
+        if (mSelectingSprite) {
+            JsonHelper::setString(mSelectingSprite->fileName(), "selectingSpriteFilename", inObj, alloc);
+        }
     }
 }
 
@@ -90,7 +94,7 @@ void SpriteButtonComponent::enableButtonFunction(bool value) {
 }
 
 void SpriteButtonComponent::callbackClick(const std::function<void()>& onClick) {
-    mCallbackClick->addObserver(onClick);
+    mCallbackClick += onClick;
 }
 
 bool SpriteButtonComponent::canAccessSprites() const {

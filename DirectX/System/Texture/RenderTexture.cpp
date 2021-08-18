@@ -62,7 +62,7 @@ void RenderTexture::createDepthDesc(Texture2DDesc& desc, int width, int height, 
     desc.width = width;
     desc.height = height;
     desc.format = textureFormat;
-    desc.usage = Usage::USAGE_DEFAULT;
+    desc.usage = Usage::DEFAULT;
     desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET)
         | static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);

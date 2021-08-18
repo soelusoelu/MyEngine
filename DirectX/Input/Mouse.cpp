@@ -11,7 +11,7 @@ Mouse::Mouse()
     , mhWnd(nullptr)
     , mCurrentMousePosition(Vector2::zero)
     , mPreviousMousePosition(Vector2::zero)
-    , mMouseMoveAmount(Vector2::zero)
+    , mMouseVelocity(Vector2::zero)
     , mScrollWheel(0)
 {
 }
@@ -36,8 +36,8 @@ const Vector2& Mouse::getMousePosition() const {
     return mCurrentMousePosition;
 }
 
-const Vector2& Mouse::getMouseMoveAmount() const {
-    return mMouseMoveAmount;
+const Vector2& Mouse::getMouseVelocity() const {
+    return mMouseVelocity;
 }
 
 int Mouse::getMouseScrollWheel() const {
@@ -81,7 +81,7 @@ void Mouse::update() {
     updateMousePosition();
     clampMousePosition();
 
-    mMouseMoveAmount = mCurrentMousePosition - mPreviousMousePosition;
+    mMouseVelocity = mCurrentMousePosition - mPreviousMousePosition;
 }
 
 void Mouse::lateUpdate() {

@@ -1,6 +1,6 @@
 ﻿#include "ComponentManager.h"
 #include "Component.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 
 ComponentManager::ComponentManager() = default;
 ComponentManager::~ComponentManager() = default;
@@ -15,13 +15,34 @@ void ComponentManager::start() {
 
 void ComponentManager::update() const {
     for (const auto& comp : mComponents) {
+        if (comp->isDead()) {
+            continue;
+        }
+
         comp->update();
+        comp->updateDestroyTimer();
     }
 }
 
 void ComponentManager::lateUpdate() const {
     for (const auto& comp : mComponents) {
+        if (comp->isDead()) {
+            continue;
+        }
+
         comp->lateUpdate();
+    }
+}
+
+void ComponentManager::destroy() {
+    auto itr = mComponents.begin();
+    while (itr != mComponents.end()) {
+        if ((*itr)->isDead()) {
+            (*itr)->finalize();
+            itr = mComponents.erase(itr);
+        } else {
+            ++itr;
+        }
     }
 }
 
@@ -65,25 +86,25 @@ const std::vector<std::shared_ptr<Component>>& ComponentManager::getAllComponent
     return mComponents;
 }
 
-void ComponentManager::saveComponents(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+void ComponentManager::saveComponents(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
     for (const auto& c : mComponents) {
         saveComponent(alloc, inObj, *c);
     }
 }
 
-void ComponentManager::saveComponent(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* outArray, const Component& component) const {
+void ComponentManager::saveComponent(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& outArray, Component& component) const {
     //Jsonオブジェクトを作成する
     rapidjson::Value obj(rapidjson::kObjectType);
     //コンポーネント名を保存
-    JsonHelper::setString(alloc, &obj, "type", component.getComponentName());
+    JsonHelper::setString(component.getComponentName(), "type", obj, alloc);
 
     //プロパティ用オブジェクトを作成
     rapidjson::Value props(rapidjson::kObjectType);
     //コンポーネントのプロパティを保存する
-    component.saveProperties(alloc, &props);
+    component.saveAndLoad(props, alloc, FileMode::SAVE);
     //Jsonオブジェクトに追加
     obj.AddMember("properties", props, alloc);
 
     //コンポーネント配列に追加
-    outArray->PushBack(obj, alloc);
+    outArray.PushBack(obj, alloc);
 }

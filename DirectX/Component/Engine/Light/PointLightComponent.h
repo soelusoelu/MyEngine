@@ -14,7 +14,7 @@ public:
     ~PointLightComponent();
     virtual void start() override;
     virtual void finalize() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     void draw(const Camera& camera, const PointLight& pointLight) const;

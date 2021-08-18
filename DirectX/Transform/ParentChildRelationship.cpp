@@ -1,10 +1,11 @@
 ﻿#include "ParentChildRelationship.h"
+#include "Transform3D.h"
 #include "../GameObject/GameObject.h"
-#include "../Transform/Transform3D.h"
 
 ParentChildRelationship::ParentChildRelationship(Transform3D* transform)
     : mTransform(transform)
     , mParent(nullptr)
+    , mEquipmentPart(nullptr)
 {
 }
 
@@ -20,6 +21,8 @@ void ParentChildRelationship::addChild(const Child& child) {
     mChildren.emplace_back(child);
     //子の親を自身に設定する
     child->transform().getParentChildRelation().setParent(this);
+
+    mCallbackBuildingParentChildRelationship();
 }
 
 void ParentChildRelationship::removeChild(const Child& child) {
@@ -50,10 +53,27 @@ size_t ParentChildRelationship::getChildCount() const {
     return mChildren.size();
 }
 
+void ParentChildRelationship::setEquipment(const Child& equipment, const Matrix4* equipmentPart) {
+    //装備を子に追加する
+    addChild(equipment);
+    //装備に装備部位を設定する
+    equipment->transform().getParentChildRelation().mEquipmentPart = equipmentPart;
+}
+
+const Matrix4* ParentChildRelationship::getEquipmentPart() const {
+    return mEquipmentPart;
+}
+
 Transform3D& ParentChildRelationship::transform() const {
     return *mTransform;
 }
 
+void ParentChildRelationship::callbackBuildingParentChildRelationship(const std::function<void()>& f) {
+    mCallbackBuildingParentChildRelationship += f;
+}
+
 void ParentChildRelationship::setParent(const Parent& parent) {
     mParent = parent;
+
+    mCallbackBuildingParentChildRelationship();
 }

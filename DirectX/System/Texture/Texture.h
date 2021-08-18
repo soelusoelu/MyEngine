@@ -2,7 +2,6 @@
 
 #include "../../Math/Math.h"
 #include <memory>
-#include <string>
 
 //頂点の構造体
 struct TextureVertex {
@@ -20,18 +19,15 @@ public:
     Texture();
     Texture(const std::shared_ptr<ShaderResourceView>& view, const Vector2& textureSize);
     virtual ~Texture();
-    //終了処理
-    static void finalize();
     //テクスチャサイズを返す
     const Vector2& getTextureSize() const;
-    //テクスチャの登録
-    void setVSTextures(unsigned start = 0, unsigned numTextures = 1) const;
-    void setPSTextures(unsigned start = 0, unsigned numTextures = 1) const;
-    //サンプラーの登録
-    void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
-    void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
-    //描画に必要な要素をすべて登録する
-    void setTextureInfo(unsigned start = 0, unsigned numSamplers = 1) const;
+    //シェーダーリソースビューを取得する
+    const ShaderResourceView& getShaderResourceView() const;
+    //サンプラーを取得する
+    const Sampler& getSampler() const;
+
+    //終了処理
+    static void finalize();
 
 private:
     Texture(const Texture&) = delete;

@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "../Device/Function.h"
+#include "../Math/Math.h"
+#include <functional>
 #include <list>
 #include <memory>
 
@@ -27,8 +30,14 @@ public:
     Parent root() const;
     //子の数を取得する
     size_t getChildCount() const;
+    //装備を設定する
+    void setEquipment(const Child& equipment, const Matrix4* equipmentPart);
+    //装備部位を取得する
+    const Matrix4* getEquipmentPart() const;
     //Transform3Dを取得する
     Transform3D& transform() const;
+    //親子関係が構築された際のコールバック
+    void callbackBuildingParentChildRelationship(const std::function<void()>& f);
 
 private:
     ParentChildRelationship(const ParentChildRelationship&) = delete;
@@ -41,4 +50,6 @@ private:
     Transform3D* mTransform;
     Parent mParent;
     Children mChildren;
+    const Matrix4* mEquipmentPart;
+    Function<void()> mCallbackBuildingParentChildRelationship;
 };

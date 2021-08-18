@@ -1,6 +1,6 @@
 {
     "globalProperties": {
-        "window": {
+        "Window": {
             "title": "MyEngine",
             "windowWidth": 1024,
             "windowHeight": 576,
@@ -11,16 +11,16 @@
             "windowDebugWidth": 1920,
             "windowDebugHeight": 1080
         },
-        "fpsCounter": {
+        "FPSCounter": {
             "fps": 60.0
         },
-        "keyboard": {
+        "Keyboard": {
             "enterKey": "Space"
         },
-        "joyPad": {
+        "JoyPad": {
             "enterPad": "A"
         },
-        "sceneManager": {
+        "SceneManager": {
             "beginScene": "Title",
             "releaseScene": "Title",
             "removeExclusionTag": [
@@ -29,13 +29,16 @@
                 "Shadow"
             ]
         },
-        "fixedDebugInfo": {
+        "EngineFunctionManager": {},
+        "DebugManager": {},
+        "DebugLayer": {},
+        "FixedDebugInformation": {
             "scale": [
                 0.3125,
                 0.3125
             ]
         },
-        "hierarchy": {
+        "Hierarchy": {
             "scale": [
                 0.30000001192092898,
                 0.30000001192092898
@@ -45,23 +48,24 @@
             "lineSpace": 8.0,
             "nonActiveAlpha": 0.30000001192092898
         },
-        "inspector": {
+        "ImGuiInspector": {
             "inspectorPositionX": 1400.0
         },
-        "log": {
+        "DebugUtility": {},
+        "Log": {
             "scale": [
                 0.3125,
                 0.3125
             ]
         },
-        "pause": {
+        "Pause": {
             "fileName": "System/pause.png",
             "offset": [
                 50.0,
                 15.0
             ]
         },
-        "engineFuctionChanger": {
+        "EngineFuctionChanger": {
             "startRenderPosition": [
                 0.0,
                 1048.0
@@ -73,35 +77,54 @@
             ],
             "spriteSpace": 16.0
         },
-        "assetsRenderTextureList": {
+        "AssetsRenderTextureList": {
             "textureSize": 64,
             "textureDisplayInterval": 32,
             "texturesFilePath": []
         },
-        "assetsRenderTextureAdder": {
+        "AssetsRenderTextureAdder": {
             "renderPosition": [
                 0.0,
                 968.0
             ],
             "spriteButtonFilePath": "System/add_mesh.png"
         },
-        "shadowMap": {
+        "ModelViewerLight": {
+            "direction": [
+                0.923882246017456,
+                -8.239712769864127e-7,
+                -3.078376664689131e-7,
+                -0.38267695903778078
+            ],
+            "color": [
+                1.0,
+                0.9999899864196777,
+                0.9999899864196777
+            ],
+            "directionDrawPosition": [
+                30.0,
+                20.0,
+                0.0
+            ],
+            "lengthDirection": 5.0
+        },
+        "ShadowMap": {
             "shadowTextureSize": 8192,
             "lightDistance": 290.0,
             "nearClip": 10.0,
             "farClip": 300.0
         },
-        "lightManager": {
+        "LightManager": {
             "ambientLight": [
                 0.0,
                 0.0,
                 0.0
             ]
         },
-        "pointLight": {
+        "PointLight": {
             "pointLightMeshFileName": "Shape/Sphere.obj"
         },
-        "drawString": {
+        "DrawString": {
             "number": "System/number2.png",
             "font": "System/font2.png"
         }

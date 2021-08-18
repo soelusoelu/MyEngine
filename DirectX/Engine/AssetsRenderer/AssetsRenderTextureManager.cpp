@@ -23,19 +23,14 @@ bool AssetsRenderTextureManager::selectedTexture() const {
     return (mCurrentSelectTexture) ? true : false;
 }
 
-void AssetsRenderTextureManager::loadProperties(const rapidjson::Value& inObj) {
-    mTextureList->loadProperties(inObj);
-    mTextureAdder->loadProperties(inObj);
+void AssetsRenderTextureManager::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mTextureList->writeAndRead(inObj, alloc, mode);
+    mTextureAdder->writeAndRead(inObj, alloc, mode);
 }
 
-void AssetsRenderTextureManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    mTextureList->saveProperties(alloc, inObj);
-    mTextureAdder->saveProperties(alloc, inObj);
-}
-
-void AssetsRenderTextureManager::initialize() {
+void AssetsRenderTextureManager::initialize(IEngineFunctionChanger& changer) {
     mTextureList->initialize();
-    mTextureAdder->initialize(mTextureList.get());
+    mTextureAdder->initialize(mTextureList.get(), changer);
     mDeleter->initialize(mTextureList.get(), this);
     mSelector->initialize(mTextureList.get());
 }
@@ -57,7 +52,6 @@ void AssetsRenderTextureManager::drawMeshes(EngineMode mode) const {
 void AssetsRenderTextureManager::drawTextures(EngineMode mode, const Matrix4& proj) const {
     if (isProcessMode(mode)) {
         mTextureList->drawTexture(proj);
-        mTextureAdder->draw(proj);
     }
 }
 

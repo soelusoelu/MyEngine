@@ -2,13 +2,15 @@
 #include "../../Device/Button.h"
 #include "../../Input/Input.h"
 #include "../../System/Window.h"
-#include "../../Utility/LevelLoader.h"
+#include "../../Utility/JsonHelper.h"
 
-Pause::Pause() :
-    mButton(nullptr),
-    mFileName(""),
-    mOffset(Vector2::zero),
-    mIsPausing(false) {
+Pause::Pause()
+    : FileOperator("Pause")
+    , mButton(nullptr)
+    , mFileName("")
+    , mOffset(Vector2::zero)
+    , mIsPausing(false)
+{
 }
 
 Pause::~Pause() = default;
@@ -17,26 +19,12 @@ bool Pause::isPausing() const {
     return mIsPausing;
 }
 
-void Pause::loadProperties(const rapidjson::Value & inObj) {
-    const auto& obj = inObj["pause"];
-    if (obj.IsObject()) {
-        JsonHelper::getString(obj, "fileName", &mFileName);
-        JsonHelper::getVector2(obj, "offset", &mOffset);
-    }
-}
-
-void Pause::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setString(alloc, &props, "fileName", mFileName);
-    JsonHelper::setVector2(alloc, &props, "offset", mOffset);
-
-    inObj.AddMember("pause", props, alloc);
-}
-
-void Pause::initialize() {
+void Pause::initialize(IEngineFunctionChanger* modeChanger) {
     auto pos = mOffset;
     pos.x += Window::width();
     mButton = std::make_unique<SpriteButton>(nullptr, mFileName, pos);
+
+    modeChanger->callbackChangeMode([&](EngineMode mode) { onModeChange(mode); });
 }
 
 void Pause::update() {
@@ -53,6 +41,11 @@ void Pause::update() {
     mIsPausing = !mIsPausing;
 }
 
-void Pause::drawButton(const Matrix4& proj) const {
-    mButton->draw(proj);
+void Pause::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mFileName, "fileName", inObj, alloc, mode);
+    JsonHelper::getSet(mOffset, "offset", inObj, alloc, mode);
+}
+
+void Pause::onModeChange(EngineMode mode) {
+    mButton->setActive(mode == EngineMode::GAME);
 }

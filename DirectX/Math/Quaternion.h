@@ -18,6 +18,9 @@ public:
 
     void set(float inX, float inY, float inZ, float inW);
 
+    friend Quaternion operator*(const Quaternion& q, const Quaternion& p);
+    Quaternion& operator*=(const Quaternion& right);
+
     void conjugate();
 
     float lengthSq() const;
@@ -43,9 +46,6 @@ public:
 
     //球面線形補間
     static Quaternion slerp(const Quaternion& a, const Quaternion& b, float f);
-
-    //足し算
-    static Quaternion concatenate(const Quaternion& q, const Quaternion& p);
 
     //指定された forward と upwards 方向に回転したクォータニオンを取得する
     static Quaternion lookRotation(const Vector3& forward, const Vector3& upwards = Vector3::up);

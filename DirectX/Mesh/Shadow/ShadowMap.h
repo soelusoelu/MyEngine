@@ -1,22 +1,20 @@
 ﻿#pragma once
 
+#include "../../Device/FileOperator.h"
 #include "../../System/Shader/ConstantBuffers.h"
-#include <rapidjson/document.h>
 #include <memory>
 
-class Shader;
 class RenderTexture;
 class MeshRenderer;
 
 //モデルの影を落とすクラス
-class ShadowMap {
+class ShadowMap
+    : public FileOperator
+{
 public:
     ShadowMap();
     ~ShadowMap();
     void initialize();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
-
     //描画準備
     void drawBegin(const Vector3& dirLightDirection);
     //描画
@@ -34,8 +32,10 @@ private:
     ShadowMap(const ShadowMap&) = delete;
     ShadowMap& operator=(const ShadowMap&) = delete;
 
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
 private:
-    std::shared_ptr<Shader> mDepthTextureCreateShader;
+    int mDepthTextureCreateShaderID;
     std::unique_ptr<RenderTexture> mRenderTexture;
     ShadowConstantBuffer mShadowConstBuffer;
     int mShadowTextureSize;

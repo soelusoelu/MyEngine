@@ -5,9 +5,15 @@
 #include "SubResourceDesc.h"
 #include "Format.h"
 
-class IndexBuffer : public Buffer {
+class IndexBuffer
+    : public Buffer
+{
 public:
     IndexBuffer(const BufferDesc& desc, const SubResourceDesc& data);
     ~IndexBuffer();
     void setIndexBuffer(Format format = Format::FORMAT_R16_UINT, unsigned offset = 0);
+
+private:
+    IndexBuffer(const IndexBuffer&) = delete;
+    IndexBuffer& operator=(const IndexBuffer&) = delete;
 };

@@ -1,8 +1,9 @@
 ﻿#include "Camera.h"
+#include "CameraHelper.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../System/Window.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 Camera::Camera() :
     Component(),
@@ -25,16 +26,10 @@ void Camera::lateUpdate() {
     calcView();
 }
 
-void Camera::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "fov", &mFOV);
-    JsonHelper::getFloat(inObj, "nearClip", &mNearClip);
-    JsonHelper::getFloat(inObj, "farClip", &mFarClip);
-}
-
-void Camera::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setFloat(alloc, inObj, "fov", mFOV);
-    JsonHelper::setFloat(alloc, inObj, "nearClip", mNearClip);
-    JsonHelper::setFloat(alloc, inObj, "farClip", mFarClip);
+void Camera::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mFOV, "fov", inObj, alloc, mode);
+    JsonHelper::getSet(mNearClip, "nearClip", inObj, alloc, mode);
+    JsonHelper::getSet(mFarClip, "farClip", inObj, alloc, mode);
 }
 
 void Camera::drawInspector() {
@@ -98,27 +93,12 @@ float Camera::getFarClip() const {
     return mFarClip;
 }
 
-Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) const {
-    //ビューポートの逆行列を求める
-    auto viewport = Matrix4::identity;
-    viewport.m[0][0] = Window::width() / 2.f;
-    viewport.m[1][1] = -Window::height() / 2.f;
-    viewport.m[3][0] = Window::width() / 2.f;
-    viewport.m[3][1] = Window::height() / 2.f;
-
-    //ビュー * 射影 * ビューポートの逆行列を求める
-    auto invMat = Matrix4::inverse(mView * mProjection * viewport);
-
-    //スクリーン座標をワールド座標に変換
-    return Vector3::transformWithPerspDiv(Vector3(position, z), invMat);
+Vector3 Camera::screenToWorldPoint(const Vector2& position, float z) const {
+    return CameraHelper::screenToWorldPoint(position, mView, mProjection, z);
 }
 
 Ray Camera::screenToRay(const Vector2& position, float z) const {
-    Ray ray;
-    ray.start = getPosition();
-    ray.end = screenToWorldPoint(position, z);
-
-    return ray;
+    return CameraHelper::screenToRay(getPosition(), position, mView, mProjection, z);
 }
 
 bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {

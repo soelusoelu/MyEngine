@@ -4,13 +4,14 @@
 #include "../../../Imgui/imgui.h"
 #include "../../../Input/Input.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
-CameraMove::CameraMove() :
-    Component(),
-    mCamera(nullptr),
-    mCameraSpeed(0.f),
-    mRotateSpeed(0.f) {
+CameraMove::CameraMove()
+    : Component()
+    , mCamera(nullptr)
+    , mCameraSpeed(0.f)
+    , mRotateSpeed(0.f)
+{
 }
 
 CameraMove::~CameraMove() = default;
@@ -48,14 +49,9 @@ void CameraMove::update() {
     mCamera->lookAt({ transform().getPosition() + transform().forward() * 10.f });
 }
 
-void CameraMove::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "cameraSpeed", &mCameraSpeed);
-    JsonHelper::getFloat(inObj, "rotateSpeed", &mRotateSpeed);
-}
-
-void CameraMove::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setFloat(alloc, inObj, "cameraSpeed", mCameraSpeed);
-    JsonHelper::setFloat(alloc, inObj, "rotateSpeed", mRotateSpeed);
+void CameraMove::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mCameraSpeed, "cameraSpeed", inObj, alloc, mode);
+    JsonHelper::getSet(mRotateSpeed, "rotateSpeed", inObj, alloc, mode);
 }
 
 void CameraMove::drawInspector() {

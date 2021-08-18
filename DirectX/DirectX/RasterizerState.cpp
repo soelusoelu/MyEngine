@@ -14,13 +14,19 @@ void RasterizerState::setRasterizerState(const RasterizerDesc & desc) {
 }
 
 void RasterizerState::setCulling(CullMode mode) {
-    mDesc.cullMode = mode;
-    execute();
+    //前回と違うモードなら更新する
+    if (mDesc.cullMode != mode) {
+        mDesc.cullMode = mode;
+        execute();
+    }
 }
 
 void RasterizerState::setFillMode(FillMode mode) {
-    mDesc.fillMode = mode;
-    execute();
+    //前回と違うモードなら更新する
+    if (mDesc.fillMode != mode) {
+        mDesc.fillMode = mode;
+        execute();
+    }
 }
 
 const RasterizerDesc& RasterizerState::desc() const {

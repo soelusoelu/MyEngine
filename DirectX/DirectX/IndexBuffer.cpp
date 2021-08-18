@@ -1,8 +1,9 @@
 ﻿#include "IndexBuffer.h"
 #include "DirectX.h"
 
-IndexBuffer::IndexBuffer(const BufferDesc& desc, const SubResourceDesc& data) :
-    Buffer(desc, &data) {
+IndexBuffer::IndexBuffer(const BufferDesc& desc, const SubResourceDesc& data)
+    : Buffer(desc, &data)
+{
 }
 
 IndexBuffer::~IndexBuffer() = default;

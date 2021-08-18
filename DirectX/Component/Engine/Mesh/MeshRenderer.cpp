@@ -1,4 +1,5 @@
 ﻿#include "MeshRenderer.h"
+#include "AnimationCPU.h"
 #include "MeshComponent.h"
 #include "MeshShader.h"
 #include "SkinMeshComponent.h"
@@ -10,6 +11,7 @@ MeshRenderer::MeshRenderer()
     , mBeforeDrawer(nullptr)
     , mMeshComponent(nullptr)
     , mMeshShader(nullptr)
+    , mFillMode(FillMode::SOLID)
 {
 }
 
@@ -58,6 +60,14 @@ void MeshRenderer::setDrawBefore(const IDrawBefore* drawer) {
     mBeforeDrawer = drawer;
 }
 
+void MeshRenderer::setFillMode(FillMode mode) {
+    mFillMode = mode;
+}
+
+FillMode MeshRenderer::getFillMode() const {
+    return mFillMode;
+}
+
 const MeshComponent& MeshRenderer::getMeshComponent() const {
     return *mMeshComponent;
 }
@@ -78,7 +88,10 @@ void MeshRenderer::drawMesh(
     const Vector3& dirLightColor
 ) const {
     //描画前準備
-    mMeshShader->preSet();
+    mMeshShader->bindShader();
+
+    //ポリゴン描画方法を指定する
+    MyDirectX::DirectX::instance().rasterizerState().setFillMode(mFillMode);
 
     //メッシュ共通の値を設定する
     mMeshShader->setCommonValue(view, projection, cameraPosition, dirLightDirection, dirLightColor);
@@ -86,10 +99,16 @@ void MeshRenderer::drawMesh(
     //コンスタントバッファに転送する
     mMeshShader->transferData();
 
-    const auto loopCount = mMeshComponent->getMesh()->getMeshCount();
+    auto mesh = mMeshComponent->getMesh();
+    const auto loopCount = mesh->getMeshCount();
     for (size_t i = 0; i < loopCount; ++i) {
+        //非アクティブなら描画しない
+        if (!mesh->getMeshActive(i)) {
+            continue;
+        }
+
         //マテリアルを設定する
-        mMeshShader->setDefaultMaterial(i);
+        mMeshShader->setMaterialData(i);
 
         //描画
         mMeshComponent->getDrawer()->draw(i);
@@ -118,6 +137,13 @@ void MeshRenderer::createSkinMeshComponent() {
         skinMesh = addComponent<SkinMeshComponent>("SkinMeshComponent");
     }
     skinMesh->setValue(mMeshShader, iAnim);
+
+
+    //AnimationCPUがないなら追加する
+    auto animationCPU = getComponent<AnimationCPU>();
+    if (!animationCPU) {
+        addComponent<AnimationCPU>("AnimationCPU");
+    }
 }
 
 void MeshRenderer::addToManager() {

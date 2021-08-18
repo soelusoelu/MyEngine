@@ -24,11 +24,12 @@
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 #include <vector>
 
 SceneManager::SceneManager()
-    : mRenderer(std::make_unique<Renderer>())
+    : FileOperator("SceneManager")
+    , mRenderer(std::make_unique<Renderer>())
     , mCurrentScene(nullptr)
     , mCamera(nullptr)
     , mEngineManager(std::make_unique<EngineFunctionManager>())
@@ -51,40 +52,14 @@ SceneManager::~SceneManager() {
     TextBase::setDrawString(nullptr);
 }
 
-void SceneManager::loadProperties(const rapidjson::Value& inObj) {
-    const auto& sceneObj = inObj["sceneManager"];
-    if (sceneObj.IsObject()) {
-        JsonHelper::getString(sceneObj, "beginScene", &mBeginScene);
-        JsonHelper::getString(sceneObj, "releaseScene", &mReleaseScene);
-        JsonHelper::getStringArray(sceneObj, "removeExclusionTag", &mRemoveExclusionTags);
-    }
-
-    mEngineManager->loadProperties(inObj);
-    mMeshManager->loadProperties(inObj);
-    mLightManager->loadProperties(inObj);
-    mTextDrawer->loadProperties(inObj);
-}
-
-void SceneManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setString(alloc, &props, "beginScene", mBeginScene);
-    JsonHelper::setString(alloc, &props, "releaseScene", mReleaseScene);
-    JsonHelper::setStringArray(alloc, &props, "removeExclusionTag", mRemoveExclusionTags);
-    inObj.AddMember("sceneManager", props, alloc);
-
-    mEngineManager->saveProperties(alloc, inObj);
-    mMeshManager->saveProperties(alloc, inObj);
-    mLightManager->saveProperties(alloc, inObj);
-    mTextDrawer->saveProperties(alloc, inObj);
-}
-
 void SceneManager::initialize(const IFpsGetter* fpsGetter) {
     //デフォルトカメラを作成する
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager().getComponent<Camera>();
 
     mRenderer->initialize();
-    mEngineManager->initialize(mCamera, this, this, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
+    mEngineManager->initialize(mCamera, this, mGameObjectManager.get(), mMeshManager.get(), fpsGetter);
+    mEngineManager->getModeChanger().callbackChangeMode([&](EngineMode mode) { onChangeMode(mode); });
     mMeshManager->initialize();
     mLightManager->initialize();
     mTextDrawer->initialize();
@@ -100,7 +75,7 @@ void SceneManager::initialize(const IFpsGetter* fpsGetter) {
 #ifdef _DEBUG
     choiceBeginScene();
 #else
-    onChangeGameMode();
+    mEngineManager->getModeChanger().changeMode(EngineMode::GAME);
     createScene(mReleaseScene);
 #endif // _DEBUG
 }
@@ -126,15 +101,20 @@ void SceneManager::update() {
         mPhysics->sweepAndPrune();
         //各マネージャークラスを更新
         mMeshManager->update();
-        mSpriteManager->update();
-        mMeshRenderOnTextureManager->update();
+    }
 
+    //スプライトはいつでも更新する
+    mSpriteManager->update();
+    mMeshRenderOnTextureManager->update();
+
+    //またゲーム中なら
+    if (isGameMode()) {
         //シーン移行
         const auto& next = mCurrentScene->getNext();
         if (!next.empty()) {
             change();
             //次のシーンに渡す値を避難させとく
-            auto toNextValues = mCurrentScene->getValuePassToNextScene();
+            const auto& toNextValues = mCurrentScene->getValuePassToNextScene();
             //シーン遷移
             createScene(next);
             //新しいシーンに前のシーンの値を渡す
@@ -199,28 +179,40 @@ void SceneManager::draw() const {
         mSpriteManager->drawComponents(proj2D);
         //テキスト描画
         mTextDrawer->drawAll(proj2D);
+        //エンジン機能の2D描画
+        mEngineManager->draw2D(*mRenderer, proj2D);
     }
 
 #ifdef _DEBUG
-    mEngineManager->draw(mMode, *mRenderer, proj2D);
+    //レンダリング領域をデバッグに変更
+    mRenderer->renderSprite();
+    mRenderer->renderSprite2D(proj2D);
+    mRenderer->renderToDebug(proj2D);
+    mSpriteManager->draw(proj2D);
+    mEngineManager->drawDebug2D(mMode, proj2D);
 #endif // _DEBUG
 }
 
-void SceneManager::onChangeGameMode() {
-    mMode = EngineMode::GAME;
-    mMeshManager->registerThisToMeshRenderer();
-    mEngineManager->debug().getDebugLayer().hierarchy().setGameObjectsGetter(mGameObjectManager.get());
+void SceneManager::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mBeginScene, "beginScene", inObj, alloc, mode);
+    JsonHelper::getSet(mReleaseScene, "releaseScene", inObj, alloc, mode);
+
+    if (mode == FileMode::SAVE) {
+        std::vector<std::string> temp(mRemoveExclusionTags.cbegin(), mRemoveExclusionTags.cend());
+        JsonHelper::setStringArray(temp, "removeExclusionTag", inObj, alloc);
+    } else {
+        std::vector<std::string> temp;
+        if (JsonHelper::getStringArray(temp, "removeExclusionTag", inObj)) {
+            mRemoveExclusionTags.insert(temp.cbegin(), temp.cend());
+        }
+    }
 }
 
-void SceneManager::onChangeMapEditorMode() {
-    mMode = EngineMode::MAP_EDITOR;
-    mEngineManager->onChangeMapEditorMode();
-    mEngineManager->debug().getDebugLayer().hierarchy().setGameObjectsGetter(mEngineManager->getMapEditorMeshManager().getGameObjects());
-}
-
-void SceneManager::onChangeModelViewerMode() {
-    mMode = EngineMode::MODEL_VIEWER;
-    mEngineManager->onChangeModelViewerMode();
+void SceneManager::childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mEngineManager->writeAndRead(inObj, alloc, mode);
+    mMeshManager->saveAndLoad(inObj, alloc, mode);
+    mLightManager->writeAndRead(inObj, alloc, mode);
+    mTextDrawer->writeAndRead(inObj, alloc, mode);
 }
 
 EngineMode SceneManager::getMode() const {
@@ -241,16 +233,28 @@ void SceneManager::createScene(const std::string& name) {
 }
 
 void SceneManager::choiceBeginScene() {
+    auto& changer = mEngineManager->getModeChanger();
+
     if (mBeginScene == EngineModeName::MAP_EDITOR) {
-        onChangeMapEditorMode();
+        changer.changeMode(EngineMode::MAP_EDITOR);
     } else if (mBeginScene == EngineModeName::MODEL_VIEWER) {
-        onChangeModelViewerMode();
+        changer.changeMode(EngineMode::MODEL_VIEWER);
     } else {
-        onChangeGameMode();
+        changer.changeMode(EngineMode::GAME);
     }
+
+    //シーン作成
     createScene(mReleaseScene);
 }
 
 bool SceneManager::isGameMode() const {
     return (mMode == EngineMode::GAME);
+}
+
+void SceneManager::onChangeMode(EngineMode mode) {
+    mMode = mode;
+    if (mode == EngineMode::GAME) {
+        mMeshManager->registerThisToMeshRenderer();
+        mEngineManager->debug().getDebugLayer().hierarchy().setGameObjectsGetter(mGameObjectManager.get());
+    }
 }

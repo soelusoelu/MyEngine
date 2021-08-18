@@ -6,13 +6,14 @@
 #include "../../../Sound/Voice/SourceVoice/SourceVoiceInitParam.h"
 #include "../../../Sound/XAudio2/SoundEngine.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
-SoundComponent::SoundComponent() :
-    Component(),
-    mSound(nullptr),
-    mFileName(""),
-    mUse3DSound(false) {
+SoundComponent::SoundComponent()
+    : Component()
+    , mSound(nullptr)
+    , mFileName()
+    , mUse3DSound(false)
+{
 }
 
 SoundComponent::~SoundComponent() = default;
@@ -42,14 +43,9 @@ void SoundComponent::finalize() {
     }
 }
 
-void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getString(inObj, "fileName", &mFileName);
-    JsonHelper::getBool(inObj, "use3D", &mUse3DSound);
-}
-
-void SoundComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setString(alloc, inObj, "fileName", mFileName);
-    JsonHelper::setBool(alloc, inObj, "use3D", mUse3DSound);
+void SoundComponent::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mFileName, "fileName", inObj, alloc, mode);
+    JsonHelper::getSet(mUse3DSound, "use3D", inObj, alloc, mode);
 }
 
 void SoundComponent::drawInspector() {

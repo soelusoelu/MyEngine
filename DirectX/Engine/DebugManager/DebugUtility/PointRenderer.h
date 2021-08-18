@@ -5,7 +5,6 @@
 #include <memory>
 
 class Transform3D;
-class Shader;
 
 class PointRenderer {
     struct Point3DParam {
@@ -35,5 +34,5 @@ private:
 private:
     std::list<Point3DParam> mPoints;
     std::unique_ptr<Transform3D> mTransform;
-    std::shared_ptr<Shader> mShader;
+    int mShaderID;
 };

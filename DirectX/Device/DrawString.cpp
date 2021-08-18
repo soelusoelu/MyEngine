@@ -1,37 +1,27 @@
 ﻿#include "DrawString.h"
 #include "../Sprite/Sprite.h"
+#include "../Sprite/SpriteInstancingDrawer.h"
+#include "../System/Texture/Texture.h"
 #include "../Transform/Transform2D.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 #include "../Utility/StringUtil.h"
 
-DrawString::DrawString() :
-    mNumberSprite(nullptr),
-    mFontSprite(nullptr),
-    mNumberFileName(""),
-    mFontFileName("") {
+DrawString::DrawString()
+    : FileOperator("DrawString")
+    , mNumberSprite(nullptr)
+    , mFontSprite(nullptr)
+    , mNumberFileName("")
+    , mFontFileName("")
+    , mDrawer(std::make_unique<SpriteInstancingDrawer>())
+{
 }
 
 DrawString::~DrawString() = default;
 
 void DrawString::initialize() {
     mNumberSprite = std::make_unique<Sprite>(mNumberFileName);
-    mFontSprite = std::make_unique<Sprite>(mFontFileName);
-}
-
-void DrawString::loadProperties(const rapidjson::Value& inObj) {
-    const auto& obj = inObj["drawString"];
-    if (obj.IsObject()) {
-        JsonHelper::getString(obj, "number", &mNumberFileName);
-        JsonHelper::getString(obj, "font", &mFontFileName);
-    }
-}
-
-void DrawString::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setString(alloc, &props, "number", mNumberFileName);
-    JsonHelper::setString(alloc, &props, "font", mFontFileName);
-
-    inObj.AddMember("drawString", props, alloc);
+    mFontSprite = std::make_unique<Sprite>(mFontFileName, "SpriteInstancing.hlsl");
+    mDrawer->initialize();
 }
 
 void DrawString::drawAll(const Matrix4& proj) const {
@@ -44,57 +34,61 @@ void DrawString::drawAll(const Matrix4& proj) const {
     for (const auto& param : mParamsString) {
         drawString(param, proj);
     }
+    mDrawer->instancingDraw(*mFontSprite);
 }
 
 void DrawString::clear() {
     mParamsInt.clear();
     mParamsFloat.clear();
     mParamsString.clear();
+    mDrawer->clear();
 }
 
-void DrawString::drawNumber(int number, const Vector2& position, const Vector2& scale, const Vector3& color, float alpha, Pivot pivot) {
-    ParamInt param;
-    param.number = number;
-    param.position = position;
-    param.scale = scale;
-    param.color = color;
-    param.alpha = alpha;
-    param.pivot = pivot;
-
-    mParamsInt.emplace_back(param);
+void DrawString::drawNumber(
+    int number,
+    const Vector2& position,
+    const Vector2& scale,
+    const Vector3& color,
+    float alpha,
+    Pivot pivot
+) {
+    mParamsInt.emplace_back(ParamInt{ number, position, scale, color, alpha, pivot });
 }
 
-void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, const Vector3& color, float alpha, Pivot pivot) {
-    ParamFloat param;
-    param.number = number;
-    param.position = position;
-    param.scale = scale;
-    param.decimalDigits = decimalDigits;
-    param.color = color;
-    param.alpha = alpha;
-    param.pivot = pivot;
-
-    mParamsFloat.emplace_back(param);
+void DrawString::drawNumber(
+    float number,
+    const Vector2& position,
+    const Vector2& scale,
+    int decimalDigits,
+    const Vector3& color,
+    float alpha,
+    Pivot pivot
+) {
+    mParamsFloat.emplace_back(ParamFloat{ number, position, scale, decimalDigits, color, alpha, pivot });
 }
 
-void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot pivot) {
-    ParamString param;
-    param.alphabet = alphabet;
-    param.position = position;
-    param.scale = scale;
-    param.color = color;
-    param.alpha = alpha;
-    param.pivot = pivot;
-
-    mParamsString.emplace_back(param);
+void DrawString::drawString(
+    const std::string& alphabet,
+    const Vector2& position,
+    const Vector2& scale,
+    const Vector3& color,
+    float alpha,
+    Pivot pivot
+) {
+    mParamsString.emplace_back(ParamString{ alphabet, position, scale, color, alpha, pivot });
 }
 
-void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
+void DrawString::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mNumberFileName, "number", inObj, alloc, mode);
+    JsonHelper::getSet(mFontFileName, "font", inObj, alloc, mode);
+}
+
+void DrawString::drawInt(const ParamInt& param, const Matrix4& proj) const {
     //要素取り出し
     auto number = param.number;
     auto pos = param.position;
-    auto scale = param.scale;
-    auto color = param.color;
+    const auto& scale = param.scale;
+    const auto& color = param.color;
     auto alpha = param.alpha;
     auto pivot = param.pivot;
 
@@ -114,7 +108,7 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
     //描画する文字列のサイズを計算
     auto size = Vector2(digit * OFFSET_X, HEIGHT * scale.y);
     //ピボットから描画位置を調整
-    computePositionFromPivot(&pos, size, pivot);
+    computePositionFromPivot(pos, size, pivot);
 
     //数字を文字列化し、1文字ずつ取り出す
     auto& t = mNumberSprite->transform();
@@ -138,13 +132,13 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
     }
 }
 
-void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const {
+void DrawString::drawFloat(const ParamFloat& param, const Matrix4& proj) const {
     //要素取り出し
     auto number = param.number;
     auto pos = param.position;
-    auto scale = param.scale;
+    const auto& scale = param.scale;
     auto decimalDigits = param.decimalDigits;
-    auto color = param.color;
+    const auto& color = param.color;
     auto alpha = param.alpha;
     auto pivot = param.pivot;
 
@@ -162,7 +156,7 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
     //描画する文字列のサイズを計算
     auto size = Vector2((num.length() - 1) * OFFSET_X + OFFSET_PERIOD_X, HEIGHT * scale.y);
     //ピボットから描画位置を調整
-    computePositionFromPivot(&pos, size, pivot);
+    computePositionFromPivot(pos, size, pivot);
 
     //数字を文字列化し、1文字ずつ取り出す
     auto& t = mNumberSprite->transform();
@@ -197,12 +191,12 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
     }
 }
 
-void DrawString::drawString(const ParamString & param, const Matrix4 & proj) const {
+void DrawString::drawString(const ParamString& param, const Matrix4& proj) const {
     //要素取り出し
-    auto alphabet = param.alphabet;
+    const auto& alphabet = param.alphabet;
     auto pos = param.position;
-    auto scale = param.scale;
-    auto color = param.color;
+    const auto& scale = param.scale;
+    const auto& color = param.color;
     auto alpha = param.alpha;
     auto pivot = param.pivot;
 
@@ -211,7 +205,7 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     //描画する文字列のサイズを計算
     auto size = Vector2(alphabet.length() * OFFSET_X, HEIGHT * scale.y);
     //ピボットから描画位置を調整
-    computePositionFromPivot(&pos, size, pivot);
+    computePositionFromPivot(pos, size, pivot);
 
     auto& trans = mFontSprite->transform();
     trans.setScale(scale);
@@ -224,48 +218,48 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
         t = Math::clamp<int>(t, 32, 127);
         t -= 32;
 
-        float left = t % WIDTH_CHAR_COUNT;
+        float left = static_cast<float>(t % WIDTH_CHAR_COUNT);
         left /= WIDTH_CHAR_COUNT;
-        float top = t / WIDTH_CHAR_COUNT;
+        float top = static_cast<float>(t / WIDTH_CHAR_COUNT);
         top /= HEIGHT_CHAR_COUNT;
         mFontSprite->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
 
         //ワールド座標を更新し、描画
         trans.computeWorldTransform();
-        mFontSprite->draw(proj);
+        mDrawer->add(*mFontSprite, proj);
 
         //描画位置を1文字分ずらす
         pos.x += OFFSET_X;
     }
 }
 
-void DrawString::computePositionFromPivot(Vector2 * pos, const Vector2 & size, Pivot pivot) const {
+void DrawString::computePositionFromPivot(Vector2& pos, const Vector2& size, Pivot pivot) const {
     switch (pivot) {
     case Pivot::CENTER_TOP:
-        pos->x -= size.x / 2.f;
+        pos.x -= size.x / 2.f;
         break;
     case Pivot::RIGHT_TOP:
-        pos->x -= size.x;
+        pos.x -= size.x;
         break;
     case Pivot::CENTER_LEFT:
-        pos->y -= size.y / 2.f;
+        pos.y -= size.y / 2.f;
         break;
     case Pivot::CENTER:
-        *pos -= size / 2.f;
+        pos -= size / 2.f;
         break;
     case Pivot::CENTER_RIGHT:
-        pos->x -= size.x;
-        pos->y -= size.y / 2.f;
+        pos.x -= size.x;
+        pos.y -= size.y / 2.f;
         break;
     case Pivot::LEFT_BOTTOM:
-        pos->y -= size.y;
+        pos.y -= size.y;
         break;
     case Pivot::CETNER_BOTTOM:
-        pos->x -= size.x / 2.f;
-        pos->y -= size.y;
+        pos.x -= size.x / 2.f;
+        pos.y -= size.y;
         break;
     case Pivot::RIGHT_BOTTOM:
-        *pos -= size;
+        pos -= size;
         break;
     default:
         break;

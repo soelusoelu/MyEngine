@@ -4,14 +4,14 @@
 
 //バッファタイプ
 enum class BufferType {
-    BUFFER_TYPE_VERTEX = 0x1L, //頂点バッファ
-    BUFFER_TYPE_INDEX = 0x2L, //インデックスバッファ
-    BUFFER_TYPE_CONSTANT_BUFFER = 0x4L,
+    VERTEX = 0x1L, //頂点バッファ
+    INDEX = 0x2L, //インデックスバッファ
+    CONSTANT_BUFFER = 0x4L,
 };
 
 enum class BufferCPUAccessFlag {
-    CPU_ACCESS_WRITE = 0x10000L,
-    CPU_ACCESS_READ = 0x20000L
+    WRITE = 0x10000L,
+    READ = 0x20000L
 };
 
 struct BufferDesc {
@@ -34,8 +34,8 @@ struct BufferDesc {
     BufferDesc() :
         oneSize(0),
         size(0),
-        usage(Usage::USAGE_DEFAULT),
-        type(static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX)),
+        usage(Usage::DEFAULT),
+        type(static_cast<unsigned>(BufferType::VERTEX)),
         cpuAccessFlags(0),
         miscFlags(0),
         structureByteStride(0) {

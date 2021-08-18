@@ -2,13 +2,16 @@
 #include "../Collision/Collision.h"
 #include "../Input/Input.h"
 #include "../Sprite/Sprite.h"
+#include "../Sprite/SpriteManager.h"
+#include "../Sprite/SpriteUtility.h"
 #include "../Transform/Transform2D.h"
 
-Button::Button(const std::function<void()>& onClick, const Vector2& pos, const Vector2& dims) :
-    mOnClick(onClick),
-    mPosition(pos),
-    mDimensions(dims),
-    mHighlighted(false) {
+Button::Button(const std::function<void()>& onClick, const Vector2& pos, const Vector2& dims)
+    : mOnClick(onClick)
+    , mPosition(pos)
+    , mDimensions(dims)
+    , mIsActive(true)
+{
 }
 
 Button::~Button() = default;
@@ -21,12 +24,12 @@ const Vector2& Button::getPosition() const {
     return mPosition;
 }
 
-void Button::setHighlighted(bool set) {
-    mHighlighted = set;
+void Button::setActive(bool value) {
+    mIsActive = value;
 }
 
-bool Button::getHighlighted() const {
-    return mHighlighted;
+bool Button::getActive() const {
+    return mIsActive;
 }
 
 bool Button::containsPoint(const Vector2& pt) const {
@@ -38,6 +41,10 @@ bool Button::containsPoint(const Vector2& pt) const {
 }
 
 bool Button::clickButton(const Vector2& pt) const {
+    if (!mIsActive) {
+        return false;
+    }
+
     if (!Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
         return false;
     }
@@ -58,10 +65,11 @@ void Button::onClick() const {
 
 
 
-SpriteButton::SpriteButton(const std::function<void()>& onClick, const std::string& fileName, const Vector2& pos) :
-    mOnClick(onClick),
-    mSprite(std::make_unique<Sprite>(fileName)),
-    mHighlighted(false) {
+SpriteButton::SpriteButton(const std::function<void()>& onClick, const std::string& fileName, const Vector2& pos)
+    : mOnClick(onClick)
+    , mSprite(std::make_shared<Sprite>(fileName))
+{
+    mSprite->getSpriteManager().add(mSprite);
     mSprite->transform().setPosition(pos);
 }
 
@@ -75,30 +83,23 @@ const Vector2& SpriteButton::getPosition() const {
     return mSprite->transform().getPosition();
 }
 
-void SpriteButton::setHighlighted(bool set) {
-    mHighlighted = set;
+void SpriteButton::setActive(bool value) {
+    mSprite->setActive(value);
 }
 
-bool SpriteButton::getHighlighted() const {
-    return mHighlighted;
+bool SpriteButton::getActive() const {
+    return mSprite->getActive();
 }
 
 bool SpriteButton::containsPoint(const Vector2& pt) const {
-    //計算に必要な要素を取得する
-    const auto& t = mSprite->transform();
-    const auto& scale = t.getScale();
-    const auto& pivot = t.getPivot() * scale;
-    const auto& compenPos = t.getPosition() - pivot;
-    const auto& texSize = mSprite->getTextureSize() * scale;
-
-    //スプライトをもとに矩形作成
-    Square square(compenPos, compenPos + texSize);
-
-    //矩形の中にマウスの座標が含まれているか
-    return square.contains(pt);
+    return SpriteUtility::containsDebug(*mSprite, pt);
 }
 
 bool SpriteButton::clickButton(const Vector2& pt) const {
+    if (!mSprite->getActive()) {
+        return false;
+    }
+
     if (!Input::mouse().getMouseButtonDown(MouseCode::LeftButton)) {
         return false;
     }
@@ -115,9 +116,4 @@ void SpriteButton::onClick() const {
     if (mOnClick) {
         mOnClick();
     }
-}
-
-void SpriteButton::draw(const Matrix4& proj) const {
-    mSprite->transform().computeWorldTransform();
-    mSprite->draw(proj);
 }

@@ -1,7 +1,7 @@
 ﻿#include "Debug.h"
 #include "DebugUtility.h"
+#include "LineRenderer/LineInstancingDrawer.h"
 #include "LineRenderer/LineRenderer2D.h"
-#include "LineRenderer/LineRenderer3D.h"
 #include "Log.h"
 #include "PointRenderer.h"
 #include "../../../System/SystemInclude.h"
@@ -50,6 +50,6 @@ void Debug::renderLine(const Vector2& p1, const Vector2& p2, const Vector3& colo
 
 void Debug::renderLine(const Vector3& p1, const Vector3& p2, const Vector3& color) {
 #ifdef _DEBUG
-    DebugUtility::instance().lineRenderer3D().renderLine(p1, p2, color);
+    DebugUtility::instance().lineRenderer3D().add(p1, p2, color);
 #endif // _DEBUG
 }

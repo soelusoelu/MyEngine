@@ -12,11 +12,11 @@ Sampler::~Sampler() {
     safeRelease(mSampler);
 }
 
-void Sampler::setVSSamplers(unsigned start, unsigned numSamplers) {
+void Sampler::setVSSamplers(unsigned start, unsigned numSamplers) const {
     MyDirectX::DirectX::instance().deviceContext()->VSSetSamplers(start, numSamplers, &mSampler);
 }
 
-void Sampler::setPSSamplers(unsigned start, unsigned numSamplers) {
+void Sampler::setPSSamplers(unsigned start, unsigned numSamplers) const {
     MyDirectX::DirectX::instance().deviceContext()->PSSetSamplers(start, numSamplers, &mSampler);
 }
 

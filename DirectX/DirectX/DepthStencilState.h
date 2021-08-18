@@ -13,15 +13,15 @@ public:
     const DepthStencilDesc& desc() const;
 
 private:
+    //コピー禁止
+    DepthStencilState(const DepthStencilState&) = delete;
+    DepthStencilState& operator=(const DepthStencilState&) = delete;
+
     void execute() const;
 
     D3D11_DEPTH_STENCIL_DESC toDepthStencilDesc(const DepthStencilDesc& desc) const;
     D3D11_DEPTH_WRITE_MASK toDepthWriteMask(bool mask) const;
     D3D11_STENCIL_OP toStencilOP(StencilOP stencilOp) const;
-
-    //コピー禁止
-    DepthStencilState(const DepthStencilState&) = delete;
-    DepthStencilState& operator=(const DepthStencilState&) = delete;
 
 private:
     DepthStencilDesc mDesc;

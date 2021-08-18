@@ -7,21 +7,18 @@
 #include <unordered_map>
 #include <utility>
 
-class Shader;
-class MeshMaterial;
-
 //メッシュのシェーダーを扱うクラス
-class MeshShader : public Component {
+class MeshShader
+    : public Component
+{
 public:
     MeshShader();
     ~MeshShader();
-    virtual void start() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
-    //シェーダーを使用する準備をする
-    void preSet() const;
+    //シェーダーをバインドする
+    void bindShader() const;
     //シェーダーにデータを転送する
     void transferData();
 
@@ -33,11 +30,11 @@ public:
         const Vector3& dirLightDirection,
         const Vector3& dirLightColor
     ) const;
-    //デフォルトのマテリアルデータを設定する
-    void setDefaultMaterial(unsigned materialIndex, unsigned constantBufferIndex = 1) const;
+    //マテリアルデータを設定する
+    void setMaterialData(unsigned materialIndex, unsigned constantBufferIndex = 1) const;
     //全メッシュに共通する値を設定する
     //データが生きている必要あり
-    void setTransferData(const void* data, unsigned size, unsigned constantBufferIndex);
+    void setTransferData(const void* data, unsigned constantBufferIndex);
 
     //各種インターフェースを設定する
     void setInterface(const IMesh* mesh, const IAnimation* anim);
@@ -48,18 +45,9 @@ private:
     MeshShader(const MeshShader&) = delete;
     MeshShader& operator=(const MeshShader&) = delete;
 
-    //マテリアルデータを設定する
-    void setMaterial(const Material& material, unsigned constantBufferIndex) const;
-
 private:
-    struct TransferData {
-        const void* data;
-        unsigned size;
-    };
-
-    std::shared_ptr<MeshMaterial> mMeshMaterial;
     const IMesh* mMesh;
     const IAnimation* mAnimation;
-    std::shared_ptr<Shader> mShader;
-    std::unordered_map<unsigned, TransferData> mTransferDataMap;
+    int mShaderID;
+    std::unordered_map<unsigned, const void*> mTransferDataMap;
 };

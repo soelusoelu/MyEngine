@@ -1,19 +1,19 @@
 ﻿#pragma once
 
+#include "../../../Device/FileOperator.h"
 #include "../../../Math/Math.h"
-#include <rapidjson/document.h>
 #include <list>
 #include <string>
 #include <utility>
 
 class DrawString;
 
-class Log {
+class Log
+    : public FileOperator
+{
 public:
     Log();
     ~Log();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
     void log(const std::string& message);
     void logError(const std::string& message);
@@ -22,6 +22,11 @@ public:
     void drawLogs(DrawString& drawString) const;
 
 private:
+    Log(const Log&) = delete;
+    Log& operator=(const Log&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
     void addLog(const std::string& message, const Vector3& color);
     void adjustCapacity();
 
@@ -32,4 +37,6 @@ private:
     Vector2 mScale;
     //画面に表示するログの行数
     int mNumRowsToDisplay;
+
+    static constexpr float DRAW_OFFSET_Y = 32.f;
 };

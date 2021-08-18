@@ -1,0 +1,29 @@
+{
+  "tag": "UI",
+  "components": [
+    {
+      "type": "PlayerUIManager",
+      "properties": {}
+    },
+    {
+      "type": "SpriteComponent",
+      "properties": {
+        "fileName": "System\\pixel.png",
+        "position": [ 64.0, 48.0 ],
+        "scale": [ 512.0, 16.0 ],
+        "color": [ 0.95, 0.05, 0.05 ]
+      }
+    },
+    {
+      "type": "PlayerHitPointGauge",
+      "properties": {}
+    },
+    {
+      "type": "CrossHair",
+      "properties": {
+        "offset": 8.0,
+        "length": 32.0
+      }
+    }
+  ]
+}

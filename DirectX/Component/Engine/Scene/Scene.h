@@ -1,13 +1,16 @@
 ﻿#pragma once
 
 #include "../../Component.h"
+#include <any>
 #include <string>
 #include <unordered_map>
 #include <utility>
 
 using ValuePassMap = std::unordered_map<std::string, std::any>;
 
-class Scene : public Component {
+class Scene
+    : public Component
+{
 public:
     Scene();
     virtual ~Scene();

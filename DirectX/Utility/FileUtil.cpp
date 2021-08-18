@@ -49,7 +49,7 @@ std::string FileUtil::getAssetsFromAbsolutePath(const std::string& absolutePath)
     return absolutePath.substr(pos);
 }
 
-bool FileUtil::openFileDialog(std::string& outFilePath, std::string& outFileName) {
+bool FileUtil::openFileDialog(std::string& outFilePath, std::string& outFilename) {
     //今のディレクトパスを取得しとく
     char currentPath[256];
     GetCurrentDirectoryA(_countof(currentPath), currentPath);
@@ -81,7 +81,44 @@ bool FileUtil::openFileDialog(std::string& outFilePath, std::string& outFileName
     SetCurrentDirectoryA(currentPath);
 
     outFilePath = StringUtil::wcharToString(path);
-    outFileName = StringUtil::wcharToString(name);
+    outFilename = StringUtil::wcharToString(name);
+
+    return true;
+}
+
+bool FileUtil::saveFileDialog(std::string& outFilePath, std::string& outFilename) {
+    //今のディレクトパスを取得しとく
+    char currentPath[256];
+    GetCurrentDirectoryA(_countof(currentPath), currentPath);
+
+    wchar_t path[MAX_PATH];
+    wchar_t name[MAX_PATH];
+    //文字列にヌル文字を代入しておく
+    memset(path, '\0', sizeof(path));
+    memset(name, '\0', sizeof(name));
+
+    OPENFILENAME ofn;
+    ZeroMemory(&ofn, sizeof(OPENFILENAME));
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = nullptr;
+    ofn.lpstrFile = path; //選択されたファイルパスを受け取る
+    ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrFileTitle = name; //選択されたファイル名
+    ofn.nMaxFileTitle = MAX_PATH;
+
+    //ofn.lpstrFilter = L"obj(*.obj)\0*.obj\0fbx(*.fbx)\0*.fbx\0all(*.*)\0*.*\0\0"; //フィルタ
+    //ofn.lpstrTitle = L"Title"; //ダイアログボックスのタイトル
+
+    ofn.Flags = OFN_FILEMUSTEXIST;
+    if (GetSaveFileName(&ofn) == FALSE) {
+        return false;
+    }
+
+    //ファイル指定時に勝手にディレクトリがずれるから直す
+    SetCurrentDirectoryA(currentPath);
+
+    outFilePath = StringUtil::wcharToString(path);
+    outFilename = StringUtil::wcharToString(name);
 
     return true;
 }

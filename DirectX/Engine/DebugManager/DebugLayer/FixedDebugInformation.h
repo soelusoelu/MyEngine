@@ -2,18 +2,24 @@
 
 #include "../../../Math/Math.h"
 #include "../../../System/FpsCounter/IFpsGetter.h"
-#include <rapidjson/document.h>
+#include "../../../Device/FileOperator.h"
 
 class DrawString;
 
-class FixedDebugInformation {
+class FixedDebugInformation
+    : public FileOperator
+{
 public:
     FixedDebugInformation();
     ~FixedDebugInformation();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize(const IFpsGetter* getter);
     void draw(DrawString& drawString) const;
+
+private:
+    FixedDebugInformation(const FixedDebugInformation&) = delete;
+    FixedDebugInformation& operator=(const FixedDebugInformation&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
 private:
     const IFpsGetter* mFpsGetter;

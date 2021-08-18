@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "SystemInclude.h"
+#include "../Utility/FileMode.h"
 #include <rapidjson/document.h>
 #include <memory>
 
@@ -14,10 +15,8 @@ public:
     ~Game();
     //アプリケーションの実行
     void run(HINSTANCE hInstance);
-    //グローバルファイルを読み込む
-    void loadProperties(const rapidjson::Value& inObj);
-    //グローバルファイルを書き込む
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+    //グローバルファイルを読み書きする
+    void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode);
 
     //アプリケーションの終了
     static void quit();

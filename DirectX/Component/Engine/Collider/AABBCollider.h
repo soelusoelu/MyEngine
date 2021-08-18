@@ -16,12 +16,13 @@ class AABBCollider
 public:
     AABBCollider();
     ~AABBCollider();
+    virtual ColliderType getType() const override;
+
     virtual void start() override;
     virtual void lateUpdate() override;
     virtual void finalize() override;
     virtual void onEnable(bool value) override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     //AABBの最小と最大点を直接設定する
@@ -40,6 +41,8 @@ private:
     AABBCollider& operator=(const AABBCollider&) = delete;
 
     //AABBを作成する
+    void create();
+    //メッシュ情報からAABBを作成する
     void createAABB(const IMesh& mesh);
     //メッシュから最小、最大点を割り出す
     void computeMinMax(Vector3& outMin, Vector3& outMax, const MeshVertices& meshVertices);
@@ -50,7 +53,7 @@ private:
     //最新の点からtransformを掛ける前の点を求める
     void computeDefaultPoint();
     //当たり判定を可視化する
-    void renderCollision();
+    void renderCollision() const;
 
 private:
     //当たり判定であるAABB

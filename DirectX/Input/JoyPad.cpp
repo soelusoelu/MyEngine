@@ -3,13 +3,14 @@
 #include "InputUtility.h"
 #include "../Math/Math.h"
 #include "../System/GlobalFunction.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE*, VOID*);
 BOOL CALLBACK enumObjectsCallback(const DIDEVICEOBJECTINSTANCE*, VOID*);
 
 JoyPad::JoyPad()
-    : mCurrentJoyState()
+    : FileOperator("JoyPad")
+    , mCurrentJoyState()
     , mPreviousJoyState()
     , mEnterPad(JoyCode::None)
     , mEnterPadStr()
@@ -44,22 +45,6 @@ bool JoyPad::initialize(const HWND& hWnd, IDirectInput8* directInput) {
     mPadDevice->Acquire();
 
     return true;
-}
-
-void JoyPad::loadProperties(const rapidjson::Value& inObj) {
-    const auto& padObj = inObj["joyPad"];
-    if (padObj.IsObject()) {
-        if (JsonHelper::getString(padObj, "enterPad", &mEnterPadStr)) {
-            stringToJoyCode(mEnterPadStr, &mEnterPad);
-        }
-    }
-}
-
-void JoyPad::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setString(alloc, &props, "enterPad", mEnterPadStr);
-
-    inObj.AddMember("joyPad", props, alloc);
 }
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext) {
@@ -129,7 +114,7 @@ bool JoyPad::getEnter() const {
     return getJoyDown(mEnterPad);
 }
 
-void JoyPad::stringToJoyCode(const std::string& src, JoyCode* dst) {
+void JoyPad::stringToJoyCode(const std::string& src, JoyCode& dst) {
     auto joy = JoyCode::None;
 
     if (src == "A") {
@@ -155,8 +140,14 @@ void JoyPad::stringToJoyCode(const std::string& src, JoyCode* dst) {
     }
 
     if (joy != JoyCode::None) {
-        *dst = joy;
+        dst = joy;
     }
 }
 
-IDirectInputDevice8* JoyPad::mPadDevice = nullptr;
+void JoyPad::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mEnterPadStr, "enterPad", inObj, alloc, mode);
+
+    if (mode == FileMode::LOAD) {
+        stringToJoyCode(mEnterPadStr, mEnterPad);
+    }
+}

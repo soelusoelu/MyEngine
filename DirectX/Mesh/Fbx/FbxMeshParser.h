@@ -13,6 +13,7 @@ public:
     //メッシュを解析する
     void parse(
         MeshVertices& meshVertices,
+        MeshVerticesPosition& meshVerticesPosition,
         Indices& indices,
         FbxMesh* fbxMesh
     ) const;

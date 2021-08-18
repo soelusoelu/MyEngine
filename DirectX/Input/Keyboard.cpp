@@ -1,10 +1,11 @@
 ﻿#include "Keyboard.h"
 #include "InputUtility.h"
 #include "../System/GlobalFunction.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 
 Keyboard::Keyboard()
-    : mKeyDevice(nullptr)
+    : FileOperator("Keyboard")
+    , mKeyDevice(nullptr)
     , mCurrentKeys()
     , mPreviousKeys()
     , mEnterKey(KeyCode::None)
@@ -71,7 +72,7 @@ int Keyboard::getNumber() const {
         return 9;
     }
 
-    return -1;
+    return INVALID_NUMBER;
 }
 
 bool Keyboard::getEnter() const {
@@ -97,22 +98,6 @@ bool Keyboard::initialize(const HWND& hWnd, IDirectInput8* directInput) {
     return true;
 }
 
-void Keyboard::loadProperties(const rapidjson::Value& inObj) {
-    const auto& keyObj = inObj["keyboard"];
-    if (keyObj.IsObject()) {
-        if (JsonHelper::getString(keyObj, "enterKey", &mEnterKeyStr)) {
-            stringToKeyCode(mEnterKeyStr, &mEnterKey);
-        }
-    }
-}
-
-void Keyboard::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setString(alloc, &props, "enterKey", mEnterKeyStr);
-
-    inObj.AddMember("keyboard", props, alloc);
-}
-
 void Keyboard::update() {
     memcpy_s(mPreviousKeys, sizeof(mPreviousKeys), mCurrentKeys, sizeof(mCurrentKeys));
 
@@ -122,7 +107,7 @@ void Keyboard::update() {
     }
 }
 
-void Keyboard::stringToKeyCode(const std::string& src, KeyCode* dst) {
+void Keyboard::stringToKeyCode(const std::string& src, KeyCode& dst) {
     auto key = KeyCode::None;
 
     if (src == "A") {
@@ -252,6 +237,14 @@ void Keyboard::stringToKeyCode(const std::string& src, KeyCode* dst) {
     }
 
     if (key != KeyCode::None) {
-        *dst = key;
+        dst = key;
+    }
+}
+
+void Keyboard::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mEnterKeyStr, "enterKey", inObj, alloc, mode);
+
+    if (mode == FileMode::LOAD) {
+        stringToKeyCode(mEnterKeyStr, mEnterKey);
     }
 }

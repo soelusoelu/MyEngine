@@ -1,18 +1,21 @@
 ﻿#pragma once
 
-#include "../../../System/AssetsDirectoryPath.h"
 #include "../../Component.h"
+#include "../../../Collision/Collision.h"
 #include "../../../Math/Math.h"
 #include "../../../Mesh/IMesh.h"
+#include "../../../System/AssetsDirectoryPath.h"
 #include <memory>
 #include <string>
 
 class MeshRenderOnTexture;
 class MeshRenderOnTextureManager;
 class Sprite;
-struct Sphere;
 
-class MeshRenderOnTextureComponent : public Component, public std::enable_shared_from_this<MeshRenderOnTextureComponent> {
+class MeshRenderOnTextureComponent
+    : public Component
+    , public std::enable_shared_from_this<MeshRenderOnTextureComponent>
+{
 public:
     MeshRenderOnTextureComponent();
     ~MeshRenderOnTextureComponent();
@@ -20,7 +23,7 @@ public:
     virtual void update() override;
     virtual void finalize() override;
     virtual void onEnable(bool value) override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
     //メッシュをテクスチャ上に描画する
     void drawMeshOnTexture() const;
@@ -60,7 +63,4 @@ private:
     Matrix4 mProjection;
 
     static inline MeshRenderOnTextureManager* mManager = nullptr;
-
-    static constexpr int DEFAULT_SPRITE_WIDTH = 128;
-    static constexpr int DEFAULT_SPRITE_HEIGHT = 128;
 };

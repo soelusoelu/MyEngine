@@ -8,7 +8,6 @@
 class Shader;
 class SpriteManager;
 class Texture;
-class TextureFromFile;
 class Transform3D;
 
 class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D> {
@@ -19,8 +18,7 @@ public:
     virtual void lateUpdate() override;
     virtual void finalize() override;
     virtual void onEnable(bool value) override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     //描画
@@ -48,10 +46,14 @@ public:
     void setTextureFromFileName(const std::string& fileName);
     //テクスチャの取得
     const Texture& texture() const;
+    //テクスチャIDを取得する
+    int getTextureID() const;
     //テクスチャのアスペクト比の取得
     const Vector2& getTextureAspect() const;
     //シェーダーの取得
     const Shader& shader() const;
+    //シェーダーIDを取得する
+    int getShaderID() const;
     //ファイル名の取得
     const std::string& fileName() const;
     //ビルボードにするか
@@ -67,11 +69,13 @@ protected:
     void addToManager();
     //テクスチャのアスペクト比を計算する
     void calcAspectRatio();
+    //有効なテクスチャか
+    bool enabledTexture() const;
 
 protected:
     std::unique_ptr<Transform3D> mTransform;
-    std::shared_ptr<TextureFromFile> mTexture;
-    std::shared_ptr<Shader> mShader;
+    int mTextureID;
+    int mShaderID;
     Vector2 mCurrentTextureSize;
     Vector2 mTextureAspect;
     Vector3 mColor;
@@ -82,4 +86,6 @@ protected:
     bool mIsBillboard;
 
     static inline SpriteManager* mSpriteManager = nullptr;
+
+    static constexpr int INVALID_ID = -1;
 };

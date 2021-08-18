@@ -4,25 +4,14 @@
 #include "Inspector/ImGuiInspector.h"
 
 DebugLayer::DebugLayer()
-    : mFixedDebugInfo(std::make_unique<FixedDebugInformation>())
+    : FileOperator("DebugLayer")
+    , mFixedDebugInfo(std::make_unique<FixedDebugInformation>())
     , mHierarchy(std::make_unique<Hierarchy>())
     , mInspector(std::make_unique<ImGuiInspector>())
 {
 }
 
 DebugLayer::~DebugLayer() = default;
-
-void DebugLayer::loadProperties(const rapidjson::Value& inObj) {
-    mFixedDebugInfo->loadProperties(inObj);
-    mHierarchy->loadProperties(inObj);
-    mInspector->loadProperties(inObj);
-}
-
-void DebugLayer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
-    mFixedDebugInfo->saveProperties(alloc, inObj);
-    mHierarchy->saveProperties(alloc, inObj);
-    mInspector->saveProperties(alloc, inObj);
-}
 
 void DebugLayer::initialize(const IGameObjectsGetter* gameObjectsGetter, const IFpsGetter* fpsGetter) {
     mFixedDebugInfo->initialize(fpsGetter);
@@ -37,8 +26,10 @@ void DebugLayer::draw(EngineMode mode, DrawString& drawer, Matrix4& proj) const 
     if (mode == EngineMode::GAME) {
         mFixedDebugInfo->draw(drawer);
     }
+    if (mode == EngineMode::GAME || mode == EngineMode::MAP_EDITOR) {
+        mHierarchy->drawGameObjects(drawer);
+    }
 
-    mHierarchy->drawGameObjects(drawer);
     mInspector->drawInspect();
 }
 
@@ -50,6 +41,12 @@ Hierarchy& DebugLayer::hierarchy() const {
     return *mHierarchy;
 }
 
-IInspectorTargetSetter* DebugLayer::inspector() const {
+IInspector* DebugLayer::inspector() const {
     return mInspector.get();
+}
+
+void DebugLayer::childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mFixedDebugInfo->writeAndRead(inObj, alloc, mode);
+    mHierarchy->writeAndRead(inObj, alloc, mode);
+    mInspector->writeAndRead(inObj, alloc, mode);
 }

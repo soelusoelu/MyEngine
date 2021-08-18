@@ -7,6 +7,7 @@
 #include "Shader/Shader.h"
 #include "Texture/Texture.h"
 #include "../DirectX/DirectX.h"
+#include "../Engine/DebugManager/DebugUtility/LineRenderer/LineRenderer.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Imgui/imgui.h"
 #include "../Imgui/imgui_impl_dx11.h"
@@ -17,11 +18,12 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/Random.h"
 
-Game::Game() :
-    mWindow(nullptr),
-    mFPSCounter(nullptr),
-    mSceneManager(nullptr),
-    mInstance(nullptr) {
+Game::Game()
+    : mWindow(nullptr)
+    , mFPSCounter(nullptr)
+    , mSceneManager(nullptr)
+    , mInstance(nullptr)
+{
 }
 
 Game::~Game() {
@@ -34,6 +36,7 @@ Game::~Game() {
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
 
+    LineRenderer::finalize();
     Shader::finalize();
     Texture::finalize();
     GameObjectCreater::finalize();
@@ -59,18 +62,11 @@ void Game::run(HINSTANCE hInstance) {
     }
 }
 
-void Game::loadProperties(const rapidjson::Value& inObj) {
-    mWindow->loadProperties(inObj);
-    mFPSCounter->loadProperties(inObj);
-    InputManager::loadProperties(inObj);
-    mSceneManager->loadProperties(inObj);
-}
-
-void Game::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    mWindow->saveProperties(alloc, inObj);
-    mFPSCounter->saveProperties(alloc, inObj);
-    InputManager::saveProperties(alloc, inObj);
-    mSceneManager->saveProperties(alloc, inObj);
+void Game::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mWindow->writeAndRead(inObj, alloc, mode);
+    mFPSCounter->writeAndRead(inObj, alloc, mode);
+    InputManager::saveAndLoad(inObj, alloc, mode);
+    mSceneManager->writeAndRead(inObj, alloc, mode);
 }
 
 void Game::quit() {

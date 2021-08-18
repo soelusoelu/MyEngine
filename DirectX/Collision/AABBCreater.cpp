@@ -1,12 +1,12 @@
 ﻿#include "AABBCreater.h"
 #include "Collision.h"
 
-AABB AABBCreater::create(const std::vector<Vector3>& vertices) {
+AABB AABBCreater::create(const std::vector<Vector3>& positions) {
     auto min = Vector3::one * FLT_MAX;
     auto max = Vector3::one * FLT_MIN;
 
     //メッシュ情報から最小、最大点を割り出す
-    for (const auto& p : vertices) {
+    for (const auto& p : positions) {
         if (p.x < min.x) {
             min.x = p.x;
         }

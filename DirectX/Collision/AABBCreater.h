@@ -9,7 +9,7 @@ struct AABB;
 class AABBCreater {
 public:
     //頂点配列からAABBを作成する
-    static AABB create(const std::vector<Vector3>& vertices);
+    static AABB create(const std::vector<Vector3>& positions);
 
 private:
     AABBCreater() = delete;

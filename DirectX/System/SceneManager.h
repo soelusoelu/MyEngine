@@ -1,10 +1,9 @@
 ﻿#pragma once
 
 #include "FpsCounter/IFpsGetter.h"
+#include "../Device/FileOperator.h"
 #include "../Engine/EngineMode.h"
-#include "../Engine/ICallbackChangeEngineMode.h"
 #include "../Engine/IEngineModeGetter.h"
-#include <rapidjson/document.h>
 #include <memory>
 #include <string>
 #include <unordered_set>
@@ -21,20 +20,20 @@ class LightManager;
 class MeshRenderOnTextureManager;
 class DrawString;
 
-class SceneManager : public ICallbackChangeEngineMode, public IEngineModeGetter {
+class SceneManager
+    : public FileOperator
+    , public IEngineModeGetter
+{
 public:
     SceneManager();
     ~SceneManager();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize(const IFpsGetter* fpsGetter);
     void update();
     void draw() const;
 
 private:
-    virtual void onChangeGameMode() override;
-    virtual void onChangeMapEditorMode() override;
-    virtual void onChangeModelViewerMode() override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+    virtual void childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
     virtual EngineMode getMode() const override;
 
@@ -46,6 +45,8 @@ private:
     void choiceBeginScene();
     //ゲーム中か
     bool isGameMode() const;
+    //モード変更時
+    void onChangeMode(EngineMode mode);
 
 private:
     std::unique_ptr<Renderer> mRenderer;

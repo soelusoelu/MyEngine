@@ -1,12 +1,14 @@
 ﻿#pragma once
 
 #include "SystemInclude.h"
+#include "../Device/FileOperator.h"
 #include "../Input/IMouseWheelScrollValueSetter.h"
 #include "../Math/Math.h"
-#include <rapidjson/document.h>
 #include <string>
 
-class Window {
+class Window
+    : public FileOperator
+{
 public:
     Window();
     ~Window();
@@ -15,8 +17,12 @@ public:
     LRESULT msgProc(HWND, UINT, WPARAM, LPARAM);
     HWND gethWnd() const;
     void update();
+    //ゲームウィンドウの横幅(px)
     static int width();
+    //ゲームウィンドウの縦幅(px)
     static int height();
+    //ゲームウィンドウのサイズ(width * height)
+    static Vector2 size();
     static int standardWidth();
     static int standardHeight();
     static int debugWidth();
@@ -24,10 +30,13 @@ public:
     static Vector2 windowToClientSize();
     //ゲームウィンドウをフルHDサイズに変える補正値を取得する
     static Vector2 getWindowCorrect();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
 
 private:
+    Window(const Window&) = delete;
+    Window& operator=(const Window&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
     void updateWindowToClientSize();
 
 private:

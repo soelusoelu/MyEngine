@@ -7,10 +7,14 @@
 
 class SpriteComponent;
 
-class CircleCollider : public Collider {
+class CircleCollider
+    : public Collider
+{
 public:
     CircleCollider();
     ~CircleCollider();
+    virtual ColliderType getType() const override;
+
     virtual void start() override;
     virtual void update() override;
     virtual void drawInspector() override;

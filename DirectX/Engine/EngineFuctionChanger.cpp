@@ -1,10 +1,10 @@
 ﻿#include "EngineFuctionChanger.h"
 #include "../Device/Button.h"
 #include "../Input/Input.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 
 EngineFuctionChanger::EngineFuctionChanger()
-    : mCallbackChangeEngineMode(nullptr)
+    : FileOperator("EngineFuctionChanger")
     , mStartRenderPosition()
     , mSpriteSpace(0.f)
 {
@@ -12,43 +12,33 @@ EngineFuctionChanger::EngineFuctionChanger()
 
 EngineFuctionChanger::~EngineFuctionChanger() = default;
 
-void EngineFuctionChanger::loadProperties(const rapidjson::Value& inObj) {
-    const auto& efcObj = inObj["engineFuctionChanger"];
-    if (efcObj.IsObject()) {
-        JsonHelper::getVector2(efcObj, "startRenderPosition", &mStartRenderPosition);
-        JsonHelper::getStringArray(efcObj, "spritesFilePath", &mSpritesFilePath);
-        JsonHelper::getFloat(efcObj, "spriteSpace", &mSpriteSpace);
-    }
+void EngineFuctionChanger::changeMode(EngineMode mode) {
+    mCallbackChangeMode(mode);
 }
 
-void EngineFuctionChanger::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setVector2(alloc, &props, "startRenderPosition", mStartRenderPosition);
-    JsonHelper::setStringArray(alloc, &props, "spritesFilePath", mSpritesFilePath);
-    JsonHelper::setFloat(alloc, &props, "spriteSpace", mSpriteSpace);
-
-    inObj.AddMember("engineFuctionChanger", props, alloc);
+void EngineFuctionChanger::callbackChangeMode(const std::function<void(EngineMode)>& f) {
+    mCallbackChangeMode += f;
 }
 
-void EngineFuctionChanger::initialize(ICallbackChangeEngineMode* callback) {
-    mCallbackChangeEngineMode = callback;
-
+void EngineFuctionChanger::initialize() {
     for (size_t i = 0; i < mSpritesFilePath.size(); ++i) {
         mSpritesButton.emplace_back(std::make_unique<SpriteButton>(nullptr, mSpritesFilePath[i], mStartRenderPosition + Vector2::right * (SPRITE_WIDTH + mSpriteSpace) * i));
     }
-    mSpritesButton[0]->setClickFunc([&] { mCallbackChangeEngineMode->onChangeGameMode(); });
-    mSpritesButton[1]->setClickFunc([&] { mCallbackChangeEngineMode->onChangeMapEditorMode(); });
-    mSpritesButton[2]->setClickFunc([&] { mCallbackChangeEngineMode->onChangeModelViewerMode(); });
 }
 
 void EngineFuctionChanger::update() {
-    for (const auto& button : mSpritesButton) {
-        button->clickButton(Input::mouse().getMousePosition());
+    const auto& mousePos = Input::mouse().getMousePosition();
+    for (size_t i = 0; i < mSpritesButton.size(); ++i) {
+        bool result = mSpritesButton[i]->clickButton(mousePos);
+        if (result) {
+            mCallbackChangeMode(static_cast<EngineMode>(i));
+            return;
+        }
     }
 }
 
-void EngineFuctionChanger::draw(const Matrix4& proj) const {
-    for (const auto& button : mSpritesButton) {
-        button->draw(proj);
-    }
+void EngineFuctionChanger::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mStartRenderPosition, "startRenderPosition", inObj, alloc, mode);
+    JsonHelper::getSet(mSpritesFilePath, "spritesFilePath", inObj, alloc, mode);
+    JsonHelper::getSet(mSpriteSpace, "spriteSpace", inObj, alloc, mode);
 }

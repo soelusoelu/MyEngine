@@ -2,7 +2,7 @@
 #include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
 #include "../../../Imgui/imgui.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 DirectionalLight::DirectionalLight() :
     Component(),
@@ -12,16 +12,18 @@ DirectionalLight::DirectionalLight() :
 
 DirectionalLight::~DirectionalLight() = default;
 
+void DirectionalLight::start() {
+    transform().rotate(mDirection);
+}
+
 void DirectionalLight::lateUpdate() {
     //メッシュの向きと合わせる
     mDirection = Vector3::transform(Vector3::down, transform().getRotation());
 }
 
-void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
-    if (JsonHelper::getVector3(inObj, "direction", &mDirection)) {
-        transform().rotate(mDirection);
-    }
-    JsonHelper::getVector3(inObj, "color", &mLightColor);
+void DirectionalLight::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mDirection, "direction", inObj, alloc, mode);
+    JsonHelper::getSet(mLightColor, "color", inObj, alloc, mode);
 }
 
 void DirectionalLight::drawInspector() {

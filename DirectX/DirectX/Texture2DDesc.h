@@ -57,7 +57,7 @@ struct Texture2DDesc {
         arraySize(1),
         format(Format::FORMAT_RGBA8_UNORM),
         sampleDesc(),
-        usage(Usage::USAGE_DEFAULT),
+        usage(Usage::DEFAULT),
         bindFlags(static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE)),
         cpuAccessFlags(0),
         miscFlags(0) {

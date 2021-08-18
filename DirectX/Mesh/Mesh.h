@@ -22,13 +22,19 @@ class Mesh
 public:
     Mesh();
     ~Mesh();
+    Mesh(const Mesh&) = delete;
+    Mesh& operator=(const Mesh&) = delete;
 
-    //指定のマテリアルの取得
+    //指定のマテリアルを設定する
+    virtual void setMaterial(const Material& material, unsigned index) override;
+    //指定のマテリアルの取得する
     virtual const Material& getMaterial(unsigned index) const override;
     //メッシュの数を取得する
     virtual unsigned getMeshCount() const override;
-    //指定の頂点情報を取得
+    //指定の頂点情報を取得する
     virtual const MeshVertices& getMeshVertices(unsigned index) const override;
+    //指定の頂点位置配列を取得する
+    virtual const MeshVerticesPosition& getMeshVerticesPosition(unsigned index) const override;
     //指定のインデックスバッファを取得する
     virtual const Indices& getMeshIndices(unsigned index) const override;
     //指定のメッシュのポリゴン数を取得する
@@ -39,6 +45,10 @@ public:
     virtual Triangle getPolygon(unsigned meshIndex, unsigned polygonIndex, const Matrix4& world) const override;
     //指定のメッシュに頂点情報を設定する
     virtual void setMeshVertices(const MeshVertices& newMeshVertices, unsigned index) override;
+    //メッシュを描画するかを指定する
+    virtual void setMeshActive(unsigned index, bool value) override;
+    //メッシュを描画するかを取得する
+    virtual bool getMeshActive(unsigned index) const override;
 
     //モーションを取得する
     virtual const Motion& getMotion(unsigned index) const override;
@@ -70,10 +80,12 @@ private:
 private:
     std::unique_ptr<IMeshLoader> mMesh;
     std::vector<MeshVertices> mMeshesVertices;
+    std::vector<MeshVerticesPosition> mMeshesVerticesPosition;
     std::vector<Indices> mMeshesIndices;
     std::vector<Material> mMaterials;
     std::vector<Motion> mMotions;
     std::vector<Bone> mBones;
     std::vector<std::unique_ptr<VertexBuffer>> mVertexBuffers;
     std::vector<std::unique_ptr<IndexBuffer>> mIndexBuffers;
+    std::vector<bool> mMeshesActive;
 };

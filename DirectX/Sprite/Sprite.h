@@ -14,6 +14,7 @@ class Sprite : public Object {
 public:
     Sprite();
     Sprite(const std::string& fileName);
+    Sprite(const std::string& fileName, const std::string& shaderName);
     virtual ~Sprite();
     //行列の計算をする
     void computeWorldTransform();
@@ -43,24 +44,40 @@ public:
     void setTextureFromFileName(const std::string& fileName);
     //テクスチャを設定する
     void setTexture(const std::shared_ptr<Texture>& texture);
-    //テクスチャの取得
+    //テクスチャを取得する
     const Texture& texture() const;
+    //テクスチャIDを取得する
+    int getTextureID() const;
     //シェーダーの取得
     const Shader& shader() const;
+    //シェーダーIDを取得する
+    int getShaderID() const;
     //ファイル名の取得
     const std::string& fileName() const;
+
+    //マネージャーを設定する
+    static void setSpriteManager(SpriteManager* manager);
+    //マネージャーを取得する
+    SpriteManager& getSpriteManager() const;
 
 private:
     Sprite(const Sprite&) = delete;
     Sprite& operator=(const Sprite&) = delete;
 
+    //有効なテクスチャか
+    bool enabledTexture() const;
+
 private:
     std::unique_ptr<Transform2D> mTransform;
-    std::shared_ptr<Texture> mTexture;
-    std::shared_ptr<Shader> mShader;
+    int mTextureID;
+    int mShaderID;
     Vector3 mColor;
     float mAlpha;
     Vector4 mUV;
     std::string mFileName;
     bool mIsActive;
+
+    static inline SpriteManager* mManager = nullptr;
+
+    static constexpr int INVALID_ID = -1;
 };

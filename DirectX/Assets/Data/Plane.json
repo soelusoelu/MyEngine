@@ -7,7 +7,8 @@
     {
       "type": "MeshComponent",
       "properties": {
-        "fileName": "Shape/Plane.fbx"
+        "fileName": "Shape/Plane.fbx",
+        "shadowHandle": false
       }
     }
   ]

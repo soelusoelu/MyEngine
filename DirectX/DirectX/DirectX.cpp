@@ -57,23 +57,28 @@ ID3D11DeviceContext* DirectX::deviceContext() const {
     return mDeviceContext.Get();
 }
 
-const std::shared_ptr<BlendState>& DirectX::blendState() const {
-    return mBlendState;
+BlendState& DirectX::blendState() const {
+    return *mBlendState;
 }
 
-const std::shared_ptr<DepthStencilState>& DirectX::depthStencilState() const {
-    return mDepthStencilState;
+DepthStencilState& DirectX::depthStencilState() const {
+    return *mDepthStencilState;
 }
 
-const std::shared_ptr<DepthStencilView>& DirectX::depthStencilView() const {
-    return mDepthStencilView;
+DepthStencilView& DirectX::depthStencilView() const {
+    return *mDepthStencilView;
 }
 
-const std::shared_ptr<RasterizerState>& DirectX::rasterizerState() const {
-    return mRasterizerState;
+RasterizerState& DirectX::rasterizerState() const {
+    return *mRasterizerState;
 }
 
-void DirectX::setViewport(float width, float height, float x, float y) const {
+void DirectX::setViewport(
+    float width,
+    float height,
+    float x,
+    float y
+) const {
     //ビューポートの設定
     D3D11_VIEWPORT vp{};
     vp.Width = width;
@@ -97,12 +102,50 @@ void DirectX::setPrimitive(PrimitiveType primitive) const {
     mDeviceContext->IASetPrimitiveTopology(toPrimitiveMode(primitive));
 }
 
+void DirectX::updateSubresource(
+    ID3D11Resource* outResource,
+    const void* inData,
+    unsigned outSubresource,
+    const D3D11_BOX* outBox,
+    unsigned inRowPitch,
+    unsigned inDepthPitch
+) {
+    mDeviceContext->UpdateSubresource(
+        outResource,
+        outSubresource,
+        outBox,
+        inData,
+        inRowPitch,
+        inDepthPitch
+    );
+}
+
 void DirectX::draw(unsigned numVertex, unsigned start) {
     mDeviceContext->Draw(numVertex, start);
 }
 
-void DirectX::drawIndexed(unsigned numIndices, unsigned startIndex, int startVertex) {
+void DirectX::drawIndexed(
+    unsigned numIndices,
+    unsigned startIndex,
+    int startVertex
+) {
     mDeviceContext->DrawIndexed(numIndices, startIndex, startVertex);
+}
+
+void DirectX::drawIndexedInstanced(
+    unsigned numIndices,
+    unsigned numInstance,
+    unsigned startIndex,
+    int startVertex,
+    unsigned startInstance
+) {
+    mDeviceContext->DrawIndexedInstanced(
+        numIndices,
+        numInstance,
+        startIndex,
+        startVertex,
+        startInstance
+    );
 }
 
 void DirectX::clearRenderTarget(float r, float g, float b, float a) const {

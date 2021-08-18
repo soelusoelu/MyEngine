@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../../../../Math/Math.h"
-#include <rapidjson/document.h>
+#include "../../../../Device/FileOperator.h"
 #include <any>
 #include <memory>
 #include <string>
@@ -11,18 +11,21 @@ class DrawString;
 class GameObject;
 class Transform3D;
 
-class Inspector {
+class Inspector
+    : public FileOperator
+{
     using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:
     Inspector(DrawString* drawString);
     ~Inspector();
-    void loadProperties(const rapidjson::Value& inObj);
     void initialize();
     void setTarget(const GameObjectPtr& target);
     void drawInspect() const;
 
 private:
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
     void drawName(const GameObject& target) const;
     void drawTag(const GameObject& target) const;
     void drawTransform(const Transform3D& target) const;

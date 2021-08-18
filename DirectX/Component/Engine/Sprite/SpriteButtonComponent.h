@@ -1,12 +1,12 @@
 ﻿#pragma once
 
 #include "../../Component.h"
+#include "../../../Device/Function.h"
 #include "../../../Math/Math.h"
 #include <functional>
 #include <memory>
 
 class SpriteComponent;
-class Subject;
 
 class SpriteButtonComponent : public Component {
     using SpritePtr = std::shared_ptr<SpriteComponent>;
@@ -17,7 +17,7 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void lateUpdate() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
     virtual void onEnable(bool value) override;
 
@@ -46,7 +46,7 @@ private:
 private:
     SpritePtr mSprite;
     SpritePtr mSelectingSprite;
-    std::unique_ptr<Subject> mCallbackClick;
+    Function<void()> mCallbackClick;
     bool mEnableFunction;
     bool mPreviousContains;
     bool mWaitOneFrame;

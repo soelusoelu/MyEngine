@@ -1,8 +1,10 @@
 ﻿#include "Mesh.h"
 #include "OBJ.h"
 #include "FBX/FBX.h"
+#include "../Collision/Collision.h"
 #include "../DirectX/DirectXInclude.h"
 #include "../Engine/DebugManager/DebugUtility/Debug.h"
+#include "../System/AssetsManager.h"
 #include "../System/Texture/TextureFromMemory.h"
 #include "../Utility/FileUtil.h"
 #include <cassert>
@@ -13,6 +15,11 @@ Mesh::Mesh()
 }
 
 Mesh::~Mesh() = default;
+
+void Mesh::setMaterial(const Material& material, unsigned index) {
+    assert(index < mMaterials.size());
+    mMaterials[index] = material;
+}
 
 const Material& Mesh::getMaterial(unsigned index) const {
     assert(index < mMaterials.size());
@@ -26,6 +33,11 @@ unsigned Mesh::getMeshCount() const {
 const MeshVertices& Mesh::getMeshVertices(unsigned index) const {
     assert(index < mMeshesVertices.size());
     return mMeshesVertices[index];
+}
+
+const MeshVerticesPosition& Mesh::getMeshVerticesPosition(unsigned index) const {
+    assert(index < mMeshesVerticesPosition.size());
+    return mMeshesVerticesPosition[index];
 }
 
 const Indices& Mesh::getMeshIndices(unsigned index) const {
@@ -62,6 +74,16 @@ Triangle Mesh::getPolygon(unsigned meshIndex, unsigned polygonIndex, const Matri
 void Mesh::setMeshVertices(const MeshVertices& newMeshVertices, unsigned index) {
     assert(index < mVertexBuffers.size());
     mVertexBuffers[index]->updateVertexBuffer(newMeshVertices.data());
+}
+
+void Mesh::setMeshActive(unsigned index, bool value) {
+    assert(index < mMeshesActive.size());
+    mMeshesActive[index] = value;
+}
+
+bool Mesh::getMeshActive(unsigned index) const {
+    assert(index < mMeshesActive.size());
+    return mMeshesActive[index];
 }
 
 const Motion& Mesh::getMotion(unsigned index) const {
@@ -114,7 +136,8 @@ void Mesh::initialize(const std::string& filePath) {
     assert(mMeshesVertices.size() == mMaterials.size());
 
     //メッシュの数だけバッファを作る
-    for (size_t i = 0; i < mMeshesVertices.size(); i++) {
+    auto size = getMeshCount();
+    for (unsigned i = 0; i < size; ++i) {
         createVertexBuffer(i);
         createIndexBuffer(i);
     }
@@ -133,12 +156,23 @@ void Mesh::createMesh(const std::string& filePath) {
     }
 
     //メッシュを解析する
-    mMesh->parse(filePath, mMeshesVertices, mMeshesIndices, mMaterials, mMotions, mBones);
+    mMesh->parse(
+        filePath,
+        mMeshesVertices,
+        mMeshesVerticesPosition,
+        mMeshesIndices,
+        mMaterials,
+        mMotions,
+        mBones
+    );
+
+    //メッシュ数分アクティブ化
+    mMeshesActive.resize(getMeshCount(), true);
 
     for (auto&& mat : mMaterials) {
         //テクスチャがないマテリアルは白テクスチャを代替する
-        if (!mat.texture) {
-            mat.texture = std::make_shared<TextureFromMemory>(1, 1);
+        if (mat.textureID == Material::INVALID_ID) {
+            mat.textureID = AssetsManager::instance().addTexture(std::make_shared<TextureFromMemory>(1, 1));
         }
 
         //透明値が0のときは1にする
@@ -153,20 +187,20 @@ void Mesh::createVertexBuffer(unsigned meshIndex) {
     BufferDesc bd;
     bd.oneSize = sizeof(vertices[0]);
     bd.size = bd.oneSize * vertices.size();
-    bd.usage = Usage::USAGE_DEFAULT;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
+    bd.usage = Usage::DEFAULT;
+    bd.type = static_cast<unsigned>(BufferType::VERTEX);
     SubResourceDesc sub;
     sub.data = vertices.data();
 
-    mVertexBuffers.emplace_back(std::make_unique<VertexBuffer>(bd, sub));
+    mVertexBuffers.emplace_back(std::make_unique<VertexBuffer>(bd, &sub));
 }
 
 void Mesh::createIndexBuffer(unsigned meshIndex) {
     const auto& indices = mMeshesIndices[meshIndex];
     BufferDesc bd;
     bd.size = sizeof(indices[0]) * indices.size();
-    bd.usage = Usage::USAGE_DEFAULT;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
+    bd.usage = Usage::DEFAULT;
+    bd.type = static_cast<unsigned>(BufferType::INDEX);
     SubResourceDesc sub;
     sub.data = indices.data();
 

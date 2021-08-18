@@ -5,9 +5,6 @@
 
 class SkinMeshComponent;
 class PlayerMove;
-class PlayerRoll;
-class PlayerAttack;
-class PlayerGuard;
 
 class PlayerAnimationController
     : public Component
@@ -22,15 +19,7 @@ private:
     PlayerAnimationController(const PlayerAnimationController&) = delete;
     PlayerAnimationController& operator=(const PlayerAnimationController&) = delete;
 
-    bool canMove() const;
-    bool canRoll() const;
-    bool canAttack() const;
-    bool canGuard() const;
-
 private:
     std::shared_ptr<SkinMeshComponent> mAnimation;
     std::shared_ptr<PlayerMove> mMove;
-    std::shared_ptr<PlayerRoll> mRoll;
-    std::shared_ptr<PlayerAttack> mAttack;
-    std::shared_ptr<PlayerGuard> mGuard;
 };

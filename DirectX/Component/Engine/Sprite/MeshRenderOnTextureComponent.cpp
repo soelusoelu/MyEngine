@@ -1,15 +1,14 @@
 ﻿#include "MeshRenderOnTextureComponent.h"
 #include "../Camera/CameraHelper.h"
-#include "../../../Collision/Collision.h"
+#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 #include "../../../Sprite/Sprite.h"
 #include "../../../System/Texture/MeshRenderOnTexture.h"
 #include "../../../System/Texture/MeshRenderOnTextureManager.h"
-#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 MeshRenderOnTextureComponent::MeshRenderOnTextureComponent()
     : Component()
-    , mMeshRenderOnTexture(nullptr)
+    , mMeshRenderOnTexture(std::make_unique<MeshRenderOnTexture>())
     , mSphereCoverMesh()
     , mView()
     , mProjection()
@@ -42,16 +41,9 @@ void MeshRenderOnTextureComponent::onEnable(bool value) {
     mMeshRenderOnTexture->getSprite().setActive(value);
 }
 
-void MeshRenderOnTextureComponent::loadProperties(const rapidjson::Value& inObj) {
-    if (std::string path; JsonHelper::getString(inObj, "filePath", &path)) {
-        int width = DEFAULT_SPRITE_WIDTH;
-        int height = DEFAULT_SPRITE_HEIGHT;
-        JsonHelper::getInt(inObj, "width", &width);
-        JsonHelper::getInt(inObj, "height", &height);
-
-        mMeshRenderOnTexture = std::make_unique<MeshRenderOnTexture>(path, width, height);
-        calcView();
-    }
+void MeshRenderOnTextureComponent::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mMeshRenderOnTexture->saveAndLoad(inObj, alloc, mode);
+    calcView();
 }
 
 void MeshRenderOnTextureComponent::drawMeshOnTexture() const {
@@ -69,12 +61,7 @@ void MeshRenderOnTextureComponent::draw(const Matrix4& proj) const {
 }
 
 void MeshRenderOnTextureComponent::changeMeshFromFilePath(const std::string& filePath) {
-    if (!mMeshRenderOnTexture) {
-        mMeshRenderOnTexture = std::make_unique<MeshRenderOnTexture>(filePath, DEFAULT_SPRITE_WIDTH, DEFAULT_SPRITE_HEIGHT);
-    } else {
-        mMeshRenderOnTexture->changeMesh(filePath);
-    }
-
+    mMeshRenderOnTexture->changeMesh(filePath);
     calcView();
 }
 

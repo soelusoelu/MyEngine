@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <rapidjson/document.h>
+#include "../Device/FileOperator.h"
 #include <dinput.h>
 #include <string>
 
@@ -21,13 +21,13 @@ enum class JoyCode {
     None = 512
 };
 
-class JoyPad {
+class JoyPad
+    : public FileOperator
+{
 public:
     JoyPad();
     ~JoyPad();
     bool initialize(const HWND& hWnd, IDirectInput8* directInput);
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void update();
     //キーが押された瞬間
     bool getJoyDown(JoyCode joy) const;
@@ -41,10 +41,16 @@ public:
     //決定キーが押された瞬間か
     bool getEnter() const;
     //文字列をJoyCodeに変換
-    static void stringToJoyCode(const std::string& src, JoyCode* dst);
+    static void stringToJoyCode(const std::string& src, JoyCode& dst);
+
+private:
+    JoyPad(const JoyPad&) = delete;
+    JoyPad& operator=(const JoyPad&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
 public:
-    static IDirectInputDevice8* mPadDevice;
+    static inline IDirectInputDevice8* mPadDevice = nullptr;
     static constexpr float STICK_VALUE = 1000.f;
 
 private:

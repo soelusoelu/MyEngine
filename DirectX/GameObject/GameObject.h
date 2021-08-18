@@ -2,6 +2,7 @@
 
 #include "IThisGetter.h"
 #include "Object.h"
+#include "../Utility/FileMode.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -27,8 +28,7 @@ public:
     void lateUpdate();
 
     //ロード/セーブ
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
+    void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode);
 
     //アクティブ指定
     void setActive(bool value);
@@ -50,7 +50,7 @@ public:
     ComponentManager& componentManager() const;
 
     //GameObjectManagerの取得
-    GameObjectManager& getGameObjectManager();
+    GameObjectManager& getGameObjectManager() const;
 
     //GameObjectManagerの登録
     static void setGameObjectManager(GameObjectManager* manager);

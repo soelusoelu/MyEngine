@@ -166,10 +166,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\Game\Player\BulletShooter.cpp" />
+    <ClCompile Include="Component\Game\Weapon\CrossHair.cpp" />
+    <ClCompile Include="Component\Game\Enemy\EnemyAI.cpp" />
+    <ClCompile Include="Component\Game\Enemy\EnemyMove.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ColliderOptionGUI.cpp" />
+    <ClCompile Include="Collision\BoxHelper.cpp" />
+    <ClCompile Include="Component\Engine\Collider\ColliderDrawer.cpp" />
+    <ClCompile Include="Component\Engine\Other\GameObjectSaveAndLoader.cpp" />
+    <ClCompile Include="Component\Game\UI\BossEnemyUIManager.cpp" />
+    <ClCompile Include="Component\Game\UI\BossEnemyHitPointGauge.cpp" />
     <ClCompile Include="Collision\AABBCreater.cpp" />
     <ClCompile Include="Component\Engine\Mesh\AnimationCPU.cpp" />
     <ClCompile Include="Component\Engine\Collider\AABBAnimationCollider.cpp" />
     <ClCompile Include="Component\Engine\Camera\CameraMove.cpp" />
+    <ClCompile Include="Component\Game\PlayerEnemyCommon\HitPoint.cpp" />
+    <ClCompile Include="Component\Engine\Collider\OBBCollider.cpp" />
+    <ClCompile Include="Engine\ModelViewer\SaveModelViewerCollider.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ModelViewerLight.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ModelViewerPlane.cpp" />
+    <ClCompile Include="Engine\ModelViewer\ModelViewerColliderManager.cpp" />
+    <ClCompile Include="Device\FileOperator.cpp" />
+    <ClCompile Include="Engine\DebugManager\DebugUtility\LineRenderer\LineInstancingDrawer.cpp" />
+    <ClCompile Include="Component\Game\Camera\TPSCamera.cpp" />
+    <ClCompile Include="Component\Game\Enemy\OctopusFoot.cpp" />
+    <ClCompile Include="Component\Game\Enemy\OctopusFootCommonSetting.cpp" />
+    <ClCompile Include="Component\Game\Enemy\OctopusFootAttack.cpp" />
+    <ClCompile Include="Component\Game\Enemy\OctopusFootManager.cpp" />
+    <ClCompile Include="Component\Game\Enemy\OctopusHead.cpp" />
+    <ClCompile Include="Component\Game\PlayerEnemyCommon\PlayerEnemyConnection.cpp" />
+    <ClCompile Include="Component\Game\Enemy\Octopus.cpp" />
+    <ClCompile Include="Utility\JsonHelper.cpp" />
+    <ClCompile Include="System\Shader\DataTransfer.cpp" />
     <ClCompile Include="Engine\Camera\EngineCamera.cpp" />
     <ClCompile Include="Engine\EngineFuctionChanger.cpp" />
     <ClCompile Include="Engine\ModelViewer\AnimationViewer.cpp" />
@@ -200,11 +228,9 @@
     <ClCompile Include="Component\Engine\CollideOperation\MeshAdder.cpp" />
     <ClCompile Include="Engine\DebugManager\DebugLayer\Inspector\ImGuiInspector.cpp" />
     <ClCompile Include="Engine\DebugManager\DebugLayer\Inspector\ImGuiWrapper.cpp" />
-    <ClCompile Include="Component\Engine\Other\GameObjectSaveAndLoader.cpp" />
     <ClCompile Include="Component\Engine\Mesh\MeshOutLine.cpp" />
     <ClCompile Include="Component\Engine\Mesh\MeshShader.cpp" />
     <ClCompile Include="Component\Engine\Mesh\MeshRenderer.cpp" />
-    <ClCompile Include="Component\Engine\Mesh\MeshMaterial.cpp" />
     <ClCompile Include="DirectX\DepthStencilView.cpp" />
     <ClCompile Include="Component\Engine\Scene\MapEditor.cpp" />
     <ClCompile Include="Component\Game\Camera\GameCamera.cpp" />
@@ -220,9 +246,17 @@
     <ClCompile Include="Component\Engine\Collider\OBBAnimationCollider.cpp" />
     <ClCompile Include="Collision\OBBCreater.cpp" />
     <ClCompile Include="Component\Game\Player\PlayerMove.cpp" />
-    <ClCompile Include="Component\Game\Player\PlayerAttack.cpp" />
-    <ClCompile Include="Component\Game\Player\PlayerRoll.cpp" />
-    <ClCompile Include="Component\Game\Player\PlayerGuard.cpp" />
+    <ClCompile Include="Component\Game\Player\Stamina.cpp" />
+    <ClCompile Include="Component\Game\Camera\LockOn.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerWalk.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerDash.cpp" />
+    <ClCompile Include="Component\Game\UI\StaminaGauge.cpp" />
+    <ClCompile Include="Component\Game\UI\PlayerUIManager.cpp" />
+    <ClCompile Include="Component\Game\UI\PlayerHitPointGauge.cpp" />
+    <ClCompile Include="Component\Game\Player\PlayerWeapon.cpp" />
+    <ClCompile Include="Component\Engine\Other\SimpleMotionChanger.cpp" />
+    <ClCompile Include="System\Shader\ShaderBinder.cpp" />
+    <ClCompile Include="Sprite\SpriteInstancingDrawer.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTextureManager.cpp" />
     <ClCompile Include="Mesh\MeshCommonShaderSetter.cpp" />
     <ClCompile Include="Engine\SceneMesh\SceneMeshOperator.cpp" />
@@ -231,6 +265,8 @@
     <ClCompile Include="Collision\SphereHelper.cpp" />
     <ClCompile Include="Engine\ModelViewer\ModelViewCamera.cpp" />
     <ClCompile Include="Engine\Camera\SimpleCamera.cpp" />
+    <ClCompile Include="Device\TimeMeasurement.cpp" />
+    <ClCompile Include="System\Texture\TextureBinder.cpp" />
     <ClCompile Include="Transform\ParentChildRelationship.cpp" />
     <ClCompile Include="System\Texture\MeshRenderOnTexture.cpp" />
     <ClCompile Include="Mesh\Fbx\FbxUtility.cpp" />
@@ -322,7 +358,6 @@
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Component\Engine\Sprite\SpriteComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
-    <ClCompile Include="Device\Subject.cpp" />
     <ClCompile Include="Component\Engine\Sprite\Sprite3D.cpp" />
     <ClCompile Include="Component\Game\Scene\Title.cpp" />
     <ClCompile Include="Transform\Pivot.cpp" />
@@ -400,26 +435,68 @@
     <ClCompile Include="Sound\Effects\FourierTransform\WindowFunction.cpp" />
     <ClCompile Include="Component\Engine\Sample\WaveformRenderSample.cpp" />
     <ClCompile Include="Mesh\VertexNormalSmoother.cpp" />
+    <ClCompile Include="Component\Game\Weapon\WeaponDamage.cpp" />
+    <ClCompile Include="Engine\ModelViewer\VertexSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\Engine\EngineComponentAlias.h" />
+    <ClInclude Include="Component\Game\Enemy\EnemyAlias.h" />
+    <ClInclude Include="Component\Game\Enemy\IOctopusPart.h" />
+    <ClInclude Include="Component\Game\Enemy\OctopusConstantNumbers.h" />
+    <ClInclude Include="Component\Game\PlayerEnemyCommon\IShotRaySetter.h" />
+    <ClInclude Include="Component\Game\Player\BulletShooter.h" />
+    <ClInclude Include="Component\Game\Weapon\CrossHair.h" />
+    <ClInclude Include="Component\Game\Enemy\EnemyAI.h" />
+    <ClInclude Include="Component\Game\Enemy\EnemyMove.h" />
+    <ClInclude Include="Engine\ModelViewer\ColliderOptionGUI.h" />
+    <ClInclude Include="Collision\BoxHelper.h" />
+    <ClInclude Include="Component\Engine\Collider\ColliderDrawer.h" />
+    <ClInclude Include="Component\Engine\Other\GameObjectSaveAndLoader.h" />
+    <ClInclude Include="Component\Game\Enemy\EnemyMotions.h" />
+    <ClInclude Include="Component\Game\UI\BossEnemyUIManager.h" />
+    <ClInclude Include="Component\Game\UI\BossEnemyHitPointGauge.h" />
     <ClInclude Include="Collision\AABBCreater.h" />
     <ClInclude Include="Component\Engine\Mesh\AnimationCPU.h" />
     <ClInclude Include="Collision\BoxConstantGroup.h" />
     <ClInclude Include="Component\Engine\Collider\AABBAnimationCollider.h" />
     <ClInclude Include="Component\Engine\Camera\CameraMove.h" />
+    <ClInclude Include="Component\Game\Camera\ILockOn.h" />
+    <ClInclude Include="Component\Game\PlayerEnemyCommon\HitPoint.h" />
+    <ClInclude Include="Component\Game\Player\IMoveDirectionGetter.h" />
+    <ClInclude Include="Component\Game\Player\IPlayerMove.h" />
     <ClInclude Include="Component\Game\Player\PlayerMotions.h" />
+    <ClInclude Include="Component\Engine\Collider\OBBCollider.h" />
+    <ClInclude Include="Engine\DebugManager\DebugLayer\Inspector\IInspector.h" />
+    <ClInclude Include="Engine\IEngineManagingClassGetter.h" />
+    <ClInclude Include="Engine\ModelViewer\IModelViewerCallback.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewerMode.h" />
+    <ClInclude Include="Engine\ModelViewer\SaveModelViewerCollider.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewerLight.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewerPlane.h" />
+    <ClInclude Include="Engine\ModelViewer\ModelViewerColliderManager.h" />
+    <ClInclude Include="Device\FileOperator.h" />
+    <ClInclude Include="Engine\DebugManager\DebugUtility\LineRenderer\LineInstancingDrawer.h" />
+    <ClInclude Include="Component\Game\Camera\TPSCamera.h" />
+    <ClInclude Include="Component\Game\Enemy\OctopusFoot.h" />
+    <ClInclude Include="Component\Game\Enemy\OctopusFootCommonSetting.h" />
+    <ClInclude Include="Component\Game\Enemy\OctopusFootAttack.h" />
+    <ClInclude Include="Component\Game\Enemy\OctopusFootManager.h" />
+    <ClInclude Include="Component\Game\Enemy\OctopusHead.h" />
+    <ClInclude Include="Component\Game\PlayerEnemyCommon\PlayerEnemyConnection.h" />
+    <ClInclude Include="Component\Game\Enemy\Octopus.h" />
+    <ClInclude Include="Utility\JsonHelper.h" />
+    <ClInclude Include="System\Shader\DataTransfer.h" />
     <ClInclude Include="Engine\Camera\EngineCamera.h" />
     <ClInclude Include="Engine\EngineFuctionChanger.h" />
     <ClInclude Include="Engine\AssetsRenderer\ICallbackSelectAssetsTexture.h" />
     <ClInclude Include="Engine\EngineMode.h" />
-    <ClInclude Include="Engine\ICallbackChangeEngineMode.h" />
+    <ClInclude Include="Engine\IEngineFunctionChanger.h" />
     <ClInclude Include="Engine\IEngineModeGetter.h" />
     <ClInclude Include="Engine\ModelViewer\AnimationViewer.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTexture.h" />
     <ClInclude Include="Component\Engine\Camera\CameraHelper.h" />
     <ClInclude Include="Engine\DebugManager\DebugManager.h" />
     <ClInclude Include="Engine\DebugManager\DebugLayer\DebugLayer.h" />
-    <ClInclude Include="Engine\DebugManager\DebugLayer\Inspector\IInspectorTargetSetter.h" />
     <ClInclude Include="Engine\EngineFunctionManager.h" />
     <ClInclude Include="Engine\AssetsRenderer\AssetsRenderTextureDeleter.h" />
     <ClInclude Include="Collision\RaycastHit.h" />
@@ -447,17 +524,16 @@
     <ClInclude Include="Engine\AssetsRenderer\ICurrentSelectTextureGetter.h" />
     <ClInclude Include="Engine\DebugManager\DebugLayer\Inspector\ImGuiInspector.h" />
     <ClInclude Include="Engine\DebugManager\DebugLayer\Inspector\ImGuiWrapper.h" />
-    <ClInclude Include="Component\Engine\Other\GameObjectSaveAndLoader.h" />
     <ClInclude Include="Component\Engine\Mesh\MeshOutLine.h" />
     <ClInclude Include="Component\Engine\Mesh\MeshShader.h" />
     <ClInclude Include="Component\Engine\Mesh\MeshRenderer.h" />
-    <ClInclude Include="Component\Engine\Mesh\MeshMaterial.h" />
     <ClInclude Include="Engine\Pause\IPause.h" />
     <ClInclude Include="Engine\SceneMesh\ICurrentSelectSceneMeshGetter.h" />
     <ClInclude Include="DirectX\DepthStencilView.h" />
     <ClInclude Include="DirectX\DepthStencilViewDesc.h" />
     <ClInclude Include="Component\Engine\Scene\MapEditor.h" />
     <ClInclude Include="Component\Game\Camera\GameCamera.h" />
+    <ClInclude Include="Device\Function.h" />
     <ClInclude Include="GameObject\IGameObjectAdder.h" />
     <ClInclude Include="GameObject\IGameObjectsGetter.h" />
     <ClInclude Include="GameObject\IThisGetter.h" />
@@ -475,9 +551,17 @@
     <ClInclude Include="Component\Engine\Collider\OBBAnimationCollider.h" />
     <ClInclude Include="Collision\OBBCreater.h" />
     <ClInclude Include="Component\Game\Player\PlayerMove.h" />
-    <ClInclude Include="Component\Game\Player\PlayerAttack.h" />
-    <ClInclude Include="Component\Game\Player\PlayerRoll.h" />
-    <ClInclude Include="Component\Game\Player\PlayerGuard.h" />
+    <ClInclude Include="Component\Game\Player\Stamina.h" />
+    <ClInclude Include="Component\Game\Camera\LockOn.h" />
+    <ClInclude Include="Component\Game\Player\PlayerWalk.h" />
+    <ClInclude Include="Component\Game\Player\PlayerDash.h" />
+    <ClInclude Include="Component\Game\UI\StaminaGauge.h" />
+    <ClInclude Include="Component\Game\UI\PlayerUIManager.h" />
+    <ClInclude Include="Component\Game\UI\PlayerHitPointGauge.h" />
+    <ClInclude Include="Component\Game\Player\PlayerWeapon.h" />
+    <ClInclude Include="Component\Engine\Other\SimpleMotionChanger.h" />
+    <ClInclude Include="System\Shader\ShaderBinder.h" />
+    <ClInclude Include="Sprite\SpriteInstancingDrawer.h" />
     <ClInclude Include="System\AssetsDirectoryPath.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTextureManager.h" />
     <ClInclude Include="Mesh\IMeshAdder.h" />
@@ -490,6 +574,8 @@
     <ClInclude Include="Engine\ModelViewer\ModelViewCamera.h" />
     <ClInclude Include="Engine\Camera\SimpleCamera.h" />
     <ClInclude Include="System\FpsCounter\IFpsGetter.h" />
+    <ClInclude Include="Device\TimeMeasurement.h" />
+    <ClInclude Include="System\Texture\TextureBinder.h" />
     <ClInclude Include="Transform\ParentChildRelationship.h" />
     <ClInclude Include="System\Texture\MeshRenderOnTexture.h" />
     <ClInclude Include="Mesh\Fbx\FbxUtility.h" />
@@ -623,7 +709,6 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Component\Engine\Sprite\SpriteComponent.h" />
     <ClInclude Include="Math\Plane.h" />
-    <ClInclude Include="Device\Subject.h" />
     <ClInclude Include="Component\Engine\Sprite\Sprite3D.h" />
     <ClInclude Include="Component\Game\Scene\Title.h" />
     <ClInclude Include="Transform\Pivot.h" />
@@ -648,6 +733,7 @@
     <ClInclude Include="Engine\DebugManager\DebugUtility\Debug.h" />
     <ClInclude Include="Collision\Triangle.h" />
     <ClInclude Include="Utility\Easing.h" />
+    <ClInclude Include="Utility\FileMode.h" />
     <ClInclude Include="Utility\FileUtil.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="DirectX\RenderTargetView.h" />
@@ -713,6 +799,8 @@
     <ClInclude Include="Sound\Effects\FourierTransform\WindowFunction.h" />
     <ClInclude Include="Component\Engine\Sample\WaveformRenderSample.h" />
     <ClInclude Include="Mesh\VertexNormalSmoother.h" />
+    <ClInclude Include="Component\Game\Weapon\WeaponDamage.h" />
+    <ClInclude Include="Engine\ModelViewer\VertexSelector.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\ChickenMesh.hlsl">
@@ -761,6 +849,16 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\Line3DInstancing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Shader\Mesh.hlsl">
@@ -871,6 +969,19 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Shader\SpriteInstancing.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\Texture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -891,11 +1002,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
-      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Assets\Data\Camera.json" />
     <None Include="Assets\Data\CollideOperator.json" />
     <None Include="Assets\Data\DirectionalLight.json" />
@@ -903,17 +1009,31 @@
     <None Include="Assets\Data\GameCamera.json" />
     <None Include="Assets\Data\Global.json" />
     <None Include="Assets\Data\Ground1.json" />
+    <None Include="Assets\Data\imgui.ini" />
     <None Include="Assets\Data\ModelViewer.json" />
+    <None Include="Assets\Data\Octopus.json" />
     <None Include="Assets\Data\Plane.json" />
     <None Include="Assets\Data\Player.json" />
+    <None Include="Assets\Data\PlayerEnemyConnector.json" />
+    <None Include="Assets\Data\PlayerUI.json" />
+    <None Include="Assets\Data\Shield.json" />
     <None Include="Assets\Data\Title.json" />
+    <None Include="Assets\Data\TPSCamera.json" />
     <None Include="Assets\Data\Waveform.json" />
+    <None Include="Assets\Data\Weapon.json" />
+    <None Include="Assets\Data\BossEnemyUI.json" />
+    <None Include="imgui.ini" />
     <None Include="Shader\MaterialHeader.hlsli" />
     <None Include="Shader\MeshCommonAndMaterialHeader.hlsli" />
     <None Include="Shader\MeshCommonHeader.hlsli" />
     <None Include="Shader\OutLineHeader.hlsli" />
     <None Include="Shader\ShadowHeader.hlsli" />
     <None Include="Shader\SimpleHeader.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
+      <Project>{371b9fa9-4c90-4ac6-a123-aced756d6c77}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

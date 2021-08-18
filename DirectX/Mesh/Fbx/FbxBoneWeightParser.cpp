@@ -9,8 +9,19 @@ void FbxBoneWeightParser::parse(
     const FbxMesh* fbxMesh
 ) {
     FbxDeformer* fbxDeformer = fbxMesh->GetDeformer(0, FbxDeformer::eSkin);
+    if (!fbxDeformer) {
+        return;
+    }
     FbxSkin* fbxSkin = static_cast<FbxSkin*>(fbxDeformer);
+    if (!fbxSkin) {
+        return;
+    }
+
     int boneCount = fbxSkin->GetClusterCount();
+    if (boneCount == 0) {
+        return;
+    }
+
     for (int boneIndex = 0; boneIndex < boneCount; ++boneIndex) {
         FbxCluster* bone = fbxSkin->GetCluster(boneIndex);
         //影響する頂点の数

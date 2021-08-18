@@ -11,6 +11,10 @@ CircleCollider::CircleCollider() :
 
 CircleCollider::~CircleCollider() = default;
 
+ColliderType CircleCollider::getType() const {
+    return ColliderType::CIRCLE;
+}
+
 void CircleCollider::start() {
     Collider::start();
 

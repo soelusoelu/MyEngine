@@ -2,6 +2,7 @@
 
 #include "IDrawBefore.h"
 #include "../../Component.h"
+#include "../../../DirectX/DirectXInclude.h"
 #include "../../../Math/Math.h"
 #include <memory>
 
@@ -10,7 +11,10 @@ class MeshShader;
 class MeshManager;
 
 //メッシュ描画専用クラス
-class MeshRenderer : public Component, public std::enable_shared_from_this<MeshRenderer> {
+class MeshRenderer
+    : public Component
+    , public std::enable_shared_from_this<MeshRenderer>
+{
 public:
     MeshRenderer();
     ~MeshRenderer();
@@ -26,6 +30,10 @@ public:
     ) const;
     //描画前描画をしたいクラスを登録する
     void setDrawBefore(const IDrawBefore* drawer);
+    //ポリゴン描画方法を設定する
+    void setFillMode(FillMode mode);
+    //ポリゴン描画方法を取得する
+    FillMode getFillMode() const;
     //メッシュコンポーネントを取得する
     const MeshComponent& getMeshComponent() const;
     //メッシュシェーダーを取得する
@@ -55,6 +63,7 @@ private:
     const IDrawBefore* mBeforeDrawer;
     std::shared_ptr<MeshComponent> mMeshComponent;
     std::shared_ptr<MeshShader> mMeshShader;
+    FillMode mFillMode;
 
     static inline MeshManager* mMeshManager = nullptr;
 };

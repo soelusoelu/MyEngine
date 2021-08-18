@@ -6,14 +6,15 @@
 class Camera;
 
 //カメラの動きを扱うクラス
-class CameraMove : public Component {
+class CameraMove
+    : public Component
+{
 public:
     CameraMove();
     ~CameraMove();
     virtual void start() override;
     virtual void update() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
 private:

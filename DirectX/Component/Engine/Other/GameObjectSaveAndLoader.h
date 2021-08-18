@@ -11,8 +11,7 @@ class GameObjectSaveAndLoader : public Component {
 public:
     GameObjectSaveAndLoader();
     ~GameObjectSaveAndLoader();
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
     //保存するゲームオブジェクトを追加する
     void addSaveGameObject(const std::string& name);

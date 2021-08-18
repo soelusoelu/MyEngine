@@ -6,12 +6,16 @@
 #include "../../../../Imgui/imgui_impl_dx11.h"
 #include "../../../../Imgui/imgui_impl_win32.h"
 #include "../../../../Input/Input.h"
+#include "../../../../Math/Math.h"
 #include "../../../../System/Window.h"
 #include "../../../../Transform/Transform3D.h"
+#include "../../../../Utility/JsonHelper.h"
 #include "../../../../Utility/LevelLoader.h"
+#include <string>
 
 ImGuiInspector::ImGuiInspector()
-    : mInspectorPositionX(0.f)
+    : FileOperator("ImGuiInspector")
+    , mInspectorPositionX(0.f)
 {
 }
 
@@ -21,18 +25,8 @@ void ImGuiInspector::setTarget(const std::shared_ptr<GameObject>& target) {
     mTarget = target;
 }
 
-void ImGuiInspector::loadProperties(const rapidjson::Value& inObj) {
-    const auto& obj = inObj["inspector"];
-    if (obj.IsObject()) {
-        JsonHelper::getFloat(obj, "inspectorPositionX", &mInspectorPositionX);
-    }
-}
-
-void ImGuiInspector::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setFloat(alloc, &props, "inspectorPositionX", mInspectorPositionX);
-
-    inObj.AddMember("inspector", props, alloc);
+float ImGuiInspector::getInspectorPositionX() const {
+    return mInspectorPositionX;
 }
 
 void ImGuiInspector::drawInspect() const {
@@ -76,8 +70,17 @@ void ImGuiInspector::drawInspect() const {
         }
     }
 
+    //ゲームオブジェクト保存ボタン
+    if (ImGui::Button("Save")) {
+        LevelLoader::saveGameObject(*target);
+    }
+
     ImGui::End();
     ImGui::PopStyleColor(3);
+}
+
+void ImGuiInspector::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mInspectorPositionX, "inspectorPositionX", inObj, alloc, mode);
 }
 
 void ImGuiInspector::drawName(const GameObject& target) const {

@@ -2,10 +2,10 @@
 
 #include "../EngineMode.h"
 #include "../Pause/IPause.h"
+#include "../../Device/FileOperator.h"
 #include "../../GameObject/IGameObjectsGetter.h"
 #include "../../Math/Math.h"
 #include "../../System/FpsCounter/IFpsGetter.h"
-#include <rapidjson/document.h>
 #include <memory>
 
 class Camera;
@@ -14,12 +14,12 @@ class Renderer;
 class DrawString;
 class DebugLayer;
 
-class DebugManager {
+class DebugManager
+    : public FileOperator
+{
 public:
     DebugManager();
     ~DebugManager();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj);
 
     //初期化
     void initialize(
@@ -34,11 +34,9 @@ public:
     void update();
 
     //2D関連の描画
-    void draw(
-        EngineMode mode,
-        const Renderer& renderer,
-        Matrix4& proj
-    ) const;
+    void draw2D(const Renderer& renderer, Matrix4& proj) const;
+    //2Dデバッグ関連の描画
+    void drawDebug2D(EngineMode mode, Matrix4& proj) const;
 
     //3D関連の描画
     void draw3D(
@@ -53,6 +51,8 @@ public:
 private:
     DebugManager(const DebugManager&) = delete;
     DebugManager& operator=(const DebugManager&) = delete;
+
+    virtual void childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
 private:
     std::unique_ptr<DrawString> mStringDrawer;

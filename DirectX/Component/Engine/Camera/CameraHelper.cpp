@@ -1,5 +1,40 @@
 ﻿#include "CameraHelper.h"
 #include "../../../Collision/Collision.h"
+#include "../../../System/Window.h"
+
+Vector3 CameraHelper::screenToWorldPoint(
+    const Vector2& position,
+    const Matrix4& view,
+    const Matrix4& projection,
+    float z
+) {
+    //ビューポートの逆行列を求める
+    auto viewport = Matrix4::identity;
+    viewport.m[0][0] = Window::width() / 2.f;
+    viewport.m[1][1] = -Window::height() / 2.f;
+    viewport.m[3][0] = Window::width() / 2.f;
+    viewport.m[3][1] = Window::height() / 2.f;
+
+    //ビュー * 射影 * ビューポートの逆行列を求める
+    auto invMat = Matrix4::inverse(view * projection * viewport);
+
+    //スクリーン座標をワールド座標に変換
+    return Vector3::transformWithPerspDiv(Vector3(position, z), invMat);
+}
+
+Ray CameraHelper::screenToRay(
+    const Vector3& start,
+    const Vector2& end,
+    const Matrix4& view,
+    const Matrix4& projection,
+    float z
+) {
+    Ray ray{};
+    ray.start = start;
+    ray.end = screenToWorldPoint(end, view, projection, z);
+
+    return ray;
+}
 
 Matrix4 CameraHelper::getViewMatrixTakingSphereInCamera(
     const Sphere& sphere,

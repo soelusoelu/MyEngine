@@ -1,7 +1,7 @@
 ﻿#include "Physics.h"
 #include "../Collision/Collision.h"
 #include "../Component/ComponentManager.h"
-#include "../Component/Engine/Collider/AABBCollider.h"
+#include "../Component/Engine/Collider/OBBCollider.h"
 #include <algorithm>
 
 Physics::Physics() {
@@ -12,11 +12,11 @@ Physics::~Physics() {
     Collider::setPhysics(nullptr);
 }
 
-void Physics::add(const CollPtr& collider) {
+void Physics::add(const ColliderPtr& collider) {
     mColliders.emplace_back(collider);
 }
 
-void Physics::remove(const CollPtr& collider) {
+void Physics::remove(const ColliderPtr& collider) {
     auto itr = std::find(mColliders.begin(), mColliders.end(), collider);
     if (itr != mColliders.end()) {
         std::iter_swap(itr, mColliders.end() - 1);
@@ -33,33 +33,45 @@ void Physics::sweepAndPrune() {
         return;
     }
 
-    //min.xが小さい順にソート
-    std::sort(mColliders.begin(), mColliders.end(), [&](const CollPtr& a, const CollPtr& b) {
-        return a->getAABB().min.x < b->getAABB().min.x;
-    });
-
-    for (size_t i = 0; i < mColliders.size(); ++i) {
+    auto size = mColliders.size();
+    for (size_t i = 0; i < size; ++i) {
         const auto& aColl = mColliders[i];
-        if (!aColl->getEnable()) {
+        if (!enabled(*aColl)) {
             continue;
         }
-        const auto& a = aColl->getAABB();
 
-        for (size_t j = i + 1; j < mColliders.size(); ++j) {
+        const auto aObb = static_cast<const OBBCollider*>(&*aColl);
+        const auto& a = aObb->getOBB();
+
+        for (size_t j = i + 1; j < size; ++j) {
             const auto& bColl = mColliders[j];
-            if (!bColl->getEnable()) {
+            if (!enabled(*bColl)) {
                 continue;
             }
-            const auto& b = bColl->getAABB();
-
-            //もしb.min.xが、a.max.xを超えていたら、
-            //aと交差する可能性があるbは存在しない
-            if (b.min.x > a.max.x) {
+            //同一ゲームオブジェクトのコライダーなら次へ
+            if (&aColl->gameObject() == &bColl->gameObject()) {
                 break;
-            } else if (Intersect::intersectAABB(a, b)) {
+            }
+
+            const auto bObb = static_cast<const OBBCollider*>(&*bColl);
+            const auto& b = bObb->getOBB();
+
+            //衝突判定
+            if (Intersect::intersectOBB(a, b)) {
                 aColl->addHitCollider(bColl);
                 bColl->addHitCollider(aColl);
             }
         }
     }
+}
+
+bool Physics::enabled(const Collider& collider) {
+    if (!collider.gameObject().getActive()) {
+        return false;
+    }
+    if (!collider.getEnable()) {
+        return false;
+    }
+
+    return true;
 }

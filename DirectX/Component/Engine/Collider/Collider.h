@@ -7,15 +7,28 @@
 
 class Physics;
 
-class Collider : public Component {
+enum class ColliderType {
+    AABB,
+    OBB,
+    CIRCLE,
+    SPHERE
+};
+
+class Collider
+    : public Component
+{
     using CollPtr = std::shared_ptr<Collider>;
     using CollPtrList = std::list<CollPtr>;
 
 protected:
     Collider();
     virtual ~Collider();
+    Collider(const Collider&) = delete;
+    Collider& operator=(const Collider&) = delete;
 
 public:
+    virtual ColliderType getType() const = 0;
+
     virtual void start() override;
     virtual void lateUpdate() override;
     virtual void finalize() override;

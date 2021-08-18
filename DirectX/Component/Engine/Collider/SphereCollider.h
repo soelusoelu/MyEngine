@@ -6,10 +6,14 @@
 #include "../../../Mesh/IMesh.h"
 #include "../../../Mesh/IMeshLoader.h"
 
-class SphereCollider : public Collider {
+class SphereCollider
+    : public Collider
+{
 public:
     SphereCollider();
     ~SphereCollider();
+    virtual ColliderType getType() const override;
+
     virtual void start() override;
     virtual void lateUpdate() override;
     virtual void drawInspector() override;

@@ -6,7 +6,7 @@ Transform2D::Transform2D() :
     mWorldTransform(Matrix4::identity),
     mPosition(Vector2::zero),
     mRotation(0.f),
-    mPivot(Pivot::NONE),
+    mPivot(Pivot::LEFT_TOP),
     mPivotPosition(Vector2::zero),
     mScale(Vector2::one),
     mSize(Vector2::zero),

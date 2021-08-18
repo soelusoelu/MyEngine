@@ -1,21 +1,22 @@
 ﻿#pragma once
 
+#include "../Device/FileOperator.h"
 #include "../Math/Math.h"
 #include "../Transform/Pivot.h"
-#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 #include <string>
 
 class Sprite;
+class SpriteInstancingDrawer;
 
-class DrawString {
+class DrawString
+    : public FileOperator
+{
 public:
     DrawString();
     ~DrawString();
     void initialize();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     //保持してる文字列を一括描画
     void drawAll(const Matrix4& proj) const;
     //保持してる文字列をすべて削除
@@ -48,6 +49,9 @@ public:
     );
 
 private:
+    DrawString(const DrawString&) = delete;
+    DrawString& operator=(const DrawString&) = delete;
+
     struct ParamInt {
         int number;
         Vector2 position;
@@ -74,11 +78,13 @@ private:
         Pivot pivot;
     };
 
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
     void drawInt(const ParamInt& param, const Matrix4& proj) const;
     void drawFloat(const ParamFloat& param, const Matrix4& proj) const;
     void drawString(const ParamString& param, const Matrix4& proj) const;
     //ピボットから描画位置を調整
-    void computePositionFromPivot(Vector2* pos, const Vector2& size, Pivot pivot) const;
+    void computePositionFromPivot(Vector2& pos, const Vector2& size, Pivot pivot) const;
 
 public:
     static constexpr int WIDTH = 32; //画像1文字の横幅
@@ -90,9 +96,9 @@ private:
     std::list<ParamInt> mParamsInt;
     std::list<ParamFloat> mParamsFloat;
     std::list<ParamString> mParamsString;
-
     std::string mNumberFileName;
     std::string mFontFileName;
+    std::unique_ptr<SpriteInstancingDrawer> mDrawer;
 
     static constexpr int SPRITE_WIDTH = 512; //画像横幅
     static constexpr float WIDTH_RATE = static_cast<float>(WIDTH) / static_cast<float>(SPRITE_WIDTH); //画像横幅に対する1文字の比率

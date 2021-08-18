@@ -13,6 +13,10 @@ SphereCollider::SphereCollider() :
 
 SphereCollider::~SphereCollider() = default;
 
+ColliderType SphereCollider::getType() const {
+    return ColliderType::SPHERE;
+}
+
 void SphereCollider::start() {
     Collider::start();
 

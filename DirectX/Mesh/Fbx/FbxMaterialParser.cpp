@@ -147,13 +147,14 @@ void FbxMaterialParser::createTexture(Material& material, const FbxSurfaceMateri
     const auto& textureName = FileUtil::getFileNameFromDirectry(filePath);
 
     //ファイル名からテクスチャを作成する
-    const auto& tex = AssetsManager::instance().createTexture(textureName, directoryPath);
+    auto& am = AssetsManager::instance();
+    int texID = am.createTexture(textureName, directoryPath);
 
     //指定されたテクスチャに渡す
     if (type == FbxSurfaceMaterial::sDiffuse) {
-        material.texture = tex;
+        material.textureID = texID;
     } else if (type == FbxSurfaceMaterial::sNormalMap) {
-        material.normalMapTexture = tex;
+        material.normalMapTextureID = texID;
     }
 }
 

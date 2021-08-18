@@ -1,20 +1,43 @@
 ﻿#include "SpriteManager.h"
+#include "Sprite.h"
 #include "../Component/Engine/Sprite/Sprite3D.h"
 #include "../Component/Engine/Sprite/SpriteComponent.h"
-#include <algorithm>
 
 SpriteManager::SpriteManager() {
+    Sprite::setSpriteManager(this);
     SpriteComponent::setSpriteManager(this);
     Sprite3D::setSpriteManager(this);
 }
 
 SpriteManager::~SpriteManager() {
+    Sprite::setSpriteManager(nullptr);
     SpriteComponent::setSpriteManager(nullptr);
     Sprite3D::setSpriteManager(nullptr);
 }
 
 void SpriteManager::update() {
     remove();
+
+    for (const auto& sprite : mSprites) {
+        if (sprite->getActive()) {
+            sprite->computeWorldTransform();
+        }
+    }
+}
+
+void SpriteManager::draw(const Matrix4& proj) const {
+    if (mSprites.empty()) {
+        return;
+    }
+
+    for (const auto& sprite : mSprites) {
+        if (!sprite->getActive() || sprite->isDead()) {
+            continue;
+        }
+
+        //描画する
+        sprite->draw(proj);
+    }
 }
 
 void SpriteManager::drawComponents(const Matrix4& proj) const {
@@ -26,6 +49,8 @@ void SpriteManager::drawComponents(const Matrix4& proj) const {
         if (!sprite->getActive() || sprite->isDead()) {
             continue;
         }
+
+        //描画する
         sprite->draw(proj);
     }
 }
@@ -45,12 +70,17 @@ void SpriteManager::draw3Ds(const Matrix4& view, const Matrix4& proj) const {
         if (!sprite->getActive() || sprite->isDead()) {
             continue;
         }
+
         if (sprite->isBillboard()) {
             sprite->drawBillboard(cancelRotation, view * proj);
         } else {
             sprite->draw(view * proj);
         }
     }
+}
+
+void SpriteManager::add(const SpritePtr& sprite) {
+    mSprites.emplace_back(sprite);
 }
 
 void SpriteManager::addComponent(const SpriteComponentPtr& add) {

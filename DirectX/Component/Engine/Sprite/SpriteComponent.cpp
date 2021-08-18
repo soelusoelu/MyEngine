@@ -6,7 +6,7 @@
 #include "../../../Sprite/SpriteManager.h"
 #include "../../../Transform/Pivot.h"
 #include "../../../Transform/Transform2D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 SpriteComponent::SpriteComponent() :
     Component(),
@@ -33,58 +33,56 @@ void SpriteComponent::onEnable(bool value) {
     setActive(value);
 }
 
-void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getInt(inObj, "drawOrder", &mDrawOrder);
-    std::string str;
-    if (JsonHelper::getString(inObj, "fileName", &str)) {
-        setTextureFromFileName(str);
+void SpriteComponent::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mDrawOrder, "drawOrder", inObj, alloc, mode);
+    if (mode == FileMode::SAVE) {
+        JsonHelper::setString(fileName(), "fileName", inObj, alloc);
+        JsonHelper::setBool(getActive(), "isActive", inObj, alloc);
+        JsonHelper::setVector2(transform().getPosition(), "position", inObj, alloc);
+        JsonHelper::setFloat(transform().getRotation(), "rotation", inObj, alloc);
+        JsonHelper::setVector2(transform().getScale(), "scale", inObj, alloc);
+        JsonHelper::setVector3(getColor(), "color", inObj, alloc);
+        JsonHelper::setFloat(getAlpha(), "alpha", inObj, alloc);
+        JsonHelper::setVector4(getUV(), "uv", inObj, alloc);
+        std::string dst;
+        PivotFunc::pivotToString(transform().getPivotEnum(), dst);
+        JsonHelper::setString(dst, "pivot", inObj, alloc);
+    } else {
+        std::string str;
+        if (JsonHelper::getString(str, "fileName", inObj)) {
+            setTextureFromFileName(str);
+        }
+        if (bool isActive = true; JsonHelper::getBool(isActive, "isActive", inObj)) {
+            setActive(isActive);
+        }
+        Vector2 vec2;
+        if (JsonHelper::getVector2(vec2, "position", inObj)) {
+            transform().setPosition(vec2);
+        }
+        float value = 0.f;
+        if (JsonHelper::getFloat(value, "rotation", inObj)) {
+            transform().setRotation(value);
+        }
+        if (JsonHelper::getVector2(vec2, "scale", inObj)) {
+            transform().setScale(vec2);
+        }
+        Vector3 vec3;
+        if (JsonHelper::getVector3(vec3, "color", inObj)) {
+            setColor(vec3);
+        }
+        if (JsonHelper::getFloat(value, "alpha", inObj)) {
+            setAlpha(value);
+        }
+        Vector4 vec4;
+        if (JsonHelper::getVector4(vec4, "uv", inObj)) {
+            setUV(vec4.x, vec4.y, vec4.z, vec4.w);
+        }
+        if (JsonHelper::getString(str, "pivot", inObj)) {
+            auto pivot = Pivot::LEFT_TOP;
+            PivotFunc::stringToPivot(str, pivot);
+            transform().setPivot(pivot);
+        }
     }
-    bool isActive = true;
-    if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
-        setActive(isActive);
-    }
-    Vector2 vec2;
-    if (JsonHelper::getVector2(inObj, "position", &vec2)) {
-        transform().setPosition(vec2);
-    }
-    float value;
-    if (JsonHelper::getFloat(inObj, "rotation", &value)) {
-        transform().setRotation(value);
-    }
-    if (JsonHelper::getVector2(inObj, "scale", &vec2)) {
-        transform().setScale(vec2);
-    }
-    Vector3 vec3;
-    if (JsonHelper::getVector3(inObj, "color", &vec3)) {
-        setColor(vec3);
-    }
-    if (JsonHelper::getFloat(inObj, "alpha", &value)) {
-        setAlpha(value);
-    }
-    Vector4 vec4;
-    if (JsonHelper::getVector4(inObj, "uv", &vec4)) {
-        setUV(vec4.x, vec4.y, vec4.z, vec4.w);
-    }
-    if (JsonHelper::getString(inObj, "pivot", &str)) {
-        Pivot pivot = Pivot::NONE;
-        PivotFunc::stringToPivot(str, &pivot);
-        transform().setPivot(pivot);
-    }
-}
-
-void SpriteComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setInt(alloc, inObj, "drawOrder", mDrawOrder);
-    JsonHelper::setString(alloc, inObj, "fileName", fileName());
-    JsonHelper::setBool(alloc, inObj, "isActive", getActive());
-    JsonHelper::setVector2(alloc, inObj, "position", transform().getPosition());
-    JsonHelper::setFloat(alloc, inObj, "rotation", transform().getRotation());
-    JsonHelper::setVector2(alloc, inObj, "scale", transform().getScale());
-    JsonHelper::setVector3(alloc, inObj, "color", getColor());
-    JsonHelper::setFloat(alloc, inObj, "alpha", getAlpha());
-    JsonHelper::setVector4(alloc, inObj, "uv", getUV());
-    std::string dst;
-    PivotFunc::pivotToString(transform().getPivotEnum(), dst);
-    JsonHelper::setString(alloc, inObj, "pivot", dst);
 }
 
 void SpriteComponent::drawInspector() {
@@ -169,6 +167,10 @@ void SpriteComponent::setTexture(const std::shared_ptr<Texture>& texture) {
 
 const Texture& SpriteComponent::texture() const {
     return mSprite->texture();
+}
+
+int SpriteComponent::getTextureID() const {
+    return mSprite->getTextureID();
 }
 
 const Shader& SpriteComponent::shader() const {

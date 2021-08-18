@@ -4,5 +4,6 @@
 
 struct OBB {
     Vector3 center;
-    Vector3 edges[3];
+    Quaternion rotation;
+    Vector3 extents;
 };

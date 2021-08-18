@@ -1,53 +1,57 @@
 ﻿#include "Time.h"
 #include "../System/SystemInclude.h"
+#include "../Utility/JsonHelper.h"
 
-Time::Time(float sec) :
-    mTimeRate(0.f),
-    mLimitTime(sec),
-    mIsOverLimit(false) {
+Time::Time()
+    : mCurrentTimer(0.f)
+    , mLimitTime(0.f)
+{
 }
 
 Time::~Time() = default;
 
-void Time::update() {
-    mTimeRate += Time::deltaTime;
+void Time::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mLimitTime, "limitTime", inObj, alloc, mode);
+}
 
-    if (mTimeRate >= mLimitTime) {
-        mIsOverLimit = true;
-    }
+void Time::update() {
+    mCurrentTimer += Time::deltaTime;
 }
 
 void Time::reset() {
-    mTimeRate = 0.f;
-    mIsOverLimit = false;
+    mCurrentTimer = 0.f;
 }
 
 bool Time::isTime() const {
-    return mIsOverLimit;
+    return (mCurrentTimer >= mLimitTime);
 }
 
 void Time::setLimitTime(float sec) {
     mLimitTime = sec;
 }
 
-void Time::setCurrentTime(float sec) {
-    mTimeRate = sec;
-}
-
-float Time::getCountUpTime() const {
-    return mTimeRate;
-}
-
-float Time::getCountDownTime() const {
-    return mLimitTime - mTimeRate;
-}
-
-float Time::limitTime() const {
+float Time::getLimitTime() const {
     return mLimitTime;
 }
 
+void Time::setCurrentTime(float sec) {
+    mCurrentTimer = sec;
+}
+
+float Time::getCountUpTime() const {
+    return mCurrentTimer;
+}
+
+float Time::getCountDownTime() const {
+    return mLimitTime - mCurrentTimer;
+}
+
 float Time::rate() const {
-    return mTimeRate / mLimitTime;
+    return mCurrentTimer / mLimitTime;
+}
+
+void Time::forceOverlimit() {
+    mCurrentTimer = mLimitTime;
 }
 
 unsigned long long Time::time() {

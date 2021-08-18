@@ -2,21 +2,20 @@
 #include "../../../DirectX/DirectXInclude.h"
 #include "../../../System/AssetsManager.h"
 #include "../../../System/Shader/ConstantBuffers.h"
-#include "../../../System/Shader/Shader.h"
+#include "../../../System/Shader/DataTransfer.h"
+#include "../../../System/Shader/ShaderBinder.h"
 #include "../../../Transform/Transform3D.h"
 
 PointRenderer::PointRenderer() :
     mTransform(std::make_unique<Transform3D>()),
-    mShader(nullptr) {
+    mShaderID(-1) {
 }
 
 PointRenderer::~PointRenderer() = default;
 
 void PointRenderer::draw(const Matrix4& viewProj) const {
-    //バーテックスバッファーを登録
-    //mVertexBuffer->setVertexBuffer();
     //シェーダーを登録
-    mShader->setShaderInfo();
+    ShaderBinder::bind(mShaderID);
 
     for (const auto& point : mPoints) {
         drawPoint(point, viewProj);
@@ -25,7 +24,7 @@ void PointRenderer::draw(const Matrix4& viewProj) const {
 
 void PointRenderer::initialize() {
     //シェーダーを作成する
-    mShader = AssetsManager::instance().createShader("Point3D.hlsl");
+    mShaderID = AssetsManager::instance().createShader("Point3D.hlsl");
 }
 
 void PointRenderer::clear() {
@@ -39,7 +38,7 @@ void PointRenderer::renderPoint(const Vector3& point, const Vector3& color) {
 void PointRenderer::drawPoint(const Point3DParam& param, const Matrix4& viewProj) const {
     //パラメータからワールド行列を計算する
     mTransform->setPosition(param.point);
-    mTransform->computeWorldTransform();
+    mTransform->computeMatrix();
 
     //シェーダーに値を渡す
     PointConstantBuffer cb;
@@ -47,7 +46,7 @@ void PointRenderer::drawPoint(const Point3DParam& param, const Matrix4& viewProj
     cb.color = Vector4(param.color, 1.f);
 
     //シェーダーにデータ転送
-    mShader->transferData(&cb, sizeof(cb));
+    DataTransfer::transferConstantBuffer(mShaderID, &cb);
 
     //描画
     MyDirectX::DirectX::instance().drawIndexed(1);

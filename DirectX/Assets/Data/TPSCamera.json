@@ -1,0 +1,14 @@
+{
+  "tag": "GameCamera",
+  "components": [
+    {
+      "type": "TPSCamera",
+      "properties": {
+        "rotateSpeed": 160.0,
+        "cameraToPlayerDistance": 1750.0,
+        "playerHeadPointY": 770.0,
+        "adsPosition": [ 1.5, -1.0, -6.5 ]
+      }
+    }
+  ]
+}

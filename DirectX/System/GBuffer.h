@@ -10,7 +10,6 @@ class LightManager;
 class IndexBuffer;
 class RenderTargetView;
 class Sampler;
-class Shader;
 class ShaderResourceView;
 class VertexBuffer;
 
@@ -53,8 +52,8 @@ private:
     RTVPtrArray mRenderTargets;
     SRVPtrArray mShaderResourceViews;
     std::unique_ptr<Sampler> mSampler;
-    std::shared_ptr<Shader> mGBufferShader;
-    std::shared_ptr<Shader> mDefferdShader;
+    int mGBufferShaderID;
+    int mDefferdShaderID;
     std::unique_ptr<VertexBuffer> mVertexBuffer;
     std::unique_ptr<IndexBuffer> mIndexBuffer;
 };

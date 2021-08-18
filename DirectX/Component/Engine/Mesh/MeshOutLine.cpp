@@ -12,16 +12,17 @@
 #include "../../../Mesh/Mesh.h"
 #include "../../../System/AssetsManager.h"
 #include "../../../System/Shader/ConstantBuffers.h"
-#include "../../../System/Shader/Shader.h"
+#include "../../../System/Shader/DataTransfer.h"
+#include "../../../System/Shader/ShaderBinder.h"
 #include "../../../System/Texture/TextureFromFile.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 MeshOutLine::MeshOutLine()
     : Component()
     , mMesh(nullptr)
     , mDrawer(nullptr)
-    , mOutLineShader(nullptr)
+    , mOutLineShaderID(-1)
     , mSkinMesh(nullptr)
     , mOutLineColor(ColorPalette::white)
     , mOutLineThickness(0.1f)
@@ -45,7 +46,7 @@ void MeshOutLine::start() {
 
     //アニメーションするかでシェーダーを決める
     auto name = (mIsAnimation) ? "SkinMeshOutLine.hlsl" : "OutLine.hlsl";
-    mOutLineShader = AssetsManager::instance().createShader(name);
+    mOutLineShaderID = AssetsManager::instance().createShader(name);
 
     if (mIsAnimation) {
         mSkinMesh = getComponent<SkinMeshComponent>();
@@ -55,18 +56,11 @@ void MeshOutLine::start() {
     getComponent<MeshRenderer>()->setDrawBefore(this);
 }
 
-void MeshOutLine::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getVector3(inObj, "outLineColor", &mOutLineColor);
-    JsonHelper::getFloat(inObj, "outLineColorThickness", &mOutLineThickness);
-    JsonHelper::getBool(inObj, "isDrawOutLine", &mIsDrawOutLine);
-    JsonHelper::getFloat(inObj, "offset", &mOffset);
-}
-
-void MeshOutLine::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setVector3(alloc, inObj, "outLineColor", mOutLineColor);
-    JsonHelper::setFloat(alloc, inObj, "outLineColorThickness", mOutLineThickness);
-    JsonHelper::setBool(alloc, inObj, "isDrawOutLine", mIsDrawOutLine);
-    JsonHelper::setFloat(alloc, inObj, "offset", mOffset);
+void MeshOutLine::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mOutLineColor, "outLineColor", inObj, alloc, mode);
+    JsonHelper::getSet(mOutLineThickness, "outLineColorThickness", inObj, alloc, mode);
+    JsonHelper::getSet(mIsDrawOutLine, "isDrawOutLine", inObj, alloc, mode);
+    JsonHelper::getSet(mOffset, "offset", inObj, alloc, mode);
 }
 
 void MeshOutLine::drawInspector() {
@@ -85,13 +79,14 @@ void MeshOutLine::drawBefore(
 ) const {
     if (mIsDrawOutLine) {
         //裏面のみ描画したいから
-        MyDirectX::DirectX::instance().rasterizerState()->setCulling(CullMode::FRONT);
+        auto& rs = MyDirectX::DirectX::instance().rasterizerState();
+        rs.setCulling(CullMode::FRONT);
 
         //アウトライン描画
         drawOutLine(view, projection);
 
         //設定を戻す
-        MyDirectX::DirectX::instance().rasterizerState()->setCulling(CullMode::BACK);
+        rs.setCulling(CullMode::BACK);
     }
 }
 
@@ -121,7 +116,7 @@ bool MeshOutLine::getActiveOutLine() const {
 
 void MeshOutLine::drawOutLine(const Matrix4& view, const Matrix4& projection) const {
     //アウトラインシェーダーの登録
-    mOutLineShader->setShaderInfo();
+    ShaderBinder::bind(mOutLineShaderID);
 
     //スケールを拡大したモデルをアウトラインとして描画するため
     //ワールド行列の再計算をする
@@ -136,12 +131,16 @@ void MeshOutLine::drawOutLine(const Matrix4& view, const Matrix4& projection) co
     OutLineConstantBuffer outlinecb;
     outlinecb.wvp = world * view * projection;
     outlinecb.outlineColor = Vector4(mOutLineColor, 1.f);
-    mOutLineShader->transferData(&outlinecb, sizeof(outlinecb), 0);
+    const auto& shader = AssetsManager::instance().getShaderFormID(mOutLineShaderID);
+    DataTransfer::transferConstantBuffer(mOutLineShaderID, &outlinecb, 0);
 
     //アニメーションするならボーンのデータも渡す
     if (mIsAnimation) {
-        //ボーンデータを転送する
-        mOutLineShader->transferData(mSkinMesh->getBoneCurrentFrameMatrix().data(), sizeof(SkinMeshConstantBuffer), 1);
+        DataTransfer::transferConstantBuffer(
+            mOutLineShaderID,
+            mSkinMesh->getBoneCurrentFrameMatrix().data(),
+            1
+        );
     }
 
     //アウトラインを描画する

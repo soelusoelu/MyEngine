@@ -19,7 +19,7 @@ RenderTargetView::~RenderTargetView() = default;
 
 void RenderTargetView::setRenderTarget() const {
     const auto& dx = MyDirectX::DirectX::instance();
-    dx.deviceContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), dx.depthStencilView()->getDepthStencilView());
+    dx.deviceContext()->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), dx.depthStencilView().getDepthStencilView());
 }
 
 void RenderTargetView::setRenderTarget(const DepthStencilView& depthStencilView) const {
@@ -39,7 +39,7 @@ void RenderTargetView::setRenderTargets(const std::vector<std::unique_ptr<Render
     }
 
     const auto& dx = MyDirectX::DirectX::instance();
-    dx.deviceContext()->OMSetRenderTargets(VIEW_COUNT, views.data(), dx.depthStencilView()->getDepthStencilView());
+    dx.deviceContext()->OMSetRenderTargets(VIEW_COUNT, views.data(), dx.depthStencilView().getDepthStencilView());
 }
 
 void RenderTargetView::setRenderTargets(

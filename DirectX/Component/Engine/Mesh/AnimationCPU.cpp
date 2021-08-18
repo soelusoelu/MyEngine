@@ -32,7 +32,7 @@ void AnimationCPU::start() {
     }
 }
 
-const MeshVertexPositions& AnimationCPU::getCurrentMotionVertexPositions(unsigned index) const {
+const MeshVerticesPosition& AnimationCPU::getCurrentMotionVertexPositions(unsigned index) const {
     assert(index < mMesh->getMeshCount());
     return mCurrentMeshesVertexPositions[index];
 }

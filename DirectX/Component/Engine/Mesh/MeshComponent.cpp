@@ -6,7 +6,7 @@
 #include "../../../Mesh/Mesh.h"
 #include "../../../System/AssetsDirectoryPath.h"
 #include "../../../System/AssetsManager.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 #include "../../../Utility/FileUtil.h"
 
 MeshComponent::MeshComponent()
@@ -46,19 +46,19 @@ void MeshComponent::onEnable(bool value) {
     setActive(value);
 }
 
-void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
-    //ファイル名からメッシュを生成
-    if (JsonHelper::getString(inObj, "fileName", &mFileName)) {
-        JsonHelper::getString(inObj, "directoryPath", &mDirectoryPath);
-        createMesh(mFileName, mDirectoryPath);
+void MeshComponent::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    if (mode == FileMode::SAVE) {
+        JsonHelper::setString(mFileName, "fileName", inObj, alloc);
+        JsonHelper::setString(mDirectoryPath, "directoryPath", inObj, alloc);
+    } else {
+        //ファイル名からメッシュを生成
+        if (JsonHelper::getString(mFileName, "fileName", inObj)) {
+            JsonHelper::getString(mDirectoryPath, "directoryPath", inObj);
+            createMesh(mFileName, mDirectoryPath);
+        }
     }
 
-    JsonHelper::getBool(inObj, "shadowHandle", &mShadowHandle);
-}
-
-void MeshComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setString(alloc, inObj, "fileName", mFileName);
-    JsonHelper::setString(alloc, inObj, "directoryPath", mDirectoryPath);
+    JsonHelper::getSet(mShadowHandle, "shadowHandle", inObj, alloc, mode);
 }
 
 void MeshComponent::drawInspector() {

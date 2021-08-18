@@ -17,7 +17,7 @@ Vector3 Ray::pointOnSegment(float t) const {
 float Ray::minDistanceSquare(const Vector3& point) const {
     //ベクトルの準備
     Vector3 ab = end - start;
-    Vector3 ba = -1.0f * ab;
+    Vector3 ba = ab * -1.f;
     Vector3 ac = point - start;
     Vector3 bc = point - end;
 

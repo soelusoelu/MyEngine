@@ -2,9 +2,10 @@
 #include "DirectX.h"
 #include "Usage.h"
 
-Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data) :
-    mDesc(desc),
-    mBuffer(nullptr) {
+Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data)
+    : mDesc(desc)
+    , mBuffer(nullptr)
+{
     //バッファの作成
     const auto& temp = toBufferDesc(desc);
     if (data) {

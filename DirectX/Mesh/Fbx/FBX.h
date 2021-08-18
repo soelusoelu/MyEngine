@@ -18,6 +18,7 @@ public:
     virtual void parse(
         const std::string& filePath,
         std::vector<MeshVertices>& meshesVertices,
+        std::vector<MeshVerticesPosition>& meshesVerticesPosition,
         std::vector<Indices>& meshesIndices,
         std::vector<Material>& materials,
         std::vector<Motion>& motions,
@@ -28,6 +29,7 @@ private:
     //すべてのメッシュを作成する
     void createMeshes(
         std::vector<MeshVertices>& meshesVertices,
+        std::vector<MeshVerticesPosition>& meshesVerticesPosition,
         std::vector<Indices>& meshesIndices,
         std::vector<Material>& materials,
         const FbxScene* fbxScene,
@@ -37,6 +39,7 @@ private:
     //メッシュ作成
     void createMesh(
         MeshVertices& meshVertices,
+        MeshVerticesPosition& meshVerticesPosition,
         Indices& indices,
         Material& material,
         FbxMesh* fbxMesh,

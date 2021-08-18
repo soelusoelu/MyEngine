@@ -3,23 +3,27 @@
 #include <memory>
 #include <vector>
 
-class AABBCollider;
+class Collider;
 
 class Physics {
-    using CollPtr = std::shared_ptr<AABBCollider>;
-    using CollPtrArray = std::vector<CollPtr>;
+    using ColliderPtr = std::shared_ptr<Collider>;
+    using ColliderPtrArray = std::vector<ColliderPtr>;
 
 public:
     Physics();
     ~Physics();
     //コライダーの追加・削除
-    void add(const CollPtr& collider);
-    void remove(const CollPtr& collider);
+    void add(const ColliderPtr& collider);
+    void remove(const ColliderPtr& collider);
     //全削除
     void clear();
     //総当たり判定
     void sweepAndPrune();
 
 private:
-    CollPtrArray mColliders;
+    //コライダーが有効か
+    bool enabled(const Collider& collider);
+
+private:
+    ColliderPtrArray mColliders;
 };

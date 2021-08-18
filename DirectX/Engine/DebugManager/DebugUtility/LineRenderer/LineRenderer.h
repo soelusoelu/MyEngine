@@ -2,31 +2,37 @@
 
 #include "../../../../Math/Math.h"
 #include <memory>
+#include <string>
 
 class VertexBuffer;
 class IndexBuffer;
 
+enum class DimensionType {
+    TWO,
+    THREE
+};
+
 class LineRenderer {
 public:
-    LineRenderer();
+    LineRenderer(DimensionType type);
     virtual ~LineRenderer();
-    void draw(const Matrix4& proj) const;
-    void initialize();
-
-private:
-    LineRenderer(const LineRenderer&) = delete;
-    LineRenderer& operator=(const LineRenderer&) = delete;
-
-    //ラインのパラメータサイズを取得する
-    virtual unsigned getParamSize() const = 0;
-    //ラインの頂点情報を取得する
-    virtual const void* getVertexData() const = 0;
-    //シェーダーを作成する
-    virtual void createShader() = 0;
+    //シェーダー名を取得する
+    virtual std::string getShaderName() = 0;
     //溜まっているライン情報を削除する
     virtual void clear() = 0;
     //すべてのラインを描画していく
     virtual void drawLines(const Matrix4& proj) const = 0;
+    //描画前処理
+    virtual void drawingPreprocessing(const Matrix4& proj) {};
+
+    void initialize();
+    void draw(const Matrix4& proj);
+
+    static void finalize();
+
+private:
+    LineRenderer(const LineRenderer&) = delete;
+    LineRenderer& operator=(const LineRenderer&) = delete;
 
     //バーテックスバッファを作成する
     void createVertexBuffer();
@@ -34,6 +40,10 @@ private:
     void createIndexBuffer();
 
 protected:
-    std::unique_ptr<VertexBuffer> mVertexBuffer;
-    std::unique_ptr<IndexBuffer> mIndexBuffer;
+    DimensionType mDimensionType;
+    int mShaderID;
+
+    inline static VertexBuffer* mVertexBuffer2D = nullptr;
+    inline static VertexBuffer* mVertexBuffer3D = nullptr;
+    inline static IndexBuffer* mIndexBuffer = nullptr;
 };

@@ -1,20 +1,18 @@
 ﻿#include "AssetsTexturesSelector.h"
 #include "AssetsRenderTexture.h"
-#include "../../Device/Subject.h"
 #include "../../Input/Input.h"
 #include "../../Sprite/SpriteUtility.h"
 #include "../../System/Texture/MeshRenderOnTexture.h"
 
 AssetsTexturesSelector::AssetsTexturesSelector()
     : mTexturesGetter(nullptr)
-    , mCallbackSelectTexture(std::make_unique<Subject>())
 {
 }
 
 AssetsTexturesSelector::~AssetsTexturesSelector() = default;
 
 void AssetsTexturesSelector::callbackSelectTexture(const std::function<void()>& callback) {
-    mCallbackSelectTexture->addObserver(callback);
+    mCallbackSelectTexture += callback;
 }
 
 void AssetsTexturesSelector::initialize(const IAssetsRenderTexturesGetter* getter) {
@@ -35,7 +33,7 @@ bool AssetsTexturesSelector::selectTexture(AssetsRenderTexturePtr& out) {
     for (const auto& tex : textures) {
         if (SpriteUtility::containsDebug(tex->getTexture().getSprite(), mousePos)) {
             out = tex;
-            mCallbackSelectTexture->notify();
+            mCallbackSelectTexture();
             return true;
         }
     }

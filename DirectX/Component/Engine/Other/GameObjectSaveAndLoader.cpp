@@ -1,6 +1,6 @@
 ﻿#include "GameObjectSaveAndLoader.h"
 #include "../../../GameObject/GameObjectFactory.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
 GameObjectSaveAndLoader::GameObjectSaveAndLoader()
     : Component()
@@ -9,15 +9,14 @@ GameObjectSaveAndLoader::GameObjectSaveAndLoader()
 
 GameObjectSaveAndLoader::~GameObjectSaveAndLoader() = default;
 
-void GameObjectSaveAndLoader::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getStringArray(inObj, "gameObjectNames", &mGameObjectNames);
-    for (const auto& name : mGameObjectNames) {
-        GameObjectCreater::create(name);
-    }
-}
+void GameObjectSaveAndLoader::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::setStringArray(mGameObjectNames, "gameObjectNames", inObj, alloc);
 
-void GameObjectSaveAndLoader::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setStringArray(alloc, inObj, "gameObjectNames", mGameObjectNames);
+    if (mode == FileMode::LOAD) {
+        for (const auto& name : mGameObjectNames) {
+            GameObjectCreater::create(name);
+        }
+    }
 }
 
 void GameObjectSaveAndLoader::addSaveGameObject(const std::string& name) {

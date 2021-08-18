@@ -7,7 +7,6 @@
 #include "../../../Mesh/IMeshDrawer.h"
 #include <memory>
 
-class Shader;
 class SkinMeshComponent;
 class Camera;
 class DirectionalLight;
@@ -17,8 +16,7 @@ public:
     MeshOutLine();
     ~MeshOutLine();
     virtual void start() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     //メッシュ描画前描画
@@ -53,7 +51,7 @@ private:
 protected:
     const IMesh* mMesh;
     const IMeshDrawer* mDrawer;
-    std::shared_ptr<Shader> mOutLineShader;
+    int mOutLineShaderID;
     std::shared_ptr<SkinMeshComponent> mSkinMesh;
     Vector3 mOutLineColor;
     float mOutLineThickness;

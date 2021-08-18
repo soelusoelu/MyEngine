@@ -1,9 +1,9 @@
 ﻿#pragma once
 
-#include "Inspector/IInspectorTargetSetter.h"
+#include "Inspector/IInspector.h"
+#include "../../../Device/FileOperator.h"
 #include "../../../GameObject/IGameObjectsGetter.h"
 #include "../../../Math/Math.h"
-#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 #include <utility>
@@ -12,7 +12,9 @@ class DrawString;
 class GameObject;
 class Button;
 
-class Hierarchy {
+class Hierarchy
+    : public FileOperator
+{
     using GameObjectPtr = std::shared_ptr<GameObject>;
     using ButtonGameObjectPair = std::pair<std::unique_ptr<Button>, GameObjectPtr>;
     using ButtonGameObjectPairList = std::list<ButtonGameObjectPair>;
@@ -20,9 +22,7 @@ class Hierarchy {
 public:
     Hierarchy();
     ~Hierarchy();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
-    void initialize(const IGameObjectsGetter* getter, IInspectorTargetSetter* setter);
+    void initialize(const IGameObjectsGetter* getter, IInspector* inspector);
     void update();
     //マネージャーに登録されてる全ゲームオブジェクトを表示
     void drawGameObjects(DrawString& drawString) const;
@@ -30,6 +30,11 @@ public:
     void setGameObjectsGetter(const IGameObjectsGetter* getter);
 
 private:
+    Hierarchy(const Hierarchy&) = delete;
+    Hierarchy& operator=(const Hierarchy&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
     //全ゲームオブジェクトをボタン登録する
     void setGameObjectToButton();
     //ボタンにゲームオブジェクトを登録する
@@ -49,14 +54,12 @@ private:
 
 private:
     const IGameObjectsGetter* mGameObjectsGetter;
-    IInspectorTargetSetter* mInspectorTargetSetter;
+    IInspector* mInspector;
     ButtonGameObjectPairList mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;
     //行間
     float mLineSpace;
-    //Inspectorの位置
-    float mInspectorPositionX;
     //表示する位置
     Vector2 mPosition;
     //文字のスケール

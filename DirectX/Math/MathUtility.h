@@ -62,11 +62,11 @@ namespace Math {
     }
 
     inline float asin(float value) {
-        return asinf(value);
+        return asinf(value) * rad2Deg;
     }
 
     inline float acos(float value) {
-        return acosf(value);
+        return acosf(value) * rad2Deg;
     }
 
     inline float atan2(float y, float x) {

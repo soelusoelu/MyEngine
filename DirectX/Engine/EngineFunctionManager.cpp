@@ -12,7 +12,8 @@
 #include "../Device/Renderer.h"
 
 EngineFunctionManager::EngineFunctionManager()
-    : mDebugManager(std::make_unique<DebugManager>())
+    : FileOperator("EngineFunctionManager")
+    , mDebugManager(std::make_unique<DebugManager>())
     , mPause(std::make_unique<Pause>())
     , mFunctionChanger(std::make_unique<EngineFuctionChanger>())
     , mMapEditor(std::make_unique<MapEditorMeshManager>())
@@ -24,25 +25,28 @@ EngineFunctionManager::EngineFunctionManager()
 
 EngineFunctionManager::~EngineFunctionManager() = default;
 
-void EngineFunctionManager::loadProperties(const rapidjson::Value& inObj) {
-    mDebugManager->loadProperties(inObj);
-    mPause->loadProperties(inObj);
-    mFunctionChanger->loadProperties(inObj);
-    mMapEditor->loadProperties(inObj);
-    mAssetsRenderTextureManager->loadProperties(inObj);
-    mModelViewer->loadProperties(inObj);
+IEngineFunctionChanger& EngineFunctionManager::getModeChanger() const {
+    return *mFunctionChanger;
 }
 
-void EngineFunctionManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
-    mDebugManager->saveProperties(alloc, inObj);
-    mPause->saveProperties(alloc, inObj);
-    mFunctionChanger->saveProperties(alloc, inObj);
-    mAssetsRenderTextureManager->saveProperties(alloc, inObj);
+DebugManager& EngineFunctionManager::debug() const {
+    return *mDebugManager;
+}
+
+IPause& EngineFunctionManager::pause() const {
+    return *mPause;
+}
+
+AssetsRenderTextureManager& EngineFunctionManager::getAssetsRenderTextureManager() const {
+    return *mAssetsRenderTextureManager;
+}
+
+MapEditorMeshManager& EngineFunctionManager::getMapEditorMeshManager() const {
+    return *mMapEditor;
 }
 
 void EngineFunctionManager::initialize(
     const std::shared_ptr<Camera>& camera,
-    ICallbackChangeEngineMode* callback,
     const IEngineModeGetter* engineModeGetter,
     const IGameObjectsGetter* gameObjctsGetter,
     const IMeshesGetter* meshesGetter,
@@ -50,12 +54,23 @@ void EngineFunctionManager::initialize(
 ) {
 #ifdef _DEBUG
     mDebugManager->initialize(gameObjctsGetter, fpsGetter, mPause.get());
-    mPause->initialize();
-    mFunctionChanger->initialize(callback);
-    mMapEditor->initialize(mDebugManager->getDebugLayer().inspector(), mAssetsRenderTextureManager.get());
-    mAssetsRenderTextureManager->initialize();
+    mFunctionChanger->initialize();
+    mPause->initialize(mFunctionChanger.get());
+    mMapEditor->initialize(
+        mDebugManager->getDebugLayer().inspector(),
+        this,
+        mFunctionChanger.get(),
+        mAssetsRenderTextureManager.get()
+    );
+    mAssetsRenderTextureManager->initialize(getModeChanger());
     mSceneMeshOperator->initialize(camera, meshesGetter);
-    mModelViewer->initialize(engineModeGetter, mAssetsRenderTextureManager.get(), mAssetsRenderTextureManager->getCallbackSelectAssetsTexture());
+    mModelViewer->initialize(
+        engineModeGetter,
+        mAssetsRenderTextureManager.get(),
+        mAssetsRenderTextureManager->getCallbackSelectAssetsTexture(),
+        mFunctionChanger.get(),
+        this
+    );
 #endif // _DEBUG
 }
 
@@ -77,15 +92,16 @@ void EngineFunctionManager::update(EngineMode mode) {
 #endif // _DEBUG
 }
 
-void EngineFunctionManager::draw(EngineMode mode, const Renderer& renderer, Matrix4& proj) const {
+void EngineFunctionManager::draw2D(const Renderer& renderer, Matrix4& proj) const {
 #ifdef _DEBUG
-    //レンダリング領域をデバッグに変更
-    renderer.renderToDebug(proj);
+    mDebugManager->draw2D(renderer, proj);
+#endif // _DEBUG
+}
 
+void EngineFunctionManager::drawDebug2D(EngineMode mode, Matrix4& proj) const {
+#ifdef _DEBUG
     mAssetsRenderTextureManager->drawTextures(mode, proj);
-    mPause->drawButton(proj);
-    mFunctionChanger->draw(proj);
-    mDebugManager->draw(mode, renderer, proj);
+    mDebugManager->drawDebug2D(mode, proj);
 #endif // _DEBUG
 }
 
@@ -98,31 +114,16 @@ void EngineFunctionManager::draw3D(
 #ifdef _DEBUG
     mAssetsRenderTextureManager->drawMeshes(mode);
     mMapEditor->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
-    mModelViewer->draw(mode, dirLight.getDirection(), dirLight.getLightColor());
+    mModelViewer->draw(mode, renderer);
     mDebugManager->draw3D(mode, renderer, camera.getViewProjection());
 #endif // _DEBUG
 }
 
-void EngineFunctionManager::onChangeMapEditorMode() {
-    mMapEditor->onChangeMapEditorMode();
-}
-
-void EngineFunctionManager::onChangeModelViewerMode() {
-    mModelViewer->onChangeModelViewerMode();
-}
-
-DebugManager& EngineFunctionManager::debug() const {
-    return *mDebugManager;
-}
-
-IPause& EngineFunctionManager::pause() const {
-    return *mPause;
-}
-
-AssetsRenderTextureManager& EngineFunctionManager::getAssetsRenderTextureManager() const {
-    return *mAssetsRenderTextureManager;
-}
-
-MapEditorMeshManager& EngineFunctionManager::getMapEditorMeshManager() const {
-    return *mMapEditor;
+void EngineFunctionManager::childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mDebugManager->writeAndRead(inObj, alloc, mode);
+    mPause->writeAndRead(inObj, alloc, mode);
+    mFunctionChanger->writeAndRead(inObj, alloc, mode);
+    mMapEditor->saveAndLoad(inObj, alloc, mode);
+    mAssetsRenderTextureManager->saveAndLoad(inObj, alloc, mode);
+    mModelViewer->saveAndLoad(inObj, alloc, mode);
 }

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
+#include "../Device/FileOperator.h"
 #include "../Math/Math.h"
 #include "../System/GlobalFunction.h"
-#include <rapidjson/document.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -11,7 +11,9 @@ class IMeshLoader;
 class Shader;
 struct Material;
 
-struct PointLight {
+struct PointLight
+    : public FileOperator
+{
     std::shared_ptr<IMeshLoader> mesh;
     std::vector<std::shared_ptr<Material>> materials;
     std::shared_ptr<Shader> shader;
@@ -19,9 +21,10 @@ struct PointLight {
 
     PointLight();
     ~PointLight();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     void initialize();
+
+private:
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
 private:
     std::string mMeshFileName;

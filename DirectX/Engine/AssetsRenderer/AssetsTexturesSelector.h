@@ -2,10 +2,9 @@
 
 #include "IAssetsRenderTexturesGetter.h"
 #include "ICallbackSelectAssetsTexture.h"
+#include "../../Device/Function.h"
 #include <functional>
 #include <memory>
-
-class Subject;
 
 //アセットテクスチャ選択クラス
 class AssetsTexturesSelector : public ICallbackSelectAssetsTexture {
@@ -24,5 +23,5 @@ private:
 
 private:
     const IAssetsRenderTexturesGetter* mTexturesGetter;
-    std::unique_ptr<Subject> mCallbackSelectTexture;
+    Function<void()> mCallbackSelectTexture;
 };

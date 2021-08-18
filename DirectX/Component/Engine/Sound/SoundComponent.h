@@ -14,15 +14,16 @@ class SoundVolume;
 class SoundEffect;
 class OutputVoices;
 
-class SoundComponent : public Component {
+class SoundComponent
+    : public Component
+{
 public:
     SoundComponent();
     ~SoundComponent();
     virtual void awake() override;
     virtual void update() override;
     virtual void finalize() override;
-    virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
     virtual void drawInspector() override;
 
     //使用可能状態か

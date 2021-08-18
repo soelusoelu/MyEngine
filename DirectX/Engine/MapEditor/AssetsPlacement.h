@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../AssetsRenderer/ICurrentSelectTextureGetter.h"
-#include "../DebugManager/DebugLayer/Inspector/IInspectorTargetSetter.h"
+#include "../DebugManager/DebugLayer/Inspector/IInspector.h"
 #include "../../GameObject/IGameObjectAdder.h"
 #include "../../Math/Math.h"
 #include "../../Mesh/IMeshAdder.h"
@@ -20,7 +20,7 @@ public:
     void initialize(
         IGameObjectAdder* gameObjectAdder,
         IMeshAdder* meshAdder,
-        IInspectorTargetSetter* inspector,
+        IInspector* inspector,
         const ICurrentSelectTextureGetter* textureGetter
     );
 
@@ -46,6 +46,6 @@ private:
 private:
     IGameObjectAdder* mGameObjectAdder;
     IMeshAdder* mMeshAdder;
-    IInspectorTargetSetter* mInspector;
+    IInspector* mInspector;
     const ICurrentSelectTextureGetter* mTextureGetter;
 };

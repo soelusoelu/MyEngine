@@ -1,15 +1,13 @@
-//グローバル
 Texture2D g_texDecal : register(t0);
 SamplerState g_samLinear : register(s0);
 
-cbuffer global
+cbuffer Texture
 {
     matrix wp;
     float4 color;
     float4 uv;
 };
 
-//構造体
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;

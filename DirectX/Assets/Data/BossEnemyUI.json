@@ -1,0 +1,23 @@
+{
+  "tag": "UI",
+  "components": [
+    {
+      "type": "BossEnemyUIManager",
+      "properties": {}
+    },
+    {
+      "type": "SpriteComponent",
+      "properties": {
+        "fileName": "System\\pixel.png",
+        "position": [ 960.0, 1016.0 ],
+        "scale": [ 960.0, 16.0 ],
+        "color": [ 0.95, 0.05, 0.05 ],
+        "pivot": "CenterTop"
+      }
+    },
+    {
+      "type": "BossEnemyHitPointGauge",
+      "properties": {}
+    }
+  ]
+}

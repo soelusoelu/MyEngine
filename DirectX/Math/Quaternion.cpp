@@ -33,6 +33,26 @@ void Quaternion::set(float inX, float inY, float inZ, float inW) {
     w = inW;
 }
 
+Quaternion operator*(const Quaternion& q, const Quaternion& p) {
+    Vector3 qv(q.x, q.y, q.z);
+    Vector3 pv(p.x, p.y, p.z);
+    Vector3 newVec = p.w * qv + q.w * pv + Vector3::cross(pv, qv);
+
+    return Quaternion(
+        //ベクトル部分 ps * qv + qs * pv + pv x qv
+        newVec.x,
+        newVec.y,
+        newVec.z,
+        //スカラー部分 ps * qs - pv . qv
+        p.w * q.w - Vector3::dot(pv, qv)
+    );
+}
+
+Quaternion& Quaternion::operator*=(const Quaternion& right) {
+    *this = *this * right;
+    return *this;
+}
+
 void Quaternion::conjugate() {
     x *= -1.f;
     y *= -1.f;
@@ -146,21 +166,6 @@ Quaternion Quaternion::slerp(const Quaternion& a, const Quaternion& b, float f) 
     retVal.normalize();
 
     return retVal;
-}
-
-Quaternion Quaternion::concatenate(const Quaternion& q, const Quaternion& p) {
-    Vector3 qv(q.x, q.y, q.z);
-    Vector3 pv(p.x, p.y, p.z);
-    Vector3 newVec = p.w * qv + q.w * pv + Vector3::cross(pv, qv);
-
-    return Quaternion(
-        //ベクトル部分 ps * qv + qs * pv + pv x qv
-        newVec.x,
-        newVec.y,
-        newVec.z,
-        //スカラー部分 ps * qs - pv . qv
-        p.w * q.w - Vector3::dot(pv, qv)
-    );
 }
 
 Quaternion Quaternion::lookRotation(const Vector3& forward, const Vector3& upwards) {

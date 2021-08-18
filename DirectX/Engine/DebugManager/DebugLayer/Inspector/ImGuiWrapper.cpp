@@ -135,3 +135,18 @@ bool ImGuiWrapper::colorButton(const std::string& desc_id, const Vector4& col, I
     ImVec2 s(size.x, size.y);
     return ImGui::ColorButton(desc_id.c_str(), temp, flags, s);
 }
+
+bool ImGuiWrapper::radioButton(const std::string* labels, int& v, int count, bool isSameLine) {
+    bool result = false;
+    for (int i = 0; i < count; ++i) {
+        if (ImGui::RadioButton(labels[i].c_str(), &v, i)) {
+            result = true;
+        }
+
+        if (isSameLine && i < count - 1) {
+            ImGui::SameLine();
+        }
+    }
+
+    return result;
+}

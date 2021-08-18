@@ -5,14 +5,11 @@
 #include <list>
 #include <memory>
 
-class Shader;
 class Transform2D;
 
-class LineRenderer2D : public LineRenderer {
-    struct Line2DVertex {
-        Vector2 pos;
-    };
-
+class LineRenderer2D
+    : public LineRenderer
+{
     struct Line2DParam {
         Vector2 p1;
         Vector2 p2;
@@ -32,16 +29,13 @@ private:
     LineRenderer2D(const LineRenderer2D&) = delete;
     LineRenderer2D& operator=(const LineRenderer2D&) = delete;
 
-    virtual unsigned getParamSize() const override;
-    virtual const void* getVertexData() const override;
-    virtual void createShader() override;
+    virtual std::string getShaderName() override;
     virtual void drawLines(const Matrix4& proj) const override;
 
     //実際にラインを描画する
     void drawLine(const Line2DParam& param, const Matrix4& proj) const;
 
 private:
-    std::shared_ptr<Shader> mShader;
     std::list<Line2DParam> mLines;
     std::unique_ptr<Transform2D> mTransform;
 };

@@ -1,18 +1,53 @@
 {
   "tag": "Enemy",
   "transform": {
-    "scale": [ 5.0, 5.0, 5.0 ]
+    "rotation": [ 0.0, 180.0, 0.0 ],
+    "scale": [ 2.0, 2.0, 2.0 ]
   },
   "components": [
     {
       "type": "MeshComponent",
       "properties": {
-        "fileName": "Practice\\test.fbx"
+        "fileName": "Enemy\\enemy_prot.fbx"
+      }
+    },
+    {
+      "type": "HitPoint",
+      "properties": {
+        "HP": 300
       }
     },
     {
       "type": "AABBAnimationCollider",
       "properties": {}
+    },
+    {
+      "type": "EnemyAnimationController",
+      "properties": {}
+    },
+    {
+      "type": "EnemyColliderController",
+      "properties": {}
+    },
+    {
+      "type": "EnemyAI",
+      "properties": {
+      }
+    },
+    {
+      "type": "EnemyMove",
+      "properties": {
+        "walkSpeed": 20.0,
+        "rotateSpeed": 400.0,
+        "toPlayerLimitDistance": 15.0
+      }
+    },
+    {
+      "type": "EnemyAttack",
+      "properties": {
+        "damage": 40,
+        "attackRangeDistance": 20.0
+      }
     }
   ]
 }

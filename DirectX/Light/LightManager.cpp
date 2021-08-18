@@ -9,11 +9,13 @@
 #include "../Mesh/IMeshLoader.h"
 #include "../System/SystemInclude.h"
 #include "../System/Shader/Shader.h"
-#include "../Utility/LevelLoader.h"
+#include "../Utility/JsonHelper.h"
 
-LightManager::LightManager() :
-    mAmbientLight(Vector3::zero),
-    mPointLight(std::make_unique<PointLight>()) {
+LightManager::LightManager()
+    : FileOperator("LightManager")
+    , mAmbientLight(Vector3::zero)
+    , mPointLight(std::make_unique<PointLight>())
+{
     PointLightComponent::setLightManager(this);
 }
 
@@ -32,28 +34,11 @@ void LightManager::createDirectionalLight() {
     mDirectionalLight->lateUpdate();
 }
 
-void LightManager::loadProperties(const rapidjson::Value & inObj) {
-    const auto& obj = inObj["lightManager"];
-    if (obj.IsObject()) {
-        JsonHelper::getVector3(obj, "ambientLight", &mAmbientLight);
-    }
-
-    mPointLight->loadProperties(inObj);
-}
-
-void LightManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const {
-    rapidjson::Value props(rapidjson::kObjectType);
-    JsonHelper::setVector3(alloc, &props, "ambientLight", mAmbientLight);
-    inObj.AddMember("lightManager", props, alloc);
-
-    mPointLight->saveProperties(alloc, inObj);
-}
-
 const DirectionalLight& LightManager::getDirectionalLight() const {
     return *mDirectionalLight;
 }
 
-void LightManager::setAmbientLight(const Vector3 & ambient) {
+void LightManager::setAmbientLight(const Vector3& ambient) {
     mAmbientLight = ambient;
 }
 
@@ -98,4 +83,12 @@ void LightManager::drawPointLights(const Camera& camera) {
     //for (const auto& pointLight : mPointLights) {
     //    pointLight->draw(camera, *mPointLight);
     //}
+}
+
+void LightManager::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mAmbientLight, "ambientLight", inObj, alloc, mode);
+}
+
+void LightManager::childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    mPointLight->writeAndRead(inObj, alloc, mode);
 }

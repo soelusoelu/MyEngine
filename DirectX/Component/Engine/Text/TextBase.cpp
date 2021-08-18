@@ -1,16 +1,17 @@
 ﻿#include "TextBase.h"
 #include "../../../Engine/DebugManager/DebugLayer/Inspector/ImGuiWrapper.h"
 #include "../../../System/Window.h"
-#include "../../../Utility/LevelLoader.h"
+#include "../../../Utility/JsonHelper.h"
 
-TextBase::TextBase() :
-    Component(),
-    mPosition(Vector2::zero),
-    mScale(Vector2::one),
-    mColor(ColorPalette::white),
-    mAlpha(1.f),
-    mPivot(Pivot::LEFT_TOP),
-    mIsActive(true) {
+TextBase::TextBase()
+    : Component()
+    , mPosition(Vector2::zero)
+    , mScale(Vector2::one)
+    , mColor(ColorPalette::white)
+    , mAlpha(1.f)
+    , mPivot(Pivot::LEFT_TOP)
+    , mIsActive(true)
+{
 }
 
 TextBase::~TextBase() = default;
@@ -19,16 +20,22 @@ void TextBase::onEnable(bool value) {
     setActive(value);
 }
 
-void TextBase::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getVector2(inObj, "position", &mPosition);
-    JsonHelper::getVector2(inObj, "scale", &mScale);
-    JsonHelper::getVector3(inObj, "color", &mColor);
-    JsonHelper::getFloat(inObj, "alpha", &mAlpha);
-    std::string src;
-    if (JsonHelper::getString(inObj, "pivot", &src)) {
-        PivotFunc::stringToPivot(src, &mPivot);
+void TextBase::saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    JsonHelper::getSet(mPosition, "position", inObj, alloc, mode);
+    JsonHelper::getSet(mScale, "scale", inObj, alloc, mode);
+    JsonHelper::getSet(mColor, "color", inObj, alloc, mode);
+    JsonHelper::getSet(mAlpha, "alpha", inObj, alloc, mode);
+    JsonHelper::getSet(mIsActive, "isActive", inObj, alloc, mode);
+
+    std::string str;
+    if (mode == FileMode::SAVE) {
+        PivotFunc::pivotToString(mPivot, str);
+        JsonHelper::setString(str, "pivot", inObj, alloc);
+    } else {
+        if (JsonHelper::getString(str, "pivot", inObj)) {
+            PivotFunc::stringToPivot(str, mPivot);
+        }
     }
-    JsonHelper::getBool(inObj, "isActive", &mIsActive);
 }
 
 void TextBase::drawInspector() {

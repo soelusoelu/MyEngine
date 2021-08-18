@@ -3,7 +3,9 @@
 #include "ICallbackSelectAssetsTexture.h"
 #include "ICurrentSelectTextureGetter.h"
 #include "../EngineMode.h"
+#include "../IEngineFunctionChanger.h"
 #include "../../Math/Math.h"
+#include "../../Utility/FileMode.h"
 #include <rapidjson/document.h>
 #include <memory>
 
@@ -14,16 +16,18 @@ class AssetsTexturesSelector;
 class AssetsRenderTexture;
 
 //メッシュ描画テクスチャ関連総管理クラス
-class AssetsRenderTextureManager : public ICurrentSelectTextureGetter {
+class AssetsRenderTextureManager
+    : public ICurrentSelectTextureGetter
+{
 public:
     AssetsRenderTextureManager();
     ~AssetsRenderTextureManager();
     virtual const AssetsRenderTexture& getCurrentSelectTexture() const override;
     virtual bool selectedTexture() const override;
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+
+    void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode);
     //初期化
-    void initialize();
+    void initialize(IEngineFunctionChanger& changer);
     //毎フレーム更新
     void update(EngineMode mode);
     //メッシュを描画する

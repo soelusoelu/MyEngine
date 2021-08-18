@@ -3,10 +3,11 @@
 #include "../../../Imgui/imgui.h"
 #include <algorithm>
 
-Collider::Collider() :
-    Component(),
-    mIsAutoUpdate(true),
-    mEnable(false) {
+Collider::Collider()
+    : Component()
+    , mIsAutoUpdate(true)
+    , mEnable(false)
+{
 }
 
 Collider::~Collider() = default;

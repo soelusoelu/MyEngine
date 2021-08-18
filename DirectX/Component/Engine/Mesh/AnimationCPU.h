@@ -5,6 +5,7 @@
 #include "../../../Math/Math.h"
 #include "../../../Mesh/IMesh.h"
 #include <memory>
+#include <vector>
 
 class SkinMeshComponent;
 
@@ -18,7 +19,7 @@ public:
     ~AnimationCPU();
     virtual void start() override;
 
-    virtual const MeshVertexPositions& getCurrentMotionVertexPositions(unsigned index) const override;
+    virtual const MeshVerticesPosition& getCurrentMotionVertexPositions(unsigned index) const override;
 
 private:
     AnimationCPU(const AnimationCPU&) = delete;
@@ -33,7 +34,7 @@ private:
     IMesh* mMesh;
     std::shared_ptr<SkinMeshComponent> mAnimation;
     //モーション中の頂点位置配列
-    MeshesVertexPositions mCurrentMeshesVertexPositions;
+    std::vector<MeshVerticesPosition> mCurrentMeshesVertexPositions;
     //モーション中のメッシュ頂点情報配列
     std::vector<MeshVertices> mCurrentMeshesVertices;
 };

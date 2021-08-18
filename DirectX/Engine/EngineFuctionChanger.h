@@ -1,15 +1,20 @@
 ﻿#pragma once
 
-#include "ICallbackChangeEngineMode.h"
+#include "EngineMode.h"
+#include "IEngineFunctionChanger.h"
+#include "../Device/FileOperator.h"
+#include "../Device/Function.h"
 #include "../Math/Math.h"
-#include <rapidjson/document.h>
 #include <memory>
 #include <string>
 #include <vector>
 
 class SpriteButton;
 
-class EngineFuctionChanger {
+class EngineFuctionChanger
+    : public FileOperator
+    , public IEngineFunctionChanger
+{
     using SpriteButtonPtr = std::unique_ptr<SpriteButton>;
     using SpriteButtonPtrArray = std::vector<SpriteButtonPtr>;
     using SpriteFilePathArray = std::vector<std::string>;
@@ -17,20 +22,22 @@ class EngineFuctionChanger {
 public:
     EngineFuctionChanger();
     ~EngineFuctionChanger();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
-    void initialize(ICallbackChangeEngineMode* callback);
+    virtual void changeMode(EngineMode mode) override;
+    virtual void callbackChangeMode(const std::function<void(EngineMode)>& f) override;
+
+    void initialize();
     void update();
-    void draw(const Matrix4& proj) const;
 
 private:
     EngineFuctionChanger(const EngineFuctionChanger&) = delete;
     EngineFuctionChanger& operator=(const EngineFuctionChanger&) = delete;
 
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+
 private:
-    ICallbackChangeEngineMode* mCallbackChangeEngineMode;
     SpriteButtonPtrArray mSpritesButton;
     SpriteFilePathArray mSpritesFilePath;
+    Function<void(EngineMode)> mCallbackChangeMode;
     Vector2 mStartRenderPosition;
     float mSpriteSpace;
 

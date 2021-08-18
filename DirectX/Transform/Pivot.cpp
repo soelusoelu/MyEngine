@@ -1,30 +1,24 @@
 ﻿#include "Pivot.h"
 
-void PivotFunc::stringToPivot(const std::string& src, Pivot* dst) {
-    auto pivot = Pivot::NONE;
-
+void PivotFunc::stringToPivot(const std::string& src, Pivot& dst) {
     if (src == "LeftTop") {
-        pivot = Pivot::LEFT_TOP;
+        dst = Pivot::LEFT_TOP;
     } else if (src == "CenterTop") {
-        pivot = Pivot::CENTER_TOP;
+        dst = Pivot::CENTER_TOP;
     } else if (src == "RightTop") {
-        pivot = Pivot::RIGHT_TOP;
+        dst = Pivot::RIGHT_TOP;
     } else if (src == "CenterLeft") {
-        pivot = Pivot::CENTER_LEFT;
+        dst = Pivot::CENTER_LEFT;
     } else if (src == "Center") {
-        pivot = Pivot::CENTER;
+        dst = Pivot::CENTER;
     } else if (src == "CenterRight") {
-        pivot = Pivot::CENTER_RIGHT;
+        dst = Pivot::CENTER_RIGHT;
     } else if (src == "LeftBottom") {
-        pivot = Pivot::LEFT_BOTTOM;
+        dst = Pivot::LEFT_BOTTOM;
     } else if (src == "CenterBottom") {
-        pivot = Pivot::CETNER_BOTTOM;
+        dst = Pivot::CETNER_BOTTOM;
     } else if (src == "RightBottom") {
-        pivot = Pivot::RIGHT_BOTTOM;
-    }
-
-    if (pivot != Pivot::NONE) {
-        *dst = pivot;
+        dst = Pivot::RIGHT_BOTTOM;
     }
 }
 
@@ -47,7 +41,5 @@ void PivotFunc::pivotToString(const Pivot& src, std::string& dst) {
         dst = "CenterBottom";
     } else if (src == Pivot::RIGHT_BOTTOM) {
         dst = "RightBottom";
-    } else if (src == Pivot::NONE) {
-        dst = "LeftTop";
     }
 }

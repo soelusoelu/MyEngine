@@ -6,7 +6,10 @@
 #include <dinput.h>
 #include <string>
 
-class Mouse : public IMouse, public IMouseWheelScrollValueSetter {
+class Mouse
+    : public IMouse
+    , public IMouseWheelScrollValueSetter
+{
 public:
     Mouse();
     ~Mouse();
@@ -14,7 +17,7 @@ public:
     virtual bool getMouseButton(MouseCode button) const override;
     virtual bool getMouseButtonUp(MouseCode button) const override;
     virtual const Vector2& getMousePosition() const override;
-    virtual const Vector2& getMouseMoveAmount() const override;
+    virtual const Vector2& getMouseVelocity() const override;
     virtual int getMouseScrollWheel() const override;
 
     virtual void setWheelScrollValue(int value) override;
@@ -38,6 +41,6 @@ private:
     HWND mhWnd;
     Vector2 mCurrentMousePosition;
     Vector2 mPreviousMousePosition;
-    Vector2 mMouseMoveAmount;
+    Vector2 mMouseVelocity;
     int mScrollWheel;
 };

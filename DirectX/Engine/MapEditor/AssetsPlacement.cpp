@@ -27,7 +27,7 @@ AssetsPlacement::~AssetsPlacement() = default;
 void AssetsPlacement::initialize(
     IGameObjectAdder* gameObjectAdder,
     IMeshAdder* meshAdder,
-    IInspectorTargetSetter* inspector,
+    IInspector* inspector,
     const ICurrentSelectTextureGetter* textureGetter
 ) {
     mGameObjectAdder = gameObjectAdder;

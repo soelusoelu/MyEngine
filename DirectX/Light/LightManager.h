@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../Math/Math.h"
-#include <rapidjson/document.h>
+#include "../Device/FileOperator.h"
 #include <list>
 #include <memory>
 
@@ -10,7 +10,9 @@ class PointLightComponent;
 class Camera;
 struct PointLight;
 
-class LightManager {
+class LightManager
+    : public FileOperator
+{
     using PointLightPtr = std::shared_ptr<PointLightComponent>;
     using PointLightPtrList = std::list<PointLightPtr>;
 
@@ -19,8 +21,6 @@ public:
     ~LightManager();
     void initialize();
     void createDirectionalLight();
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
     //ディレクショナルライト
     const DirectionalLight& getDirectionalLight() const;
     //アンビエントライト
@@ -30,6 +30,13 @@ public:
     void addPointLight(const PointLightPtr& pointLight);
     void removePointLight(const PointLightPtr& pointLight);
     void drawPointLights(const Camera& camera);
+
+private:
+    LightManager(const LightManager&) = delete;
+    LightManager& operator=(const LightManager&) = delete;
+
+    virtual void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
+    virtual void childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) override;
 
 private:
     Vector3 mAmbientLight;

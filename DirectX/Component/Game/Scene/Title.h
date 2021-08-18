@@ -7,6 +7,7 @@ public:
     Title();
     ~Title();
     virtual void awake() override;
+    virtual void update() override;
 
 private:
     Title(const Title&) = delete;

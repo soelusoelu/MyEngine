@@ -3,6 +3,7 @@
 #include "AABB.h"
 #include "AABBCreater.h"
 #include "BoxConstantGroup.h"
+#include "BoxHelper.h"
 #include "Circle.h"
 #include "Intersect.h"
 #include "IntersectHelper.h"

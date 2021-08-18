@@ -1,9 +1,9 @@
 ﻿#include "Scene.h"
-#include "../../../Engine/DebugManager/DebugUtility/Debug.h"
 
-Scene::Scene() :
-    Component(),
-    mNext() {
+Scene::Scene()
+    : Component()
+    , mNext()
+{
 }
 
 Scene::~Scene() = default;

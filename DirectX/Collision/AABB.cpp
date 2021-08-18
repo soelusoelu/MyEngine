@@ -26,12 +26,12 @@ void AABB::rotate(const Quaternion& q) {
     //ボックスの角の8つの点を格納する
     std::array<Vector3, 8> points;
     //最小点からボックスの角の点を計算していく
-    points[BoxConstantGroup::BOX_NEAR_BOTTOM_LEFT] = min;
-    points[BoxConstantGroup::BOX_NEAR_BOTTOM_RIGHT] = Vector3(max.x, min.y, min.z);
+    points[BoxConstantGroup::BOX_FORE_BOTTOM_LEFT] = min;
+    points[BoxConstantGroup::BOX_FORE_BOTTOM_RIGHT] = Vector3(max.x, min.y, min.z);
     points[BoxConstantGroup::BOX_BACK_BOTTOM_LEFT] = Vector3(min.x, max.y, min.z);
     points[BoxConstantGroup::BOX_BACK_BOTTOM_RIGHT] = Vector3(min.x, min.y, max.z);
-    points[BoxConstantGroup::BOX_NEAR_TOP_LEFT] = Vector3(min.x, max.y, max.z);
-    points[BoxConstantGroup::BOX_NEAR_TOP_RIGHT] = Vector3(max.x, min.y, max.z);
+    points[BoxConstantGroup::BOX_FORE_TOP_LEFT] = Vector3(min.x, max.y, max.z);
+    points[BoxConstantGroup::BOX_FORE_TOP_RIGHT] = Vector3(max.x, min.y, max.z);
     points[BoxConstantGroup::BOX_BACK_TOP_LEFT] = Vector3(max.x, max.y, min.z);
     points[BoxConstantGroup::BOX_BACK_TOP_RIGHT] = max;
 

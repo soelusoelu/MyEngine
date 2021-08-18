@@ -1,22 +1,24 @@
 ﻿#include "PlayerMove.h"
+#include "BulletShooter.h"
+#include "PlayerDash.h"
 #include "PlayerMotions.h"
+#include "PlayerWalk.h"
 #include "../../Engine/Camera/Camera.h"
 #include "../../Engine/Mesh/SkinMeshComponent.h"
 #include "../../../Device/Time.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../GameObject/GameObjectManager.h"
+#include "../../../Input/Input.h"
 #include "../../../Transform/Transform3D.h"
-#include "../../../Utility/LevelLoader.h"
 
 PlayerMove::PlayerMove()
     : Component()
     , mCamera(nullptr)
     , mAnimation(nullptr)
-    , mDashMigrationTimer(std::make_unique<Time>())
-    , mWalkSpeed(0.f)
-    , mDashSpeed(0.f)
-    , mIsWalking(false)
-    , mIsDashing(false)
+    , mWalk(nullptr)
+    , mDash(nullptr)
+    , mShooter(nullptr)
+    , mMoveDirectionInputedLast(Vector3::forward)
 {
 }
 
@@ -24,27 +26,30 @@ PlayerMove::~PlayerMove() = default;
 
 void PlayerMove::start() {
     const auto& cam = gameObject().getGameObjectManager().find("Camera");
-    mCamera = cam->componentManager().getComponent<Camera>();
+    const auto& camCompManager = cam->componentManager();
+    mCamera = camCompManager.getComponent<Camera>();
+
     mAnimation = getComponent<SkinMeshComponent>();
-    mAnimation->callbackChangeMotion([&] { onChangeMotion(); });
+    mWalk = getComponent<PlayerWalk>();
+    mDash = getComponent<PlayerDash>();
+    mShooter = getComponent<BulletShooter>();
 }
 
-void PlayerMove::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getFloat(inObj, "walkSpeed", &mWalkSpeed);
-    JsonHelper::getFloat(inObj, "dashSpeed", &mDashSpeed);
-    if (float time = 0.f; JsonHelper::getFloat(inObj, "dashMigrationTime", &time)) {
-        mDashMigrationTimer->setLimitTime(time);
-    }
+const Vector3& PlayerMove::getMoveDirectionInputedLast() const {
+    return mMoveDirectionInputedLast;
 }
 
 void PlayerMove::originalUpdate() {
-    const auto& pad = Input::joyPad();
-    const auto& leftStick = pad.leftStick();
+    const auto& leftStick = Input::joyPad().leftStick();
     if (canMove(leftStick)) {
-        if (canDash(pad)) {
-            dash(pad, leftStick);
+        //スティック入力から移動方向を求める
+        calcMoveDirection(leftStick);
+
+        //非ADS時はダッシュ、ADS時は移動速度を落とす
+        if (mShooter->isAds()) {
+            mWalk->walk(*this);
         } else {
-            walk(leftStick);
+            mDash->dash(*this);
         }
     } else {
         stop();
@@ -52,10 +57,10 @@ void PlayerMove::originalUpdate() {
 }
 
 bool PlayerMove::isMoving() const {
-    if (mIsWalking) {
+    if (isWalking()) {
         return true;
     }
-    if (mIsDashing) {
+    if (isDashing()) {
         return true;
     }
 
@@ -63,35 +68,26 @@ bool PlayerMove::isMoving() const {
 }
 
 bool PlayerMove::isWalking() const {
-    return mIsWalking;
+    return mWalk->isWalking();
 }
 
 bool PlayerMove::isDashing() const {
-    return mIsDashing;
+    return mDash->isDashing();
 }
 
-void PlayerMove::walk(const Vector2& leftStickValue) {
-    move(mWalkSpeed, leftStickValue);
-
-    if (!mIsWalking) {
-        mAnimation->changeMotion(PlayerMotions::WALK);
-        mAnimation->setLoop(true);
-        mIsWalking = true;
-        mIsDashing = false;
-    }
+void PlayerMove::callbackToStop(const std::function<void()>& callback) {
+    mCallbackToStop += callback;
 }
 
-void PlayerMove::dash(const JoyPad& pad, const Vector2& leftStickValue) {
-    move(mDashSpeed, leftStickValue);
-
-    if (!mIsDashing) {
-        mAnimation->changeMotion(PlayerMotions::DASH);
-        mIsWalking = false;
-        mIsDashing = true;
-    }
+void PlayerMove::move(float moveSpeed) {
+    transform().translate(mMoveDirectionInputedLast * moveSpeed * Time::deltaTime);
 }
 
-void PlayerMove::move(float moveSpeed, const Vector2& leftStickValue) {
+void PlayerMove::rotateToMoveDirection() {
+    transform().setRotation(Quaternion::lookRotation(mMoveDirectionInputedLast));
+}
+
+void PlayerMove::calcMoveDirection(const Vector2& leftStickValue) {
     //カメラの視線ベクトルから向きを得る
     auto eye = Vector3::normalize(mCamera->getLookAt() - mCamera->getPosition());
     auto lookRot = Quaternion::lookRotation(eye);
@@ -101,48 +97,25 @@ void PlayerMove::move(float moveSpeed, const Vector2& leftStickValue) {
     auto camForward = Vector3::transform(Vector3::forward, lookRot);
     camForward.y = 0.f;
 
-    auto& t = transform();
-    auto moveDir = camRight * leftStickValue.x + camForward * leftStickValue.y;
-    t.translate(moveDir * moveSpeed * Time::deltaTime);
-    t.setRotation(Quaternion::lookRotation(moveDir));
+    //移動方向を求める
+    mMoveDirectionInputedLast = camRight * leftStickValue.x + camForward * leftStickValue.y;
 }
 
 void PlayerMove::stop() {
-    if (mIsWalking || mIsDashing) {
+    //動いてないなら終了
+    if (!isMoving()) {
+        return;
+    }
+
+    //ADSしていなかったら待機モーションへ
+    if (!mShooter->isAds()) {
         mAnimation->changeMotion(PlayerMotions::IDOL);
         mAnimation->setLoop(true);
-        mIsWalking = false;
-        mIsDashing = false;
     }
+
+    mCallbackToStop();
 }
 
 bool PlayerMove::canMove(const Vector2& leftStickValue) const {
     return !(Vector2::equal(leftStickValue, Vector2::zero));
-}
-
-bool PlayerMove::canDash(const JoyPad& pad) {
-    if (!pad.getJoy(DASH_BUTTON)) {
-        mDashMigrationTimer->reset();
-        return false;
-    }
-
-    if (!mDashMigrationTimer->isTime()) {
-        mDashMigrationTimer->update();
-        return false;
-    }
-
-    return true;
-}
-
-void PlayerMove::onChangeMotion() {
-    auto curMotionNo = mAnimation->getCurrentMotionNumber();
-    if (curMotionNo == PlayerMotions::WALK) {
-        return;
-    }
-    if (curMotionNo == PlayerMotions::DASH) {
-        return;
-    }
-
-    mIsWalking = false;
-    mIsDashing = false;
 }

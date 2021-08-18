@@ -4,24 +4,14 @@
 #include "../../Device/DrawString.h"
 
 DebugManager::DebugManager()
-    : mStringDrawer(std::make_unique<DrawString>())
+    : FileOperator("DebugManager")
+    , mStringDrawer(std::make_unique<DrawString>())
     , mDebugLayer(std::make_unique<DebugLayer>())
 {
 }
 
 DebugManager::~DebugManager() {
     DebugUtility::instance().finalize();
-}
-
-void DebugManager::loadProperties(const rapidjson::Value& inObj) {
-    mStringDrawer->loadProperties(inObj);
-    mDebugLayer->loadProperties(inObj);
-    DebugUtility::instance().loadProperties(inObj);
-}
-
-void DebugManager::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) {
-    mDebugLayer->saveProperties(alloc, inObj);
-    DebugUtility::instance().saveProperties(alloc, inObj);
 }
 
 void DebugManager::initialize(
@@ -44,15 +34,14 @@ void DebugManager::update() {
     mDebugLayer->update();
 }
 
-void DebugManager::draw(
-    EngineMode mode,
-    const Renderer& renderer,
-    Matrix4& proj
-) const {
+void DebugManager::draw2D(const Renderer& renderer, Matrix4& proj) const {
+    DebugUtility::instance().drawLine2D(renderer, proj);
+}
+
+void DebugManager::drawDebug2D(EngineMode mode, Matrix4& proj) const {
     mDebugLayer->draw(mode, *mStringDrawer, proj);
     DebugUtility::instance().draw(mode, *mStringDrawer);
     mStringDrawer->drawAll(proj);
-    DebugUtility::instance().drawLine2D(mode, renderer, proj);
 }
 
 void DebugManager::draw3D(
@@ -65,4 +54,12 @@ void DebugManager::draw3D(
 
 DebugLayer& DebugManager::getDebugLayer() const {
     return *mDebugLayer;
+}
+
+void DebugManager::childSaveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode) {
+    if (mode == FileMode::LOAD) {
+        mStringDrawer->writeAndRead(inObj, alloc, mode);
+    }
+    mDebugLayer->writeAndRead(inObj, alloc, mode);
+    DebugUtility::instance().writeAndRead(inObj, alloc, mode);
 }

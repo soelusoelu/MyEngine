@@ -10,6 +10,8 @@
 
 //頂点構造体の配列を別名定義
 using MeshVertices = std::vector<MeshVertex>;
+//頂点位置の配列を別名定義
+using MeshVerticesPosition = std::vector<Vector3>;
 //インデックスの配列を別名定義
 using Indices = std::vector<unsigned short>;
 
@@ -19,6 +21,7 @@ public:
     virtual void parse(
         const std::string& filePath,
         std::vector<MeshVertices>& meshesVertices,
+        std::vector<MeshVerticesPosition>& meshesVerticesPosition,
         std::vector<Indices>& meshesIndices,
         std::vector<Material>& materials,
         std::vector<Motion>& motions,

@@ -1,7 +1,10 @@
 ﻿#pragma once
 
+#include "../Device/Function.h"
 #include "../Math/Math.h"
+#include "../Utility/FileMode.h"
 #include <rapidjson/document.h>
+#include <functional>
 #include <memory>
 
 class GameObject;
@@ -12,8 +15,10 @@ public:
     Transform3D(GameObject* gameObject = nullptr);
     ~Transform3D();
 
-    //ワールド行列更新
-    void computeWorldTransform();
+    //行列を計算する
+    void computeMatrix();
+    //ローカル行列の取得
+    const Matrix4& getLocalTransform() const;
     //ワールド行列の取得
     const Matrix4& getWorldTransform() const;
 
@@ -42,6 +47,8 @@ public:
     void rotate(const Vector3& axis, float angle);
     //eulers量回転させる
     void rotate(const Vector3& eulers);
+    //targetを向く
+    void lookAt(const Transform3D& target, const Vector3& upwards = Vector3::up);
 
     //ピボット位置の設定
     void setPivot(const Vector3& pivot);
@@ -69,9 +76,11 @@ public:
     //親子関係統括クラスを取得する
     ParentChildRelationship& getParentChildRelation() const;
 
+    //ワールド行列計算前に呼ばれる
+    void callbackBeforeComputeWorldMatrix(const std::function<void()>& f);
+
     //ロード/セーブ
-    void loadProperties(const rapidjson::Value& inObj);
-    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
+    void saveAndLoad(rapidjson::Value& inObj, rapidjson::Document::AllocatorType& alloc, FileMode mode);
 
     //インスペクター
     void drawInspector();
@@ -80,19 +89,21 @@ private:
     Transform3D(const Transform3D&) = delete;
     Transform3D& operator=(const Transform3D&) = delete;
 
+    //ローカル行列を計算する
+    void computeLocalMatrix();
     //ワールド行列を計算する
-    void computeWorld();
-    //親のワールド行列を掛け合わせる
-    void multiplyParentWorldTransform();
+    void computeWorldMatrix();
     //子のワールド行列を計算する
     void computeChildrenTransform();
 
 private:
     GameObject* mGameObject;
     std::unique_ptr<ParentChildRelationship> mParentChildRelation;
+    Matrix4 mLocalTransform;
     Matrix4 mWorldTransform;
     Vector3 mPosition;
     Quaternion mRotation;
     Vector3 mPivot;
     Vector3 mScale;
+    Function<void()> mCallbackBeforeComputeWorldMatrix;
 };

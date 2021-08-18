@@ -1,8 +1,8 @@
 ﻿#include "OBBCreater.h"
 #include "OBB.h"
 
-OBB OBBCreater::create(const MeshVertices& vertices) {
-    auto collectMat = collectMatrix(vertices);
+OBB OBBCreater::create(const std::vector<Vector3>& positions) {
+    auto collectMat = collectMatrix(positions);
     auto eigenvector = computeEigenvector(collectMat);
 
     const auto& eigenMat = eigenvector.m;
@@ -32,9 +32,8 @@ OBB OBBCreater::create(const MeshVertices& vertices) {
     float max2 = FLT_MIN;
     float max3 = FLT_MIN;
 
-    for (const auto& vert : vertices) {
-        const auto& pos = vert.pos;
-        float dot1 = Vector3::dot(vec1, pos);
+    for (const auto& p : positions) {
+        float dot1 = Vector3::dot(vec1, p);
         if (dot1 > max1) {
             max1 = dot1;
         }
@@ -42,7 +41,7 @@ OBB OBBCreater::create(const MeshVertices& vertices) {
             min1 = dot1;
         }
 
-        float dot2 = Vector3::dot(vec2, pos);
+        float dot2 = Vector3::dot(vec2, p);
         if (dot2 > max2) {
             max2 = dot2;
         }
@@ -50,7 +49,7 @@ OBB OBBCreater::create(const MeshVertices& vertices) {
             min2 = dot2;
         }
 
-        float dot3 = Vector3::dot(vec3, pos);
+        float dot3 = Vector3::dot(vec3, p);
         if (dot3 > max3) {
             max3 = dot3;
         }
@@ -65,22 +64,25 @@ OBB OBBCreater::create(const MeshVertices& vertices) {
     Vector3 center3 = vec3 * (max3 + min3);
     result.center = (center1 + center2 + center3) / 2.f;
 
-    result.edges[0] = vec1 * (max1 - min1);
-    result.edges[1] = vec2 * (max2 - min2);
-    result.edges[2] = vec3 * (max3 - min3);
+    auto right = vec1 * (max1 - min1) / 2.f;
+    auto top = vec2 * (max2 - min2) / 2.f;
+    auto forward = vec3 * (max3 - min3) / 2.f;
+    result.rotation = Quaternion::lookRotation(Vector3::normalize(forward), Vector3::normalize(top));
+
+    result.extents = Vector3(right.length(), top.length(), forward.length());
 
     return result;
 }
 
-Matrix3 OBBCreater::collectMatrix(const MeshVertices& vertices) {
+Matrix3 OBBCreater::collectMatrix(const std::vector<Vector3>& positions) {
     //各成分の平均を求める
     auto avg = Vector3::zero;
 
-    for (const auto& vert : vertices) {
-        avg += vert.pos;
+    for (const auto& p : positions) {
+        avg += p;
     }
 
-    auto meshVerticesSize = vertices.size();
+    auto meshVerticesSize = positions.size();
     avg /= meshVerticesSize;
 
     float m00 = 0.f;
@@ -89,11 +91,10 @@ Matrix3 OBBCreater::collectMatrix(const MeshVertices& vertices) {
     float m01and10 = 0.f;
     float m02and20 = 0.f;
     float m12and21 = 0.f;
-    for (const auto& vert : vertices) {
-        const auto& pos = vert.pos;
-        float x = pos.x - avg.x;
-        float y = pos.y - avg.y;
-        float z = pos.z - avg.z;
+    for (const auto& p : positions) {
+        float x = p.x - avg.x;
+        float y = p.y - avg.y;
+        float z = p.z - avg.z;
 
         m00 += x * x;
         m11 += y * y;
@@ -145,7 +146,7 @@ Matrix3 OBBCreater::computeEigenvector(const Matrix3& mat) {
         float cos = Math::sqrt((1.f + gamma) / 2.f);
 
         if (alpha * beta < 0.f) {
-            sin = -sin;
+            sin *= -1.f;
         }
 
         for (int i = 0; i < 3; ++i) {
